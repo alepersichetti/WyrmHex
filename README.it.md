@@ -130,13 +130,15 @@ Mentre lavora, mostra i passaggi che sta facendo, ognuno con una **barra di avan
 
 Durante il disegno delle due immagini, che è la parte più lunga, compare anche una seconda barra con la percentuale, che si aggiorna sul posto fino a `100%  fatto`. Quando la mappa è pronta ti chiede l'ultima cosa:
 
-8. **Formato di stampa** delle due mappe: `A4`, `A3` o `A2`. Prima della domanda vedi, per ogni formato, quanto verranno grandi i caratteri e se saranno ben leggibili; la risposta pronta tra parentesi è il **formato consigliato**, cioè il più piccolo in cui la mappa si legge bene. Più esagoni hai scelto, più grande sarà il formato consigliato. Esempio:
+8. **Formato di stampa** delle due mappe: `A4`, `A3` o `A2`. Il programma valuta il formato in base al numero di esagoni: prima della domanda vedi, per ogni formato, quanto verranno grandi gli esagoni e i caratteri, e se saranno ben leggibili. La risposta pronta tra parentesi è il **formato consigliato**, cioè il più piccolo in cui la mappa si legge bene; più esagoni hai scelto, più grande sarà. **La scelta finale è tua:** premi Invio per il formato consigliato, oppure scrivine un altro. Esempio:
 
    ```
-   · A4 verticale   esagoni piccoli caratteri da 1.07 mm (troppo piccoli)
-   · A3 verticale   esagoni piccoli caratteri da 1.53 mm (ben leggibili)   <- consigliato
-   · A2 verticale   esagoni grandi  caratteri da 1.50 mm (ben leggibili)
-   Formato di stampa per le due mappe (A4, A3, A2) [A3]:
+   · Griglia di 12 x 30 esagoni: ecco come verrebbe stampata su ogni formato (esagono misurato da lato piatto a lato piatto)
+   · A4 verticale   esagoni piccoli da  8 mm, caratteri da 1.07 mm (troppo piccoli)
+   · A3 verticale   esagoni piccoli da 12 mm, caratteri da 1.53 mm (ben leggibili)   <- consigliato
+   · A2 verticale   esagoni grandi  da 18 mm, caratteri da 1.50 mm (ben leggibili)
+     La scelta finale è tua: premi Invio per il formato consigliato, oppure scrivine un altro.
+     Formato di stampa per le due mappe (A4, A3, A2) [A3]:
    ```
 
    Sui fogli grandi, se c'è spazio, il programma usa esagoni più grandi, così la mappa resta ben proporzionata.
@@ -217,7 +219,7 @@ Ogni opzione ha anche un nome inglese (nella tabella dopo la barra `/`), e puoi 
 | `--scala` / `--scale` | Testo della scala | `--scala "8 km"` |
 | `--seme` / `--seed` | Usa un seme preciso invece di uno a caso | `--seme 42` |
 | `--riproduci` / `--reproduce` | Rifà la mappa con quel seme, leggendo le impostazioni dal suo file (cercato in `maps_generated/<seme>`, o nella cartella di `--output`) | `--riproduci 482913` |
-| `--formato` / `--format` | Formato di stampa: `A4`, `A3` o `A2`. Se manca si usa quello consigliato (o, con `--riproduci`, quello della volta prima) | `--formato A3` |
+| `--formato` / `--format` | Formato di stampa: `A4`, `A3` o `A2`. Se manca, il programma te lo chiede alla fine, proponendo quello consigliato (o, con `--riproduci`, quello della volta prima) | `--formato A3` |
 | `--orientamento` / `--orientation` | Di solito non serve: il verso del foglio segue la forma della mappa. Puoi forzarlo con `verticale` o `orizzontale` (`portrait` o `landscape`) | `--orientamento verticale` |
 | `--output` | Cartella in cui salvare le mappe al posto di `maps_generated`; anche lì ogni mappa ha la sua cartella con il seme | `--output mappe` |
 | `--solo-ascii` / `--ascii-only` | Usa solo lettere e segni semplici della tastiera | `--solo-ascii` |

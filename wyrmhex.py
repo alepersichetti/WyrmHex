@@ -339,8 +339,14 @@ TEXTS = {
     "suggested": ("   <- consigliato", "   <- suggested"),
     "hexes_large": ("esagoni grandi", "large hexes"),
     "hexes_small": ("esagoni piccoli", "small hexes"),
-    "info_paper_option": ("{paper} {o:<11} {hexes:<15} caratteri da {mm:.2f} mm ({v}){note}",
-                          "{paper} {o:<11} {hexes:<15} letters {mm:.2f} mm wide ({v}){note}"),
+    "info_paper_intro": ("Griglia di {c} x {r} esagoni: ecco come verrebbe stampata su ogni formato "
+                         "(esagono misurato da lato piatto a lato piatto)",
+                         "Grid of {c} x {r} hexes: this is how it would print on each format "
+                         "(hex measured from flat side to flat side)"),
+    "info_paper_option": ("{paper} {o:<11} {hexes:<15} da {hex_mm:>2.0f} mm, caratteri da {mm:.2f} mm ({v}){note}",
+                          "{paper} {o:<11} {hexes:<11} {hex_mm:>2.0f} mm, letters {mm:.2f} mm wide ({v}){note}"),
+    "paper_choice": ("  La scelta finale è tua: premi Invio per il formato consigliato, oppure scrivine un altro.",
+                     "  The final choice is yours: press Enter for the suggested format, or type another one."),
     "subtitle": ("1 esagono = {scale}  {dot}  {c}{x}{r} esagoni  {dot}  seme {seed}",
                  "1 hex = {scale}  {dot}  {c}{x}{r} hexes  {dot}  seed {seed}"),
     "warn_shrink": ("Il contenuto sfora il foglio: l'immagine viene ridotta al {p:.0%} per stare nell'{paper}",
@@ -398,8 +404,10 @@ TEXTS = {
                     "(in maps_generated/<seed>, or in the --output folder)"),
     "h_title": ("titolo della mappa", "map title"),
     "h_scale": ("testo della scala, es. '6 miglia'", "scale text, e.g. '6 miles'"),
-    "h_paper": ("formato di stampa delle due mappe; se manca si usa quello consigliato",
-                "print format of the two maps; if missing the suggested one is used"),
+    "h_paper": ("formato di stampa delle due mappe; se manca, il programma lo chiede proponendo quello "
+                "consigliato (o lo usa direttamente, se non gira in un terminale)",
+                "print format of the two maps; if missing, the program asks for it, offering the suggested one "
+                "(or just uses it, when not running in a terminal)"),
     "h_orientation": ("di solito non serve: la direzione del foglio segue la forma della mappa",
                       "usually not needed: the sheet direction follows the shape of the map"),
     "h_output": ("cartella in cui salvare le mappe (default: maps_generated accanto a wyrmhex.py); ogni mappa "
@@ -988,6 +996,8 @@ def settings_from_options(argv):
     ap.add_argument("--font", default=None, metavar="FILE", help=tr("h_font"))
     a = ap.parse_args(argv)
     orientation = ORIENTATION_FROM_USER[a.orientation]
+    # no --formato typed: ask for it at the end, if someone is at the keyboard
+    ask_for_paper = a.paper is None and sys.stdin.isatty()
     size = SIZE_FROM_USER[a.size]
 
     if a.reproduce is not None:
@@ -1005,6 +1015,7 @@ def settings_from_options(argv):
         if a.paper:
             saved["paper"] = a.paper            # a format typed now wins over the saved one
         saved["orientation"] = orientation
+        saved["ask_paper"] = ask_for_paper
         return saved
 
     # "20x15" becomes 20 columns and 15 rows; "auto" is worked out later
@@ -1022,6 +1033,7 @@ def settings_from_options(argv):
         "rivers": a.rivers, "seed": a.seed, "title": a.title, "scale": a.scale,
         "orientation": orientation, "output": a.output, "paper": a.paper,
         "ascii_only": a.ascii_only, "size": size, "font": a.font,
+        "ask_paper": ask_for_paper,
     }
 
 
@@ -1967,11 +1979,14 @@ def suggest_paper(params, grid, fonts, G):
     return (readable[0] if readable else list(PAPERS)[-1]), options
 
 
-def ask_paper(params, grid, fonts, G, interactive, log):
-    """Show how the map would look on each paper and pick the format:
-    asked to the user when the program is asking questions, otherwise taken
-    from --formato, from the saved settings, or from the suggestion."""
+def ask_paper(params, grid, fonts, G, ask_user, log):
+    """Show how the map would look on each paper, suggest the best one and let
+    the user make the final choice. When the user is not asked (the format was
+    typed with --formato, or nobody is at the keyboard), the format comes from
+    --formato, from the saved settings, or from the suggestion."""
     suggested, options = suggest_paper(params, grid, fonts, G)
+    aspect = fonts[3]
+    log.info(tr("info_paper_intro", c=grid.cols, r=grid.rows))
     for paper, (char_mm, orientation, k) in options.items():
         if char_mm < SMALL_CHAR_MM:
             verdict = tr("v_too_small")
@@ -1981,11 +1996,14 @@ def ask_paper(params, grid, fonts, G, interactive, log):
             verdict = tr("v_good")
         note = tr("suggested") if paper == suggested else ""
         hexes = tr("hexes_large") if k == 3 else tr("hexes_small")
+        # a hex is 2k lines tall, and a line is 'aspect' times taller than a letter is wide
+        hex_mm = 2 * k * aspect * char_mm
         log.info(tr("info_paper_option", paper=paper, o=pick(ORIENTATION_NAMES[orientation]), hexes=hexes,
-                    mm=char_mm, v=verdict, note=note))
+                    hex_mm=hex_mm, mm=char_mm, v=verdict, note=note))
     default = params.get("paper") or suggested
-    if interactive:
+    if ask_user:
         print()
+        print(tr("paper_choice"))
         while True:
             answer = input(tr("q_paper", default=default)).strip().upper()
             if not answer:
@@ -2156,6 +2174,10 @@ def main():
     # No options typed? Then ask the questions one by one.
     interactive = len(sys.argv) == 1
     params = ask_settings() if interactive else settings_from_options(sys.argv[1:])
+    # The print format is always asked, so the final choice is the user's:
+    # not only after the questions, but also with options typed on the command
+    # line, unless --formato was typed or nobody is at the keyboard.
+    ask_format = params.pop("ask_paper", interactive)
     # the settings are decided: the conjuring begins
     show_conjuring()
     log = Log(12)
@@ -2188,7 +2210,7 @@ def main():
     # Step 10: the map is ready, now the print format
     log.step(tr("step_paper"))
     G = Glyphs(open_font(font_spec, 40), params["ascii_only"])
-    paper = ask_paper(params, grid, (font_spec, bold_spec, advance_em, aspect), G, interactive, log)
+    paper = ask_paper(params, grid, (font_spec, bold_spec, advance_em, aspect), G, ask_format, log)
     params["paper"] = paper
     k = hex_size(params, grid, paper, aspect)
     layout, n_cols, n_rows, legend, subtitle = page_layout(

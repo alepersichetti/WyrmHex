@@ -130,13 +130,15 @@ While it works, it shows each step it's taking, each with a **progress bar** tha
 
 While it draws the two pictures, which is the longest part, a second bar shows the percentage and updates in place until it reaches `100%  done`. When the map is ready, it asks you one last thing:
 
-8. **Print format** for the two maps: `A4`, `A3` or `A2`. Before the question you'll see, for each format, how big the letters will be and whether they'll be easy to read. The ready-made answer in brackets is the **suggested format**: the smallest one where the map reads well. The more hexes you chose, the bigger the suggested format. For example:
+8. **Print format** for the two maps: `A4`, `A3` or `A2`. The program weighs up the format based on the number of hexes: before the question you'll see, for each format, how big the hexes and the letters will be and whether they'll be easy to read. The ready-made answer in brackets is the **suggested format**: the smallest one where the map reads well; the more hexes you chose, the bigger it gets. **The final choice is yours:** press Enter for the suggested format, or type another one. For example:
 
    ```
-   · A4 portrait    small hexes     letters 1.07 mm wide (too small)
-   · A3 portrait    small hexes     letters 1.53 mm wide (easy to read)   <- suggested
-   · A2 portrait    large hexes     letters 1.50 mm wide (easy to read)
-   Print format for both maps (A4, A3, A2) [A3]:
+   · Grid of 12 x 30 hexes: this is how it would print on each format (hex measured from flat side to flat side)
+   · A4 portrait    small hexes  8 mm, letters 1.07 mm wide (too small)
+   · A3 portrait    small hexes 12 mm, letters 1.53 mm wide (easy to read)   <- suggested
+   · A2 portrait    large hexes 18 mm, letters 1.50 mm wide (easy to read)
+     The final choice is yours: press Enter for the suggested format, or type another one.
+     Print format for both maps (A4, A3, A2) [A3]:
    ```
 
    On big sheets, if there's room, the program uses bigger hexes, so the map keeps good proportions.
@@ -216,7 +218,7 @@ Without `--language en` the messages and the texts on the map are in Italian. Ev
 | `--scale` / `--scala` | Scale text | `--scale "5 km"` |
 | `--seed` / `--seme` | Use a specific seed instead of a random one | `--seed 42` |
 | `--reproduce` / `--riproduci` | Rebuilds the map with that seed, reading the settings from its file (looked for in `maps_generated/<seed>`, or in the `--output` folder) | `--reproduce 482913` |
-| `--format` / `--formato` | Print format: `A4`, `A3` or `A2`. If you leave it out, the suggested one is used (or, with `--reproduce`, the one from last time) | `--format A3` |
+| `--format` / `--formato` | Print format: `A4`, `A3` or `A2`. If you leave it out, the program asks you at the end, offering the suggested one (or, with `--reproduce`, the one from last time) | `--format A3` |
 | `--orientation` / `--orientamento` | Usually not needed: the sheet direction follows the shape of the map. You can force it with `portrait` or `landscape` (`verticale` or `orizzontale`) | `--orientation portrait` |
 | `--output` | Folder to save the maps in instead of `maps_generated`; there too, every map gets its own folder named after its seed | `--output maps` |
 | `--ascii-only` / `--solo-ascii` | Use only plain keyboard letters and signs | `--ascii-only` |
