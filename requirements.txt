@@ -1,0 +1,6 @@
+# WyrmHex v0.0.1 - libraries to install
+# Install with:  python -m pip install -r requirements.txt
+#
+# Pillow creates and saves the map pictures.
+# 11.3 is the first version made for Python 3.14.
+Pillow>=11.3
