@@ -1,4 +1,4 @@
-# WyrmHex v0.0.1 - libraries to install
+# WyrmHex v0.0.2 - libraries to install
 # Install with:  python -m pip install -r requirements.txt
 #
 # Pillow creates and saves the map pictures.

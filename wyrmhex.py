@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-WyrmHex v0.0.1 - hexcrawl map generator for OSR campaigns
+WyrmHex v0.0.2 - hexcrawl map generator for OSR campaigns
 =========================================================
 
 This program draws a random map made of hexagons ("hexes") for old-school
@@ -16,14 +16,26 @@ and Moonring:
   - cities, fortresses and dungeons are white symbols in black boxes
 
 The whole page (frame, title, map, legend) is a grid of letters that all
-have the same width. The program saves it as black-and-white pictures
-ready to print on A4 paper at 300 dpi, and also as plain text (.txt).
+have the same width. First the program builds the map, then it asks on
+which paper you want to print it (A4, A3 or A2, suggesting the best one
+for the number of hexes), and saves black-on-white pictures for that
+paper at 600 dpi, plus the page as plain text (.txt). The sheet is turned
+upright or sideways automatically, following the shape of the map.
 
-Files it creates (--output chooses the folder):
-  <seed>_nonumber.png / .txt   the map without hex numbers
-  <seed>_number.png / .txt     the same map with a number in every hex
-                               (column + row, e.g. 0101 is the top-left hex)
-  e.g. 482913_nonumber.png
+Where the files go: the first time it runs, the program creates a folder
+called "maps_generated" next to wyrmhex.py. Every map gets its own folder
+in there, named with its seed (--output chooses another place for them):
+  maps_generated/<seed>/<seed>_nonumber.png / .txt   the map without hex numbers
+  maps_generated/<seed>/<seed>_number.png / .txt     the same map with a number in every hex
+                                     (column + row, e.g. 0101 is the top-left hex)
+  e.g. maps_generated/482913/482913_nonumber.png
+
+What happens when it runs without options: it asks for the language
+(Italian or English), shows a welcome screen with a wyvern, asks its
+questions, then shows a wizard casting the spell and builds the map in
+12 numbered steps. Every step starts with a bar that shows how much of
+the whole job is done; while the two big pictures are drawn and saved, a
+second bar fills up on the same line with the percentage.
 
 The "seed" is the number that produced the map. Every PNG also keeps its
 settings hidden inside the file, so the map can be rebuilt from its seed.
@@ -33,14 +45,16 @@ How to run it:
   python wyrmhex.py --seme 42            (the grid size is chosen to fill the sheet)
   python wyrmhex.py --griglia 20x15      (choose the grid size yourself)
   python wyrmhex.py --riproduci 42       (rebuild map 42 from the settings in its PNG)
+  python wyrmhex.py --formato A3         (print format: A4, A3 or A2)
+  python wyrmhex.py --language en --seed 42   (English texts; every option also has an English name)
   python wyrmhex.py --solo-ascii         (only the most basic keyboard characters)
-  python wyrmhex.py --invertito          (white on black, for screens)
 
 If the terrain percentages add up to less than 100%, the rest becomes
 plains. If they add up to more than 100%, the program stops with an error.
 
 The code is written in English. What the user sees (questions, messages,
-option names such as --griglia) is in Italian.
+the texts on the map) is in Italian or in English: the language is chosen
+at the start, or with --lingua / --language.
 """
 
 import argparse
@@ -56,37 +70,43 @@ from collections import deque
 
 # Pillow is the only extra library we need: it creates and saves pictures.
 try:
-    from PIL import Image, ImageDraw, ImageFont, ImageOps
+    from PIL import Image, ImageDraw, ImageFont
     from PIL.PngImagePlugin import PngInfo
 except ImportError:
-    sys.exit("Manca la libreria Pillow. Installala con:  pip install -r requirements.txt")
+    sys.exit("Manca la libreria Pillow. Installala con:  pip install -r requirements.txt\n"
+             "Pillow is missing. Install it with:   pip install -r requirements.txt")
+
+# An A2 page at 600 dpi has about 139 million pixels. Pillow warns about pictures
+# that big because they could be a trick to fill the memory; ours are our own maps.
+Image.MAX_IMAGE_PIXELS = None
 
 
 # ==========================================================================
 # SETTINGS
 # ==========================================================================
 
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 
 # The seven terrain types a hex can have.
 PLAINS, SEA, LAKE, HILLS, MOUNTAINS, FOREST, DESERT = (
     "plains", "sea", "lake", "hills", "mountains", "forest", "desert")
 WATER = (SEA, LAKE)   # the two "water" terrains
 
-# Terrain names as the user reads them in the console.
-TERRAIN_NAMES = {PLAINS: "pianura", SEA: "mare", LAKE: "lago", HILLS: "colline",
-                 MOUNTAINS: "montagne", FOREST: "foresta", DESERT: "deserto"}
+# Terrain names as the user reads them in the console: (Italian, English).
+TERRAIN_NAMES = {PLAINS: ("pianura", "plains"), SEA: ("mare", "sea"), LAKE: ("lago", "lake"),
+                 HILLS: ("colline", "hills"), MOUNTAINS: ("montagne", "mountains"),
+                 FOREST: ("foresta", "forest"), DESERT: ("deserto", "desert")}
 
 # For each terrain the user can set a percentage.
-# Each line is: (option name typed by the user, terrain, label shown to the user)
+# Each line is: (Italian option name, English option name, terrain, label shown to the user)
 TERRAIN_OPTIONS = [
-    ("pianura", PLAINS, "Pianura"),
-    ("mare", SEA, "Mare"),
-    ("laghi", LAKE, "Laghi"),
-    ("colline", HILLS, "Colline"),
-    ("montagne", MOUNTAINS, "Montagne"),
-    ("foreste", FOREST, "Foreste"),
-    ("deserti", DESERT, "Deserti"),
+    ("pianura", "plains", PLAINS, ("Pianura", "Plains")),
+    ("mare", "sea", SEA, ("Mare", "Sea")),
+    ("laghi", "lakes", LAKE, ("Laghi", "Lakes")),
+    ("colline", "hills", HILLS, ("Colline", "Hills")),
+    ("montagne", "mountains", MOUNTAINS, ("Montagne", "Mountains")),
+    ("foreste", "forests", FOREST, ("Foreste", "Forests")),
+    ("deserti", "deserts", DESERT, ("Deserti", "Deserts")),
 ]
 # Percentages used when the user does not choose their own.
 DEFAULT_PERCENTAGES = {PLAINS: 30, SEA: 15, LAKE: 3, HILLS: 15,
@@ -94,21 +114,24 @@ DEFAULT_PERCENTAGES = {PLAINS: 30, SEA: 15, LAKE: 3, HILLS: 15,
 
 # The three kinds of sites placed on the map, and their printed names.
 CITY, FORTRESS, DUNGEON = "city", "fortress", "dungeon"
-SITE_NAMES = {CITY: "Città", FORTRESS: "Fortezza", DUNGEON: "Dungeon"}
+SITE_NAMES = {CITY: ("Città", "City"), FORTRESS: ("Fortezza", "Fortress"), DUNGEON: ("Dungeon", "Dungeon")}
 
 # Sheet directions: the words the user types, and the words shown in messages.
-ORIENTATION_FROM_USER = {"auto": "auto", "verticale": "portrait", "orizzontale": "landscape"}
-ORIENTATION_NAMES = {"portrait": "verticale", "landscape": "orizzontale"}
+ORIENTATION_FROM_USER = {"auto": "auto", "verticale": "portrait", "orizzontale": "landscape",
+                         "portrait": "portrait", "landscape": "landscape"}
+ORIENTATION_NAMES = {"portrait": ("verticale", "portrait"), "landscape": ("orizzontale", "landscape")}
 # Hex sizes: the words the user types.
-SIZE_FROM_USER = {"auto": "auto", "piccola": "small", "grande": "large"}
+SIZE_FROM_USER = {"auto": "auto", "piccola": "small", "grande": "large", "small": "small", "large": "large"}
 
 # Printing
-DPI = 300                   # print quality: 300 dots per inch
-SUPERSAMPLE = 2             # we draw everything twice as big, then shrink it: smoother result
+DPI = 600                   # print quality: 600 dots per inch, sharp even on large paper
 MARGIN_MM = 10.0            # white border around the page, in millimetres
-MAX_CHAR_MM = 3.2           # letters never get wider than this, even on small maps
+MAX_CHAR_MM = 3.2           # on A4, letters never get wider than this (bigger sheets allow bigger letters)
 READABLE_CHAR_MM = 1.35     # letter width used when the program picks the grid size itself
-A4_300DPI = {(2480, 3508), (3508, 2480)}   # pixel size of an A4 sheet at 300 dpi, upright and sideways
+GOOD_CHAR_MM = 1.3          # letters at least this wide read well on paper
+SMALL_CHAR_MM = 1.1         # below this width letters are hard to read
+# Paper sizes in millimetres (width, height when the sheet is upright), from small to big.
+PAPERS = {"A4": (210, 297), "A3": (297, 420), "A2": (420, 594)}
 
 # Name of the note, hidden inside every PNG, that keeps the map's settings.
 SETTINGS_KEY = "wyrmhex-settings"
@@ -167,23 +190,319 @@ MONO_FONTS = [
 
 
 def mm(value):
-    """Turn millimetres into pixels at 300 dpi."""
+    """Turn millimetres into pixels at 600 dpi."""
     return value / 25.4 * DPI
+
+
+# ==========================================================================
+# LANGUAGE
+#
+# Everything the user reads exists in Italian and in English. The language
+# is chosen at the start (or with --lingua / --language) and kept in LANG.
+# Each entry below is  key: (Italian text, English text).  Words in braces,
+# like {seed}, are filled in when the text is shown.
+# ==========================================================================
+LANGUAGES = ("it", "en")
+LANG = "it"
+
+TEXTS = {
+    # console: general
+    "done": ("Completato in {s:.1f} s.", "Done in {s:.1f} s."),
+    "interrupted": ("\n\nInterrotto.", "\n\nStopped."),
+    "invalid_value": ("    Valore non valido, riprova.", "    Invalid value, try again."),
+    "value_range": ("    Il valore deve essere tra {lo} e {hi}.", "    The value must be between {lo} and {hi}."),
+    "yes_letter": ("s", "y"),
+    # welcome screen and conjuring screen
+    "welcome_subtitle": ("generatore di mappe hexcrawl per campagne OSR", "hexcrawl map generator for OSR campaigns"),
+    "press_enter": ("  Premi INVIO per iniziare... ", "  Press ENTER to start... "),
+    "conjuring": ("L'incantesimo di evocazione ha inizio!", "The conjuring spell begins!"),
+    # questions
+    "enter_accepts": ("  Premi Invio per accettare il valore tra parentesi\n",
+                      "  Press Enter to accept the value in brackets\n"),
+    "what_to_do": ("  Cosa vuoi fare?", "  What do you want to do?"),
+    "mode_new": ("    1 = creare una mappa nuova", "    1 = make a new map"),
+    "mode_rebuild": ("    2 = riprodurre una mappa già fatta, a partire dal suo seme",
+                     "    2 = rebuild a map you already made, from its seed"),
+    "choice": ("Scelta", "Choice"),
+    "ask_seed": ("  Seme della mappa da riprodurre (il numero all'inizio del nome del file): ",
+                 "  Seed of the map to rebuild (the number at the start of the file name): "),
+    "seed_digits_only": ("    Scrivi solo il numero, per esempio 482913.", "    Type just the number, for example 482913."),
+    "found_settings": ("\n  Trovate le impostazioni della mappa {seed}:\n    {desc}",
+                       "\n  Found the settings of map {seed}:\n    {desc}"),
+    "use_settings": ("  Uso queste impostazioni? (S/n): ", "  Use these settings? (Y/n): "),
+    "no_settings": ("\n  Non trovo {seed}_nonumber.png (né in {folder}, né nella cartella corrente), "
+                    "quindi non conosco le impostazioni originali.",
+                    "\n  Cannot find {seed}_nonumber.png (neither in {folder} nor in the current folder), "
+                    "so the original settings are unknown."),
+    "same_settings": ("  Inserisci le STESSE impostazioni della mappa originale: il seme da solo non basta.\n",
+                      "  Enter the SAME settings as the original map: the seed alone is not enough.\n"),
+    "ask_ascii": ("  Usare solo i caratteri base della tastiera, senza simboli come ♣ ▲ ≈? (s/N): ",
+                  "  Use only basic keyboard characters, without symbols like ♣ ▲ ≈? (y/N): "),
+    "q_columns": ("Esagoni in base (colonne)", "Hexes across (columns)"),
+    "q_rows": ("Esagoni in altezza (righe)", "Hexes down (rows)"),
+    "q_dungeons": ("Numero di dungeon", "Number of dungeons"),
+    "q_cities": ("Numero di città", "Number of cities"),
+    "q_fortresses": ("Numero di fortezze", "Number of fortresses"),
+    "pct_intro": ("\n  Percentuali di terreno (la somma non deve superare 100; il resto diventa pianura)",
+                  "\n  Terrain percentages (they must not add up to more than 100; the rest becomes plains)"),
+    "pct_retry": ("\n  ERRORE: {error}\n  Reinserisci le percentuali.\n", "\n  ERROR: {error}\n  Enter the percentages again.\n"),
+    "q_rivers": ("Numero di fiumi (-1 = automatico)", "Number of rivers (-1 = automatic)"),
+    "q_title": ("  Titolo della mappa [{default}]: ", "  Map title [{default}]: "),
+    "default_title": ("Terre Selvagge", "Wild Lands"),
+    "default_scale": ("6 miglia", "6 miles"),
+    "q_paper": ("  Formato di stampa per le due mappe (A4, A3, A2) [{default}]: ",
+                "  Print format for both maps (A4, A3, A2) [{default}]: "),
+    "paper_retry": ("    Scrivi A4, A3 oppure A2.", "    Type A4, A3 or A2."),
+    # checks and errors
+    "pct_out_of_range": ("La percentuale di {label} deve essere tra 0 e 100 (ricevuto {value:g}).",
+                         "The {label} percentage must be between 0 and 100 (got {value:g})."),
+    "pct_over_100": ("La somma delle percentuali di terreno è {total:g}%, supera il 100%.",
+                     "The terrain percentages add up to {total:g}%, more than 100%."),
+    "describe": ("griglia {cols}x{rows}, {cities} città, {forts} fortezze, {dungeons} dungeon, fiumi {rivers}"
+                 "\n    terreni: {perc}\n    titolo: {title}",
+                 "grid {cols}x{rows}, {cities} cities, {forts} fortresses, {dungeons} dungeons, rivers {rivers}"
+                 "\n    terrains: {perc}\n    title: {title}"),
+    "err_params": ("\nERRORE NEI PARAMETRI:", "\nERROR IN THE SETTINGS:"),
+    "err_grid_range": ("La griglia deve essere tra 2x2 e 80x80 esagoni.", "The grid must be between 2x2 and 80x80 hexes."),
+    "err_negative": ("Il numero di {name} non può essere negativo.", "The number of {name} cannot be negative."),
+    "n_dungeons": ("dungeon", "dungeons"),
+    "n_cities": ("città", "cities"),
+    "n_fortresses": ("fortezze", "fortresses"),
+    "err_land": ("\nERRORE: servono {sites} esagoni di terra per i siti, ma la mappa ne ha solo {land}.",
+                 "\nERROR: the sites need {sites} land hexes, but the map has only {land}."),
+    "err_no_saved": ("non trovo {seed}_nonumber.png con le impostazioni né in '{folder}' né nella cartella corrente",
+                     "cannot find {seed}_nonumber.png with its settings in '{folder}' or in the current folder"),
+    "err_grid_format": ("--griglia deve avere il formato BASExALTEZZA, es. 20x15",
+                        "--grid must look like COLSxROWS, e.g. 20x15"),
+    "err_no_font": ("Nessun font monospazio trovato. Indica un file .ttf con --font (es. DejaVuSansMono.ttf).",
+                    "No monospaced font found. Give a .ttf file with --font (e.g. DejaVuSansMono.ttf)."),
+    "err_size": ("{path}: {size} non è un foglio A4, A3 o A2 a 600 dpi",
+                 "{path}: {size} is not an A4, A3 or A2 sheet at 600 dpi"),
+    # step 1-2
+    "step_validate": ("Lettura e validazione dei parametri", "Reading and checking the settings"),
+    "info_grid": ("Griglia: {c} x {r} = {n} esagoni", "Grid: {c} x {r} = {n} hexes"),
+    "info_terrains": ("Terreni: {list}", "Terrains: {list}"),
+    "info_pct_sum": ("Somma percentuali: {t:g}% (≤ 100%: OK)", "Percentages add up to {t:g}% (≤ 100%: OK)"),
+    "info_pct_rest": ("Il {r:g}% non assegnato viene aggiunto alla pianura", "The unassigned {r:g}% is added to plains"),
+    "info_sites": ("Siti richiesti: {c} città, {f} fortezze, {d} dungeon",
+                   "Sites wanted: {c} cities, {f} fortresses, {d} dungeons"),
+    "info_auto_grid": ("Griglia automatica: {c} x {r} esagoni riempiono un A4 {o} (caratteri da {mm} mm)",
+                       "Automatic grid: {c} x {r} hexes fill an A4 {o} sheet ({mm} mm letters)"),
+    "info_seed": ("Seme: {s}  (per rifare questa mappa: scegli 2 all'avvio, oppure usa --riproduci {s})",
+                  "Seed: {s}  (to rebuild this map: choose 2 at the start, or use --reproduce {s})"),
+    "info_folder": ("Cartella della mappa: {folder}", "Map folder: {folder}"),
+    "info_new_folder": ("Creata la cartella {folder}: qui dentro finiranno tutte le mappe",
+                        "Created the {folder} folder: every map will be saved in there"),
+    "step_font": ("Font", "Font"),
+    "info_font": ("Font: {name}{fake}, cella {a:.2f} volte più alta che larga",
+                  "Font: {name}{fake}, letter cell {a:.2f} times taller than wide"),
+    "fake_bold": (" (grassetto simulato)", " (simulated bold)"),
+    # steps 3-9: the land
+    "step_heights": ("Campo di altitudine: rumore casuale livellato + abbassamento verso i bordi",
+                     "Height map: smoothed random noise, lowered towards the edges"),
+    "info_heights": ("{n} quote calcolate, normalizzate tra 0 e 1", "{n} heights worked out, scaled between 0 and 1"),
+    "step_sea": ("Mare: allagamento dall'esagono di bordo più basso verso le quote minori",
+                 "Sea: flooding from the lowest edge hex towards lower ground"),
+    "info_no_sea": ("Nessun mare richiesto", "No sea wanted"),
+    "info_sea": ("Mare partito da {h}, {n} esagoni allagati", "Sea started at {h}, {n} hexes flooded"),
+    "step_lakes": ("Laghi: bacini interni scavati nelle conche", "Lakes: inland basins dug in the dips"),
+    "info_lakes": ("{n} laghi per {h} esagoni", "{n} lakes, {h} hexes"),
+    "warn_lakes": ("Spazio insufficiente: {n} esagoni di lago diventano pianura",
+                   "Not enough room: {n} lake hexes become plains"),
+    "step_relief": ("Rilievi: gli esagoni più alti diventano montagne, i successivi colline",
+                    "Relief: the highest hexes become mountains, the next ones hills"),
+    "info_relief": ("{m} montagne, {h} colline", "{m} mountains, {h} hills"),
+    "step_wetness": ("Umidità: foreste nelle zone umide e vicino all'acqua, deserti in quelle aride, il resto pianura",
+                     "Wetness: forests where it is wet and near water, deserts where it is dry, plains elsewhere"),
+    "info_result": ("Risultato: {list}", "Result: {list}"),
+    "step_rivers": ("Fiumi: dalle sorgenti in quota verso il basso fino a mare, lago o bordo",
+                    "Rivers: from high springs downhill to the sea, a lake or the edge"),
+    "river_water": ("sfocia in acqua", "flows into water"),
+    "river_join": ("confluisce in un altro fiume", "joins another river"),
+    "river_edge": ("esce dalla mappa", "leaves the map"),
+    "info_river": ("Fiume {i}: sorgente {h}, {n} esagoni, {where}", "River {i}: spring {h}, {n} hexes, {where}"),
+    "warn_rivers": ("Tracciati {d} fiumi su {n} richiesti (percorsi validi insufficienti)",
+                    "Drew {d} of {n} rivers wanted (not enough valid paths)"),
+    "step_sites": ("Insediamenti e dungeon: scelta pesata per terreno, con distanze minime",
+                   "Settlements and dungeons: chosen by terrain, with minimum distances"),
+    "info_site_kind": ("{name}: {n} su {n}, distanza minima tra loro {d} esagoni",
+                       "{name}: {n} of {n}, at least {d} hexes apart"),
+    "relaxed": (" (rilassata per mancanza di spazio)", " (reduced for lack of room)"),
+    "sites_header": ("\nELENCO DEI SITI (codice esagono)", "\nLIST OF SITES (hex code)"),
+    "on_river": (", sul fiume", ", on a river"),
+    # step 10: print format
+    "step_paper": ("Formato di stampa: la direzione del foglio segue la forma della mappa",
+                   "Print format: the sheet direction follows the shape of the map"),
+    "v_too_small": ("troppo piccoli", "too small"),
+    "v_small": ("piccoli", "small"),
+    "v_good": ("ben leggibili", "easy to read"),
+    "suggested": ("   <- consigliato", "   <- suggested"),
+    "hexes_large": ("esagoni grandi", "large hexes"),
+    "hexes_small": ("esagoni piccoli", "small hexes"),
+    "info_paper_option": ("{paper} {o:<11} {hexes:<15} caratteri da {mm:.2f} mm ({v}){note}",
+                          "{paper} {o:<11} {hexes:<15} letters {mm:.2f} mm wide ({v}){note}"),
+    "subtitle": ("1 esagono = {scale}  {dot}  {c}{x}{r} esagoni  {dot}  seme {seed}",
+                 "1 hex = {scale}  {dot}  {c}{x}{r} hexes  {dot}  seed {seed}"),
+    "warn_shrink": ("Il contenuto sfora il foglio: l'immagine viene ridotta al {p:.0%} per stare nell'{paper}",
+                    "The content does not fit: the picture is shrunk to {p:.0%} to fit the {paper}"),
+    "info_sheet": ("Foglio {paper} {o} ({w} x {h} px a {dpi} dpi): pagina di {nc} x {nr} caratteri, "
+                   "carattere largo {mm:.2f} mm",
+                   "{paper} sheet, {o} ({w} x {h} px at {dpi} dpi): page of {nc} x {nr} letters, "
+                   "letters {mm:.2f} mm wide"),
+    "hexes_desc_large": ("Esagoni grandi", "Large hexes"),
+    "hexes_desc_small": ("Esagoni piccoli", "Small hexes"),
+    "info_hexes": ("{prefix} (k={k}): {w} caratteri x {h} righe; mappa di {mw} x {mh} caratteri",
+                   "{prefix} (k={k}): {w} letters x {h} lines; map of {mw} x {mh} letters"),
+    "warn_tiny": ("Caratteri molto piccoli: la stampa sarà poco leggibile, scegli un formato più grande",
+                  "Very small letters: the print will be hard to read, choose a bigger format"),
+    # steps 11-12: drawing and saving
+    "step_plain": ("Disegno della mappa senza numeri ({paper}, {dpi} dpi, PNG + TXT)",
+                   "Drawing the map without numbers ({paper}, {dpi} dpi, PNG + TXT)"),
+    "step_numbered": ("Disegno della mappa numerata ({paper}, {dpi} dpi, stessa mappa + codici CCRR)",
+                      "Drawing the numbered map ({paper}, {dpi} dpi, same map + CCRR codes)"),
+    "saved": ("Salvate: {a}, {b}", "Saved: {a}, {b}"),
+    "warn_missing_glyphs": ("Il font non ha questi glifi, sostituiti con ASCII: {g}",
+                            "The font lacks these symbols, replaced with ASCII: {g}"),
+    "pb_drawing": ("disegno", "drawing"),
+    "pb_saving": ("salvataggio", "saving"),
+    "pb_done": ("fatto", "done"),
+    # texts drawn on the map (legend)
+    "leg_mountains": ("Montagne", "Mountains"),
+    "leg_hills": ("Colline", "Hills"),
+    "leg_forest": ("Foresta", "Forest"),
+    "leg_plains": ("Pianura = esagono vuoto", "Plains = empty hex"),
+    "leg_desert": ("Deserto", "Desert"),
+    "leg_sea": ("Mare", "Sea"),
+    "leg_lake": ("Lago", "Lake"),
+    "leg_river": ("Fiume", "River"),
+    # command-line help
+    "cli_description": ("WyrmHex: genera una mappa hexcrawl OSR in stile ASCII (Dwarf Fortress / Moonring), "
+                        "PNG a 600 dpi in formato A4, A3 o A2 + TXT.",
+                        "WyrmHex: makes an ASCII-style OSR hexcrawl map (Dwarf Fortress / Moonring), "
+                        "600 dpi PNG on A4, A3 or A2 + TXT."),
+    "mv_grid": ("BASExALTEZZA", "COLSxROWS"),
+    "mv_seed": ("SEME", "SEED"),
+    "mv_text": ("TESTO", "TEXT"),
+    "mv_folder": ("CARTELLA", "FOLDER"),
+    "h_grid": ("esagoni in base X altezza, es. 33x15; auto (default) riempie un A4",
+               "hexes across X down, e.g. 33x15; auto (default) fills an A4"),
+    "h_dungeons": ("numero di dungeon", "number of dungeons"),
+    "h_cities": ("numero di città", "number of cities"),
+    "h_fortresses": ("numero di fortezze", "number of fortresses"),
+    "h_terrain": ("%% di {label} (default {default})", "%% of {label} (default {default})"),
+    "h_rivers": ("numero di fiumi, -1 = automatico", "number of rivers, -1 = automatic"),
+    "h_seed": ("seme casuale per rigenerare la stessa mappa", "random seed, to make the same map again"),
+    "h_reproduce": ("rifà la mappa con questo seme, leggendo le impostazioni dal suo PNG "
+                    "(in maps_generated/<seme>, o nella cartella --output)",
+                    "rebuilds the map with this seed, reading the settings from its PNG "
+                    "(in maps_generated/<seed>, or in the --output folder)"),
+    "h_title": ("titolo della mappa", "map title"),
+    "h_scale": ("testo della scala, es. '6 miglia'", "scale text, e.g. '6 miles'"),
+    "h_paper": ("formato di stampa delle due mappe; se manca si usa quello consigliato",
+                "print format of the two maps; if missing the suggested one is used"),
+    "h_orientation": ("di solito non serve: la direzione del foglio segue la forma della mappa",
+                      "usually not needed: the sheet direction follows the shape of the map"),
+    "h_output": ("cartella in cui salvare le mappe (default: maps_generated accanto a wyrmhex.py); ogni mappa "
+                 "va in una sua cartella <seme>, con i file <seme>_nonumber e <seme>_number",
+                 "folder where the maps are saved (default: maps_generated next to wyrmhex.py); every map goes "
+                 "in its own <seed> folder, with the files <seed>_nonumber and <seed>_number"),
+    "h_ascii": ("usa solo caratteri ASCII a 7 bit", "use only 7-bit ASCII characters"),
+    "h_size": ("esagoni piccoli (k=2) o grandi (k=3); auto sceglie in base al formato",
+               "small (k=2) or large (k=3) hexes; auto chooses from the print format"),
+    "h_version": ("mostra la versione del programma ed esce", "show the program version and exit"),
+    "h_font": ("file .ttf monospazio da usare", "monospaced .ttf font file to use"),
+    "h_language": ("lingua dei testi: it (italiano) o en (inglese)", "language of the texts: it (Italian) or en (English)"),
+}
+
+
+def tr(key, **values):
+    """The text 'key' in the chosen language, with the {words} in braces filled in."""
+    text = TEXTS[key][LANGUAGES.index(LANG)]
+    return text.format(**values) if values else text
+
+
+def pick(pair):
+    """Pick the Italian or the English half of an (Italian, English) pair."""
+    return pair[LANGUAGES.index(LANG)]
+
+
+def normalize_language(value):
+    """Turn what the user typed (1, 2, it, en, italiano, english...) into "it" or "en", or None."""
+    value = (value or "").strip().lower()
+    if value in ("1", "it", "ita", "italiano", "italian"):
+        return "it"
+    if value in ("2", "en", "eng", "english", "inglese"):
+        return "en"
+    return None
+
+
+def ask_language():
+    """The very first question, shown in both languages."""
+    global LANG
+    print("\n  Lingua / Language:")
+    print("    1 = Italiano")
+    print("    2 = English")
+    while True:
+        choice = normalize_language(input("  Scelta / Choice [1]: ") or "1")
+        if choice:
+            LANG = choice
+            return
+        print("    1 / 2")
+
+
+def language_from_options(argv):
+    """Find --lingua / --language among the typed options before anything else,
+    so that even the help text is in the right language."""
+    global LANG
+    for i, arg in enumerate(argv):
+        for name in ("--lingua", "--language"):
+            if arg == name and i + 1 < len(argv):
+                LANG = normalize_language(argv[i + 1]) or LANG
+            elif arg.startswith(name + "="):
+                LANG = normalize_language(arg.split("=", 1)[1]) or LANG
 
 
 # ==========================================================================
 # MESSAGES IN THE CONSOLE
 # ==========================================================================
+def bar(fraction, cells):
+    """A progress bar made of blocks, e.g. [██████░░░░] for 60%."""
+    full = round(max(0.0, min(1.0, fraction)) * cells)
+    return "[" + "█" * full + "░" * (cells - full) + "]"
+
+
+class LiveBar:
+    """A progress bar that fills up on the same line while something long runs
+    (drawing and saving a big map). When the output is not a console window
+    (for example when it goes to a file) it stays silent."""
+
+    def __init__(self):
+        self.live = sys.stdout.isatty()
+        self.shown = None
+
+    def update(self, fraction, label):
+        percent = int(fraction * 100)
+        if self.live and (percent, label) != self.shown:
+            self.shown = (percent, label)
+            print(f"\r        {bar(fraction, 30)} {percent:>3}%  {label:<14}", end="", flush=True)
+
+    def finish(self):
+        if self.live:
+            print(f"\r        {bar(1, 30)} 100%  {tr('pb_done'):<14}")
+
+
 class Log:
-    """Prints numbered steps ("[3/11] ...") so the user can follow the work."""
+    """Prints numbered steps so the user can follow the work. Each step starts
+    with a bar that shows how much of the whole job is done."""
 
     def __init__(self, total_steps):
         self.total_steps, self.step_number, self.start_time = total_steps, 0, time.perf_counter()
 
     def step(self, message):
-        # a new numbered step
+        # a new numbered step, with the overall progress bar
         self.step_number += 1
-        print(f"\n[{self.step_number:>2}/{self.total_steps}] {message}")
+        progress = bar(self.step_number / self.total_steps, self.total_steps)
+        print(f"\n{progress} {self.step_number:>2}/{self.total_steps}  {message}")
 
     def info(self, message):
         # a detail inside the current step
@@ -195,7 +514,7 @@ class Log:
 
     def done(self):
         # the closing line, with how long everything took
-        print(f"\nCompletato in {time.perf_counter() - self.start_time:.1f} s.")
+        print("\n" + tr("done", s=time.perf_counter() - self.start_time))
 
 
 # ==========================================================================
@@ -275,15 +594,14 @@ def hex_code(hex_, digits):
 def check_percentages(perc):
     """Check the terrain percentages. Returns an error message, or None if all is fine."""
     # each percentage must be between 0 and 100
-    for _, terrain, label in TERRAIN_OPTIONS:
+    for _, _, terrain, label in TERRAIN_OPTIONS:
         if perc[terrain] < 0 or perc[terrain] > 100:
-            return f"La percentuale di {label.lower()} deve essere tra 0 e 100 (ricevuto {perc[terrain]:g})."
+            return tr("pct_out_of_range", label=pick(label).lower(), value=perc[terrain])
     # and all together they must not go over 100
     total = sum(perc.values())
     if total > 100 + 1e-9:
-        detail = " + ".join(f"{label.lower()} {perc[terrain]:g}" for _, terrain, label in TERRAIN_OPTIONS)
-        return (f"La somma delle percentuali di terreno è {total:g}%, supera il 100%.\n"
-                f"         ({detail})")
+        detail = " + ".join(f"{pick(label).lower()} {perc[terrain]:g}" for _, _, terrain, label in TERRAIN_OPTIONS)
+        return tr("pct_over_100", total=total) + f"\n         ({detail})"
     return None
 
 
@@ -292,9 +610,38 @@ def new_seed():
     return 100_000 + secrets.randbelow(900_000)
 
 
-def output_names(folder, seed, extension="png"):
-    """File names for the two maps: <seed>_nonumber and <seed>_number, inside 'folder'."""
-    os.makedirs(folder, exist_ok=True)   # create the folder if it does not exist yet
+# All maps are saved in this folder, next to wyrmhex.py: one sub-folder per map, named with its seed.
+MAPS_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "maps_generated")
+
+
+def make_maps_folder():
+    """Create the maps_generated folder if it does not exist yet.
+    Returns True when it has just been created (the very first run)."""
+    if os.path.isdir(MAPS_FOLDER):
+        return False
+    os.makedirs(MAPS_FOLDER, exist_ok=True)
+    return True
+
+
+def map_folder(base, seed):
+    """The folder of one map: <base>/<seed>."""
+    return os.path.join(base, str(seed))
+
+
+def short_path(path):
+    """A path written the short way for the screen: relative to the current folder when possible."""
+    try:
+        short = os.path.relpath(path)
+    except ValueError:                   # Windows: another drive letter
+        return path
+    return path if short.startswith("..") else short
+
+
+def output_names(base, seed, extension="png"):
+    """File names for the two maps: <seed>_nonumber and <seed>_number,
+    inside the map's own folder <base>/<seed> (created if it does not exist yet)."""
+    folder = map_folder(base, seed)
+    os.makedirs(folder, exist_ok=True)
     return (os.path.join(folder, f"{seed}_nonumber.{extension}"),
             os.path.join(folder, f"{seed}_number.{extension}"))
 
@@ -309,7 +656,7 @@ def upgrade_settings(data):
              "scala": "scale", "orientamento": "orientation", "solo_ascii": "ascii_only",
              "invertito": "inverted", "dimensione": "size", "font": "font"}
     new = {names[k]: v for k, v in data.items() if k in names}
-    terrain_of_option = {option: terrain for option, terrain, _ in TERRAIN_OPTIONS}
+    terrain_of_option = {option: terrain for option, _, terrain, _ in TERRAIN_OPTIONS}
     new["percentages"] = {terrain_of_option[k]: v for k, v in new["percentages"].items()}
     if "orientation" in new:
         new["orientation"] = ORIENTATION_FROM_USER.get(new["orientation"], new["orientation"])
@@ -326,9 +673,11 @@ def load_settings(folder, seed):
         if not os.path.exists(path):
             continue
         try:
+            # the settings note sits before the picture data, so 'info' has it
+            # without having to decode the whole (possibly huge) picture
             with Image.open(path) as img:
-                text = next((img.text[key] for key in (SETTINGS_KEY, *OLD_SETTINGS_KEYS)
-                             if key in img.text), None)
+                text = next((img.info[key] for key in (SETTINGS_KEY, *OLD_SETTINGS_KEYS)
+                             if key in img.info), None)
         except (OSError, AttributeError):
             continue
         if text:
@@ -336,20 +685,41 @@ def load_settings(folder, seed):
     return None
 
 
+def find_settings(base, seed):
+    """Look for the saved settings of map 'seed': first in its own folder <base>/<seed>,
+    then in maps_generated, then in the current folder (where older versions saved the maps)."""
+    folders = []
+    for folder in (map_folder(base, seed), base, map_folder(MAPS_FOLDER, seed), MAPS_FOLDER,
+                   map_folder(".", seed), "."):
+        if os.path.abspath(folder) not in (os.path.abspath(f) for f in folders):
+            folders.append(folder)
+    for folder in folders:
+        saved = load_settings(folder, seed)
+        if saved:
+            return saved
+    return None
+
+
 def complete_settings(p):
     """Fill in any setting missing from saved settings (e.g. from an older version of the program)."""
-    for key, value in (("ascii_only", False), ("inverted", False), ("size", "auto"), ("font", None)):
+    for key, value in (("ascii_only", False), ("size", "auto"), ("font", None), ("paper", None)):
         p.setdefault(key, value)
-    if p.get("orientation", "auto") == "auto":
-        p["orientation"] = "landscape"
+    # maps are always black on white now: an old "white on black" choice is dropped
+    p.pop("inverted", None)
+    # the sheet direction follows the shape of the map
+    p["orientation"] = "auto"
+    # a default title or scale written in the other language follows the language chosen now
+    for key, default in (("title", "default_title"), ("scale", "default_scale")):
+        if p.get(key) in TEXTS[default]:
+            p[key] = tr(default)
     return p
 
 
 def describe_settings(p):
     """A short summary of the settings, to show the user before reproducing a map."""
-    perc = ", ".join(f"{option} {p['percentages'][terrain]:g}%" for option, terrain, _ in TERRAIN_OPTIONS)
-    return (f"griglia {p['columns']}x{p['rows']}, {p['cities']} città, {p['fortresses']} fortezze, "
-            f"{p['dungeons']} dungeon, fiumi {p['rivers']}\n    terreni: {perc}\n    titolo: {p['title']}")
+    perc = ", ".join(f"{pick(label).lower()} {p['percentages'][terrain]:g}%" for _, _, terrain, label in TERRAIN_OPTIONS)
+    return tr("describe", cols=p["columns"], rows=p["rows"], cities=p["cities"], forts=p["fortresses"],
+              dungeons=p["dungeons"], rivers=p["rivers"], perc=perc, title=p["title"])
 
 
 def split_hexes(total, perc):
@@ -373,16 +743,18 @@ def ask(question, default, kind=int, lowest=None, highest=None):
         try:
             value = kind(answer.replace(",", "."))   # accept "2,5" as well as "2.5"
         except ValueError:
-            print("    Valore non valido, riprova.")
+            print(tr("invalid_value"))
             continue
         if (lowest is not None and value < lowest) or (highest is not None and value > highest):
-            print(f"    Il valore deve essere tra {lowest} e {highest}.")
+            print(tr("value_range", lo=lowest, hi=highest))
             continue
         return value
 
 
 # ==========================================================================
-# WELCOME SCREEN (shown when the program asks its questions)
+# WELCOME SCREEN, WIZARD AND QUESTIONS
+# (the welcome screen and the questions appear only when the program is
+# started without options; the wizard appears every time)
 # ==========================================================================
 # The program's name in big letters.
 TITLE_ART = r"""
@@ -428,7 +800,7 @@ def show_welcome():
     """Show the title and the drawing, then wait for the user to press ENTER."""
     art = WYVERN_CASTLE.strip("\n").split("\n")
     title = TITLE_ART.strip("\n").split("\n")
-    subtitle = f"v{VERSION}  ·  generatore di mappe hexcrawl per campagne OSR"
+    subtitle = f"v{VERSION}  ·  " + tr("welcome_subtitle")
     width = max(len(line) for line in art)
     # In a narrow window long lines would wrap and scramble the drawing:
     # use only the width of the window and cut the drawing at its edge.
@@ -449,147 +821,191 @@ def show_welcome():
         "═" * width,
     ]
     print("\n" + "\n".join(line.rstrip() for line in screen) + "\n")
-    input("  Premi INVIO per iniziare... ")
+    input(tr("press_enter"))
     print()
 
 
-def ask_mode(folder="."):
+# A wizard casting a spell, shown once the settings are decided.
+# ASCII art by Row, from the classic ASCII art archives: the artist's signature
+# "-Row" at the bottom right is replaced on screen by the spell text (@SPELL@).
+WIZARD = r"""
+                  .
+
+                   .
+         /^\     .
+    /\   "V"
+   /__\   I      O  o
+  //..\\  I     .
+  \].`[/  I
+  /l\/j\  (]    .  O
+ /. ~~ ,\/I          .
+ \\L__j^\/I       o
+  \/--v}  I     o   .
+  |    |  I   _________
+  |    |  I c(`       ')o
+  |    l  I   \.     ,/
+_/j  L l\_!  _//^---^\\_    @SPELL@
+"""
+
+
+def show_conjuring():
+    """Show the wizard: the map is about to be conjured."""
+    print(WIZARD.replace("@SPELL@", tr("conjuring")).rstrip())
+
+
+def ask_mode(folder=MAPS_FOLDER):
     """The first question: make a brand new map, or rebuild one from its seed?
     Returns None for a new map, otherwise (seed, saved settings or None)."""
-    print("  Cosa vuoi fare?")
-    print("    1 = creare una mappa nuova")
-    print("    2 = riprodurre una mappa già fatta, a partire dal suo seme")
-    choice = ask("Scelta", 1, int, 1, 2)
+    print(tr("what_to_do"))
+    print(tr("mode_new"))
+    print(tr("mode_rebuild"))
+    choice = ask(tr("choice"), 1, int, 1, 2)
     if choice == 1:
         return None
     # the seed has no default value: keep asking until we get a number
     seed = None
     while seed is None:
-        answer = input("  Seme della mappa da riprodurre (il numero all'inizio del nome del file): ").strip()
+        answer = input(tr("ask_seed")).strip()
         if answer.isdigit():
             seed = int(answer)
         else:
-            print("    Scrivi solo il numero, per esempio 482913.")
-    saved = load_settings(folder, seed)
+            print(tr("seed_digits_only"))
+    saved = find_settings(folder, seed)
     if saved:
-        print(f"\n  Trovate le impostazioni della mappa {seed}:\n    {describe_settings(saved)}")
-        if input("  Uso queste impostazioni? (S/n): ").strip().lower().startswith("n"):
+        print(tr("found_settings", seed=seed, desc=describe_settings(saved)))
+        if input(tr("use_settings")).strip().lower().startswith("n"):
             saved = None
     else:
-        print(f"\n  Non trovo {seed}_nonumber.png in questa cartella, quindi non conosco le impostazioni originali.")
+        print(tr("no_settings", seed=seed, folder=short_path(folder)))
     if not saved:
-        print("  Inserisci le STESSE impostazioni della mappa originale: il seme da solo non basta.\n")
+        print(tr("same_settings"))
     return seed, saved
 
 
 def ask_look(p):
-    """Ask how the map should look. These choices never change the land itself,
-    so they are asked again even when an old map is rebuilt from its seed."""
-    p["ascii_only"] = input("  Usare solo i caratteri base della tastiera, senza simboli come ♣ ▲ ≈? (s/N): "
-                            ).strip().lower().startswith("s")
-    p["inverted"] = input("  Sfondo NERO con segni bianchi? Solo per lo schermo, sconsigliato "
-                          "per la stampa (s/N): ").strip().lower().startswith("s")
+    """Ask how the map should look. This never changes the land itself,
+    so it is asked again even when an old map is rebuilt from its seed."""
+    p["ascii_only"] = input(tr("ask_ascii")).strip().lower().startswith(tr("yes_letter"))
 
 
 def ask_settings():
     """Ask the user every setting, one question at a time (used when no options are given)."""
+    ask_language()
     show_welcome()
-    print("  Premi Invio per accettare il valore tra parentesi\n")
+    print(tr("enter_accepts"))
     # first question: new map, or rebuild an old one from its seed?
     mode = ask_mode()
     if mode and mode[1]:
         # the old settings were found inside the picture: only ask how it should look
+        # (the print format is asked later, after the map is built)
         seed, saved = mode
-        saved.update(seed=seed, output=".")
+        saved.update(seed=seed, output=MAPS_FOLDER)
         print()
         ask_look(saved)
         return complete_settings(saved)
     print()
     p = {}
     # "auto" = the program works out how many hexes fill the sheet
-    p["columns"] = ask("Esagoni in base (colonne)", "auto", int, 2, 80)
-    p["rows"] = ask("Esagoni in altezza (righe)", "auto", int, 2, 80)
-    p["dungeons"] = ask("Numero di dungeon", 4, int, 0, 500)
-    p["cities"] = ask("Numero di città", 3, int, 0, 500)
-    p["fortresses"] = ask("Numero di fortezze", 2, int, 0, 500)
-    print("\n  Percentuali di terreno (la somma non deve superare 100; il resto diventa pianura)")
+    p["columns"] = ask(tr("q_columns"), "auto", int, 2, 80)
+    p["rows"] = ask(tr("q_rows"), "auto", int, 2, 80)
+    p["dungeons"] = ask(tr("q_dungeons"), 4, int, 0, 500)
+    p["cities"] = ask(tr("q_cities"), 3, int, 0, 500)
+    p["fortresses"] = ask(tr("q_fortresses"), 2, int, 0, 500)
+    print(tr("pct_intro"))
     # keep asking for the percentages until they make sense
     while True:
-        perc = {terrain: ask(f"% {label.lower()}", DEFAULT_PERCENTAGES[terrain], float, 0, 100)
-                for _, terrain, label in TERRAIN_OPTIONS}
+        perc = {terrain: ask(f"% {pick(label).lower()}", DEFAULT_PERCENTAGES[terrain], float, 0, 100)
+                for _, _, terrain, label in TERRAIN_OPTIONS}
         error = check_percentages(perc)
         if not error:
             break
-        print(f"\n  ERRORE: {error}\n  Reinserisci le percentuali.\n")
+        print(tr("pct_retry", error=error))
     p["percentages"] = perc
-    p["rivers"] = ask("Numero di fiumi (-1 = automatico)", -1, int, -1, 100)
+    p["rivers"] = ask(tr("q_rivers"), -1, int, -1, 100)
     if mode:
         p["seed"] = mode[0]          # we already know the seed
     else:
         p["seed"] = None             # a new map gets a new random seed
-    p["title"] = input("  Titolo della mappa [Terre Selvagge]: ").strip() or "Terre Selvagge"
-    p["scale"] = "6 miglia"
-    p["output"] = "."
-    p["orientation"] = "landscape"
+    p["title"] = input(tr("q_title", default=tr("default_title"))).strip() or tr("default_title")
+    p["scale"] = tr("default_scale")
+    p["output"] = MAPS_FOLDER
+    p["orientation"] = "auto"
     ask_look(p)
-    p["size"], p["font"] = "auto", None
+    p["size"], p["font"], p["paper"] = "auto", None, None   # paper: asked after the map is built
     return p
 
 
 def settings_from_options(argv):
     """Read the settings from the options typed after the program name (e.g. --seme 42).
-    The option names are Italian because that is what the user types."""
-    ap = argparse.ArgumentParser(
-        prog="wyrmhex.py",
-        epilog=f"WyrmHex v{VERSION}",
-        description="WyrmHex: genera una mappa hexcrawl OSR in stile ASCII (Dwarf Fortress / Moonring), PNG A4 + TXT.")
-    ap.add_argument("--griglia", dest="grid", default="auto", metavar="BASExALTEZZA",
-                    help="esagoni in base X altezza, es. 33x15; auto (default) riempie il foglio")
-    ap.add_argument("--dungeon", dest="dungeons", type=int, default=4, metavar="N")
-    ap.add_argument("--citta", dest="cities", type=int, default=3, metavar="N")
-    ap.add_argument("--fortezze", dest="fortresses", type=int, default=2, metavar="N")
-    # one option per terrain: --pianura, --mare, --laghi, ...
-    for option, terrain, label in TERRAIN_OPTIONS:
-        ap.add_argument(f"--{option}", dest=terrain, type=float, default=DEFAULT_PERCENTAGES[terrain], metavar="%",
-                        help=f"%% di {label.lower()} (default {DEFAULT_PERCENTAGES[terrain]})")
-    ap.add_argument("--fiumi", dest="rivers", type=int, default=-1, metavar="N", help="numero di fiumi, -1 = automatico")
-    ap.add_argument("--seme", dest="seed", type=int, default=None, metavar="SEME",
-                    help="seme casuale per rigenerare la stessa mappa")
-    ap.add_argument("--riproduci", dest="reproduce", type=int, default=None, metavar="SEME",
-                    help="rifà la mappa con questo seme, leggendo le impostazioni dal suo PNG nella cartella --output")
-    ap.add_argument("--titolo", dest="title", default="Terre Selvagge", metavar="TESTO")
-    ap.add_argument("--scala", dest="scale", default="6 miglia", metavar="TESTO", help="testo della scala, es. '6 miglia'")
-    ap.add_argument("--orientamento", dest="orientation", choices=list(ORIENTATION_FROM_USER),
-                    default="orizzontale")
-    ap.add_argument("--output", default=".", metavar="CARTELLA",
-                    help="cartella dei file generati (default: cartella corrente); "
-                         "i file si chiamano <seme>_nonumber e <seme>_number")
-    ap.add_argument("--solo-ascii", dest="ascii_only", action="store_true", help="usa solo caratteri ASCII a 7 bit")
-    ap.add_argument("--invertito", dest="inverted", action="store_true",
-                    help="sfondo nero con segni bianchi (per lo schermo, non per la stampa)")
-    ap.add_argument("--dimensione", dest="size", choices=list(SIZE_FROM_USER), default="auto",
-                    help="esagoni piccoli (k=2) o grandi (k=3); auto sceglie in base al foglio")
-    ap.add_argument("--version", action="version", version=f"WyrmHex v{VERSION}",
-                    help="mostra la versione del programma ed esce")
-    ap.add_argument("--font", default=None, metavar="FILE", help="file .ttf monospazio da usare")
+    Every option has an Italian and an English name (--seme / --seed): both work,
+    and the help lists first the one of the chosen language."""
+    language_from_options(argv)
+
+    def names(italian, english):
+        # the two names of an option, the chosen language first
+        if italian == english:
+            return (f"--{italian}",)
+        return (f"--{italian}", f"--{english}") if LANG == "it" else (f"--{english}", f"--{italian}")
+
+    def shown(options):
+        # the choices of an option, as listed in the help for the chosen language
+        return "{" + ",".join(options[LANG]) + "}"
+
+    ap = argparse.ArgumentParser(prog="wyrmhex.py", epilog=f"WyrmHex v{VERSION}", description=tr("cli_description"))
+    ap.add_argument(*names("lingua", "language"), dest="language", default=LANG, metavar="{it,en}",
+                    help=tr("h_language"))
+    ap.add_argument(*names("griglia", "grid"), dest="grid", default="auto", metavar=tr("mv_grid"), help=tr("h_grid"))
+    ap.add_argument(*names("dungeon", "dungeons"), dest="dungeons", type=int, default=4, metavar="N",
+                    help=tr("h_dungeons"))
+    ap.add_argument(*names("citta", "cities"), dest="cities", type=int, default=3, metavar="N", help=tr("h_cities"))
+    ap.add_argument(*names("fortezze", "fortresses"), dest="fortresses", type=int, default=2, metavar="N",
+                    help=tr("h_fortresses"))
+    # one option per terrain: --pianura / --plains, --mare / --sea, ...
+    for italian, english, terrain, label in TERRAIN_OPTIONS:
+        ap.add_argument(*names(italian, english), dest=terrain, type=float, default=DEFAULT_PERCENTAGES[terrain],
+                        metavar="%", help=tr("h_terrain", label=pick(label).lower(),
+                                             default=DEFAULT_PERCENTAGES[terrain]))
+    ap.add_argument(*names("fiumi", "rivers"), dest="rivers", type=int, default=-1, metavar="N", help=tr("h_rivers"))
+    ap.add_argument(*names("seme", "seed"), dest="seed", type=int, default=None, metavar=tr("mv_seed"),
+                    help=tr("h_seed"))
+    ap.add_argument(*names("riproduci", "reproduce"), dest="reproduce", type=int, default=None,
+                    metavar=tr("mv_seed"), help=tr("h_reproduce"))
+    ap.add_argument(*names("titolo", "title"), dest="title", default=tr("default_title"), metavar=tr("mv_text"),
+                    help=tr("h_title"))
+    ap.add_argument(*names("scala", "scale"), dest="scale", default=tr("default_scale"), metavar=tr("mv_text"),
+                    help=tr("h_scale"))
+    ap.add_argument(*names("formato", "format"), dest="paper", type=str.upper, choices=list(PAPERS), default=None,
+                    help=tr("h_paper"))
+    orientations = {"it": ["auto", "verticale", "orizzontale"], "en": ["auto", "portrait", "landscape"]}
+    ap.add_argument(*names("orientamento", "orientation"), dest="orientation", choices=list(ORIENTATION_FROM_USER),
+                    default="auto", metavar=shown(orientations), help=tr("h_orientation"))
+    ap.add_argument("--output", default=MAPS_FOLDER, metavar=tr("mv_folder"), help=tr("h_output"))
+    ap.add_argument(*names("solo-ascii", "ascii-only"), dest="ascii_only", action="store_true", help=tr("h_ascii"))
+    sizes = {"it": ["auto", "piccola", "grande"], "en": ["auto", "small", "large"]}
+    ap.add_argument(*names("dimensione", "size"), dest="size", choices=list(SIZE_FROM_USER), default="auto",
+                    metavar=shown(sizes), help=tr("h_size"))
+    ap.add_argument("--version", action="version", version=f"WyrmHex v{VERSION}", help=tr("h_version"))
+    ap.add_argument("--font", default=None, metavar="FILE", help=tr("h_font"))
     a = ap.parse_args(argv)
     orientation = ORIENTATION_FROM_USER[a.orientation]
     size = SIZE_FROM_USER[a.size]
 
     if a.reproduce is not None:
         # rebuild an old map: read its settings from its picture,
-        # looking in the output folder first, then in the current folder
-        saved = load_settings(a.output, a.reproduce) or load_settings(".", a.reproduce)
+        # looking in its folder inside --output first, then in maps_generated and the current folder
+        saved = find_settings(a.output, a.reproduce)
         if not saved:
-            ap.error(f"non trovo {a.reproduce}_nonumber.png con le impostazioni "
-                     f"né nella cartella '{a.output}' né in quella corrente")
+            ap.error(tr("err_no_saved", seed=a.reproduce, folder=short_path(a.output)))
         saved.update(seed=a.reproduce, output=a.output)
-        # the look comes from this command, not from the old picture:
-        # e.g. an old white-on-black map comes back black on white unless --invertito is given
-        saved.update(ascii_only=a.ascii_only, inverted=a.inverted)
+        # the look comes from this command, not from the old picture
+        saved.update(ascii_only=a.ascii_only)
         for key, value in (("size", size), ("font", a.font)):
             saved.setdefault(key, value)
-        return complete_settings(saved)
+        saved = complete_settings(saved)
+        if a.paper:
+            saved["paper"] = a.paper            # a format typed now wins over the saved one
+        saved["orientation"] = orientation
+        return saved
 
     # "20x15" becomes 20 columns and 15 rows; "auto" is worked out later
     if a.grid.strip().lower() == "auto":
@@ -598,14 +1014,14 @@ def settings_from_options(argv):
         try:
             columns, rows = (int(v) for v in a.grid.lower().replace("×", "x").split("x"))
         except ValueError:
-            ap.error("--griglia deve avere il formato BASExALTEZZA, es. 20x15")
+            ap.error(tr("err_grid_format"))
     return {
         "columns": columns, "rows": rows,
         "dungeons": a.dungeons, "cities": a.cities, "fortresses": a.fortresses,
-        "percentages": {terrain: getattr(a, terrain) for _, terrain, _ in TERRAIN_OPTIONS},
+        "percentages": {terrain: getattr(a, terrain) for _, _, terrain, _ in TERRAIN_OPTIONS},
         "rivers": a.rivers, "seed": a.seed, "title": a.title, "scale": a.scale,
-        "orientation": orientation, "output": a.output,
-        "ascii_only": a.ascii_only, "inverted": a.inverted, "size": size, "font": a.font,
+        "orientation": orientation, "output": a.output, "paper": a.paper,
+        "ascii_only": a.ascii_only, "size": size, "font": a.font,
     }
 
 
@@ -614,27 +1030,27 @@ def validate(p, log):
     Returns how many hexes each terrain will get."""
     errors = []
     if not (2 <= p["columns"] <= 80 and 2 <= p["rows"] <= 80):
-        errors.append("La griglia deve essere tra 2x2 e 80x80 esagoni.")
-    for key, name in (("dungeons", "dungeon"), ("cities", "citta"), ("fortresses", "fortezze")):
+        errors.append(tr("err_grid_range"))
+    for key in ("dungeons", "cities", "fortresses"):
         if p[key] < 0:
-            errors.append(f"Il numero di {name} non può essere negativo.")
+            errors.append(tr("err_negative", name=tr("n_" + key)))
     perc_error = check_percentages(p["percentages"])
     if perc_error:
         errors.append(perc_error)
     if errors:
-        print("\nERRORE NEI PARAMETRI:")
+        print(tr("err_params"))
         for e in errors:
             print(f"  - {e}")
         sys.exit(1)
 
     # show the user what we are going to do
     total_perc = sum(p["percentages"].values())
-    log.info(f"Griglia: {p['columns']} x {p['rows']} = {p['columns'] * p['rows']} esagoni")
-    log.info("Terreni: " + ", ".join(f"{label.lower()} {p['percentages'][terrain]:g}%"
-                                      for _, terrain, label in TERRAIN_OPTIONS))
-    log.info(f"Somma percentuali: {total_perc:g}% (≤ 100%: OK)")
+    log.info(tr("info_grid", c=p["columns"], r=p["rows"], n=p["columns"] * p["rows"]))
+    log.info(tr("info_terrains", list=", ".join(f"{pick(label).lower()} {p['percentages'][terrain]:g}%"
+                                                for _, _, terrain, label in TERRAIN_OPTIONS)))
+    log.info(tr("info_pct_sum", t=total_perc))
     if total_perc < 100:
-        log.info(f"Il {100 - total_perc:g}% non assegnato viene aggiunto alla pianura")
+        log.info(tr("info_pct_rest", r=100 - total_perc))
 
     # the percentage nobody asked for becomes plains
     total = p["columns"] * p["rows"]
@@ -645,9 +1061,9 @@ def validate(p, log):
     # there must be enough dry land for all the sites
     land = total - counts[SEA] - counts[LAKE]
     sites = p["cities"] + p["fortresses"] + p["dungeons"]
-    log.info(f"Siti richiesti: {p['cities']} città, {p['fortresses']} fortezze, {p['dungeons']} dungeon")
+    log.info(tr("info_sites", c=p["cities"], f=p["fortresses"], d=p["dungeons"]))
     if sites > land:
-        print(f"\nERRORE: servono {sites} esagoni di terra per i siti, ma la mappa ne ha solo {land}.")
+        print(tr("err_land", sites=sites, land=land))
         sys.exit(1)
     return counts
 
@@ -926,56 +1342,55 @@ def place_sites(grid, terrain, rivers, wanted, rng, log):
             chosen = rng.choices(candidates, weights=weights)[0]
             sites.append((kind, chosen))
             taken.add(chosen)
-        log.info(f"{SITE_NAMES[kind]}: {n} su {n}, distanza minima tra loro {same_kind_dist} esagoni"
-                 + (" (rilassata per mancanza di spazio)" if relaxed else ""))
+        log.info(tr("info_site_kind", name=pick(SITE_NAMES[kind]), n=n, d=same_kind_dist)
+                 + (tr("relaxed") if relaxed else ""))
     return sites
 
 
 def build_land(params, counts, grid, rng, log):
     """Steps 3 to 9: heights, sea, lakes, mountains and hills, forests and
     deserts, rivers, sites. Returns (terrain of every hex, rivers, sites)."""
-    log.step("Campo di altitudine: rumore casuale livellato + abbassamento verso i bordi")
+    log.step(tr("step_heights"))
     height = make_heights(grid, rng)
-    log.info(f"{len(grid.hexes)} quote calcolate, normalizzate tra 0 e 1")
+    log.info(tr("info_heights", n=len(grid.hexes)))
 
     # at the start every hex is empty (None); the steps below fill them in
     terrain = {h: None for h in grid.hexes}
-    log.step("Mare: allagamento dall'esagono di bordo più basso verso le quote minori")
+    log.step(tr("step_sea"))
     start = flood_sea(grid, height, counts[SEA], rng, terrain)
     if start is None:
-        log.info("Nessun mare richiesto")
+        log.info(tr("info_no_sea"))
     else:
-        log.info(f"Mare partito da {hex_code(start, 2)}, {counts[SEA]} esagoni allagati")
+        log.info(tr("info_sea", h=hex_code(start, 2), n=counts[SEA]))
 
-    log.step("Laghi: bacini interni scavati nelle conche")
+    log.step(tr("step_lakes"))
     placed, n_lakes = dig_lakes(grid, height, counts[LAKE], rng, terrain)
-    log.info(f"{n_lakes} laghi per {placed} esagoni")
+    log.info(tr("info_lakes", n=n_lakes, h=placed))
     if placed < counts[LAKE]:
-        log.warn(f"Spazio insufficiente: {counts[LAKE] - placed} esagoni di lago diventano pianura")
+        log.warn(tr("warn_lakes", n=counts[LAKE] - placed))
 
-    log.step("Rilievi: gli esagoni più alti diventano montagne, i successivi colline")
+    log.step(tr("step_relief"))
     place_mountains_and_hills(grid, height, counts[MOUNTAINS], counts[HILLS], rng, terrain)
-    log.info(f"{counts[MOUNTAINS]} montagne, {counts[HILLS]} colline")
+    log.info(tr("info_relief", m=counts[MOUNTAINS], h=counts[HILLS]))
 
-    log.step("Umidità: foreste nelle zone umide e vicino all'acqua, deserti in quelle aride, il resto pianura")
+    log.step(tr("step_wetness"))
     place_forests_and_deserts(grid, counts[FOREST], counts[DESERT], rng, terrain)
     actual = {t: sum(1 for h in grid.hexes if terrain[h] == t)
               for t in (PLAINS, SEA, LAKE, HILLS, MOUNTAINS, FOREST, DESERT)}
-    log.info("Risultato: " + ", ".join(f"{TERRAIN_NAMES[t]} {n}" for t, n in actual.items()))
+    log.info(tr("info_result", list=", ".join(f"{pick(TERRAIN_NAMES[t])} {n}" for t, n in actual.items())))
 
-    log.step("Fiumi: dalle sorgenti in quota verso il basso fino a mare, lago o bordo")
+    log.step(tr("step_rivers"))
     # automatic number of rivers: about one every 60 land hexes
     land = len(grid.hexes) - actual[SEA] - actual[LAKE]
     n_rivers = params["rivers"] if params["rivers"] >= 0 else max(0, round(land / 60))
     rivers = trace_rivers(grid, terrain, height, n_rivers, rng)
     for i, r in enumerate(rivers, 1):
-        where = {"water": "sfocia in acqua", "join": "confluisce in un altro fiume",
-                 "edge": "esce dalla mappa"}[r["end"][0]]
-        log.info(f"Fiume {i}: sorgente {hex_code(r['path'][0], 2)}, {len(r['path'])} esagoni, {where}")
+        where = tr("river_" + r["end"][0])
+        log.info(tr("info_river", i=i, h=hex_code(r["path"][0], 2), n=len(r["path"]), where=where))
     if len(rivers) < n_rivers:
-        log.warn(f"Tracciati {len(rivers)} fiumi su {n_rivers} richiesti (percorsi validi insufficienti)")
+        log.warn(tr("warn_rivers", d=len(rivers), n=n_rivers))
 
-    log.step("Insediamenti e dungeon: scelta pesata per terreno, con distanze minime")
+    log.step(tr("step_sites"))
     sites = place_sites(grid, terrain, rivers,
                         {CITY: params["cities"], FORTRESS: params["fortresses"], DUNGEON: params["dungeons"]},
                         rng, log)
@@ -986,11 +1401,11 @@ def build_land(params, counts, grid, rng, log):
 def print_sites(grid, terrain, rivers, sites):
     """Print the list of all sites with their hex number, handy for the game master's notes."""
     digits = max(2, len(str(max(grid.cols, grid.rows))))
-    print("\nELENCO DEI SITI (codice esagono)")
+    print(tr("sites_header"))
     for kind in (CITY, FORTRESS, DUNGEON):
         for i, (_, h) in enumerate([s for s in sites if s[0] == kind], 1):
-            extra = ", sul fiume" if any(h in r["path"] for r in rivers) else ""
-            print(f"  {SITE_NAMES[kind]:<9} {i:>2}  →  {hex_code(h, digits)}  ({TERRAIN_NAMES[terrain[h]]}{extra})")
+            extra = tr("on_river") if any(h in r["path"] for r in rivers) else ""
+            print(f"  {pick(SITE_NAMES[kind]):<9} {i:>2}  →  {hex_code(h, digits)}  ({pick(TERRAIN_NAMES[terrain[h]])}{extra})")
 
 
 # ==========================================================================
@@ -1027,7 +1442,7 @@ def find_font(chosen=None):
         except OSError:
             bold = None        # no bold version: we will fake it later
         return regular, bold
-    sys.exit("Nessun font monospazio trovato. Indica un file .ttf con --font (es. DejaVuSansMono.ttf).")
+    sys.exit(tr("err_no_font"))
 
 
 def font_name(spec):
@@ -1373,13 +1788,14 @@ def write_hex_numbers(page, grid, k, ox, oy):
 # ==========================================================================
 def legend_entries(G):
     """The entries of the legend: (sample symbols, name)."""
+    # each terrain entry is (sample symbols, name, style of the sample)
     terrains = [
-        (G("▲^", "^A"), "Montagne"), (G("∩n", "nm"), "Colline"), (G("♣♠", "TY"), "Foresta"),
-        ("", "Pianura = esagono vuoto"), (G("░·", ".:"), "Deserto"),
-        (G("≈≈", "~~"), "Mare"),   # this sample is drawn as a gray patch
-        (G("≈≈", "~~"), "Lago"), (G("═╗", "=+"), "Fiume"),
+        (G("▲^", "^A"), tr("leg_mountains"), "b"), (G("∩n", "nm"), tr("leg_hills"), "b"),
+        (G("♣♠", "TY"), tr("leg_forest"), "b"), ("", tr("leg_plains"), "b"), (G("░·", ".:"), tr("leg_desert"), "b"),
+        (G("≈≈", "~~"), tr("leg_sea"), "g"),   # "g": this sample is drawn as a gray patch
+        (G("≈≈", "~~"), tr("leg_lake"), "b"), (G("═╗", "=+"), tr("leg_river"), "b"),
     ]
-    sites = [(G(*SITE_GLYPHS[kind]), SITE_NAMES[kind]) for kind in (CITY, FORTRESS, DUNGEON)]
+    sites = [(G(*SITE_GLYPHS[kind]), pick(SITE_NAMES[kind])) for kind in (CITY, FORTRESS, DUNGEON)]
     if G.ascii_only:
         # with --solo-ascii even "Città" loses its accent
         sites = [(g, name.replace("à", "a'")) for g, name in sites]
@@ -1390,8 +1806,7 @@ def pack_legend(G, max_width):
     """Arrange the legend entries in as few lines as possible, each line at most 'max_width' letters."""
     terrains, sites = legend_entries(G)
     # each entry is a list of (text, style) pieces
-    entries = [[(g, "g" if name == "Mare" else "b"), (" " + name, "n")] if g else [(name, "n")]
-               for g, name in terrains]
+    entries = [[(g, style), (" " + name, "n")] if g else [(name, "n")] for g, name, style in terrains]
     entries += [[("[" + g + "]", "i"), (" " + name, "n")] for g, name in sites]
     lines, line, length = [], [], 0
     for entry in entries:
@@ -1455,19 +1870,35 @@ def compose_page(map_canvas, n_cols, n_rows, legend_lines, title, subtitle, G):
 
 
 # ==========================================================================
-# FITTING THE PAGE ON A4 PAPER, DRAWING AND SAVING
+# FITTING THE PAGE ON PAPER (A4, A3, A2), DRAWING AND SAVING
 # ==========================================================================
-def choose_sheet(map_width, map_height, legend_lines_guess, orientation, aspect):
-    """Decide the sheet direction (portrait or landscape) and the letter width in mm.
+def paper_pixels(paper, orientation):
+    """Size in pixels of a sheet at 600 dpi, upright ("portrait") or sideways ("landscape")."""
+    w_mm, h_mm = PAPERS[paper]
+    if orientation == "landscape":
+        w_mm, h_mm = h_mm, w_mm
+    return round(mm(w_mm)), round(mm(h_mm))
+
+
+# every allowed picture size: each paper, upright and sideways, at 600 dpi
+VALID_SIZES = {paper_pixels(p, o) for p in PAPERS for o in ("portrait", "landscape")}
+
+
+def choose_sheet(map_width, map_height, legend_lines_guess, paper, orientation, aspect):
+    """Decide the sheet direction and the letter width in mm for one paper size.
+    With orientation "auto" the direction follows the shape of the map: the sheet
+    is turned the way that lets the letters be biggest.
     Returns (letter width, how well the sheet is filled, direction, sheet width, sheet height)."""
+    short, long_ = PAPERS[paper]
+    max_char = MAX_CHAR_MM * short / PAPERS["A4"][0]      # bigger sheet, bigger letters allowed
     options = []
-    for name, (w_mm, h_mm) in (("portrait", (210, 297)), ("landscape", (297, 210))):
+    for name, (w_mm, h_mm) in (("portrait", (short, long_)), ("landscape", (long_, short))):
         if orientation not in ("auto", name):
             continue
         page_w, page_h = w_mm - 2 * MARGIN_MM, h_mm - 2 * MARGIN_MM
         # the biggest letters that let map + frame + title + legend fit
         char_mm = min(page_w / (map_width + 4), page_h / ((map_height + legend_lines_guess + 7) * aspect),
-                      MAX_CHAR_MM)
+                      max_char)
         filled = (map_width * char_mm) * (map_height * char_mm * aspect) / (page_w * page_h)
         options.append((char_mm, filled, name, w_mm, h_mm))
     # biggest letters wins; if the two are close (within 8%), the fuller sheet wins
@@ -1476,15 +1907,12 @@ def choose_sheet(map_width, map_height, legend_lines_guess, orientation, aspect)
 
 
 def fill_page(params, font_spec, aspect, log):
-    """Work out how many hexes fill the page frame when letters are
+    """Work out how many hexes fill an A4 page frame when letters are
     READABLE_CHAR_MM wide (a size that prints well).
     Only the sizes left on "auto" are changed; sizes typed by the user stay."""
-    if params["orientation"] == "auto":
-        params["orientation"] = "landscape"
-    w_mm, h_mm = (297, 210) if params["orientation"] == "landscape" else (210, 297)
+    orientation = "portrait" if params["orientation"] == "portrait" else "landscape"
+    w_mm, h_mm = PAPERS["A4"] if orientation == "portrait" else PAPERS["A4"][::-1]
     k = 3 if params["size"] == "large" else 2
-    if params["size"] == "auto":
-        params["size"] = "small"
     # how many letters fit across and down the sheet
     n_cols = int((w_mm - 2 * MARGIN_MM) / READABLE_CHAR_MM)
     n_rows = int((h_mm - 2 * MARGIN_MM) / (READABLE_CHAR_MM * aspect))
@@ -1496,19 +1924,103 @@ def fill_page(params, font_spec, aspect, log):
         params["columns"] = columns
     if params["rows"] == "auto":
         params["rows"] = rows
-    log.info(f"Griglia automatica: {params['columns']} x {params['rows']} esagoni riempiono la cornice "
-             f"del foglio {ORIENTATION_NAMES[params['orientation']]} (caratteri da {READABLE_CHAR_MM} mm)")
+    log.info(tr("info_auto_grid", c=params["columns"], r=params["rows"], o=pick(ORIENTATION_NAMES[orientation]),
+                mm=READABLE_CHAR_MM))
 
 
-def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy):
+def hex_size(params, grid, paper, aspect):
+    """How big each hex is in letters: k = 2 (small) or 3 (large).
+    With "auto", large hexes are used only if their letters stay easy to read on this paper."""
+    if params["size"] == "small":
+        return 2
+    if params["size"] == "large":
+        return 3
+    mw, mh = map_size(grid.cols, grid.rows, 3)
+    return 3 if choose_sheet(mw, mh, 3, paper, params["orientation"], aspect)[0] >= 1.4 else 2
+
+
+class QuietLog:
+    """A log that prints nothing: used to try out a paper size without messages."""
+
+    def info(self, message):
+        pass
+
+    def warn(self, message):
+        pass
+
+
+def suggest_paper(params, grid, fonts, G):
+    """For each paper, lay out the page exactly as it would be printed and note
+    how wide the letters come out. The suggested paper is the smallest one where
+    the letters are easy to read.
+    Returns (suggested paper, {paper: (letter width in mm, direction, hex size k)})."""
+    font_spec, bold_spec, advance_em, aspect = fonts
+    options = {}
+    for paper in PAPERS:
+        k = hex_size(params, grid, paper, aspect)
+        layout = page_layout(params, grid, k, paper, 0, font_spec, bold_spec, advance_em, aspect, G, QuietLog())[0]
+        char_w, width, work_w = layout[2], layout[5], layout[7]
+        printed_char_mm = char_w * (width / work_w) / DPI * 25.4
+        orientation = "landscape" if layout[5] > layout[6] else "portrait"
+        options[paper] = (printed_char_mm, orientation, k)
+    readable = [p for p in PAPERS if options[p][0] >= GOOD_CHAR_MM]
+    return (readable[0] if readable else list(PAPERS)[-1]), options
+
+
+def ask_paper(params, grid, fonts, G, interactive, log):
+    """Show how the map would look on each paper and pick the format:
+    asked to the user when the program is asking questions, otherwise taken
+    from --formato, from the saved settings, or from the suggestion."""
+    suggested, options = suggest_paper(params, grid, fonts, G)
+    for paper, (char_mm, orientation, k) in options.items():
+        if char_mm < SMALL_CHAR_MM:
+            verdict = tr("v_too_small")
+        elif char_mm < GOOD_CHAR_MM:
+            verdict = tr("v_small")
+        else:
+            verdict = tr("v_good")
+        note = tr("suggested") if paper == suggested else ""
+        hexes = tr("hexes_large") if k == 3 else tr("hexes_small")
+        log.info(tr("info_paper_option", paper=paper, o=pick(ORIENTATION_NAMES[orientation]), hexes=hexes,
+                    mm=char_mm, v=verdict, note=note))
+    default = params.get("paper") or suggested
+    if interactive:
+        print()
+        while True:
+            answer = input(tr("q_paper", default=default)).strip().upper()
+            if not answer:
+                return default
+            if answer in PAPERS:
+                return answer
+            print(tr("paper_retry"))
+    return default
+
+
+def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy, progress=None):
     """Draw the letter grid as a picture 'width' x 'height' pixels big.
     'regular' and 'bold' are the fonts, 'char_w' and 'char_h' the size of one
-    letter square, 'ox' and 'oy' where the grid starts."""
+    letter square, 'ox' and 'oy' where the grid starts. 'progress', if given,
+    is told after each line of letters how much of the drawing is done (0 to 1)."""
     img = Image.new("L", (width, height), 255)   # white grayscale picture
     d = ImageDraw.Draw(img)
-    bold_font = bold or regular
-    # no bold font? draw the letter twice, a hair apart, to make it look bold
-    fake_bold = max(1, size // 22) if bold is regular else 0
+    thicken = max(1, size // 22)                 # shift used to fake a bold letter
+    real_bold = bold is not None and bold is not regular
+    probe = bold.font_variant(size=40) if real_bold else None
+    bold_can_draw = {}                           # remembers which symbols the bold font has
+
+    def draw_bold(px, py, ch):
+        # Some bold fonts (for example Menlo Bold on macOS) lack the double-line
+        # river symbols and would show an empty box. For any symbol the bold font
+        # cannot draw, use the normal font drawn twice, a hair apart.
+        if real_bold:
+            if ch not in bold_can_draw:
+                bold_can_draw[ch] = ch.isascii() or font_has_glyph(probe, ch)
+            if bold_can_draw[ch]:
+                d.text((px, py), ch, font=bold, fill=0, anchor="la")
+                return
+        d.text((px, py), ch, font=regular, fill=0, anchor="la")
+        d.text((px + thicken, py), ch, font=regular, fill=0, anchor="la")
+
     for y in range(canvas.height):
         py = oy + y * char_h
         for x in range(canvas.width):
@@ -1523,9 +2035,7 @@ def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy):
                 if style == "G":
                     d.text((px, py), ch, font=regular, fill=0, anchor="la")
                 elif style == "H":
-                    d.text((px, py), ch, font=bold_font, fill=0, anchor="la")
-                    if fake_bold:
-                        d.text((px + fake_bold, py), ch, font=bold_font, fill=0, anchor="la")
+                    draw_bold(px, py, ch)
                 continue
             if style == "i":
                 # white letter on black (brackets are hidden)
@@ -1533,11 +2043,11 @@ def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy):
                 if ch not in "[] ":
                     d.text((px, py), ch, font=regular, fill=255, anchor="la")
             elif style == "b":
-                d.text((px, py), ch, font=bold_font, fill=0, anchor="la")
-                if fake_bold:
-                    d.text((px + fake_bold, py), ch, font=bold_font, fill=0, anchor="la")
+                draw_bold(px, py, ch)
             else:
                 d.text((px, py), ch, font=regular, fill=0, anchor="la")
+        if progress:
+            progress((y + 1) / canvas.height)
     # site boxes: black rectangle with one big white symbol in the middle
     big = regular.font_variant(size=int(size * 1.7))
     for bx, by, bw, bh, g in canvas.boxes:
@@ -1547,47 +2057,112 @@ def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy):
     return img
 
 
-def save_png_300dpi(img, path, settings=None):
-    """The only place where pictures are saved: every PNG must be exactly A4 at 300 dpi.
-    The map's settings are hidden inside the file, so the map can be rebuilt from its seed."""
-    if img.size not in A4_300DPI:
-        raise ValueError(f"{path}: {img.size} non è un A4 a 300 dpi")
+def save_png(img, path, settings=None):
+    """The only place where pictures are saved: every PNG must be exactly an
+    A4, A3 or A2 sheet at 600 dpi. The map's settings are hidden inside the
+    file, so the map can be rebuilt from its seed."""
+    if img.size not in VALID_SIZES:
+        raise ValueError(tr("err_size", path=path, size=img.size))
     info = PngInfo()
     if settings:
         # keep everything except where the file was saved and the seed (it is in the file name)
         data = {k: v for k, v in settings.items() if k not in ("output", "seed")}
         info.add_itxt(SETTINGS_KEY, json.dumps(data, ensure_ascii=False))
-    img.save(path, dpi=(DPI, DPI), optimize=True, pnginfo=info)
+    # no extra "optimize" pass: on an A2 at 600 dpi it would take a long time
+    img.save(path, dpi=(DPI, DPI), pnginfo=info)
 
 
-def save(canvas, layout, png_path, inverted, settings=None):
-    """Save the page as a PNG picture (A4, 300 dpi) and as a .txt file with the same name."""
+def save(canvas, layout, png_path, settings=None):
+    """Save the page as a PNG picture and as a .txt file with the same name."""
     regular, bold, char_w, char_h, size, width, height, work_w, work_h, ox, oy = layout
-    img = render(canvas, regular, bold, char_w, char_h, size, work_w, work_h, ox, oy)
+    live = LiveBar()
+    drawing = tr("pb_drawing")
+    # drawing takes most of the time: it fills the bar up to 90%, saving does the rest
+    img = render(canvas, regular, bold, char_w, char_h, size, work_w, work_h, ox, oy,
+                 progress=lambda done: live.update(0.9 * done, drawing))
     if (work_w, work_h) != (width, height):
-        # the page came out bigger than A4: shrink it evenly and centre it on the sheet
+        # the page came out bigger than the sheet: shrink it evenly and centre it
         f = min(width / work_w, height / work_h)
         smaller = img.resize((round(work_w * f), round(work_h * f)), Image.LANCZOS)
         img = Image.new("L", (width, height), 255)
         img.paste(smaller, ((width - smaller.width) // 2, (height - smaller.height) // 2))
-    if inverted:
-        img = ImageOps.invert(img)    # white on black
-    final_size = (round(width / SUPERSAMPLE), round(height / SUPERSAMPLE))   # A4 in pixels at 300 dpi
-    save_png_300dpi(img.resize(final_size, Image.LANCZOS), png_path, settings)
+    live.update(0.9, tr("pb_saving"))
+    save_png(img, png_path, settings)
     with open(png_path[:-4] + ".txt", "w", encoding="utf-8") as f:
         f.write("\n".join(canvas.lines()) + "\n")
+    live.finish()
+
+
+def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, aspect, G, log):
+    """Work out letter size, page size in letters and where everything goes,
+    for the chosen paper. Returns what 'save' and 'compose_page' need."""
+    map_w, map_h = map_size(grid.cols, grid.rows, k)
+    # The legend may need one or more lines depending on the page width, and the
+    # page width depends on the legend: repeat the sums until they agree.
+    legend_guess = 3
+    for _ in range(8):
+        char_mm, _, orientation, w_mm, h_mm = choose_sheet(map_w, map_h, legend_guess, paper,
+                                                           params["orientation"], aspect)
+        size = max(6, int(mm(char_mm) / advance_em))
+        regular = open_font(font_spec, size)
+        bold = open_font(bold_spec, size) if bold_spec else regular
+        char_w = regular.getlength("M")        # width of one letter square, in pixels
+        ascent, descent = regular.getmetrics()
+        char_h = ascent + descent               # height of one letter square, in pixels
+        width, height = paper_pixels(paper, orientation)
+        area_w = width - 2 * mm(MARGIN_MM)
+        area_h = height - 2 * mm(MARGIN_MM)
+        n_cols, n_rows = int(area_w // char_w), int(area_h // char_h)
+        legend = pack_legend(G, n_cols - 4)
+        if len(legend) <= legend_guess and n_rows >= map_h + len(legend) + 7:
+            break
+        # not enough room yet: count one more legend line and try again
+        legend_guess = max(len(legend), legend_guess + 1)
+    dot = G("·", "-")
+    subtitle = tr("subtitle", scale=params["scale"], dot=dot, c=grid.cols, x=G("×", "x"), r=grid.rows, seed=seed)
+    legend = pack_legend(G, n_cols - 4)
+    # Safety net: if something does not fit (a very long title, for example),
+    # make the page bigger now; it will be shrunk to the sheet when saving.
+    legend_width = max(sum(len(t) for entry in line for t, _ in entry) + 4 * (len(line) - 1) for line in legend)
+    need_cols = max(n_cols, map_w + 4, len(params["title"]) + 8, len(subtitle) + 4, legend_width + 4)
+    need_rows = max(n_rows, map_h + len(legend) + 7)
+    work_w, work_h, shrink = width, height, 1.0
+    if need_cols > n_cols or need_rows > n_rows:
+        n_cols, n_rows = need_cols, need_rows
+        work_w = max(width, round(n_cols * char_w + 2 * mm(MARGIN_MM)))
+        work_h = max(height, round(n_rows * char_h + 2 * mm(MARGIN_MM)))
+        shrink = min(width / work_w, height / work_h)
+        log.warn(tr("warn_shrink", p=shrink, paper=paper))
+    # centre the letter grid on the page
+    ox = (work_w - n_cols * char_w) / 2
+    oy = (work_h - n_rows * char_h) / 2
+    printed_char_mm = char_w * shrink / DPI * 25.4
+    log.info(tr("info_sheet", paper=paper, o=pick(ORIENTATION_NAMES[orientation]), w=width, h=height, dpi=DPI,
+                nc=n_cols, nr=n_rows, mm=printed_char_mm))
+    log.info(tr("info_hexes", prefix=tr("hexes_desc_large" if k == 3 else "hexes_desc_small"), k=k,
+                w=2 * k + 2 * k + 1, h=2 * k, mw=map_w, mh=map_h))
+    if printed_char_mm < SMALL_CHAR_MM:
+        log.warn(tr("warn_tiny"))
+    layout = (regular, bold if bold_spec else regular, char_w, char_h, size, width, height, work_w, work_h, ox, oy)
+    return layout, n_cols, n_rows, legend, subtitle
 
 
 # ==========================================================================
 # MAIN PROGRAM
 # ==========================================================================
 def main():
+    # The first time the program runs, create the maps_generated folder next to wyrmhex.py
+    first_run = make_maps_folder()
     # No options typed? Then ask the questions one by one.
-    params = ask_settings() if len(sys.argv) == 1 else settings_from_options(sys.argv[1:])
-    log = Log(11)
+    interactive = len(sys.argv) == 1
+    params = ask_settings() if interactive else settings_from_options(sys.argv[1:])
+    # the settings are decided: the conjuring begins
+    show_conjuring()
+    log = Log(12)
 
-    # Step 1: find a font, choose the grid size if needed, check the settings
-    log.step("Lettura e validazione dei parametri")
+    # Step 1: find a font, choose the grid size if needed, check the settings,
+    # then tell the seed and the folder where the map will be saved
+    log.step(tr("step_validate"))
     font_spec, bold_spec = find_font(params["font"])
     advance_em, line_em = font_metrics(font_spec)
     aspect = line_em / advance_em        # a letter square is this many times taller than wide
@@ -1597,94 +2172,47 @@ def main():
     # use the seed the user gave, or make a new one
     seed = params["seed"] if params["seed"] is not None else new_seed()
     rng = random.Random(seed)            # every random choice of the land comes from this seed
-    log.info(f"Seme: {seed}  (per rifare questa mappa: scegli 2 all'avvio, oppure usa --riproduci {seed})")
+    log.info(tr("info_seed", s=seed))
+    if first_run:
+        log.info(tr("info_new_folder", folder=short_path(MAPS_FOLDER)))
+    log.info(tr("info_folder", folder=short_path(map_folder(params["output"], seed))))
 
-    # Step 2: sheet, letter size and hex size
-    log.step("Font, dimensione dei caratteri e formato di stampa")
+    # Step 2: tell which font is used, and prepare the hex grid
+    log.step(tr("step_font"))
     grid = HexGrid(params["columns"], params["rows"])
-    log.info(f"Font: {font_name(font_spec)}" + ("" if bold_spec else " (grassetto simulato)")
-             + f", cella {aspect:.2f} volte più alta che larga")
-
-    # big hexes (k=3) only if the letters would still be wide enough to read
-    if params["size"] == "auto":
-        mw, mh = map_size(grid.cols, grid.rows, 3)
-        k = 3 if choose_sheet(mw, mh, 3, params["orientation"], aspect)[0] >= 1.4 else 2
-    else:
-        k = 2 if params["size"] == "small" else 3
-    map_w, map_h = map_size(grid.cols, grid.rows, k)
-
-    G = Glyphs(open_font(font_spec, 40), params["ascii_only"])
-    # The legend may need one or more lines depending on the page width, and the
-    # page width depends on the legend: repeat the sums until they agree.
-    legend_guess = 3
-    for _ in range(3):
-        char_mm, _, orientation, w_mm, h_mm = choose_sheet(map_w, map_h, legend_guess,
-                                                           params["orientation"], aspect)
-        size = max(6, int(mm(char_mm) * SUPERSAMPLE / advance_em))
-        regular = open_font(font_spec, size)
-        bold = open_font(bold_spec, size) if bold_spec else regular
-        char_w = regular.getlength("M")        # width of one letter square, in pixels
-        ascent, descent = regular.getmetrics()
-        char_h = ascent + descent               # height of one letter square, in pixels
-        width, height = round(mm(w_mm) * SUPERSAMPLE), round(mm(h_mm) * SUPERSAMPLE)
-        area_w = width - 2 * mm(MARGIN_MM) * SUPERSAMPLE
-        area_h = height - 2 * mm(MARGIN_MM) * SUPERSAMPLE
-        n_cols, n_rows = int(area_w // char_w), int(area_h // char_h)
-        legend = pack_legend(G, n_cols - 4)
-        if len(legend) <= legend_guess and n_rows >= map_h + len(legend) + 7:
-            break
-        legend_guess = len(legend)
-    dot = G("·", "-")
-    subtitle = (f"1 esagono = {params['scale']}  {dot}  {grid.cols}{G('×', 'x')}{grid.rows} esagoni"
-                f"  {dot}  seme {seed}")
-    legend = pack_legend(G, n_cols - 4)
-    # Safety net: if something does not fit (a very long title, for example),
-    # make the page bigger now; it will be shrunk to A4 when saving.
-    legend_width = max(sum(len(t) for entry in line for t, _ in entry) + 4 * (len(line) - 1) for line in legend)
-    need_cols = max(n_cols, map_w + 4, len(params["title"]) + 8, len(subtitle) + 4, legend_width + 4)
-    need_rows = max(n_rows, map_h + len(legend) + 7)
-    work_w, work_h, shrink = width, height, 1.0
-    if need_cols > n_cols or need_rows > n_rows:
-        n_cols, n_rows = need_cols, need_rows
-        work_w = max(width, round(n_cols * char_w + 2 * mm(MARGIN_MM) * SUPERSAMPLE))
-        work_h = max(height, round(n_rows * char_h + 2 * mm(MARGIN_MM) * SUPERSAMPLE))
-        shrink = min(width / work_w, height / work_h)
-        log.warn(f"Il contenuto sfora il foglio: l'immagine viene ridotta al {shrink:.0%} per stare nell'A4")
-    # centre the letter grid on the page
-    ox = (work_w - n_cols * char_w) / 2
-    oy = (work_h - n_rows * char_h) / 2
-    printed_char_mm = char_w * shrink / SUPERSAMPLE / DPI * 25.4
-    log.info(f"Foglio A4 {ORIENTATION_NAMES[orientation]}: pagina di {n_cols} x {n_rows} caratteri, "
-             f"carattere largo {printed_char_mm:.2f} mm")
-    log.info(f"Esagoni {'grandi' if k == 3 else 'piccoli'} (k={k}): {2 * k + 2 * k + 1} caratteri x {2 * k} righe; "
-             f"mappa di {map_w} x {map_h} caratteri")
-    if printed_char_mm < 1.1:
-        log.warn("Caratteri molto piccoli: la stampa sarà poco leggibile, valuta una griglia più piccola")
+    log.info(tr("info_font", name=font_name(font_spec), fake="" if bold_spec else tr("fake_bold"), a=aspect))
 
     # Steps 3 to 9: build the land
     terrain, rivers, sites = build_land(params, counts, grid, rng, log)
+
+    # Step 10: the map is ready, now the print format
+    log.step(tr("step_paper"))
+    G = Glyphs(open_font(font_spec, 40), params["ascii_only"])
+    paper = ask_paper(params, grid, (font_spec, bold_spec, advance_em, aspect), G, interactive, log)
+    params["paper"] = paper
+    k = hex_size(params, grid, paper, aspect)
+    layout, n_cols, n_rows, legend, subtitle = page_layout(
+        params, grid, k, paper, seed, font_spec, bold_spec, advance_em, aspect, G, log)
 
     # a separate random generator for the symbols, so they are the same every time
     drawing_rng = random.Random(seed + 1)
     map_canvas = draw_map(grid, terrain, rivers, sites, k, G, drawing_rng, aspect)
     page, mx, my = compose_page(map_canvas, n_cols, n_rows, legend, params["title"], subtitle, G)
-    layout = (regular, bold if bold_spec else regular, char_w, char_h, size,
-              width, height, work_w, work_h, ox, oy)
     plain_path, numbered_path = output_names(params["output"], seed)
 
-    # Step 10: the map without numbers
-    log.step("Disegno della mappa senza numeri (PNG + TXT)")
-    save(page, layout, plain_path, params["inverted"], params)
-    log.info(f"Salvate: {plain_path}, {plain_path[:-4]}.txt")
+    # Step 11: the map without numbers
+    log.step(tr("step_plain", paper=paper, dpi=DPI))
+    save(page, layout, plain_path, params)
+    log.info(tr("saved", a=short_path(plain_path), b=short_path(plain_path[:-4] + ".txt")))
     if G.missing:
-        log.warn(f"Il font non ha questi glifi, sostituiti con ASCII: {' '.join(sorted(G.missing))}")
+        log.warn(tr("warn_missing_glyphs", g=" ".join(sorted(G.missing))))
 
-    # Step 11: the same page with the hex numbers added
-    log.step("Disegno della mappa numerata (stessa mappa + codici CCRR)")
+    # Step 12: the same page with the hex numbers added
+    log.step(tr("step_numbered", paper=paper, dpi=DPI))
     numbered = page.copy()
     write_hex_numbers(numbered, grid, k, mx, my)
-    save(numbered, layout, numbered_path, params["inverted"], params)
-    log.info(f"Salvate: {numbered_path}, {numbered_path[:-4]}.txt")
+    save(numbered, layout, numbered_path, params)
+    log.info(tr("saved", a=short_path(numbered_path), b=short_path(numbered_path[:-4] + ".txt")))
 
     print_sites(grid, terrain, rivers, sites)
     log.done()
@@ -1700,5 +2228,5 @@ if __name__ == "__main__":
         main()
     except (KeyboardInterrupt, EOFError):
         # Ctrl+C (or the input ending) stops the program quietly
-        print("\n\nInterrotto.")
+        print(tr("interrupted"))
         sys.exit(1)
