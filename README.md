@@ -1,6 +1,12 @@
 # WyrmHex
 
+<div align="center">
+
 [Italiano](README.it.md) · **English**
+
+<img src="img_examples/OSR%20LOGO.png" alt="OSR logo" width="50%"><br>
+Compatible with any "OSR" tabletop RPG.
+</div>
 
 ```
  _       __                     __  __
@@ -32,7 +38,7 @@
 
 ```
 
-**WyrmHex** is a small program that draws a random hex map for old-school (OSR) role-playing campaigns. The map is made only of letters and symbols, like the old video games Dwarf Fortress and Moonring:
+**WyrmHex** is a small program that draws a random hex map for old-school (OSR) role-playing campaigns. The map is made only of letters and symbols, like the video games Dwarf Fortress, NetHack, and Moonring:
 
 - **forests** `♣♠`, **mountains** `▲^`, **hills** `∩n`, **deserts** `░·`, **lakes** `≈`;
 - **plains** stay empty and the **sea** is a flat gray area;
@@ -264,19 +270,21 @@ The terminal window is too narrow: the picture is 94 characters wide, and the pr
 **I have an old map with a black background.**
 Earlier versions allowed a black background; now maps are always on white. Rebuild the map from its seed (chapter 4) or use `--reproduce` with the seed: it comes back the same, on a white background.
 
-## Output Examples
+---
 
-### 12x10
+## 9. Output examples
 
-![](img_examples/example 12x10_nonumber.png)
-![](img_examples/example12x10_number.png)
+### 12 × 10 hexes
 
-### 20x5
+![12 x 10 map without numbers](img_examples/example_12x10_nonumber.png)
+![12 x 10 map with numbers](img_examples/example_12x10_number.png)
 
-![](img_examples/example_20x5_nonumber.png)
-![](img_examples/example_20x5_number.png)
+### 20 × 5 hexes
 
-### 80x80
+![20 x 5 map without numbers](img_examples/example_20x5_nonumber.png)
+![20 x 5 map with numbers](img_examples/example_20x5_number.png)
 
-![](img_examples/example80x80_nonumber.png)
-![](img_examples/example80x80.png)
+### 80 × 80 hexes
+
+![80 x 80 map without numbers](img_examples/example_80x80_nonumber.png)
+![80 x 80 map with numbers](img_examples/example_80x80.png)

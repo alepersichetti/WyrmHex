@@ -1,6 +1,12 @@
 # WyrmHex
 
+<div align="center">
+
 **Italiano** · [English](README.md)
+
+<img src="img_examples/OSR%20LOGO.png" alt="Logo OSR" width="50%"><br>
+Compatibile con qualunque gioco di ruolo analogico "OSR".
+</div>
 
 ```
  _       __                     __  __
@@ -32,7 +38,7 @@
 
 ```
 
-**WyrmHex** è un piccolo programma che disegna a caso una mappa a esagoni per campagne di gioco di ruolo old school (OSR). La mappa è fatta solo di lettere e simboli, come nei vecchi videogiochi Dwarf Fortress e Moonring:
+**WyrmHex** è un piccolo programma che disegna a caso una mappa a esagoni per campagne di gioco di ruolo old school (OSR). La mappa è fatta solo di lettere e simboli, come nei videogiochi Dwarf Fortress, NetHack e Moonring:
 
 - **foreste** `♣♠`, **montagne** `▲^`, **colline** `∩n`, **deserti** `░·`, **laghi** `≈`;
 - la **pianura** resta vuota e il **mare** è una campitura grigia;
@@ -265,19 +271,21 @@ La finestra del terminale è troppo stretta: il disegno è largo 94 caratteri e 
 **Ho una mappa vecchia con lo sfondo nero.**
 Le versioni precedenti permettevano lo sfondo nero; ora le mappe sono sempre su sfondo bianco. Rifai la mappa dal suo seme (capitolo 4) oppure usa `--riproduci` con il seme: torna uguale, con lo sfondo bianco.
 
-## Esempi di output
+---
 
-### 12x10
+## 9. Esempi di output
 
-![](img_examples/example 12x10_nonumber.png)
-![](img_examples/example12x10_number.png)
+### 12 × 10 esagoni
 
-### 20x5
+![Mappa 12 x 10 senza numeri](img_examples/example_12x10_nonumber.png)
+![Mappa 12 x 10 con i numeri](img_examples/example_12x10_number.png)
 
-![](img_examples/example_20x5_nonumber.png)
-![](img_examples/example_20x5_number.png)
+### 20 × 5 esagoni
 
-### 80x80
+![Mappa 20 x 5 senza numeri](img_examples/example_20x5_nonumber.png)
+![Mappa 20 x 5 con i numeri](img_examples/example_20x5_number.png)
 
-![](img_examples/example80x80_nonumber.png)
-![](img_examples/example80x80.png)
+### 80 × 80 esagoni
+
+![Mappa 80 x 80 senza numeri](img_examples/example_80x80_nonumber.png)
+![Mappa 80 x 80 con i numeri](img_examples/example_80x80.png)
