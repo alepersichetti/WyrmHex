@@ -263,3 +263,20 @@ The terminal window is too narrow: the picture is 94 characters wide, and the pr
 
 **I have an old map with a black background.**
 Earlier versions allowed a black background; now maps are always on white. Rebuild the map from its seed (chapter 4) or use `--reproduce` with the seed: it comes back the same, on a white background.
+
+## Output Examples
+
+### 12x10
+
+![](img_examples/example 12x10_nonumber.png)
+![](img_examples/example12x10_number.png)
+
+### 20x5
+
+![](img_examples/example_20x5_nonumber.png)
+![](img_examples/example_20x5_number.png)
+
+### 80x80
+
+![](img_examples/example80x80_nonumber.png)
+![](img_examples/example80x80.png)

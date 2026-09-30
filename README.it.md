@@ -264,3 +264,20 @@ La finestra del terminale è troppo stretta: il disegno è largo 94 caratteri e 
 
 **Ho una mappa vecchia con lo sfondo nero.**
 Le versioni precedenti permettevano lo sfondo nero; ora le mappe sono sempre su sfondo bianco. Rifai la mappa dal suo seme (capitolo 4) oppure usa `--riproduci` con il seme: torna uguale, con lo sfondo bianco.
+
+## Esempi di output
+
+### 12x10
+
+![](img_examples/example 12x10_nonumber.png)
+![](img_examples/example12x10_number.png)
+
+### 20x5
+
+![](img_examples/example_20x5_nonumber.png)
+![](img_examples/example_20x5_number.png)
+
+### 80x80
+
+![](img_examples/example80x80_nonumber.png)
+![](img_examples/example80x80.png)
