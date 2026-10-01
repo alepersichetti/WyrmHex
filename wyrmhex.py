@@ -18,7 +18,8 @@ The seed (e.g. 475T-4KM4-MY0B-JNDJ-ZYEQ-K164) holds the whole land, so the
 same seed always gives the same map. The PNG also keeps the settings.
 
 Usage. Every option has an Italian and an English name, use whichever:
-  python wyrmhex.py                              interactive
+  python wyrmhex.py                              interactive: new map, rebuild one,
+                                                 or edit one hex by hex (editor)
   python wyrmhex.py --seme 42                    / --seed 42
   python wyrmhex.py --griglia 20x15              / --grid 20x15
   python wyrmhex.py --citta 4 --fortezze 2 --dungeon 6
@@ -213,6 +214,7 @@ TEXTS = {
                       "  Press Enter to accept the value in brackets\n"),
     "what_to_do": ("  Cosa vuoi fare?", "  What do you want to do?"),
     "mode_new": ("    1 = creare una mappa nuova", "    1 = make a new map"),
+    "mode_edit": ("    3 = modificare una mappa, a partire dal suo seme", "    3 = edit a map, starting from its seed"),
     "mode_rebuild": ("    2 = riprodurre una mappa già fatta, a partire dal suo seme",
                      "    2 = rebuild a map you already made, from its seed"),
     "choice": ("Scelta", "Choice"),
@@ -368,6 +370,88 @@ TEXTS = {
     "info_site_kind": ("{name}: {n} su {n}, distanza minima tra loro {d} esagoni",
                        "{name}: {n} of {n}, at least {d} hexes apart"),
     "relaxed": (" (rilassata per mancanza di spazio)", " (reduced for lack of room)"),
+    # editor
+    "ed_header": ("\nMODIFICA DELLA MAPPA", "\nEDITING THE MAP"),
+    "ed_columns": (("Esagono", "Terreno", "Dungeon", "Città", "Fiume", "Direzione", "Fortezza"),
+                   ("Hex", "Terrain", "Dungeon", "City", "River", "Direction", "Fortress")),
+    "ed_yes": ("sì", "yes"),
+    "ed_dirs": (("nord", "nord-est", "sud-est", "sud", "sud-ovest", "nord-ovest"),
+                ("north", "north-east", "south-east", "south", "south-west", "north-west")),
+    "ed_resume_png": ("  Il file delle modifiche manca, ma le ho ritrovate nell'immagine della mappa modificata. "
+                      "Le riprendo? (S/n): ",
+                      "  The edits file is missing, but the edits are inside the edited map's picture. "
+                      "Pick them up again? (Y/n): "),
+    "ed_shown": ("\n  Esagoni con siti, fiumi o modifiche{near} ({n} su {total}). T = tabella completa.",
+                 "\n  Hexes with sites, rivers or changes{near} ({n} of {total}). T = full table."),
+    "ed_near": (", più i dintorni di {h}", ", plus the hexes around {h}"),
+    "ed_next_undo": ("annullare l'ultima modifica", "undo the last change"),
+    "ed_next_quit": ("uscire senza generare la mappa (le modifiche restano salvate)",
+                     "quit without making the map (the changes stay saved)"),
+    "ed_undone": ("    Annullata l'ultima modifica.", "    Last change undone."),
+    "ed_nothing_to_undo": ("    Non c'è nessuna modifica da annullare.", "    There's nothing to undo."),
+    "ed_quit": ("\n  Le modifiche sono salvate in {path}: le ritrovi scegliendo di nuovo 3 con questo seme.",
+                "\n  The changes are saved in {path}: you'll find them again by choosing 3 with this seed."),
+    "ed_quit_nothing": ("\n  Esco senza modifiche.", "\n  Quitting, nothing changed."),
+    "ed_no_change": ("    Nessuna modifica.", "    Nothing changed."),
+    "ed_river_cut_end": ("accorciarlo: il fiume finisce qui", "shorten it: the river ends here"),
+    "ed_river_cut_start": ("accorciarlo: il fiume nasce qui", "shorten it: the river springs here"),
+    "ed_too_short": ("    Resterebbe un fiume troppo corto: se vuoi, toglilo tutto.",
+                     "    The river would be too short: remove it altogether if you want."),
+    "ed_did_cut_end": ("il fiume ora finisce in {h}{how}", "the river now ends at {h}{how}"),
+    "ed_did_cut_start": ("il fiume ora nasce in {h}", "the river now springs at {h}"),
+    "ed_into_water": (", sfociando in acqua", ", flowing into the water"),
+    "ed_off_map": (", uscendo dalla mappa", ", leaving the map"),
+    "info_has_edits": ("Questa mappa ha anche una versione modificata: per rifare quella, scegli 3 "
+                       "(\"modificare una mappa\") con questo seme e riprendi le modifiche",
+                       "This map also has an edited version: to make that one, choose 3 "
+                       "(\"edit a map\") with this seed and pick up the changes"),
+    "ed_bad_edits": ("    Le modifiche salvate sono illeggibili: riparto dalla mappa originale.",
+                     "    The saved edits can't be read: starting from the original map."),
+    "ed_resume": ("  Questa mappa ha già delle modifiche salvate. Le riprendo? (S/n): ",
+                  "  This map already has saved edits. Pick them up again? (Y/n): "),
+    "ed_ask_hex": ("  Esagono da modificare (colonna.riga, es. 03.07; T = tabella completa, A = annulla, E = esci): ",
+                   "  Hex to edit (column.row, e.g. 03.07; T = full table, U = undo, Q = quit): "),
+    "ed_bad_hex": ("    Esagono non valido: scrivi colonna.riga, es. 03.07 (la mappa va da 01.01 a {last}).",
+                   "    Not a valid hex: type column.row, e.g. 03.07 (the map goes from 01.01 to {last})."),
+    "ed_hex_is": ("\n  Esagono {h}: {desc}", "\n  Hex {h}: {desc}"),
+    "ed_what": ("  Cosa vuoi fare?", "  What do you want to do?"),
+    "ed_terrain": ("cambiare il tipo di terreno", "change the terrain"),
+    "ed_add": ("aggiungere {what}", "add {what}"),
+    "ed_remove": ("togliere {what}", "remove {what}"),
+    "ed_a_dungeon": ("un dungeon", "a dungeon"), "ed_the_dungeon": ("il dungeon", "the dungeon"),
+    "ed_a_city": ("una città", "a city"), "ed_the_city": ("la città", "the city"),
+    "ed_a_fortress": ("una fortezza", "a fortress"), "ed_the_fortress": ("la fortezza", "the fortress"),
+    "ed_add_river": ("aggiungere un fiume che nasce qui", "add a river that springs here"),
+    "ed_river_piece": ("togliere o spostare il fiume", "remove or move the river"),
+    "ed_nothing": ("niente, scegli un altro esagono", "nothing, pick another hex"),
+    "ed_which_terrain": ("  Nuovo terreno:", "  New terrain:"),
+    "ed_river_how": ("  Il fiume:", "  The river:"),
+    "ed_river_all": ("togliere tutto il fiume", "remove the whole river"),
+    "ed_river_move": ("spostare questo tratto di un esagono", "move this stretch by one hex"),
+    "ed_which_dir": ("  In quale direzione?", "  Which way?"),
+    "ed_next": ("\n  E adesso?", "\n  What next?"),
+    "ed_next_more": ("modificare un altro esagono", "edit another hex"),
+    "ed_next_go": ("generare la mappa con le modifiche", "make the map with the changes"),
+    "ed_done": ("    Fatto: {what}.", "    Done: {what}."),
+    "ed_did_terrain": ("{h} ora è {t}", "{h} is now {t}"),
+    "ed_did_add": ("aggiunto {what} in {h}", "added {what} at {h}"),
+    "ed_did_replace": ("{h}: {old} → {what}", "{h}: {old} → {what}"),
+    "ed_did_remove": ("tolto {what} da {h}", "removed {what} from {h}"),
+    "ed_did_river_add": ("nuovo fiume da {h}, lungo {n} esagoni", "new river from {h}, {n} hexes long"),
+    "ed_did_river_del": ("tolto il fiume che passava da {h}", "removed the river through {h}"),
+    "ed_did_river_move": ("il fiume ora passa da {h} invece che da {old}", "the river now goes through {h} instead of {old}"),
+    "ed_lost_site": ("tolto {what} da {h}: sull'acqua non può stare", "removed {what} from {h}: it can't stand on water"),
+    "ed_cut_river": ("il fiume che passava da {h} ora finisce lì nell'acqua", "the river through {h} now ends there in the water"),
+    "ed_no_water_site": ("    Su mare e laghi non si possono mettere siti.", "    Sites can't go on sea or lakes."),
+    "ed_no_water_river": ("    Un fiume non può nascere nell'acqua.", "    A river can't spring in the water."),
+    "ed_no_river_path": ("    Da qui il fiume non trova una strada verso il basso: prova un esagono più in alto.",
+                         "    From here the river finds no way downhill: try a higher hex."),
+    "ed_no_move": ("    Non posso spostare il fiume lì: {why}.", "    Can't move the river there: {why}."),
+    "ed_why_water": ("c'è acqua", "there's water"),
+    "ed_why_river": ("c'è già un fiume", "there's already a river"),
+    "ed_why_break": ("il fiume si spezzerebbe", "the river would break apart"),
+    "ed_edited": ("(modificata)", "(edited)"),
+    "info_edits": ("Modifiche salvate in {path}", "Edits saved in {path}"),
     "sites_header": ("\nELENCO DEI SITI (codice esagono)", "\nLIST OF SITES (hex code)"),
     "on_river": (", sul fiume", ", on a river"),
     # step 10: print format
@@ -795,11 +879,12 @@ def short_path(path):
     return path if short.startswith("..") else short
 
 
-def output_names(base, seed, extension="png"):
+def output_names(base, seed, suffix=""):
+    """suffix is "_edit" for an edited map, which sits next to the original."""
     folder = map_folder(base, seed)
     os.makedirs(folder, exist_ok=True)
-    return (os.path.join(folder, f"{seed}_nonumber.{extension}"),
-            os.path.join(folder, f"{seed}_number.{extension}"))
+    return (os.path.join(folder, f"{seed}{suffix}_nonumber.png"),
+            os.path.join(folder, f"{seed}{suffix}_number.png"))
 
 
 def upgrade_settings(data):
@@ -1064,14 +1149,17 @@ def show_conjuring():
 
 
 def ask_mode(folder=MAPS_FOLDER):
-    """None for a new map, otherwise (number, settings). settings is None only
-    for an old number seed whose PNG is gone: then everything is asked again."""
+    """None for a new map, otherwise (number, settings[, edit]). settings is None
+    only for an old number seed whose PNG is gone: then everything is asked again.
+    settings["edit"] is True when the map is going to be edited."""
     print(tr("what_to_do"))
     print(tr("mode_new"))
     print(tr("mode_rebuild"))
-    choice = ask(tr("choice"), 1, int, 1, 2)
+    print(tr("mode_edit"))
+    choice = ask(tr("choice"), 1, int, 1, 3)
     if choice == 1:
         return None
+    edit = choice == 3
     while True:
         answer = input(tr("ask_seed", example=example_seed())).strip()
         if is_old_seed(answer) or read_seed(answer):
@@ -1081,6 +1169,7 @@ def ask_mode(folder=MAPS_FOLDER):
     if not is_old_seed(answer):
         saved = rebuild_settings(answer, folder)
         print(tr("found_seed", seed=make_seed(saved, saved["seed"]), desc=describe_settings(complete_settings(saved))))
+        saved["edit"] = edit
         return saved["seed"], saved
 
     # old number seed: only the PNG knows the settings
@@ -1094,7 +1183,9 @@ def ask_mode(folder=MAPS_FOLDER):
         print(tr("no_settings", seed=number, folder=short_path(folder)))
     if not saved:
         print(tr("same_settings"))
-    return number, saved
+    else:
+        saved["edit"] = edit
+    return number, saved, edit
 
 
 def ask_look(p):
@@ -1156,6 +1247,7 @@ def ask_settings():
     print()
     if mode:
         p["seed"] = mode[0]          # an old number seed: we already know the random number
+        p["edit"] = mode[-1] is True
     else:
         p["seed"] = None             # a new map gets a new random number
     p["title"] = input(tr("q_title", default=tr("default_title"))).strip() or tr("default_title")
@@ -1456,6 +1548,35 @@ def place_forests_and_deserts(grid, n_forests, n_deserts, rng, terrain):
         terrain[h] = PLAINS
 
 
+def follow_river(grid, terrain, height, spring, river_hexes, rng, max_length):
+    """Walk downhill from spring. Returns (path, end); end is None if it got stuck."""
+    path, end = [spring], None
+    while len(path) <= max_length:
+        current = path[-1]
+        around = grid.neighbours(current)
+        water = [nb for nb in around if terrain[nb] in WATER]
+        if water:
+            end = ("water", min(water, key=lambda nb: height[nb]))
+            break
+        joins = [nb for nb in around if nb in river_hexes]
+        if joins and len(path) >= 3:
+            end = ("join", joins[0])
+            break
+        # no going back, no loops
+        forbidden = set(path)
+        for p in path[:-1]:
+            forbidden.update(grid.neighbours(p))
+        options = [nb for nb in around if nb not in forbidden and nb not in river_hexes]
+        if grid.on_edge(current) and len(path) >= 3 and (
+                not options or min(height[nb] for nb in options) > height[current]):
+            end = ("edge", None)
+            break
+        if not options:
+            break   # stuck
+        path.append(min(options, key=lambda nb: height[nb] + rng.uniform(0, 0.03)))
+    return path, end
+
+
 def trace_rivers(grid, terrain, height, n, rng):
     """Rivers start high up and always go to the lowest neighbour, until they hit
     water, another river or the map edge. The ones that get stuck are dropped."""
@@ -1477,30 +1598,7 @@ def trace_rivers(grid, terrain, height, n, rng):
             continue
         if any(terrain[nb] in WATER for nb in grid.neighbours(spring)):
             continue
-        path, end = [spring], None
-        while len(path) <= max_length:
-            current = path[-1]
-            around = grid.neighbours(current)
-            water = [nb for nb in around if terrain[nb] in WATER]
-            if water:
-                end = ("water", min(water, key=lambda nb: height[nb]))
-                break
-            joins = [nb for nb in around if nb in river_hexes]
-            if joins and len(path) >= 3:
-                end = ("join", joins[0])
-                break
-            # no going back, no loops
-            forbidden = set(path)
-            for p in path[:-1]:
-                forbidden.update(grid.neighbours(p))
-            options = [nb for nb in around if nb not in forbidden and nb not in river_hexes]
-            if grid.on_edge(current) and len(path) >= 3 and (
-                    not options or min(height[nb] for nb in options) > height[current]):
-                end = ("edge", None)
-                break
-            if not options:
-                break   # stuck
-            path.append(min(options, key=lambda nb: height[nb] + rng.uniform(0, 0.03)))
+        path, end = follow_river(grid, terrain, height, spring, river_hexes, rng, max_length)
         # keep it only if it's >= 3 hexes and ends somewhere sensible
         if end and len(path) >= 3:
             rivers.append({"path": path, "end": end})
@@ -1572,7 +1670,7 @@ def place_sites(grid, terrain, rivers, wanted, rng, log):
 
 
 def build_land(params, counts, grid, rng, log):
-    """Steps 3-9. Returns (terrain of every hex, rivers, sites)."""
+    """Steps 3-9. Returns (terrain of every hex, rivers, sites, heights)."""
     log.step(tr("step_heights"))
     height = make_heights(grid, rng)
     log.info(tr("info_heights", n=len(grid.hexes)))
@@ -1618,7 +1716,7 @@ def build_land(params, counts, grid, rng, log):
                         {CITY: params["cities"], FORTRESS: params["fortresses"], DUNGEON: params["dungeons"]},
                         rng, log)
 
-    return terrain, rivers, sites
+    return terrain, rivers, sites, height
 
 
 def print_sites(grid, terrain, rivers, sites):
@@ -1830,6 +1928,8 @@ def river_line(grid, river, k, rng):
         points.append(((lx + tx) / 2, (ly + ty) / 2))
     elif end_kind == "join":
         points.append(hex_centre(*target, k))
+    elif end_kind == "stop":         # only from the editor: the river just ends here
+        pass
     else:
         px, py = points[-2]
         outside = [n for n in grid.all_neighbours(last) if not grid.inside(n)]
@@ -1871,26 +1971,35 @@ def line_to_squares(points, aspect):
 
 
 # --- drawing the map ---
-def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect):
+def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect, original=None):
     """Terrain, then hex borders, then rivers, then sites; each layer can
-    overwrite the previous one."""
+    overwrite the previous one.
+    original = (terrain, rivers) before editing. Its glyphs and river wiggles
+    are rolled first, in the usual order, so everything the editor didn't touch
+    looks exactly as on the unedited map; only the changed bits get new dice."""
     width, height = map_size(grid.cols, grid.rows, k)
     canvas = Canvas(width, height)
     border, inside = hex_template(k)
+    old_terrain, old_rivers = original or (terrain, rivers)
+
+    def glyphs(kind, dice):
+        if kind == SEA or not TERRAIN_GLYPHS[kind]:
+            return None
+        return [pick_symbol(dice, TERRAIN_GLYPHS[kind], G) for _ in inside]
 
     for c, r in grid.hexes:
         x0, y0 = hex_origin(c, r, k)
         kind = terrain[(c, r)]
+        chars = glyphs(old_terrain[(c, r)], rng)
+        if kind != old_terrain[(c, r)]:
+            chars = glyphs(kind, random.Random(f"{c},{r},{kind}"))
         if kind == SEA:
             for (yy, xx) in inside:
                 # the ≈ only shows in the .txt
                 canvas.put(x0 + xx, y0 + yy, G("≈", "~"), "g", SEA)
-            continue
-        choices = TERRAIN_GLYPHS[kind]
-        if not choices:
-            continue
-        for (yy, xx) in inside:
-            canvas.put(x0 + xx, y0 + yy, pick_symbol(rng, choices, G), "n", kind)
+        elif chars:
+            for (yy, xx), ch in zip(inside, chars):
+                canvas.put(x0 + xx, y0 + yy, ch, "n", kind)
 
     # borders between two sea hexes get the gray too, or the sea looks tiled
     shared = {}    # for each border square: [letter, "only sea hexes share it so far"]
@@ -1902,9 +2011,17 @@ def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect):
     for (x, y), (ch, sea_only) in shared.items():
         canvas.put(x, y, ch, "H" if sea_only else "b", "sea_line" if sea_only else "border")
 
-    arms = {}
-    for river in rivers:
+    lines = []
+    for river in old_rivers:
         squares = line_to_squares(river_line(grid, river, k, rng), aspect)
+        if river in rivers:
+            lines.append(squares)
+    for river in rivers:
+        if river not in old_rivers:      # new or changed in the editor
+            dice = random.Random(repr(river["path"]))
+            lines.append(line_to_squares(river_line(grid, river, k, dice), aspect))
+    arms = {}
+    for squares in lines:
         for a, b in zip(squares, squares[1:]):
             d = {(1, 0): "r", (-1, 0): "l", (0, 1): "d", (0, -1): "u"}[(b[0] - a[0], b[1] - a[1])]
             arms.setdefault(a, set()).add(d)
@@ -2281,6 +2398,411 @@ def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, 
     return layout, n_cols, n_rows, legend, subtitle
 
 
+# --- editor ---
+# Edits are kept as the final state (terrain overrides, all sites, all rivers)
+# in <seed>_edit.json next to the map, and in the edited PNGs. The seed alone
+# still gives the original map.
+SITE_KEYS = {DUNGEON: ("ed_a_dungeon", "ed_the_dungeon"), CITY: ("ed_a_city", "ed_the_city"),
+             FORTRESS: ("ed_a_fortress", "ed_the_fortress")}
+TERRAIN_ORDER = (PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)
+
+
+def direction(a, b):
+    """Index into ed_dirs (N, NE, SE, S, SW, NW) of neighbour b as seen from a."""
+    dx = b[0] - a[0]
+    dy = (b[1] + 0.5 * (b[0] & 1)) - (a[1] + 0.5 * (a[0] & 1))
+    if dx == 0:
+        return 0 if dy < 0 else 3
+    if dx > 0:
+        return 1 if dy < 0 else 2
+    return 5 if dy < 0 else 4
+
+
+def river_direction(grid, river, h):
+    """Where the river goes from hex h: index into ed_dirs, or None."""
+    path, (kind, target) = river["path"], river["end"]
+    i = path.index(h)
+    if i + 1 < len(path):
+        return direction(h, path[i + 1])
+    if kind in ("water", "join"):
+        return direction(h, target)
+    if kind == "edge" and len(path) > 1:     # it keeps going straight off the map
+        return direction(path[-2], h)
+    return None
+
+
+def parse_hex(text, grid):
+    """'03.07', '3.7' or '0307' -> (2, 6). None if it's not a hex of this grid."""
+    text = text.strip().replace(",", ".")
+    if "." in text:
+        parts = text.split(".")
+    elif text.isdigit() and len(text) == 4:
+        parts = [text[:2], text[2:]]
+    else:
+        return None
+    try:
+        c, r = (int(p) - 1 for p in parts)
+    except ValueError:
+        return None
+    return (c, r) if grid.inside((c, r)) else None
+
+
+def show_hex(h):
+    return f"{h[0] + 1:02d}.{h[1] + 1:02d}"
+
+
+def print_hex_table(grid, terrain, rivers, sites, only=None):
+    """only: the hexes to list (None = all of them)."""
+    head = pick(TEXTS["ed_columns"])
+    yes, dirs = tr("ed_yes"), pick(TEXTS["ed_dirs"])
+    site_at = {h: kind for kind, h in sites}
+    rows = []
+    for c in range(grid.cols):
+        for r in range(grid.rows):
+            h = (c, r)
+            if only is not None and h not in only:
+                continue
+            river = next((rv for rv in rivers if h in rv["path"]), None)
+            d = river_direction(grid, river, h) if river else None
+            rows.append((show_hex(h), pick(TERRAIN_NAMES[terrain[h]]),
+                         yes if site_at.get(h) == DUNGEON else "-",
+                         yes if site_at.get(h) == CITY else "-",
+                         yes if river else "-",
+                         dirs[d] if d is not None else "-",
+                         yes if site_at.get(h) == FORTRESS else "-"))
+    widths = [max(len(x) for x in col) for col in zip(head, *rows)]
+    line = lambda cells: "  " + "  ".join(f"{x:<{w}}" for x, w in zip(cells, widths)).rstrip()
+    print()
+    print(line(head))
+    print(line(["-" * w for w in widths]))
+    for row in rows:
+        print(line(row))
+
+
+def fix_river_end(grid, terrain, river, rivers):
+    """After an edit, make sure the river still ends somewhere that makes sense."""
+    last = river["path"][-1]
+    others = {h for rv in rivers if rv is not river for h in rv["path"]}
+    kind, target = river["end"]
+    if kind == "water" and target in grid.neighbours(last) and terrain[target] in WATER:
+        return
+    if kind == "join" and target in grid.neighbours(last) and target in others:
+        return
+    water = [nb for nb in grid.neighbours(last) if terrain[nb] in WATER]
+    joins = [nb for nb in grid.neighbours(last) if nb in others]
+    if water:
+        river["end"] = ("water", water[0])
+    elif joins:
+        river["end"] = ("join", joins[0])
+    elif grid.on_edge(last):
+        river["end"] = ("edge", None)
+    else:
+        river["end"] = ("stop", None)
+
+
+def move_river_piece(grid, terrain, rivers, river, i, target):
+    """Bend the river so that its i-th hex becomes target. Returns an error key or None."""
+    path = river["path"]
+    if terrain[target] in WATER:
+        return "ed_why_water"
+    if any(target in rv["path"] for rv in rivers):
+        return "ed_why_river"
+    before, after = path[:i], path[i + 1:]
+
+    def bridge(a, b):
+        # hexes to put between a and b so they touch; [] if they already do
+        if b in grid.neighbours(a):
+            return []
+        common = [n for n in grid.neighbours(a) if b in grid.neighbours(n)
+                  and n != path[i] and terrain[n] not in WATER and n not in path]
+        return [common[0]] if common else None
+
+    left = bridge(before[-1], target) if before else []
+    right = bridge(target, after[0]) if after else []
+    if left is None or right is None:
+        return "ed_why_break"
+    new_path = before + left + [target] + right + after
+    if len(set(new_path)) != len(new_path):
+        return "ed_why_break"
+    river["path"] = new_path
+    fix_river_end(grid, terrain, river, rivers)
+    return None
+
+
+def choose(options, default=1):
+    """Print a numbered menu and return the index (0-based) of the answer."""
+    for i, text in enumerate(options, 1):
+        print(f"    {i} = {text}")
+    return ask(tr("choice"), default, int, 1, len(options)) - 1
+
+
+def edits_to_json(original, terrain, rivers, sites):
+    code = lambda h: hex_code(h, 2)
+    return {"terrain": {code(h): t for h, t in terrain.items() if t != original[h]},
+            "sites": [[kind, code(h)] for kind, h in sites],
+            "rivers": [{"path": [code(h) for h in rv["path"]],
+                        "end": [rv["end"][0], code(rv["end"][1]) if rv["end"][1] else None]} for rv in rivers]}
+
+
+def edits_from_json(data, grid, terrain):
+    """Returns (terrain, rivers, sites) with the saved edits applied."""
+    hx = lambda code: (int(code[:2]) - 1, int(code[2:]) - 1)
+    terrain = dict(terrain)
+    for code, t in data.get("terrain", {}).items():
+        if grid.inside(hx(code)) and t in TERRAIN_NAMES:
+            terrain[hx(code)] = t
+    sites = [(kind, hx(code)) for kind, code in data.get("sites", []) if grid.inside(hx(code))]
+    rivers = [{"path": [hx(c) for c in rv["path"]], "end": (rv["end"][0], hx(rv["end"][1]) if rv["end"][1] else None)}
+              for rv in data.get("rivers", [])]
+    return terrain, rivers, sites
+
+
+def load_edits(edit_base):
+    """Saved edits for this map: from <seed>_edit.json or, if that's gone, from
+    the edited PNG. Returns (edits, "json" | "png") or (None, None)."""
+    if os.path.exists(edit_base + ".json"):
+        try:
+            with open(edit_base + ".json", encoding="utf-8") as f:
+                return json.load(f), "json"
+        except (OSError, ValueError):
+            pass
+    for name in (edit_base + "_nonumber.png", edit_base + "_number.png"):
+        try:
+            with Image.open(name) as img:
+                edits = json.loads(img.info.get(SETTINGS_KEY, "{}")).get("edits")
+        except (OSError, ValueError):
+            continue
+        if edits:
+            return edits, "png"
+    return None, None
+
+
+def has_edits(edit_base):
+    return load_edits(edit_base)[0] is not None
+
+
+def snapshot(terrain, rivers, sites):
+    return dict(terrain), [{"path": list(rv["path"]), "end": rv["end"]} for rv in rivers], list(sites)
+
+
+def restore(state, terrain, rivers, sites):
+    t, rv, st = snapshot(*state)
+    terrain.clear()
+    terrain.update(t)
+    rivers[:] = rv
+    sites[:] = st
+
+
+def edit_map(grid, terrain, rivers, sites, height, edit_base):
+    """The interactive editor. Returns the edited (terrain, rivers, sites, edits),
+    or None if the user quits without making the map. The edits are written to
+    <seed>_edit.json after every change, so nothing is lost on Ctrl+C."""
+    original = dict(terrain)
+    terrain, rivers, sites = snapshot(terrain, rivers, sites)
+    print(tr("ed_header"))
+    resumed = False
+    data, source = load_edits(edit_base)
+    if data is not None:
+        prompt = tr("ed_resume") if source == "json" else tr("ed_resume_png")
+        if not input(prompt).strip().lower().startswith("n"):
+            try:
+                terrain, rivers, sites = edits_from_json(data, grid, terrain)
+                resumed = True
+            except (KeyError, TypeError, ValueError, IndexError):
+                print(tr("ed_bad_edits"))
+
+    def save_edits():
+        with open(edit_base + ".json", "w", encoding="utf-8") as f:
+            json.dump(edits_to_json(original, terrain, rivers, sites), f, ensure_ascii=False)
+
+    def show(focus=None, full=False):
+        if full or len(grid.hexes) <= 80:
+            print_hex_table(grid, terrain, rivers, sites)
+            return
+        shown = {h for h in grid.hexes if terrain[h] != original[h]}
+        shown |= {h for _, h in sites} | {h for rv in rivers for h in rv["path"]}
+        near = ""
+        if focus:
+            shown |= {focus, *grid.neighbours(focus)}
+            near = tr("ed_near", h=show_hex(focus))
+        print(tr("ed_shown", near=near, n=len(shown), total=len(grid.hexes)))
+        print_hex_table(grid, terrain, rivers, sites, only=shown)
+
+    def quit_editor():
+        if history or resumed:      # every change is already on disk
+            print(tr("ed_quit", path=short_path(edit_base + ".json")))
+        else:
+            print(tr("ed_quit_nothing"))
+        return None
+
+    history, focus = [], None
+    last = show_hex((grid.cols - 1, grid.rows - 1))
+    show()
+    ask_next = resumed           # picked up old edits: maybe they just want the map again
+    while True:
+        if ask_next:
+            print(tr("ed_next"))
+            options = [tr("ed_next_more"), tr("ed_next_go"), tr("ed_next_undo"), tr("ed_next_quit")]
+            answer = choose(options)
+            if answer == 1:
+                break
+            if answer == 3:
+                return quit_editor()
+            if answer == 2:
+                if history:
+                    restore(history.pop(), terrain, rivers, sites)
+                    save_edits()
+                    print(tr("ed_undone"))
+                    show(focus)
+                else:
+                    print(tr("ed_nothing_to_undo"))
+                continue
+        ask_next = False
+        answer = input(tr("ed_ask_hex")).strip().lower()
+        if answer == "t":
+            show(full=True)
+            continue
+        if answer in ("a", "u"):
+            ask_next = True
+            if history:
+                restore(history.pop(), terrain, rivers, sites)
+                save_edits()
+                print(tr("ed_undone"))
+                show(focus)
+            else:
+                print(tr("ed_nothing_to_undo"))
+            continue
+        if answer in ("e", "q"):
+            return quit_editor()
+        h = parse_hex(answer, grid)
+        if not h:
+            print(tr("ed_bad_hex", last=last))
+            continue
+        before = snapshot(terrain, rivers, sites)
+        edit_hex(grid, terrain, rivers, sites, height, h)
+        if snapshot(terrain, rivers, sites) != before:
+            history.append(before)
+            save_edits()
+        else:
+            print(tr("ed_no_change"))
+        focus = h
+        show(focus)
+        ask_next = True
+    save_edits()
+    return terrain, rivers, sites, edits_to_json(original, terrain, rivers, sites)
+
+
+def edit_hex(grid, terrain, rivers, sites, height, h):
+    name = show_hex(h)
+    site = next((kind for kind, at in sites if at == h), None)
+    river = next((rv for rv in rivers if h in rv["path"]), None)
+    desc = pick(TERRAIN_NAMES[terrain[h]])
+    if site:
+        desc += ", " + pick(SITE_NAMES[site]).lower()
+    if river:
+        d = river_direction(grid, river, h)
+        desc += ", " + pick(TEXTS["ed_columns"])[4].lower()
+        if d is not None:
+            desc += " → " + pick(TEXTS["ed_dirs"])[d]
+    print(tr("ed_hex_is", h=name, desc=desc))
+    print(tr("ed_what"))
+    actions = [("terrain", tr("ed_terrain"))]
+    for kind in (DUNGEON, CITY, FORTRESS):
+        a, the = SITE_KEYS[kind]
+        actions.append((kind, tr("ed_remove", what=tr(the)) if site == kind else tr("ed_add", what=tr(a))))
+    actions.append(("river", tr("ed_river_piece") if river else tr("ed_add_river")))
+    actions.append(("nothing", tr("ed_nothing")))
+    action = actions[choose([text for _, text in actions], len(actions))][0]
+    done = []
+
+    if action == "terrain":
+        print(tr("ed_which_terrain"))
+        new = TERRAIN_ORDER[choose([pick(TERRAIN_NAMES[t]) for t in TERRAIN_ORDER],
+                                   TERRAIN_ORDER.index(terrain[h]) + 1)]
+        terrain[h] = new
+        done.append(tr("ed_did_terrain", h=name, t=pick(TERRAIN_NAMES[new])))
+        if new in WATER:
+            if site:
+                sites.remove((site, h))
+                done.append(tr("ed_lost_site", what=tr(SITE_KEYS[site][1]), h=name))
+            if river:
+                i = river["path"].index(h)
+                if i < 2:                        # nothing left upstream worth keeping
+                    rivers.remove(river)
+                    done.append(tr("ed_did_river_del", h=name))
+                else:
+                    river["path"], river["end"] = river["path"][:i], ("water", h)
+                    done.append(tr("ed_cut_river", h=name))
+        for rv in rivers:
+            fix_river_end(grid, terrain, rv, rivers)
+
+    elif action in SITE_KEYS:
+        a, the = SITE_KEYS[action]
+        if site == action:
+            sites.remove((site, h))
+            done.append(tr("ed_did_remove", what=tr(the), h=name))
+        elif terrain[h] in WATER:
+            print(tr("ed_no_water_site"))
+        else:
+            if site:
+                sites.remove((site, h))
+                done.append(tr("ed_did_replace", old=tr(SITE_KEYS[site][1]), h=name, what=tr(a)))
+            else:
+                done.append(tr("ed_did_add", what=tr(a), h=name))
+            sites.append((action, h))
+
+    elif action == "river" and river:
+        print(tr("ed_river_how"))
+        how = choose([tr("ed_river_all"), tr("ed_river_move"), tr("ed_river_cut_end"), tr("ed_river_cut_start")])
+        i = river["path"].index(h)
+        if how == 0:
+            rivers.remove(river)
+            for rv in rivers:
+                fix_river_end(grid, terrain, rv, rivers)
+            done.append(tr("ed_did_river_del", h=name))
+        elif how in (2, 3):
+            path = river["path"][:i + 1] if how == 2 else river["path"][i:]
+            if len(path) < 2:
+                print(tr("ed_too_short"))
+            else:
+                river["path"] = path
+                for rv in rivers:
+                    fix_river_end(grid, terrain, rv, rivers)
+                if how == 2:
+                    how_end = {"water": tr("ed_into_water"), "edge": tr("ed_off_map")}.get(river["end"][0], "")
+                    done.append(tr("ed_did_cut_end", h=name, how=how_end))
+                else:
+                    done.append(tr("ed_did_cut_start", h=name))
+        else:
+            dirs = pick(TEXTS["ed_dirs"])
+            around = sorted(((direction(h, n), n) for n in grid.neighbours(h)))
+            print(tr("ed_which_dir"))
+            _, target = around[choose([dirs[d] for d, _ in around])]
+            why = move_river_piece(grid, terrain, rivers, river, river["path"].index(h), target)
+            if why:
+                print(tr("ed_no_move", why=tr(why)))
+            else:
+                for rv in rivers:
+                    fix_river_end(grid, terrain, rv, rivers)
+                done.append(tr("ed_did_river_move", h=show_hex(target), old=name))
+
+    elif action == "river":
+        if terrain[h] in WATER:
+            print(tr("ed_no_water_river"))
+        else:
+            busy = {x for rv in rivers for x in rv["path"]}
+            path, end = follow_river(grid, terrain, height, h, busy, random.Random(f"river {h}"),
+                                     grid.cols + grid.rows)
+            if end and len(path) >= 2:
+                rivers.append({"path": path, "end": end})
+                done.append(tr("ed_did_river_add", h=name, n=len(path)))
+            else:
+                print(tr("ed_no_river_path"))
+
+    for what in done:
+        print(tr("ed_done", what=what))
+
+
 def main():
     first_run = make_maps_folder()
     interactive = len(sys.argv) == 1
@@ -2318,7 +2840,19 @@ def main():
     log.info(tr("info_font", name=font_name(font_spec), fake="" if bold_spec else tr("fake_bold"), a=aspect))
 
     # 3-9: land
-    terrain, rivers, sites = build_land(params, counts, grid, rng, log)
+    terrain, rivers, sites, height = build_land(params, counts, grid, rng, log)
+    original = None
+    edit_base = os.path.join(map_folder(params["output"], seed), f"{seed}_edit")
+    if params.pop("edit", False):
+        original = (terrain, rivers)
+        os.makedirs(map_folder(params["output"], seed), exist_ok=True)
+        edited = edit_map(grid, terrain, rivers, sites, height, edit_base)
+        if edited is None:
+            return
+        terrain, rivers, sites, params["edits"] = edited
+        log.info(tr("info_edits", path=short_path(edit_base + ".json")))
+    elif has_edits(edit_base):
+        log.info(tr("info_has_edits"))
 
     # 10: paper
     log.step(tr("step_paper"))
@@ -2326,14 +2860,15 @@ def main():
     paper = ask_paper(params, grid, (font_spec, bold_spec, advance_em, aspect), G, ask_format, log)
     params["paper"] = paper
     k = hex_size(params, grid, paper, aspect)
+    label = f"{seed} {tr('ed_edited')}" if original else seed
     layout, n_cols, n_rows, legend, subtitle = page_layout(
-        params, grid, k, paper, seed, font_spec, bold_spec, advance_em, aspect, G, log)
+        params, grid, k, paper, label, font_spec, bold_spec, advance_em, aspect, G, log)
 
     # glyphs get their own rng, independent from the land's
     drawing_rng = random.Random(number + 1)
-    map_canvas = draw_map(grid, terrain, rivers, sites, k, G, drawing_rng, aspect)
+    map_canvas = draw_map(grid, terrain, rivers, sites, k, G, drawing_rng, aspect, original)
     page, mx, my = compose_page(map_canvas, n_cols, n_rows, legend, params["title"], subtitle, G)
-    plain_path, numbered_path = output_names(params["output"], seed)
+    plain_path, numbered_path = output_names(params["output"], seed, "_edit" if original else "")
 
     # 11-12: the two maps
     log.step(tr("step_plain", paper=paper, dpi=DPI))

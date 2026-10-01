@@ -146,7 +146,7 @@ Per prima cosa il programma ti chiede la **lingua**: scrivi `1` per l'italiano o
 
 Poi compare la schermata di benvenuto, con il titolo e un disegno: premi **INVIO** per cominciare. Il programma ti fa alcune domande. **Ogni domanda ha una risposta già pronta tra parentesi quadre: se ti va bene, premi solo Invio.**
 
-1. **Cosa vuoi fare?** Scrivi `1` per una mappa nuova, `2` per rifare una mappa già fatta (vedi il capitolo 4).
+1. **Cosa vuoi fare?** Scrivi `1` per una mappa nuova, `2` per rifare una mappa già fatta (vedi il capitolo 4), `3` per modificare una mappa a mano, esagono per esagono (vedi il capitolo 5).
 2. **Esagoni in base e in altezza:** quante colonne e quante righe di esagoni vuoi. La risposta pronta è `auto`: il programma sceglie da solo quanti esagoni riempiono un foglio A4 restando leggibili (33 × 15).
 3. **Scegli tu o a caso?** Scrivi `1` per rispondere tu alle tre domande successive, oppure `2` per far scegliere al programma a caso il numero di siti, le percentuali di terreno e i fiumi, in proporzione alla mappa. Con `2` passa direttamente al titolo. I valori scelti vengono mostrati mentre lavora e finiscono nel seme come tutti gli altri.
 4. **Numero di dungeon, città e fortezze** da mettere sulla mappa (fino a 99 per tipo).
@@ -202,7 +202,45 @@ La mappa rifatta finisce nella cartella `maps_generated/<seme>` e sostituisce i 
 
 ---
 
-## 5. I file che ottieni
+## 5. Modificare una mappa
+
+Puoi cambiare a mano una mappa, esagono per esagono, partendo dal suo seme. Avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" rispondi `3` e scrivi il seme. Come quando rifai una mappa, ti chiede del titolo, della scala e dell'aspetto; poi costruisce la mappa e mostra una tabella con una riga per ogni esagono:
+
+```
+  Esagono  Terreno   Dungeon  Città  Fiume  Direzione  Fortezza
+  -------  --------  -------  -----  -----  ---------  --------
+  03.07    foresta   -        -      sì     sud        -
+```
+
+La direzione è quella verso cui scorre il fiume da quell'esagono. Gli esagoni hanno il lato piatto in alto, quindi le sei direzioni sono nord, nord-est, sud-est, sud, sud-ovest e nord-ovest: est e ovest "puri" non esistono.
+
+Sulle mappe con più di 80 esagoni la tabella mostra solo gli esagoni con siti, fiumi o modifiche, più quelli intorno all'esagono appena modificato, così non riempie lo schermo. Scrivi `T` al posto dell'esagono per vedere la tabella completa.
+
+Poi:
+
+1. Scrivi l'esagono da cambiare come colonna.riga, per esempio `03.07` (vanno bene anche `3.7` e `0307`).
+2. Scegli cosa farne: cambiare il terreno; aggiungere o togliere un dungeon, una città o una fortezza; aggiungere un fiume che nasce da quell'esagono oppure, se ci passa già un fiume, toglierlo tutto, spostare quel tratto di un esagono in una delle sei direzioni, o accorciarlo in modo che finisca o nasca proprio lì.
+3. La tabella ricompare, aggiornata. Scegli se cambiare un altro esagono, generare la mappa con le modifiche, **annullare** l'ultima modifica (puoi annullarne più d'una, una alla volta) o **uscire** senza generare la mappa.
+
+Quando ti chiede l'esagono puoi anche scrivere `T` (tabella completa), `A` (annulla l'ultima modifica) o `E` (esci). In inglese sono `T`, `U` e `Q`.
+
+Alcune regole tengono la mappa coerente:
+
+- In un esagono c'è al massimo un sito: se aggiungi una città dove c'è un dungeon, la città prende il suo posto.
+- Siti e fiumi non possono nascere sul mare o sui laghi. Se trasformi un esagono in acqua, il suo sito viene tolto e il fiume che ci passava ora finisce lì.
+- Un tratto di fiume spostato viene ricollegato al resto attraverso gli esagoni vicini. Se non si può (c'è acqua o un altro fiume, oppure il fiume si spezzerebbe), il programma te lo dice e non cambia nulla.
+- Un fiume nuovo scende verso il basso come gli altri; se non trova una strada, prova un esagono più in alto.
+- Tutto quello che non hai toccato resta identico alla mappa originale.
+
+La mappa modificata viene salvata nella stessa cartella dell'originale, che resta com'è: `<seme>_edit_nonumber.png` e `<seme>_edit_number.png` (più i .txt), con "(modificata)" dopo il seme sotto il titolo. Le modifiche vengono salvate in `<seme>_edit.json` dopo ogni singolo cambiamento, così non le perdi se esci o chiudi il programma a metà. Il seme da solo dà sempre la mappa originale, ma se scegli di nuovo `3` con lo stesso seme, il programma ti propone di riprendere le modifiche salvate: puoi continuare a modificare, oppure rigenerare subito la mappa modificata, per esempio in un altro formato o a colori.
+
+Le modifiche sono conservate anche dentro il PNG modificato: se `<seme>_edit.json` va perso, il programma le ritrova lì. E se rifai una mappa che ha una versione modificata (scelta `2`, oppure `--riproduci`), il programma ti ricorda che la versione modificata esiste e come ottenerla.
+
+L'editor funziona solo rispondendo alle domande: non c'è un'opzione da riga di comando.
+
+---
+
+## 6. I file che ottieni
 
 La prima volta che lo usi, il programma crea accanto a `wyrmhex.py` una cartella chiamata **`maps_generated`**. Ogni mappa ha lì dentro una cartella tutta sua, che ha per nome il seme della mappa (vedi il capitolo 4), con dentro i suoi quattro file:
 
@@ -222,12 +260,13 @@ Alla fine il programma ti dice in quale cartella ha messo i file.
 | `<seme>_nonumber.png` | La mappa senza numeri, per i giocatori |
 | `<seme>_number.png` | La stessa mappa con il numero in ogni esagono, per il master |
 | `<seme>_nonumber.txt`, `<seme>_number.txt` | La mappa come testo, apribile con il Blocco note |
+| `<seme>_edit_…`, `<seme>_edit.json` | Solo se hai modificato la mappa (capitolo 5): la mappa modificata e l'elenco delle modifiche |
 
 I numeri degli esagoni hanno quattro cifre: le prime due indicano la colonna, le ultime due la riga. `0101` è l'esagono in alto a sinistra; `0305` è nella terza colonna, quinta riga.
 
 ---
 
-## 6. Stampare
+## 7. Stampare
 
 Le immagini hanno già la misura esatta del foglio che hai scelto (A4, A3 o A2), a 600 dpi: si stampano nitide anche sui fogli grandi.
 
@@ -238,7 +277,7 @@ Le immagini hanno già la misura esatta del foglio che hai scelto (A4, A3 o A2),
 
 ---
 
-## 7. Per chi vuole andare più veloce: le opzioni
+## 8. Per chi vuole andare più veloce: le opzioni
 
 Invece di rispondere alle domande, puoi scrivere tutto su una riga. Le impostazioni che non scrivi prendono il valore di partenza. Esempi, con l'ambiente virtuale attivo (vedi il capitolo 3):
 
@@ -278,7 +317,7 @@ Per vedere l'elenco completo delle opzioni, aggiungi `--help` dopo il nome del f
 
 ---
 
-## 8. Problemi comuni
+## 9. Problemi comuni
 
 **"py" / "python3" non è riconosciuto come comando.**
 Python non è installato, oppure su Windows non è stato aggiunto al PATH. Reinstallalo spuntando "Add python.exe to PATH", poi chiudi e riapri il terminale.
@@ -327,7 +366,7 @@ Le versioni precedenti alla 0.0.2 potevano disegnare la mappa in bianco e nero c
 
 ---
 
-## 9. Esempi di output
+## 10. Esempi di output
 
 ### 12 × 10 esagoni
 

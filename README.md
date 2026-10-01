@@ -146,7 +146,7 @@ First the program asks for the **language**: type `1` for Italian or `2` for Eng
 
 Then the welcome screen appears, with the title and a picture: press **ENTER** to begin. The program asks you a few questions. **Every question has a ready-made answer in square brackets: if you're happy with it, just press Enter.**
 
-1. **What do you want to do?** Type `1` for a new map, `2` to rebuild a map you already made (see chapter 4).
+1. **What do you want to do?** Type `1` for a new map, `2` to rebuild a map you already made (see chapter 4), `3` to edit a map by hand, hex by hex (see chapter 5).
 2. **Hexes across and down:** how many columns and rows of hexes you want. The ready-made answer is `auto`: the program works out by itself how many hexes fill an A4 sheet and stay easy to read (33 × 15).
 3. **Choose yourself or at random?** Type `1` to answer the next three questions yourself, or `2` to let the program pick the number of sites, the terrain percentages and the rivers at random, sized to the map. With `2` it skips straight to the title. The values it picks are shown while it works, and they end up in the seed like any other.
 4. **Number of dungeons, cities and fortresses** to put on the map (up to 99 of each).
@@ -202,7 +202,45 @@ The rebuilt map goes into the `maps_generated/<seed>` folder and replaces the fi
 
 ---
 
-## 5. The files you get
+## 5. Editing a map
+
+You can change a map by hand, hex by hex, starting from its seed. Start the program, choose the language, answer `3` to "What do you want to do?" and type the seed. As when rebuilding a map, it asks about the title, the scale and the look; then it builds the map and shows a table with one line per hex:
+
+```
+  Hex    Terrain   Dungeon  City  River  Direction   Fortress
+  -----  --------  -------  ----  -----  ----------  --------
+  03.07  forest    -        -     yes    south       -
+```
+
+The direction is where the river flows from that hex. Hexes have a flat top, so the six directions are north, north-east, south-east, south, south-west and north-west: there's no straight east or west.
+
+On maps with more than 80 hexes the table only lists the hexes with sites, rivers or changes, plus the ones around the hex you just edited, so it doesn't fill the screen. Type `T` instead of a hex to see the full table.
+
+Then:
+
+1. Type the hex you want to change as column.row, for example `03.07` (`3.7` and `0307` work too).
+2. Choose what to do with it: change the terrain; add or remove a dungeon, a city or a fortress; add a river that springs from that hex or, if a river already flows through it, remove the whole river, move that stretch by one hex in one of the six directions, or shorten the river so that it ends or springs right there.
+3. The table comes back, updated. Choose whether to change another hex, make the map with the changes, **undo** the last change (you can undo several, one at a time), or **quit** without making the map.
+
+When it asks for a hex you can also type `T` (full table), `U` (undo the last change) or `Q` (quit). In Italian they are `T`, `A` and `E`.
+
+A few rules keep the map consistent:
+
+- A hex holds at most one site: adding a city where there's a dungeon replaces the dungeon.
+- Sites and rivers can't start on the sea or on lakes. If you turn a hex into water, its site is removed and a river flowing through it now ends there.
+- A moved stretch of river is joined back to the rest through the nearby hexes. If that's not possible (there's water or another river, or the river would break apart), the program says so and changes nothing.
+- A new river flows downhill like the others; if it can't find a way, try a higher hex.
+- Everything you didn't touch looks exactly as on the original map.
+
+The edited map is saved in the same folder as the original, which stays as it is: `<seed>_edit_nonumber.png` and `<seed>_edit_number.png` (plus the .txt files), with "(edited)" after the seed under the title. The changes are saved in `<seed>_edit.json` after every single change, so you don't lose them if you quit or close the program halfway. The seed alone still gives the original map, but if you choose `3` again with the same seed, the program offers to pick up the saved changes: you can carry on editing, or just make the edited map again, for example on another paper size or in colour.
+
+The changes are also stored inside the edited PNG: if `<seed>_edit.json` gets lost, the program finds them there. And if you rebuild a map that has an edited version (choice `2`, or `--reproduce`), it reminds you that the edited version exists and how to get it.
+
+The editor only works through the questions: there's no command-line option for it.
+
+---
+
+## 6. The files you get
 
 The first time you use it, the program creates a folder called **`maps_generated`** next to `wyrmhex.py`. Inside it, every map gets a folder of its own, named after the map's seed (see chapter 4), holding its four files:
 
@@ -222,12 +260,13 @@ At the end, the program tells you which folder it saved the files in.
 | `<seed>_nonumber.png` | The map without numbers, for the players |
 | `<seed>_number.png` | The same map with a number in every hex, for the game master |
 | `<seed>_nonumber.txt`, `<seed>_number.txt` | The map as text, which you can open with Notepad or TextEdit |
+| `<seed>_edit_…`, `<seed>_edit.json` | Only if you edited the map (chapter 5): the edited map, and the list of changes |
 
 Hex numbers have four digits: the first two are the column, the last two the row. `0101` is the top-left hex; `0305` is in the third column, fifth row.
 
 ---
 
-## 6. Printing
+## 7. Printing
 
 The pictures already have the exact size of the paper you chose (A4, A3 or A2), at 600 dpi: they print sharp even on big sheets.
 
@@ -238,7 +277,7 @@ The pictures already have the exact size of the paper you chose (A4, A3 or A2), 
 
 ---
 
-## 7. For people in a hurry: the options
+## 8. For people in a hurry: the options
 
 Instead of answering the questions, you can type everything on one line. Any setting you leave out keeps its starting value. Examples, with the virtual environment active (see chapter 3):
 
@@ -277,7 +316,7 @@ To see the full list of options, add `--help` after the file name (with `--langu
 
 ---
 
-## 8. Common problems
+## 9. Common problems
 
 **"py" / "python3" is not recognized as a command.**
 Python isn't installed, or on Windows it wasn't added to the PATH. Reinstall it with "Add python.exe to PATH" ticked, then close and reopen the terminal.
@@ -326,7 +365,7 @@ Versions before 0.0.2 could draw the black-and-white map as white on black; that
 
 ---
 
-## 9. Output examples
+## 10. Output examples
 
 ### 12 × 10 hexes
 
