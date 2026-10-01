@@ -63,7 +63,7 @@ Ti serve anche **Python 3.14**, il programma che fa funzionare i file `.py`. Van
 
 ---
 
-## 2. Installazione (si fa una volta sola)
+## 2. Installazione
 
 ### Passo 1 — Installa Python
 
@@ -80,39 +80,67 @@ Il terminale è una finestra in cui si scrivono comandi.
 - **macOS:** apri l'app **Terminale** (in Applicazioni → Utility). Scrivi `cd` seguito da uno spazio, trascina la cartella `mappe` dentro la finestra e premi Invio.
 - **Linux:** apri la cartella, fai clic destro in uno spazio vuoto e scegli **"Apri nel terminale"**.
 
-### Passo 3 — Prepara il programma
+### Passo 3 — Crea l'ambiente virtuale
 
-Copia i comandi qui sotto **uno alla volta** e premi Invio dopo ciascuno. Il primo crea, dentro la cartella, uno spazio riservato al programma: una sottocartella nascosta `.venv`, che non devi toccare. Il secondo scarica **Pillow**, la libreria che serve a creare le immagini.
+Il programma ha uno spazio riservato dentro la cartella, chiamato *ambiente virtuale*: una sottocartella nascosta `.venv`, che non devi toccare. Così le librerie che gli servono non si mescolano con il resto del computer. Scrivi:
 
 **Windows**
 ```
 py -m venv .venv
-.venv\Scripts\python -m pip install -r requirements.txt
 ```
 
 **macOS e Linux**
 ```
 python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
 ```
 
-Se alla fine compare una riga che inizia con `Successfully installed`, è tutto pronto.
+Sullo schermo non compare nulla: è normale. Si fa una volta sola.
+
+### Passo 4 — Attiva l'ambiente virtuale
+
+Attivarlo dice al terminale di usare il Python che sta dentro `.venv`. Scrivi:
+
+**Windows**
+```
+.venv\Scripts\activate
+```
+
+**macOS e Linux**
+```
+source .venv/bin/activate
+```
+
+Da qui in poi la riga in cui scrivi comincia con `(.venv)`: è il segno che è attivo. Va attivato di nuovo ogni volta che apri un nuovo terminale (vedi il capitolo 3).
+
+### Passo 5 — Installa le librerie
+
+Con l'ambiente virtuale attivo, scarica **Pillow**, la libreria che serve a creare le immagini. Il comando è uguale su tutti i sistemi:
+
+```
+pip install -r requirements.txt
+```
+
+Se alla fine compare una riga che inizia con `Successfully installed`, è tutto pronto. Si fa una volta sola.
 
 ---
 
 ## 3. Creare una mappa
 
-Apri il terminale nella cartella, come al passo 2, e scrivi:
+Apri il terminale nella cartella, come al passo 2. Prima attiva l'ambiente virtuale (come al passo 4), poi avvia il programma:
 
 **Windows**
 ```
-.venv\Scripts\python wyrmhex.py
+.venv\Scripts\activate
+python wyrmhex.py
 ```
 
 **macOS e Linux**
 ```
-.venv/bin/python wyrmhex.py
+source .venv/bin/activate
+python wyrmhex.py
 ```
+
+Basta attivarlo una volta ogni volta che apri un terminale: finché la riga comincia con `(.venv)` è attivo, e puoi fare tutte le mappe che vuoi con `python wyrmhex.py`. Quando hai finito, scrivi `deactivate` o chiudi semplicemente il terminale. Se hai appena finito l'installazione nella stessa finestra, l'ambiente è già attivo.
 
 Per prima cosa il programma ti chiede la **lingua**: scrivi `1` per l'italiano o `2` per l'inglese (con Invio resta l'italiano). Da lì in poi domande, messaggi e anche i testi stampati sulla mappa (legenda, scala, titolo di partenza) sono nella lingua scelta.
 
@@ -120,9 +148,9 @@ Poi compare la schermata di benvenuto, con il titolo e un disegno: premi **INVIO
 
 1. **Cosa vuoi fare?** Scrivi `1` per una mappa nuova, `2` per rifare una mappa già fatta (vedi il capitolo 4).
 2. **Esagoni in base e in altezza:** quante colonne e quante righe di esagoni vuoi. La risposta pronta è `auto`: il programma sceglie da solo quanti esagoni riempiono un foglio A4 restando leggibili (33 × 15).
-3. **Numero di dungeon, città e fortezze** da mettere sulla mappa.
-4. **Percentuali di terreno:** quanta parte della mappa è pianura, mare, laghi, colline, montagne, foreste e deserti. La somma non può superare 100; se resta qualcosa, diventa pianura. Se sbagli, il programma te lo dice e ti fa reinserire i numeri.
-5. **Numero di fiumi:** con `-1` il programma decide da solo.
+3. **Numero di dungeon, città e fortezze** da mettere sulla mappa (fino a 99 per tipo).
+4. **Percentuali di terreno:** quanta parte della mappa è pianura, mare, laghi, colline, montagne, foreste e deserti, in numeri interi. La somma non può superare 100; se resta qualcosa, diventa pianura. Se sbagli, il programma te lo dice e ti fa reinserire i numeri.
+5. **Numero di fiumi** (fino a 100): con `-1` il programma decide da solo.
 6. **Titolo** stampato in cima alla mappa.
 7. Se usare **solo i caratteri base della tastiera** (senza simboli come ♣ ▲ ≈). Di solito rispondi no: basta premere Invio.
 
@@ -155,36 +183,42 @@ Alla fine elenca dove sono le città, le fortezze e i dungeon, con il numero del
 
 ## 4. Rifare una mappa già fatta
 
-Ogni mappa ha un **seme**: è il nome della sua cartella dentro `maps_generated` e il numero all'inizio del nome dei suoi file. Per esempio, il seme di `maps_generated/482913/482913_nonumber.png` è `482913`.
+Ogni mappa ha un **seme**: un codice di 24 lettere e cifre a gruppi di quattro, come `0RY5-P688-H9F9-56PA-CEQK-194V`. Il programma lo mostra mentre lavora e lo stampa sotto il titolo della mappa. È anche il nome della cartella della mappa dentro `maps_generated` e l'inizio del nome dei suoi file.
 
-Per rifare esattamente quella mappa, avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" rispondi `2` e scrivi il seme. Ogni immagine conserva al suo interno le impostazioni con cui è stata creata, e il programma le rilegge da lì: per questo il file `<seme>_nonumber.png` deve essere ancora nella sua cartella `maps_generated/<seme>`. Le mappe fatte con le versioni precedenti, salvate direttamente nella cartella del programma, vengono trovate lo stesso. La mappa rifatta finisce nella cartella `maps_generated/<seme>` e sostituisce i file che c'erano. Ti chiede di nuovo solo se usare i caratteri base e, alla fine, il formato di stampa (la risposta pronta è il formato usato la volta prima): così puoi rifare la stessa mappa, per esempio, in A3 invece che in A4.
+Il seme contiene tutto ciò che dà forma alla terra: il numero di esagoni, le città, le fortezze e i dungeon, le percentuali di terreno, i fiumi e tutte le scelte casuali. Per questo **lo stesso seme dà sempre la stessa mappa**, su qualunque computer, anche se i file della mappa non ci sono più. Per condividere una mappa con qualcuno basta dargli il suo seme.
+
+Per rifare una mappa, avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" rispondi `2` e scrivi il seme. Maiuscole, trattini e spazi non contano, e se sbagli un carattere il programma te lo dice, invece di fare in silenzio una mappa diversa. Poi ti chiede di nuovo solo se usare i caratteri base e, alla fine, il formato di stampa: così puoi rifare la stessa mappa, per esempio, in A3 invece che in A4.
+
+Il titolo, la scala e il formato di stampa non fanno parte del seme, perché non cambiano la terra. Se il PNG della mappa è ancora nella sua cartella `maps_generated/<seme>`, il programma li prende da lì (il formato diventa la risposta pronta); altrimenti usa il titolo e la scala di partenza. Da riga di comando puoi sceglierli tu, per esempio `--riproduci <seme> --titolo "Terre del Nord"`.
 
 Se rifai la mappa in una lingua diversa da quella della prima volta, il titolo e la scala di partenza vengono tradotti (per esempio "Terre Selvagge" diventa "Wild Lands"); un titolo scelto da te resta com'è.
 
-Se il file non c'è più, il programma ti chiede di reinserire a mano **le stesse impostazioni** usate la prima volta. Il seme da solo non basta: con impostazioni diverse esce una mappa diversa.
+La mappa rifatta finisce nella cartella `maps_generated/<seme>` e sostituisce i file che c'erano. Le lettere sono disegnate con un carattere trovato sul tuo computer: su un altro computer possono avere un aspetto un po' diverso, ma esagoni, terreni, fiumi e siti sono identici.
+
+**Mappe fatte con le versioni precedenti.** Prima il seme era un semplice numero, come `482913`, e funzionava solo insieme alle impostazioni salvate nel PNG della mappa. Puoi ancora scrivere quel numero: se il PNG viene trovato (in `maps_generated/482913` o nella cartella del programma), la mappa torna uguale e riceve un seme del nuovo tipo. Se il PNG non c'è più, il programma ti chiede di reinserire le stesse impostazioni usate la prima volta.
 
 ---
 
 ## 5. I file che ottieni
 
-La prima volta che lo usi, il programma crea accanto a `wyrmhex.py` una cartella chiamata **`maps_generated`**. Ogni mappa ha lì dentro una cartella tutta sua, che ha per nome il seme della mappa, con dentro i suoi quattro file:
+La prima volta che lo usi, il programma crea accanto a `wyrmhex.py` una cartella chiamata **`maps_generated`**. Ogni mappa ha lì dentro una cartella tutta sua, che ha per nome il seme della mappa (vedi il capitolo 4), con dentro i suoi quattro file:
 
 ```
 maps_generated/
-  482913/
-    482913_nonumber.png
-    482913_nonumber.txt
-    482913_number.png
-    482913_number.txt
+  0RY5-P688-H9F9-56PA-CEQK-194V/
+    0RY5-P688-H9F9-56PA-CEQK-194V_nonumber.png
+    0RY5-P688-H9F9-56PA-CEQK-194V_nonumber.txt
+    0RY5-P688-H9F9-56PA-CEQK-194V_number.png
+    0RY5-P688-H9F9-56PA-CEQK-194V_number.txt
 ```
 
 Alla fine il programma ti dice in quale cartella ha messo i file.
 
 | File | Cos'è |
 |---|---|
-| `482913_nonumber.png` | La mappa senza numeri, per i giocatori |
-| `482913_number.png` | La stessa mappa con il numero in ogni esagono, per il master |
-| `482913_nonumber.txt`, `482913_number.txt` | La mappa come testo, apribile con il Blocco note |
+| `<seme>_nonumber.png` | La mappa senza numeri, per i giocatori |
+| `<seme>_number.png` | La stessa mappa con il numero in ogni esagono, per il master |
+| `<seme>_nonumber.txt`, `<seme>_number.txt` | La mappa come testo, apribile con il Blocco note |
 
 I numeri degli esagoni hanno quattro cifre: le prime due indicano la colonna, le ultime due la riga. `0101` è l'esagono in alto a sinistra; `0305` è nella terza colonna, quinta riga.
 
@@ -202,14 +236,14 @@ Le immagini hanno già la misura esatta del foglio che hai scelto (A4, A3 o A2),
 
 ## 7. Per chi vuole andare più veloce: le opzioni
 
-Invece di rispondere alle domande, puoi scrivere tutto su una riga. Le impostazioni che non scrivi prendono il valore di partenza. Esempi (su Windows usa `.venv\Scripts\python` al posto di `.venv/bin/python`):
+Invece di rispondere alle domande, puoi scrivere tutto su una riga. Le impostazioni che non scrivi prendono il valore di partenza. Esempi, con l'ambiente virtuale attivo (vedi il capitolo 3):
 
 ```
-.venv/bin/python wyrmhex.py --griglia 30x15 --citta 4 --dungeon 6
-.venv/bin/python wyrmhex.py --griglia 50x30 --formato A2
-.venv/bin/python wyrmhex.py --mare 30 --pianura 15 --titolo "Isola dei Venti"
-.venv/bin/python wyrmhex.py --riproduci 482913
-.venv/bin/python wyrmhex.py --language en --grid 30x15 --cities 4
+python wyrmhex.py --griglia 30x15 --citta 4 --dungeon 6
+python wyrmhex.py --griglia 50x30 --formato A2
+python wyrmhex.py --mare 30 --pianura 15 --titolo "Isola dei Venti"
+python wyrmhex.py --riproduci 0RY5-P688-H9F9-56PA-CEQK-194V
+python wyrmhex.py --language en --grid 30x15 --cities 4
 ```
 
 Ogni opzione ha anche un nome inglese (nella tabella dopo la barra `/`), e puoi mescolarli come vuoi. Senza `--lingua` i messaggi e i testi della mappa sono in italiano.
@@ -218,13 +252,13 @@ Ogni opzione ha anche un nome inglese (nella tabella dopo la barra `/`), e puoi 
 |---|---|---|
 | `--lingua` / `--language` | Lingua dei messaggi e dei testi della mappa: `it` o `en` | `--lingua en` |
 | `--griglia` / `--grid` | Colonne x righe di esagoni (`auto` = riempie un A4) | `--griglia 20x15` |
-| `--citta`, `--fortezze`, `--dungeon` / `--cities`, `--fortresses`, `--dungeons` | Quanti siti di ogni tipo | `--citta 4` |
-| `--pianura`, `--mare`, `--laghi`, `--colline`, `--montagne`, `--foreste`, `--deserti` / `--plains`, `--sea`, `--lakes`, `--hills`, `--mountains`, `--forests`, `--deserts` | Percentuale di ogni terreno | `--mare 25` |
-| `--fiumi` / `--rivers` | Numero di fiumi (`-1` = automatico) | `--fiumi 3` |
+| `--citta`, `--fortezze`, `--dungeon` / `--cities`, `--fortresses`, `--dungeons` | Quanti siti di ogni tipo (da 0 a 99) | `--citta 4` |
+| `--pianura`, `--mare`, `--laghi`, `--colline`, `--montagne`, `--foreste`, `--deserti` / `--plains`, `--sea`, `--lakes`, `--hills`, `--mountains`, `--forests`, `--deserts` | Percentuale di ogni terreno, in numero intero | `--mare 25` |
+| `--fiumi` / `--rivers` | Numero di fiumi, fino a 100 (`-1` = automatico) | `--fiumi 3` |
 | `--titolo` / `--title` | Titolo in cima alla mappa | `--titolo "Terre del Nord"` |
 | `--scala` / `--scale` | Testo della scala | `--scala "8 km"` |
-| `--seme` / `--seed` | Usa un seme preciso invece di uno a caso | `--seme 42` |
-| `--riproduci` / `--reproduce` | Rifà la mappa con quel seme, leggendo le impostazioni dal suo file (cercato in `maps_generated/<seme>`, o nella cartella di `--output`) | `--riproduci 482913` |
+| `--seme` / `--seed` | Con un seme completo, rifà quella mappa (come `--riproduci`). Con un numero da 0 a 1048575, fa una mappa nuova con le tue impostazioni e quel numero per le scelte casuali | `--seme 42` |
+| `--riproduci` / `--reproduce` | Rifà la mappa di quel seme. Titolo, scala e formato vengono dal suo PNG, se è in `maps_generated/<seme>` (o nella cartella di `--output`); un vecchio seme numerico ha bisogno del suo PNG | `--riproduci 0RY5-P688-H9F9-56PA-CEQK-194V` |
 | `--formato` / `--format` | Formato di stampa: `A4`, `A3` o `A2`. Se manca, il programma te lo chiede alla fine, proponendo quello consigliato (o, con `--riproduci`, quello della volta prima) | `--formato A3` |
 | `--orientamento` / `--orientation` | Di solito non serve: il verso del foglio segue la forma della mappa. Puoi forzarlo con `verticale` o `orizzontale` (`portrait` o `landscape`) | `--orientamento verticale` |
 | `--output` | Cartella in cui salvare le mappe al posto di `maps_generated`; anche lì ogni mappa ha la sua cartella con il seme | `--output mappe` |
@@ -242,13 +276,19 @@ Per vedere l'elenco completo delle opzioni, aggiungi `--help` dopo il nome del f
 Python non è installato, oppure su Windows non è stato aggiunto al PATH. Reinstallalo spuntando "Add python.exe to PATH", poi chiudi e riapri il terminale.
 
 **"Manca la libreria Pillow".**
-Non hai fatto il passo 3, oppure stai avviando il programma con `py` o `python3` invece che con `.venv\Scripts\python` (Windows) o `.venv/bin/python` (macOS/Linux).
+L'ambiente virtuale non è attivo: la riga in cui scrivi non comincia con `(.venv)`. Attivalo (passo 4 dell'installazione) e riavvia il programma. Se succede ancora, le librerie non sono ancora installate: fai il passo 5.
+
+**Windows: l'attivazione dà un errore che dice che "l'esecuzione di script è disabilitata nel sistema".**
+Il terminale PowerShell di Windows blocca gli script finché non li permetti. Scrivi `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, rispondi `S` (o `Y`), poi attiva di nuovo. Basta farlo una volta sola.
 
 **Linux: `python3 -m venv .venv` dà un errore che parla di `ensurepip` o `venv`.**
 Manca un pezzo di Python. Su Ubuntu e Debian installalo con `sudo apt install python3-venv`, poi ripeti il passo 3.
 
 **"La somma delle percentuali di terreno è ...%, supera il 100%".**
 Le percentuali che hai scritto, sommate, fanno più di 100. Abbassane qualcuna.
+
+**"... non è un seme valido".**
+Uno dei caratteri del seme è sbagliato o manca. Confrontalo con il nome della cartella della mappa o con la riga sotto il titolo della mappa. Maiuscole, trattini e spazi non contano, e O e 0, oppure I, L e 1, valgono come lo stesso carattere.
 
 **"servono N esagoni di terra per i siti, ma la mappa ne ha solo M".**
 Hai chiesto troppi siti per una mappa piccola o con troppa acqua. Riduci il numero di siti, ingrandisci la griglia o diminuisci mare e laghi.

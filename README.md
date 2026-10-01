@@ -63,7 +63,7 @@ You also need **Python 3.14**, the program that runs `.py` files. Slightly older
 
 ---
 
-## 2. Installation (you only do this once)
+## 2. Installation
 
 ### Step 1 — Install Python
 
@@ -80,39 +80,67 @@ The terminal is a window where you type commands.
 - **macOS:** open the **Terminal** app (in Applications → Utilities). Type `cd` followed by a space, drag the `maps` folder into the window and press Enter.
 - **Linux:** open the folder, right-click an empty spot and choose **"Open in Terminal"**.
 
-### Step 3 — Get the program ready
+### Step 3 — Create the virtual environment
 
-Copy the commands below **one at a time** and press Enter after each one. The first one creates a private space for the program inside the folder: a hidden subfolder called `.venv`, which you should leave alone. The second one downloads **Pillow**, the library that creates the pictures.
+The program gets a private space inside the folder, called a *virtual environment*: a hidden subfolder named `.venv`, which you should leave alone. That way the libraries it needs don't mix with the rest of your computer. Type:
 
 **Windows**
 ```
 py -m venv .venv
-.venv\Scripts\python -m pip install -r requirements.txt
 ```
 
 **macOS and Linux**
 ```
 python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
 ```
 
-If you see a line starting with `Successfully installed` at the end, you're all set.
+Nothing shows up on screen: that's normal. You only do this once.
+
+### Step 4 — Activate the virtual environment
+
+Activating it tells the terminal to use the Python inside `.venv`. Type:
+
+**Windows**
+```
+.venv\Scripts\activate
+```
+
+**macOS and Linux**
+```
+source .venv/bin/activate
+```
+
+From now on, the line where you type starts with `(.venv)`: that's how you know it's active. You need to activate it again every time you open a new terminal (see chapter 3).
+
+### Step 5 — Install the libraries
+
+With the virtual environment active, download **Pillow**, the library that creates the pictures. The command is the same on every system:
+
+```
+pip install -r requirements.txt
+```
+
+If you see a line starting with `Successfully installed` at the end, you're all set. You only do this once.
 
 ---
 
 ## 3. Making a map
 
-Open the terminal in the folder, as in step 2, and type:
+Open the terminal in the folder, as in step 2. First activate the virtual environment (as in step 4), then start the program:
 
 **Windows**
 ```
-.venv\Scripts\python wyrmhex.py
+.venv\Scripts\activate
+python wyrmhex.py
 ```
 
 **macOS and Linux**
 ```
-.venv/bin/python wyrmhex.py
+source .venv/bin/activate
+python wyrmhex.py
 ```
+
+You only need to activate it once each time you open a terminal: while the line starts with `(.venv)`, it is active and you can make as many maps as you like with `python wyrmhex.py`. When you're done, type `deactivate` or just close the terminal. If you've just finished the installation in the same window, the environment is already active.
 
 First the program asks for the **language**: type `1` for Italian or `2` for English (pressing Enter keeps Italian). From then on the questions, the messages and even the texts printed on the map (legend, scale, starting title) are in the language you chose.
 
@@ -120,9 +148,9 @@ Then the welcome screen appears, with the title and a picture: press **ENTER** t
 
 1. **What do you want to do?** Type `1` for a new map, `2` to rebuild a map you already made (see chapter 4).
 2. **Hexes across and down:** how many columns and rows of hexes you want. The ready-made answer is `auto`: the program works out by itself how many hexes fill an A4 sheet and stay easy to read (33 × 15).
-3. **Number of dungeons, cities and fortresses** to put on the map.
-4. **Terrain percentages:** how much of the map is plains, sea, lakes, hills, mountains, forests and deserts. They can't add up to more than 100; anything left over becomes plains. If you get it wrong, the program tells you and asks for the numbers again.
-5. **Number of rivers:** with `-1` the program decides by itself.
+3. **Number of dungeons, cities and fortresses** to put on the map (up to 99 of each).
+4. **Terrain percentages:** how much of the map is plains, sea, lakes, hills, mountains, forests and deserts, as whole numbers. They can't add up to more than 100; anything left over becomes plains. If you get it wrong, the program tells you and asks for the numbers again.
+5. **Number of rivers** (up to 100): with `-1` the program decides by itself.
 6. **Title** printed at the top of the map.
 7. Whether to use **only basic keyboard characters** (no symbols like ♣ ▲ ≈). You'll usually answer no: just press Enter.
 
@@ -155,36 +183,42 @@ At the end it lists where the cities, fortresses and dungeons are, with their he
 
 ## 4. Rebuilding a map you already made
 
-Every map has a **seed**: it's the name of the map's folder inside `maps_generated` and the number at the start of its file names. For example, the seed of `maps_generated/482913/482913_nonumber.png` is `482913`.
+Every map has a **seed**: a code of 24 letters and digits in groups of four, like `0RY5-P688-H9F9-56PA-CEQK-194V`. The program shows it while it works and prints it under the title of the map. It's also the name of the map's folder inside `maps_generated` and the start of its file names.
 
-To rebuild exactly that map, start the program, choose the language, answer `2` to "What do you want to do?" and type the seed. Every picture keeps the settings it was made with hidden inside it, and the program reads them back from there: that's why the file `<seed>_nonumber.png` must still be in its folder `maps_generated/<seed>`. Maps made with earlier versions, which were saved straight into the program's folder, are found too. The rebuilt map goes into the `maps_generated/<seed>` folder and replaces the files that were there. The program only asks again whether to use basic characters and, at the end, the print format (the ready-made answer is the format you used last time): so you can rebuild the same map in A3 instead of A4, for example.
+The seed holds everything that shapes the land: the number of hexes, the cities, fortresses and dungeons, the terrain percentages, the rivers and all the random choices. So **the same seed always gives the same map**, on any computer, even if the map's files are gone. To share a map with someone, just give them its seed.
+
+To rebuild a map, start the program, choose the language, answer `2` to "What do you want to do?" and type the seed. Capitals, dashes and spaces don't matter, and if you mistype a character the program tells you, instead of quietly making a different map. The program then only asks again whether to use basic characters and, at the end, the print format: so you can rebuild the same map in A3 instead of A4, for example.
+
+The title, the scale and the paper size aren't part of the seed, because they don't change the land. If the map's PNG is still in its folder `maps_generated/<seed>`, the program takes them from there (the paper size becomes the ready-made answer); otherwise it uses the starting title and scale. From the command line you can choose them yourself, for example `--reproduce <seed> --title "Northern Lands"`.
 
 If you rebuild the map in a different language from the first time, the starting title and scale are translated (for example "Terre Selvagge" becomes "Wild Lands"); a title you chose yourself stays as it is.
 
-If the file is gone, the program asks you to type in **the same settings** you used the first time. The seed alone isn't enough: different settings make a different map.
+The rebuilt map goes into the `maps_generated/<seed>` folder and replaces the files that were there. The letters are drawn with a font found on your computer: on a different computer they may look a little different, but hexes, terrains, rivers and sites are exactly the same.
+
+**Maps made with earlier versions.** Before, the seed was a plain number, like `482913`, and it only worked together with the settings saved in the map's PNG. You can still type that number: if the PNG is found (in `maps_generated/482913` or in the program's folder), the map comes back the same and gets a seed of the new kind. If the PNG is gone, the program asks you to type in the same settings you used the first time.
 
 ---
 
 ## 5. The files you get
 
-The first time you use it, the program creates a folder called **`maps_generated`** next to `wyrmhex.py`. Inside it, every map gets a folder of its own, named after the map's seed, holding its four files:
+The first time you use it, the program creates a folder called **`maps_generated`** next to `wyrmhex.py`. Inside it, every map gets a folder of its own, named after the map's seed (see chapter 4), holding its four files:
 
 ```
 maps_generated/
-  482913/
-    482913_nonumber.png
-    482913_nonumber.txt
-    482913_number.png
-    482913_number.txt
+  0RY5-P688-H9F9-56PA-CEQK-194V/
+    0RY5-P688-H9F9-56PA-CEQK-194V_nonumber.png
+    0RY5-P688-H9F9-56PA-CEQK-194V_nonumber.txt
+    0RY5-P688-H9F9-56PA-CEQK-194V_number.png
+    0RY5-P688-H9F9-56PA-CEQK-194V_number.txt
 ```
 
 At the end, the program tells you which folder it saved the files in.
 
 | File | What it is |
 |---|---|
-| `482913_nonumber.png` | The map without numbers, for the players |
-| `482913_number.png` | The same map with a number in every hex, for the game master |
-| `482913_nonumber.txt`, `482913_number.txt` | The map as text, which you can open with Notepad or TextEdit |
+| `<seed>_nonumber.png` | The map without numbers, for the players |
+| `<seed>_number.png` | The same map with a number in every hex, for the game master |
+| `<seed>_nonumber.txt`, `<seed>_number.txt` | The map as text, which you can open with Notepad or TextEdit |
 
 Hex numbers have four digits: the first two are the column, the last two the row. `0101` is the top-left hex; `0305` is in the third column, fifth row.
 
@@ -202,13 +236,13 @@ The pictures already have the exact size of the paper you chose (A4, A3 or A2), 
 
 ## 7. For people in a hurry: the options
 
-Instead of answering the questions, you can type everything on one line. Any setting you leave out keeps its starting value. Examples (on Windows use `.venv\Scripts\python` instead of `.venv/bin/python`):
+Instead of answering the questions, you can type everything on one line. Any setting you leave out keeps its starting value. Examples, with the virtual environment active (see chapter 3):
 
 ```
-.venv/bin/python wyrmhex.py --language en --grid 30x15 --cities 4 --dungeons 6
-.venv/bin/python wyrmhex.py --language en --grid 50x30 --format A2
-.venv/bin/python wyrmhex.py --language en --sea 30 --plains 15 --title "Isle of Winds"
-.venv/bin/python wyrmhex.py --language en --reproduce 482913
+python wyrmhex.py --language en --grid 30x15 --cities 4 --dungeons 6
+python wyrmhex.py --language en --grid 50x30 --format A2
+python wyrmhex.py --language en --sea 30 --plains 15 --title "Isle of Winds"
+python wyrmhex.py --language en --reproduce 0RY5-P688-H9F9-56PA-CEQK-194V
 ```
 
 Without `--language en` the messages and the texts on the map are in Italian. Every option also has an Italian name (in the table after the slash `/`), and you can mix them as you like.
@@ -217,13 +251,13 @@ Without `--language en` the messages and the texts on the map are in Italian. Ev
 |---|---|---|
 | `--language` / `--lingua` | Language of the messages and of the texts on the map: `en` or `it` | `--language en` |
 | `--grid` / `--griglia` | Columns x rows of hexes (`auto` = fills an A4) | `--grid 20x15` |
-| `--cities`, `--fortresses`, `--dungeons` / `--citta`, `--fortezze`, `--dungeon` | How many sites of each kind | `--cities 4` |
-| `--plains`, `--sea`, `--lakes`, `--hills`, `--mountains`, `--forests`, `--deserts` / `--pianura`, `--mare`, `--laghi`, `--colline`, `--montagne`, `--foreste`, `--deserti` | Percentage of each terrain | `--sea 25` |
-| `--rivers` / `--fiumi` | Number of rivers (`-1` = automatic) | `--rivers 3` |
+| `--cities`, `--fortresses`, `--dungeons` / `--citta`, `--fortezze`, `--dungeon` | How many sites of each kind (0 to 99) | `--cities 4` |
+| `--plains`, `--sea`, `--lakes`, `--hills`, `--mountains`, `--forests`, `--deserts` / `--pianura`, `--mare`, `--laghi`, `--colline`, `--montagne`, `--foreste`, `--deserti` | Percentage of each terrain, as a whole number | `--sea 25` |
+| `--rivers` / `--fiumi` | Number of rivers, up to 100 (`-1` = automatic) | `--rivers 3` |
 | `--title` / `--titolo` | Title at the top of the map | `--title "Northern Lands"` |
 | `--scale` / `--scala` | Scale text | `--scale "5 km"` |
-| `--seed` / `--seme` | Use a specific seed instead of a random one | `--seed 42` |
-| `--reproduce` / `--riproduci` | Rebuilds the map with that seed, reading the settings from its file (looked for in `maps_generated/<seed>`, or in the `--output` folder) | `--reproduce 482913` |
+| `--seed` / `--seme` | With a full seed, rebuilds that map (like `--reproduce`). With a number from 0 to 1048575, makes a new map with your settings and that number for the random choices | `--seed 42` |
+| `--reproduce` / `--riproduci` | Rebuilds the map of that seed. Title, scale and paper size come from its PNG if it's in `maps_generated/<seed>` (or in the `--output` folder); an old number seed needs its PNG | `--reproduce 0RY5-P688-H9F9-56PA-CEQK-194V` |
 | `--format` / `--formato` | Print format: `A4`, `A3` or `A2`. If you leave it out, the program asks you at the end, offering the suggested one (or, with `--reproduce`, the one from last time) | `--format A3` |
 | `--orientation` / `--orientamento` | Usually not needed: the sheet direction follows the shape of the map. You can force it with `portrait` or `landscape` (`verticale` or `orizzontale`) | `--orientation portrait` |
 | `--output` | Folder to save the maps in instead of `maps_generated`; there too, every map gets its own folder named after its seed | `--output maps` |
@@ -241,13 +275,19 @@ To see the full list of options, add `--help` after the file name (with `--langu
 Python isn't installed, or on Windows it wasn't added to the PATH. Reinstall it with "Add python.exe to PATH" ticked, then close and reopen the terminal.
 
 **"Pillow is missing".**
-You skipped step 3, or you're starting the program with `py` or `python3` instead of `.venv\Scripts\python` (Windows) or `.venv/bin/python` (macOS/Linux).
+The virtual environment isn't active: the line where you type doesn't start with `(.venv)`. Activate it (step 4 of the installation) and start the program again. If it still happens, the libraries aren't installed yet: do step 5.
+
+**Windows: activating gives an error saying that "running scripts is disabled on this system".**
+Windows' PowerShell terminal blocks scripts until you allow them. Type `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, answer `Y`, then activate again. You only need to do this once.
 
 **Linux: `python3 -m venv .venv` gives an error that mentions `ensurepip` or `venv`.**
 A piece of Python is missing. On Ubuntu and Debian install it with `sudo apt install python3-venv`, then repeat step 3.
 
 **"The terrain percentages add up to ...%, more than 100%".**
 The percentages you typed add up to more than 100. Lower some of them.
+
+**"... is not a valid seed".**
+One of the characters of the seed is wrong or missing. Compare it with the name of the map's folder or with the line under the map's title. Capitals, dashes and spaces don't matter, and O and 0, or I, L and 1, count as the same character.
 
 **"the sites need N land hexes, but the map has only M".**
 You asked for too many sites for a small map, or one with too much water. Ask for fewer sites, make the grid bigger, or lower the sea and lakes.

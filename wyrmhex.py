@@ -28,7 +28,7 @@ in there, named with its seed (--output chooses another place for them):
   maps_generated/<seed>/<seed>_nonumber.png / .txt   the map without hex numbers
   maps_generated/<seed>/<seed>_number.png / .txt     the same map with a number in every hex
                                      (column + row, e.g. 0101 is the top-left hex)
-  e.g. maps_generated/482913/482913_nonumber.png
+  e.g. maps_generated/0RY5-P688-H9F9-56PA-CEQK-194V/0RY5-P688-H9F9-56PA-CEQK-194V_nonumber.png
 
 What happens when it runs without options: it asks for the language
 (Italian or English), shows a welcome screen with a wyvern, asks its
@@ -37,20 +37,25 @@ questions, then shows a wizard casting the spell and builds the map in
 the whole job is done; while the two big pictures are drawn and saved, a
 second bar fills up on the same line with the percentage.
 
-The "seed" is the number that produced the map. Every PNG also keeps its
-settings hidden inside the file, so the map can be rebuilt from its seed.
+The "seed" is a code like 0RY5-P688-H9F9-56PA-CEQK-194V that holds
+everything that shapes the land (grid size, sites, terrain percentages,
+rivers and a random number): the same seed always gives the same map, on
+any computer, even without its picture. Title, scale, paper and plain
+symbols are not in the seed; they are chosen each time. Every PNG also
+keeps its settings (title included) hidden inside the file.
 
 How to run it:
   python wyrmhex.py                      (welcome screen, then the program asks you questions)
-  python wyrmhex.py --seme 42            (the grid size is chosen to fill the sheet)
+  python wyrmhex.py --seme 42            (a new map whose random number is 42)
   python wyrmhex.py --griglia 20x15      (choose the grid size yourself)
-  python wyrmhex.py --riproduci 42       (rebuild map 42 from the settings in its PNG)
+  python wyrmhex.py --riproduci 0RY5-P688-H9F9-56PA-CEQK-194V   (rebuild the map of that seed)
   python wyrmhex.py --formato A3         (print format: A4, A3 or A2)
   python wyrmhex.py --language en --seed 42   (English texts; every option also has an English name)
   python wyrmhex.py --solo-ascii         (only the most basic keyboard characters)
 
 If the terrain percentages add up to less than 100%, the rest becomes
 plains. If they add up to more than 100%, the program stops with an error.
+Percentages are whole numbers; each kind of site can be from 0 to 99.
 
 The code is written in English. What the user sees (questions, messages,
 the texts on the map) is in Italian or in English: the language is chosen
@@ -66,6 +71,7 @@ import random
 import secrets
 import sys
 import time
+import zlib
 from collections import deque
 
 # Pillow is the only extra library we need: it creates and saves pictures.
@@ -224,9 +230,11 @@ TEXTS = {
     "mode_rebuild": ("    2 = riprodurre una mappa già fatta, a partire dal suo seme",
                      "    2 = rebuild a map you already made, from its seed"),
     "choice": ("Scelta", "Choice"),
-    "ask_seed": ("  Seme della mappa da riprodurre (il numero all'inizio del nome del file): ",
-                 "  Seed of the map to rebuild (the number at the start of the file name): "),
-    "seed_digits_only": ("    Scrivi solo il numero, per esempio 482913.", "    Type just the number, for example 482913."),
+    "ask_seed": ("  Seme della mappa da rifare (è anche il nome della sua cartella, es. {example}): ",
+                 "  Seed of the map to rebuild (it is also the name of its folder, e.g. {example}): "),
+    "seed_invalid": ("    Questo seme non è valido: controlla di averlo scritto bene (es. {example}).",
+                     "    This seed is not valid: check that you typed it correctly (e.g. {example})."),
+    "found_seed": ("\n  Mappa del seme {seed}:\n    {desc}", "\n  Map of seed {seed}:\n    {desc}"),
     "found_settings": ("\n  Trovate le impostazioni della mappa {seed}:\n    {desc}",
                        "\n  Found the settings of map {seed}:\n    {desc}"),
     "use_settings": ("  Uso queste impostazioni? (S/n): ", "  Use these settings? (Y/n): "),
@@ -234,8 +242,10 @@ TEXTS = {
                     "quindi non conosco le impostazioni originali.",
                     "\n  Cannot find {seed}_nonumber.png (neither in {folder} nor in the current folder), "
                     "so the original settings are unknown."),
-    "same_settings": ("  Inserisci le STESSE impostazioni della mappa originale: il seme da solo non basta.\n",
-                      "  Enter the SAME settings as the original map: the seed alone is not enough.\n"),
+    "same_settings": ("  È un seme numerico di una versione precedente, che da solo non basta: "
+                      "inserisci le STESSE impostazioni della mappa originale.\n",
+                      "  This is a number seed from an earlier version, which is not enough on its own: "
+                      "enter the SAME settings as the original map.\n"),
     "ask_ascii": ("  Usare solo i caratteri base della tastiera, senza simboli come ♣ ▲ ≈? (s/N): ",
                   "  Use only basic keyboard characters, without symbols like ♣ ▲ ≈? (y/N): "),
     "q_columns": ("Esagoni in base (colonne)", "Hexes across (columns)"),
@@ -264,7 +274,17 @@ TEXTS = {
                  "\n    terrains: {perc}\n    title: {title}"),
     "err_params": ("\nERRORE NEI PARAMETRI:", "\nERROR IN THE SETTINGS:"),
     "err_grid_range": ("La griglia deve essere tra 2x2 e 80x80 esagoni.", "The grid must be between 2x2 and 80x80 hexes."),
-    "err_negative": ("Il numero di {name} non può essere negativo.", "The number of {name} cannot be negative."),
+    "err_sites_range": ("Il numero di {name} deve essere tra 0 e {max}.", "The number of {name} must be between 0 and {max}."),
+    "err_rivers_range": ("Il numero di fiumi deve essere tra -1 (automatico) e {max}.",
+                         "The number of rivers must be between -1 (automatic) and {max}."),
+    "err_pct_whole": ("Le percentuali di terreno devono essere numeri interi (ricevuto {value:g}).",
+                      "The terrain percentages must be whole numbers (got {value:g})."),
+    "err_bad_seed": ("'{seed}' non è un seme valido: controlla di averlo scritto bene (es. {example})",
+                     "'{seed}' is not a valid seed: check that you typed it correctly (e.g. {example})"),
+    "err_seed_number": ("il numero dopo --seme deve essere tra 0 e {max}; per rifare una mappa scrivi il suo "
+                        "seme completo (es. {example})",
+                        "the number after --seed must be between 0 and {max}; to rebuild a map, type its "
+                        "full seed (e.g. {example})"),
     "n_dungeons": ("dungeon", "dungeons"),
     "n_cities": ("città", "cities"),
     "n_fortresses": ("fortezze", "fortresses"),
@@ -288,8 +308,14 @@ TEXTS = {
                    "Sites wanted: {c} cities, {f} fortresses, {d} dungeons"),
     "info_auto_grid": ("Griglia automatica: {c} x {r} esagoni riempiono un A4 {o} (caratteri da {mm} mm)",
                        "Automatic grid: {c} x {r} hexes fill an A4 {o} sheet ({mm} mm letters)"),
-    "info_seed": ("Seme: {s}  (per rifare questa mappa: scegli 2 all'avvio, oppure usa --riproduci {s})",
-                  "Seed: {s}  (to rebuild this map: choose 2 at the start, or use --reproduce {s})"),
+    "info_seed": ("Seme: {s}  (basta questo per rifare la mappa: rispondi 2 a \"Cosa vuoi fare?\", "
+                  "oppure usa --riproduci {s})",
+                  "Seed: {s}  (this is all you need to rebuild the map: answer 2 to \"What do you want to do?\", "
+                  "or use --reproduce {s})"),
+    "warn_old_seed": ("Le impostazioni di questa mappa di una versione precedente non entrano in un seme: "
+                      "resta il seme numerico {s}",
+                      "The settings of this map from an earlier version do not fit in a seed: "
+                      "it keeps the number seed {s}"),
     "info_folder": ("Cartella della mappa: {folder}", "Map folder: {folder}"),
     "info_new_folder": ("Creata la cartella {folder}: qui dentro finiranno tutte le mappe",
                         "Created the {folder} folder: every map will be saved in there"),
@@ -349,6 +375,11 @@ TEXTS = {
                      "  The final choice is yours: press Enter for the suggested format, or type another one."),
     "subtitle": ("1 esagono = {scale}  {dot}  {c}{x}{r} esagoni  {dot}  seme {seed}",
                  "1 hex = {scale}  {dot}  {c}{x}{r} hexes  {dot}  seed {seed}"),
+    # shorter versions of the line above, for small pages
+    "subtitle_tight": ("1 esagono = {scale} {dot} {c}{x}{r} esagoni {dot} seme {seed}",
+                       "1 hex = {scale} {dot} {c}{x}{r} hexes {dot} seed {seed}"),
+    "subtitle_short": ("1 esagono = {scale} {dot} seme {seed}", "1 hex = {scale} {dot} seed {seed}"),
+    "subtitle_seed": ("seme {seed}", "seed {seed}"),
     "warn_shrink": ("Il contenuto sfora il foglio: l'immagine viene ridotta al {p:.0%} per stare nell'{paper}",
                     "The content does not fit: the picture is shrunk to {p:.0%} to fit the {paper}"),
     "info_sheet": ("Foglio {paper} {o} ({w} x {h} px a {dpi} dpi): pagina di {nc} x {nr} caratteri, "
@@ -392,16 +423,19 @@ TEXTS = {
     "mv_folder": ("CARTELLA", "FOLDER"),
     "h_grid": ("esagoni in base X altezza, es. 33x15; auto (default) riempie un A4",
                "hexes across X down, e.g. 33x15; auto (default) fills an A4"),
-    "h_dungeons": ("numero di dungeon", "number of dungeons"),
-    "h_cities": ("numero di città", "number of cities"),
-    "h_fortresses": ("numero di fortezze", "number of fortresses"),
-    "h_terrain": ("%% di {label} (default {default})", "%% of {label} (default {default})"),
-    "h_rivers": ("numero di fiumi, -1 = automatico", "number of rivers, -1 = automatic"),
-    "h_seed": ("seme casuale per rigenerare la stessa mappa", "random seed, to make the same map again"),
-    "h_reproduce": ("rifà la mappa con questo seme, leggendo le impostazioni dal suo PNG "
-                    "(in maps_generated/<seme>, o nella cartella --output)",
-                    "rebuilds the map with this seed, reading the settings from its PNG "
-                    "(in maps_generated/<seed>, or in the --output folder)"),
+    "h_dungeons": ("numero di dungeon (0-99)", "number of dungeons (0-99)"),
+    "h_cities": ("numero di città (0-99)", "number of cities (0-99)"),
+    "h_fortresses": ("numero di fortezze (0-99)", "number of fortresses (0-99)"),
+    "h_terrain": ("%% di {label}, numero intero (default {default})", "%% of {label}, whole number (default {default})"),
+    "h_rivers": ("numero di fiumi (fino a 100), -1 = automatico", "number of rivers (up to 100), -1 = automatic"),
+    "h_seed": ("un seme completo (es. {example}) rifà quella mappa; un numero da 0 a {max} fa una mappa "
+               "nuova con le tue impostazioni e quel numero casuale",
+               "a full seed (e.g. {example}) rebuilds that map; a number from 0 to {max} makes a new map "
+               "with your settings and that random number"),
+    "h_reproduce": ("rifà la mappa di questo seme; con un seme numerico di una versione precedente "
+                    "legge le impostazioni dal suo PNG (in maps_generated/<seme>, o nella cartella --output)",
+                    "rebuilds the map of this seed; with a number seed from an earlier version it reads "
+                    "the settings from its PNG (in maps_generated/<seed>, or in the --output folder)"),
     "h_title": ("titolo della mappa", "map title"),
     "h_scale": ("testo della scala, es. '6 miglia'", "scale text, e.g. '6 miles'"),
     "h_paper": ("formato di stampa delle due mappe; se manca, il programma lo chiede proponendo quello "
@@ -613,9 +647,144 @@ def check_percentages(perc):
     return None
 
 
+# ==========================================================================
+# THE SEED
+#
+# A seed is a code of 24 letters and digits, written in groups of four:
+#   e.g. 0RY5-P688-H9F9-56PA-CEQK-194V
+# It holds everything that shapes the land: grid size, number of sites,
+# terrain percentages, number of rivers, and a random number. So the same
+# seed always gives the same map, on any computer, even without the picture
+# it came from. What only changes the look of the page (title, scale, paper,
+# plain symbols) is not in the seed: it is chosen each time.
+#
+# How it works: all those numbers are packed into one big whole number
+# (like writing a date as 20260930), which is then written with the 32
+# symbols below. The last 3 symbols are a check: if a symbol is typed wrong,
+# the check does not match and the program says the seed is not valid,
+# instead of quietly making a different map.
+#
+# Older versions used a plain number (e.g. 482913) as the seed, together
+# with settings saved in the PNG. Those maps can still be rebuilt from their
+# PNG; they then get a seed of the new kind.
+# ==========================================================================
+SEED_VERSION = 1                     # changes only if the way maps are built ever changes
+SEED_SYMBOLS = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"   # no I, L, O, U: too easy to misread
+SEED_DATA_SYMBOLS, SEED_CHECK_SYMBOLS = 21, 3
+MAX_SITES = 99                       # at most 99 cities, 99 fortresses and 99 dungeons
+MAX_RIVERS = 100
+RANDOM_NUMBERS = 2 ** 20             # the random part of a seed goes from 0 to 1048575
+# The plains are not in the seed: they are whatever the other terrains leave free.
+SEED_TERRAINS = (SEA, LAKE, HILLS, MOUNTAINS, FOREST, DESERT)
+
+
 def new_seed():
-    """Pick a random 6-digit seed (100000-999999). The same seed always makes the same map."""
-    return 100_000 + secrets.randbelow(900_000)
+    """Pick the random part of a new map: a number from 0 to 1048575."""
+    return secrets.randbelow(RANDOM_NUMBERS)
+
+
+def seed_fields(p, number):
+    """The numbers packed into a seed, each with how many different values it can take."""
+    fields = [(SEED_VERSION, 16), (p["columns"] - 2, 79), (p["rows"] - 2, 79),
+              (p["dungeons"], MAX_SITES + 1), (p["cities"], MAX_SITES + 1), (p["fortresses"], MAX_SITES + 1)]
+    fields += [(p["percentages"][terrain], 101) for terrain in SEED_TERRAINS]
+    fields += [(p["rivers"] + 1, MAX_RIVERS + 2), (number, RANDOM_NUMBERS)]
+    return fields
+
+
+def to_symbols(value, length):
+    """Write a whole number with the 32 seed symbols, using exactly 'length' symbols."""
+    symbols = ""
+    for _ in range(length):
+        value, digit = divmod(value, 32)
+        symbols = SEED_SYMBOLS[digit] + symbols
+    return symbols
+
+
+def seed_check(data):
+    """The 3 check symbols of a seed, worked out from its other 21 symbols."""
+    return to_symbols(zlib.crc32(data.encode()) % 32 ** SEED_CHECK_SYMBOLS, SEED_CHECK_SYMBOLS)
+
+
+def make_seed(p, number):
+    """The seed of a map with settings 'p' and random number 'number'.
+    Returns None if the settings do not fit in a seed (possible only for maps
+    made with an earlier version, e.g. with a percentage like 12.5)."""
+    packed = 0
+    for value, choices in seed_fields(p, number):
+        if value != int(value) or not 0 <= value < choices:
+            return None
+        packed = packed * choices + int(value)
+    data = to_symbols(packed, SEED_DATA_SYMBOLS)
+    code = data + seed_check(data)
+    return "-".join(code[i:i + 4] for i in range(0, len(code), 4))
+
+
+def read_seed(text):
+    """Unpack a seed typed by the user. Returns (land settings, random number),
+    or None if the text is not a valid seed. Small slips are forgiven: lower-case
+    letters, missing dashes or spaces, O typed for 0, I or L typed for 1."""
+    code = text.strip().upper().replace("-", "").replace(" ", "")
+    code = code.replace("O", "0").replace("I", "1").replace("L", "1")
+    if len(code) != SEED_DATA_SYMBOLS + SEED_CHECK_SYMBOLS or any(c not in SEED_SYMBOLS for c in code):
+        return None
+    data, check = code[:SEED_DATA_SYMBOLS], code[SEED_DATA_SYMBOLS:]
+    if seed_check(data) != check:
+        return None
+    packed = 0
+    for c in data:
+        packed = packed * 32 + SEED_SYMBOLS.index(c)
+    # take the numbers out again, last one first
+    blank = {"columns": 2, "rows": 2, "dungeons": 0, "cities": 0, "fortresses": 0,
+             "percentages": {terrain: 0 for terrain in SEED_TERRAINS}, "rivers": 0}
+    values = []
+    for _, choices in reversed(seed_fields(blank, 0)):
+        packed, value = divmod(packed, choices)
+        values.append(value)
+    if packed or values.pop() != SEED_VERSION:
+        return None
+    columns, rows, dungeons, cities, fortresses, *rest = [v for v in reversed(values)]
+    percentages = dict(zip(SEED_TERRAINS, rest[:len(SEED_TERRAINS)]))
+    rivers, number = rest[len(SEED_TERRAINS)] - 1, rest[-1]
+    percentages[PLAINS] = 100 - sum(percentages.values())
+    land = {"columns": columns + 2, "rows": rows + 2, "dungeons": dungeons, "cities": cities,
+            "fortresses": fortresses, "rivers": rivers,
+            "percentages": {terrain: percentages[terrain] for _, _, terrain, _ in TERRAIN_OPTIONS}}
+    if check_percentages(land["percentages"]) or percentages[PLAINS] < 0:
+        return None
+    return land, number
+
+
+def example_seed():
+    """A real seed, shown in messages as an example of what a seed looks like."""
+    p = {"columns": 33, "rows": 15, "dungeons": 4, "cities": 3, "fortresses": 2,
+         "percentages": dict(DEFAULT_PERCENTAGES), "rivers": -1}
+    return make_seed(p, 482913)
+
+
+def is_old_seed(text):
+    """True for a seed of an earlier version: a plain number, like 482913."""
+    return text.strip().isdigit()
+
+
+def rebuild_settings(text, base):
+    """The settings to rebuild the map of seed 'text'.
+    A seed of the new kind holds the land itself; if the map's PNG is still around,
+    its title, scale and print format are used too. An old number seed needs its PNG.
+    Returns the settings, or None if they cannot be found."""
+    if is_old_seed(text):
+        saved = find_settings(base, int(text))
+        if saved:
+            saved["seed"] = int(text)
+        return saved
+    unpacked = read_seed(text)
+    if unpacked is None:
+        return None
+    land, number = unpacked
+    picture = find_settings(base, make_seed(land, number)) or {}
+    settings = {key: picture[key] for key in ("title", "scale", "paper", "size", "font") if key in picture}
+    settings.update(land, seed=number)
+    return settings
 
 
 # All maps are saved in this folder, next to wyrmhex.py: one sub-folder per map, named with its seed.
@@ -710,7 +879,8 @@ def find_settings(base, seed):
 
 def complete_settings(p):
     """Fill in any setting missing from saved settings (e.g. from an older version of the program)."""
-    for key, value in (("ascii_only", False), ("size", "auto"), ("font", None), ("paper", None)):
+    for key, value in (("ascii_only", False), ("size", "auto"), ("font", None), ("paper", None),
+                       ("title", tr("default_title")), ("scale", tr("default_scale"))):
         p.setdefault(key, value)
     # maps are always black on white now: an old "white on black" choice is dropped
     p.pop("inverted", None)
@@ -863,31 +1033,40 @@ def show_conjuring():
 
 def ask_mode(folder=MAPS_FOLDER):
     """The first question: make a brand new map, or rebuild one from its seed?
-    Returns None for a new map, otherwise (seed, saved settings or None)."""
+    Returns None for a new map, otherwise (random number, settings or None).
+    The settings are None only for an old number seed whose PNG is gone:
+    then the user has to type the settings again."""
     print(tr("what_to_do"))
     print(tr("mode_new"))
     print(tr("mode_rebuild"))
     choice = ask(tr("choice"), 1, int, 1, 2)
     if choice == 1:
         return None
-    # the seed has no default value: keep asking until we get a number
-    seed = None
-    while seed is None:
-        answer = input(tr("ask_seed")).strip()
-        if answer.isdigit():
-            seed = int(answer)
-        else:
-            print(tr("seed_digits_only"))
-    saved = find_settings(folder, seed)
+    # the seed has no default value: keep asking until we get a valid one
+    while True:
+        answer = input(tr("ask_seed", example=example_seed())).strip()
+        if is_old_seed(answer) or read_seed(answer):
+            break
+        print(tr("seed_invalid", example=example_seed()))
+
+    if not is_old_seed(answer):
+        # a seed of the new kind: it holds the whole land, nothing else to ask
+        saved = rebuild_settings(answer, folder)
+        print(tr("found_seed", seed=make_seed(saved, saved["seed"]), desc=describe_settings(complete_settings(saved))))
+        return saved["seed"], saved
+
+    # an old number seed: its settings can only come from its PNG
+    number = int(answer)
+    saved = rebuild_settings(answer, folder)
     if saved:
-        print(tr("found_settings", seed=seed, desc=describe_settings(saved)))
+        print(tr("found_settings", seed=number, desc=describe_settings(saved)))
         if input(tr("use_settings")).strip().lower().startswith("n"):
             saved = None
     else:
-        print(tr("no_settings", seed=seed, folder=short_path(folder)))
+        print(tr("no_settings", seed=number, folder=short_path(folder)))
     if not saved:
         print(tr("same_settings"))
-    return seed, saved
+    return number, saved
 
 
 def ask_look(p):
@@ -904,10 +1083,10 @@ def ask_settings():
     # first question: new map, or rebuild an old one from its seed?
     mode = ask_mode()
     if mode and mode[1]:
-        # the old settings were found inside the picture: only ask how it should look
-        # (the print format is asked later, after the map is built)
-        seed, saved = mode
-        saved.update(seed=seed, output=MAPS_FOLDER)
+        # the land is known (from the seed, or from an old map's picture):
+        # only ask how it should look (the print format is asked later, after the map is built)
+        saved = mode[1]
+        saved["output"] = MAPS_FOLDER
         print()
         ask_look(saved)
         return complete_settings(saved)
@@ -916,24 +1095,24 @@ def ask_settings():
     # "auto" = the program works out how many hexes fill the sheet
     p["columns"] = ask(tr("q_columns"), "auto", int, 2, 80)
     p["rows"] = ask(tr("q_rows"), "auto", int, 2, 80)
-    p["dungeons"] = ask(tr("q_dungeons"), 4, int, 0, 500)
-    p["cities"] = ask(tr("q_cities"), 3, int, 0, 500)
-    p["fortresses"] = ask(tr("q_fortresses"), 2, int, 0, 500)
+    p["dungeons"] = ask(tr("q_dungeons"), 4, int, 0, MAX_SITES)
+    p["cities"] = ask(tr("q_cities"), 3, int, 0, MAX_SITES)
+    p["fortresses"] = ask(tr("q_fortresses"), 2, int, 0, MAX_SITES)
     print(tr("pct_intro"))
     # keep asking for the percentages until they make sense
     while True:
-        perc = {terrain: ask(f"% {pick(label).lower()}", DEFAULT_PERCENTAGES[terrain], float, 0, 100)
+        perc = {terrain: ask(f"% {pick(label).lower()}", DEFAULT_PERCENTAGES[terrain], int, 0, 100)
                 for _, _, terrain, label in TERRAIN_OPTIONS}
         error = check_percentages(perc)
         if not error:
             break
         print(tr("pct_retry", error=error))
     p["percentages"] = perc
-    p["rivers"] = ask(tr("q_rivers"), -1, int, -1, 100)
+    p["rivers"] = ask(tr("q_rivers"), -1, int, -1, MAX_RIVERS)
     if mode:
-        p["seed"] = mode[0]          # we already know the seed
+        p["seed"] = mode[0]          # an old number seed: we already know the random number
     else:
-        p["seed"] = None             # a new map gets a new random seed
+        p["seed"] = None             # a new map gets a new random number
     p["title"] = input(tr("q_title", default=tr("default_title"))).strip() or tr("default_title")
     p["scale"] = tr("default_scale")
     p["output"] = MAPS_FOLDER
@@ -970,17 +1149,17 @@ def settings_from_options(argv):
                     help=tr("h_fortresses"))
     # one option per terrain: --pianura / --plains, --mare / --sea, ...
     for italian, english, terrain, label in TERRAIN_OPTIONS:
-        ap.add_argument(*names(italian, english), dest=terrain, type=float, default=DEFAULT_PERCENTAGES[terrain],
+        ap.add_argument(*names(italian, english), dest=terrain, type=int, default=DEFAULT_PERCENTAGES[terrain],
                         metavar="%", help=tr("h_terrain", label=pick(label).lower(),
                                              default=DEFAULT_PERCENTAGES[terrain]))
     ap.add_argument(*names("fiumi", "rivers"), dest="rivers", type=int, default=-1, metavar="N", help=tr("h_rivers"))
-    ap.add_argument(*names("seme", "seed"), dest="seed", type=int, default=None, metavar=tr("mv_seed"),
-                    help=tr("h_seed"))
-    ap.add_argument(*names("riproduci", "reproduce"), dest="reproduce", type=int, default=None,
+    ap.add_argument(*names("seme", "seed"), dest="seed", default=None, metavar=tr("mv_seed"),
+                    help=tr("h_seed", example=example_seed(), max=RANDOM_NUMBERS - 1))
+    ap.add_argument(*names("riproduci", "reproduce"), dest="reproduce", default=None,
                     metavar=tr("mv_seed"), help=tr("h_reproduce"))
-    ap.add_argument(*names("titolo", "title"), dest="title", default=tr("default_title"), metavar=tr("mv_text"),
+    ap.add_argument(*names("titolo", "title"), dest="title", default=None, metavar=tr("mv_text"),
                     help=tr("h_title"))
-    ap.add_argument(*names("scala", "scale"), dest="scale", default=tr("default_scale"), metavar=tr("mv_text"),
+    ap.add_argument(*names("scala", "scale"), dest="scale", default=None, metavar=tr("mv_text"),
                     help=tr("h_scale"))
     ap.add_argument(*names("formato", "format"), dest="paper", type=str.upper, choices=list(PAPERS), default=None,
                     help=tr("h_paper"))
@@ -1000,15 +1179,26 @@ def settings_from_options(argv):
     ask_for_paper = a.paper is None and sys.stdin.isatty()
     size = SIZE_FROM_USER[a.size]
 
+    # a full seed after --seme works just like --riproduci: it rebuilds that map
+    if a.reproduce is None and a.seed is not None and not is_old_seed(a.seed):
+        a.reproduce, a.seed = a.seed, None
+    if a.seed is not None and not (is_old_seed(a.seed) and int(a.seed) < RANDOM_NUMBERS):
+        ap.error(tr("err_seed_number", max=RANDOM_NUMBERS - 1, example=example_seed()))
+
     if a.reproduce is not None:
-        # rebuild an old map: read its settings from its picture,
-        # looking in its folder inside --output first, then in maps_generated and the current folder
-        saved = find_settings(a.output, a.reproduce)
+        # rebuild a map from its seed. An old number seed needs the map's picture,
+        # looked for in its folder inside --output first, then in maps_generated and the current folder.
+        saved = rebuild_settings(a.reproduce, a.output)
         if not saved:
-            ap.error(tr("err_no_saved", seed=a.reproduce, folder=short_path(a.output)))
-        saved.update(seed=a.reproduce, output=a.output)
+            if is_old_seed(a.reproduce):
+                ap.error(tr("err_no_saved", seed=a.reproduce, folder=short_path(a.output)))
+            ap.error(tr("err_bad_seed", seed=a.reproduce, example=example_seed()))
+        saved["output"] = a.output
         # the look comes from this command, not from the old picture
         saved.update(ascii_only=a.ascii_only)
+        for key in ("title", "scale"):
+            if getattr(a, key) is not None:
+                saved[key] = getattr(a, key)   # a title or scale typed now wins over the saved one
         for key, value in (("size", size), ("font", a.font)):
             saved.setdefault(key, value)
         saved = complete_settings(saved)
@@ -1030,7 +1220,8 @@ def settings_from_options(argv):
         "columns": columns, "rows": rows,
         "dungeons": a.dungeons, "cities": a.cities, "fortresses": a.fortresses,
         "percentages": {terrain: getattr(a, terrain) for _, _, terrain, _ in TERRAIN_OPTIONS},
-        "rivers": a.rivers, "seed": a.seed, "title": a.title, "scale": a.scale,
+        "rivers": a.rivers, "seed": None if a.seed is None else int(a.seed),
+        "title": a.title or tr("default_title"), "scale": a.scale or tr("default_scale"),
         "orientation": orientation, "output": a.output, "paper": a.paper,
         "ascii_only": a.ascii_only, "size": size, "font": a.font,
         "ask_paper": ask_for_paper,
@@ -1044,8 +1235,10 @@ def validate(p, log):
     if not (2 <= p["columns"] <= 80 and 2 <= p["rows"] <= 80):
         errors.append(tr("err_grid_range"))
     for key in ("dungeons", "cities", "fortresses"):
-        if p[key] < 0:
-            errors.append(tr("err_negative", name=tr("n_" + key)))
+        if not 0 <= p[key] <= MAX_SITES:
+            errors.append(tr("err_sites_range", name=tr("n_" + key), max=MAX_SITES))
+    if not -1 <= p["rivers"] <= MAX_RIVERS:
+        errors.append(tr("err_rivers_range", max=MAX_RIVERS))
     perc_error = check_percentages(p["percentages"])
     if perc_error:
         errors.append(perc_error)
@@ -2083,7 +2276,8 @@ def save_png(img, path, settings=None):
         raise ValueError(tr("err_size", path=path, size=img.size))
     info = PngInfo()
     if settings:
-        # keep everything except where the file was saved and the seed (it is in the file name)
+        # keep everything except where the file was saved and the random number
+        # (it is inside the seed, which is the file name)
         data = {k: v for k, v in settings.items() if k not in ("output", "seed")}
         info.add_itxt(SETTINGS_KEY, json.dumps(data, ensure_ascii=False))
     # no extra "optimize" pass: on an A2 at 600 dpi it would take a long time
@@ -2136,8 +2330,10 @@ def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, 
             break
         # not enough room yet: count one more legend line and try again
         legend_guess = max(len(legend), legend_guess + 1)
-    dot = G("·", "-")
-    subtitle = tr("subtitle", scale=params["scale"], dot=dot, c=grid.cols, x=G("×", "x"), r=grid.rows, seed=seed)
+    # the line under the title: the longest version that fits across the page
+    values = dict(scale=params["scale"], dot=G("·", "-"), c=grid.cols, x=G("×", "x"), r=grid.rows, seed=seed)
+    versions = [tr(key, **values) for key in ("subtitle", "subtitle_tight", "subtitle_short", "subtitle_seed")]
+    subtitle = next((v for v in versions if len(v) + 4 <= n_cols), versions[-1])
     legend = pack_legend(G, n_cols - 4)
     # Safety net: if something does not fit (a very long title, for example),
     # make the page bigger now; it will be shrunk to the sheet when saving.
@@ -2191,9 +2387,14 @@ def main():
     if "auto" in (params["columns"], params["rows"]):
         fill_page(params, font_spec, aspect, log)
     counts = validate(params, log)
-    # use the seed the user gave, or make a new one
-    seed = params["seed"] if params["seed"] is not None else new_seed()
-    rng = random.Random(seed)            # every random choice of the land comes from this seed
+    # the random number: the one in the seed, the one the user gave, or a new one
+    number = params["seed"] if params["seed"] is not None else new_seed()
+    rng = random.Random(number)          # every random choice of the land comes from this number
+    # the seed packs the settings of the land together with the random number
+    seed = make_seed(params, number)
+    if seed is None:
+        seed = str(number)
+        log.warn(tr("warn_old_seed", s=seed))
     log.info(tr("info_seed", s=seed))
     if first_run:
         log.info(tr("info_new_folder", folder=short_path(MAPS_FOLDER)))
@@ -2217,7 +2418,7 @@ def main():
         params, grid, k, paper, seed, font_spec, bold_spec, advance_em, aspect, G, log)
 
     # a separate random generator for the symbols, so they are the same every time
-    drawing_rng = random.Random(seed + 1)
+    drawing_rng = random.Random(number + 1)
     map_canvas = draw_map(grid, terrain, rivers, sites, k, G, drawing_rng, aspect)
     page, mx, my = compose_page(map_canvas, n_cols, n_rows, legend, params["title"], subtitle, G)
     plain_path, numbered_path = output_names(params["output"], seed)
