@@ -38,7 +38,7 @@ Compatibile con qualunque gioco di ruolo analogico "OSR".
 
 ```
 
-**WyrmHex** è un piccolo programma che disegna a caso una mappa a esagoni per campagne di gioco di ruolo old school (OSR). La mappa è fatta solo di lettere e simboli, come nei videogiochi Dwarf Fortress, NetHack e Moonring:
+**WyrmHex** è un piccolo programma che disegna a caso una mappa a esagoni per campagne di gioco di ruolo old school (OSR). La mappa è fatta solo di lettere e simboli, come nei videogiochi Dwarf Fortress e NetHack:
 
 - **foreste** `♣♠`, **montagne** `▲^`, **colline** `∩n`, **deserti** `░·`, **laghi** `≈`;
 - la **pianura** resta vuota e il **mare** è una campitura grigia;

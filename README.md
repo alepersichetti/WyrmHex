@@ -38,7 +38,7 @@ Compatible with any "OSR" tabletop RPG.
 
 ```
 
-**WyrmHex** is a small program that draws a random hex map for old-school (OSR) role-playing campaigns. The map is made only of letters and symbols, like the video games Dwarf Fortress, NetHack, and Moonring:
+**WyrmHex** is a small program that draws a random hex map for old-school (OSR) role-playing campaigns. The map is made only of letters and symbols, like the video games Dwarf Fortress and NetHack:
 
 - **forests** `♣♠`, **mountains** `▲^`, **hills** `∩n`, **deserts** `░·`, **lakes** `≈`;
 - **plains** stay empty and the **sea** is a flat gray area;
