@@ -262,6 +262,12 @@ TEXTS = {
     "miles": ("{n} miglia", "{n} miles"),
     "mile": ("{n} miglio", "{n} mile"),
     "scale_how": ("\n  Quante miglia copre ogni esagono?", "\n  How many miles does each hex cover?"),
+    "ask_rename": ("  Titolo attuale: {title}. Vuoi rinominare la mappa? (s/N): ",
+                   "  Current title: {title}. Rename the map? (y/N): "),
+    "ask_new_title": ("  Nuovo titolo [{default}]: ", "  New title [{default}]: "),
+    "ask_rescale": ("  Scala attuale: 1 esagono = {scale}. Vuoi cambiarla? (s/N): ",
+                    "  Current scale: 1 hex = {scale}. Change it? (y/N): "),
+    "scale_keep": ("lascia com'è ({scale})", "keep it as it is ({scale})"),
     "scale_other": ("altro, lo scrivo io", "other, I'll type it"),
     "ask_custom_scale": ("  Miglia per esagono (un numero, oppure un testo come \"5 km\"): ",
                          "  Miles per hex (a number, or a text like \"5 km\"): "),
@@ -923,15 +929,26 @@ def scale_text(value):
     return tr("mile" if n == 1 else "miles", n=shown)
 
 
-def ask_scale():
+def ask_scale(current=None):
+    """current: the scale of a map being rebuilt, offered as the default."""
+    presets = [scale_text(str(miles)) for miles in SCALE_PRESETS]
     print(tr("scale_how"))
-    for i, miles in enumerate(SCALE_PRESETS, 1):
-        print(f"    {i} = {scale_text(str(miles))}")
-    other = len(SCALE_PRESETS) + 1
+    for i, text in enumerate(presets, 1):
+        print(f"    {i} = {text}")
+    other = len(presets) + 1
     print(f"    {other} = {tr('scale_other')}")
-    choice = ask(tr("choice"), SCALE_PRESETS.index(6) + 1, int, 1, other)
+    default, highest = SCALE_PRESETS.index(6) + 1, other
+    if current in presets:
+        default = presets.index(current) + 1
+    elif current:                    # a custom scale: offer to keep it
+        highest = other + 1
+        print(f"    {highest} = {tr('scale_keep', scale=current)}")
+        default = highest
+    choice = ask(tr("choice"), default, int, 1, highest)
+    if choice == other + 1:
+        return current
     if choice < other:
-        return scale_text(str(SCALE_PRESETS[choice - 1]))
+        return presets[choice - 1]
     while True:
         answer = input(tr("ask_custom_scale")).strip()
         if answer:
@@ -1101,12 +1118,17 @@ def ask_settings():
     print(tr("enter_accepts"))
     mode = ask_mode()
     if mode and mode[1]:
-        # land already known: only the look is left to ask (paper comes later)
-        saved = mode[1]
+        # land already known: only the title, the scale and the look are left (paper comes later)
+        saved = complete_settings(mode[1])
         saved["output"] = MAPS_FOLDER
         print()
+        if input(tr("ask_rename", title=saved["title"])).strip().lower().startswith(tr("yes_letter")):
+            saved["title"] = input(tr("ask_new_title", default=saved["title"])).strip() or saved["title"]
+        if input(tr("ask_rescale", scale=saved["scale"])).strip().lower().startswith(tr("yes_letter")):
+            saved["scale"] = ask_scale(saved["scale"])
+            print()
         ask_look(saved)
-        return complete_settings(saved)
+        return saved
     print()
     p = {}
     p["columns"] = ask(tr("q_columns"), "auto", int, 2, 80)
