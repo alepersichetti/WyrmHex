@@ -280,6 +280,12 @@ The virtual environment isn't active: the line where you type doesn't start with
 **Windows: activating gives an error saying that "running scripts is disabled on this system".**
 Windows' PowerShell terminal blocks scripts until you allow them. Type `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, answer `Y`, then activate again. You only need to do this once.
 
+**macOS: `python wyrmhex.py` says "command not found: python".**
+The virtual environment isn't active. On macOS the `python` command only exists inside the virtual environment (outside it there's only `python3`). Activate it (step 4) and try again.
+
+**macOS and Linux: `source .venv/bin/activate` gives an error, or the line doesn't start with `(.venv)`.**
+Your terminal may use a less common shell, which needs its own activation command. With **fish** type `source .venv/bin/activate.fish`; with **csh** or **tcsh** type `source .venv/bin/activate.csh`. The usual terminals of macOS (zsh) and Linux (bash) use `source .venv/bin/activate`, as in step 4.
+
 **Linux: `python3 -m venv .venv` gives an error that mentions `ensurepip` or `venv`.**
 A piece of Python is missing. On Ubuntu and Debian install it with `sudo apt install python3-venv`, then repeat step 3.
 

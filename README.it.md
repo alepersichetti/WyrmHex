@@ -281,6 +281,12 @@ L'ambiente virtuale non è attivo: la riga in cui scrivi non comincia con `(.ven
 **Windows: l'attivazione dà un errore che dice che "l'esecuzione di script è disabilitata nel sistema".**
 Il terminale PowerShell di Windows blocca gli script finché non li permetti. Scrivi `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, rispondi `S` (o `Y`), poi attiva di nuovo. Basta farlo una volta sola.
 
+**macOS: `python wyrmhex.py` dice "command not found: python".**
+L'ambiente virtuale non è attivo. Su macOS il comando `python` esiste solo dentro l'ambiente virtuale (fuori c'è solo `python3`). Attivalo (passo 4) e riprova.
+
+**macOS e Linux: `source .venv/bin/activate` dà un errore, oppure la riga non comincia con `(.venv)`.**
+Il tuo terminale potrebbe usare una shell meno comune, che ha un suo comando di attivazione. Con **fish** scrivi `source .venv/bin/activate.fish`; con **csh** o **tcsh** scrivi `source .venv/bin/activate.csh`. I terminali normali di macOS (zsh) e Linux (bash) usano `source .venv/bin/activate`, come al passo 4.
+
 **Linux: `python3 -m venv .venv` dà un errore che parla di `ensurepip` o `venv`.**
 Manca un pezzo di Python. Su Ubuntu e Debian installalo con `sudo apt install python3-venv`, poi ripeti il passo 3.
 
