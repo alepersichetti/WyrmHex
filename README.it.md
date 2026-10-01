@@ -16,7 +16,7 @@ Compatibile con qualunque gioco di ruolo analogico "OSR".
 |__/|__/\__, /_/  /_/ /_/ /_/_/ /_/\___/_/|_|
        /____/
 
-                    v0.0.2
+                    v0.0.3
                                                                           /\
                                                                          /¨¨\
                ______________                /\    *                    /¨¨¨¨\
