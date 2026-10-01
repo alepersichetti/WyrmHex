@@ -148,11 +148,13 @@ Poi compare la schermata di benvenuto, con il titolo e un disegno: premi **INVIO
 
 1. **Cosa vuoi fare?** Scrivi `1` per una mappa nuova, `2` per rifare una mappa già fatta (vedi il capitolo 4).
 2. **Esagoni in base e in altezza:** quante colonne e quante righe di esagoni vuoi. La risposta pronta è `auto`: il programma sceglie da solo quanti esagoni riempiono un foglio A4 restando leggibili (33 × 15).
-3. **Numero di dungeon, città e fortezze** da mettere sulla mappa (fino a 99 per tipo).
-4. **Percentuali di terreno:** quanta parte della mappa è pianura, mare, laghi, paludi, colline, montagne, foreste e deserti, in numeri interi. Le paludi nascono nelle zone basse, soprattutto lungo la costa e attorno ai laghi. La somma non può superare 100; se resta qualcosa, diventa pianura. Se sbagli, il programma te lo dice e ti fa reinserire i numeri.
-5. **Numero di fiumi** (fino a 100): con `-1` il programma decide da solo.
-6. **Titolo** stampato in cima alla mappa.
-7. Se usare **solo i caratteri base della tastiera** (senza simboli come ♣ ▲ ≈). Di solito rispondi no: basta premere Invio.
+3. **Scegli tu o a caso?** Scrivi `1` per rispondere tu alle tre domande successive, oppure `2` per far scegliere al programma a caso il numero di siti, le percentuali di terreno e i fiumi, in proporzione alla mappa. Con `2` passa direttamente al titolo. I valori scelti vengono mostrati mentre lavora e finiscono nel seme come tutti gli altri.
+4. **Numero di dungeon, città e fortezze** da mettere sulla mappa (fino a 99 per tipo).
+5. **Percentuali di terreno:** quanta parte della mappa è pianura, mare, laghi, paludi, colline, montagne, foreste e deserti, in numeri interi. Le paludi nascono nelle zone basse, soprattutto lungo la costa e attorno ai laghi. La somma non può superare 100; se resta qualcosa, diventa pianura. Se sbagli, il programma te lo dice e ti fa reinserire i numeri.
+6. **Numero di fiumi** (fino a 100): con `-1` il programma decide da solo.
+7. **Titolo** stampato in cima alla mappa.
+8. **Scala:** quante miglia copre ogni esagono. `1` = 2 miglia, `2` = 6 miglia (la risposta pronta), `3` = 12 miglia, `4` = 24 miglia, `5` = lo scrivi tu: un numero di miglia, oppure un testo qualsiasi come `5 km` o `1 giorno`. Viene stampata sotto il titolo, come "1 esagono = 6 miglia".
+9. Se usare **solo i caratteri base della tastiera** (senza simboli come ♣ ▲ ≈). Di solito rispondi no: basta premere Invio.
 
 Finite le domande compare un mago con la scritta **"L'incantesimo di evocazione ha inizio!"** (in inglese: *"The conjuring spell begins!"*): da qui il programma si mette al lavoro.
 
@@ -164,7 +166,7 @@ Mentre lavora, mostra i passaggi che sta facendo, ognuno con una **barra di avan
 
 Durante il disegno delle due immagini, che è la parte più lunga, compare anche una seconda barra con la percentuale, che si aggiorna sul posto fino a `100%  fatto`. Quando la mappa è pronta ti chiede l'ultima cosa:
 
-8. **Formato di stampa** delle due mappe: `A4`, `A3` o `A2`. Il programma valuta il formato in base al numero di esagoni: prima della domanda vedi, per ogni formato, quanto verranno grandi gli esagoni e i caratteri, e se saranno ben leggibili. La risposta pronta tra parentesi è il **formato consigliato**, cioè il più piccolo in cui la mappa si legge bene; più esagoni hai scelto, più grande sarà. **La scelta finale è tua:** premi Invio per il formato consigliato, oppure scrivine un altro. Esempio:
+10. **Formato di stampa** delle due mappe: `A4`, `A3` o `A2`. Il programma valuta il formato in base al numero di esagoni: prima della domanda vedi, per ogni formato, quanto verranno grandi gli esagoni e i caratteri, e se saranno ben leggibili. La risposta pronta tra parentesi è il **formato consigliato**, cioè il più piccolo in cui la mappa si legge bene; più esagoni hai scelto, più grande sarà. **La scelta finale è tua:** premi Invio per il formato consigliato, oppure scrivine un altro. Esempio:
 
    ```
    · Griglia di 12 x 30 esagoni: ecco come verrebbe stampata su ogni formato (esagono misurato da lato piatto a lato piatto)
@@ -243,6 +245,7 @@ python wyrmhex.py --griglia 30x15 --citta 4 --dungeon 6
 python wyrmhex.py --griglia 50x30 --formato A2
 python wyrmhex.py --mare 30 --pianura 15 --titolo "Isola dei Venti"
 python wyrmhex.py --riproduci 475T-4KM4-MY0B-JNDJ-ZYEQ-K164
+python wyrmhex.py --griglia 40x25 --casuale
 python wyrmhex.py --language en --grid 30x15 --cities 4
 ```
 
@@ -255,8 +258,9 @@ Ogni opzione ha anche un nome inglese (nella tabella dopo la barra `/`), e puoi 
 | `--citta`, `--fortezze`, `--dungeon` / `--cities`, `--fortresses`, `--dungeons` | Quanti siti di ogni tipo (da 0 a 99) | `--citta 4` |
 | `--pianura`, `--mare`, `--laghi`, `--paludi`, `--colline`, `--montagne`, `--foreste`, `--deserti` / `--plains`, `--sea`, `--lakes`, `--swamps`, `--hills`, `--mountains`, `--forests`, `--deserts` | Percentuale di ogni terreno, in numero intero | `--mare 25` |
 | `--fiumi` / `--rivers` | Numero di fiumi, fino a 100 (`-1` = automatico) | `--fiumi 3` |
+| `--casuale` / `--random` | Sceglie a caso il numero di siti, le percentuali di terreno e i fiumi, in proporzione alla mappa. Le opzioni qui sopra per siti, terreni e fiumi vengono ignorate. Con lo stesso numero di `--seme` escono sempre gli stessi valori | `--casuale` |
 | `--titolo` / `--title` | Titolo in cima alla mappa | `--titolo "Terre del Nord"` |
-| `--scala` / `--scale` | Testo della scala | `--scala "8 km"` |
+| `--scala` / `--scale` | Miglia per esagono: 2, 6 (default), 12, 24 o un altro numero. Va bene anche un testo libero, come `"8 km"` | `--scala 12` |
 | `--seme` / `--seed` | Con un seme completo, rifà quella mappa (come `--riproduci`). Con un numero da 0 a 1048575, fa una mappa nuova con le tue impostazioni e quel numero per le scelte casuali | `--seme 42` |
 | `--riproduci` / `--reproduce` | Rifà la mappa di quel seme. Titolo, scala e formato vengono dal suo PNG, se è in `maps_generated/<seme>` (o nella cartella di `--output`); un vecchio seme numerico ha bisogno del suo PNG | `--riproduci 475T-4KM4-MY0B-JNDJ-ZYEQ-K164` |
 | `--formato` / `--format` | Formato di stampa: `A4`, `A3` o `A2`. Se manca, il programma te lo chiede alla fine, proponendo quello consigliato (o, con `--riproduci`, quello della volta prima) | `--formato A3` |

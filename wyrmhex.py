@@ -27,11 +27,14 @@ Usage. Every option has an Italian and an English name, use whichever:
       (also --laghi/--lakes, --colline/--hills, --montagne/--mountains,
        --foreste/--forests, --deserti/--deserts; whole numbers, max 100 in
        total, whatever is left becomes plains)
+  python wyrmhex.py --casuale                    / --random
+      (random sites, terrain % and rivers; ignores the options above)
   python wyrmhex.py --riproduci 475T-4KM4-MY0B-JNDJ-ZYEQ-K164
                     / --reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164
   python wyrmhex.py --formato A3                 / --format A3
-  python wyrmhex.py --titolo "Terre del Nord" --scala "8 km"
-                    / --title "Northern Lands" --scale "5 km"
+  python wyrmhex.py --titolo "Terre del Nord" --scala 12
+                    / --title "Northern Lands" --scale 12
+      (miles per hex: 2, 6, 12, 24 or any number; free text like "5 km" works too)
   python wyrmhex.py --solo-ascii                 / --ascii-only
   python wyrmhex.py --lingua en                  / --language en  (default: Italian)
   python wyrmhex.py --help
@@ -45,6 +48,7 @@ import json
 import math
 import os
 import random
+import re
 import secrets
 import sys
 import time
@@ -186,6 +190,10 @@ TEXTS = {
     "mode_rebuild": ("    2 = riprodurre una mappa già fatta, a partire dal suo seme",
                      "    2 = rebuild a map you already made, from its seed"),
     "choice": ("Scelta", "Choice"),
+    "values_how": ("\n  Città, fortezze, dungeon, percentuali di terreno e fiumi:",
+                   "\n  Cities, fortresses, dungeons, terrain percentages and rivers:"),
+    "values_manual": ("    1 = li scelgo io", "    1 = I'll choose them"),
+    "values_random": ("    2 = a caso", "    2 = random"),
     "ask_seed": ("  Seme della mappa da rifare (è anche il nome della sua cartella, es. {example}): ",
                  "  Seed of the map to rebuild (it is also the name of its folder, e.g. {example}): "),
     "seed_invalid": ("    Questo seme non è valido: controlla di averlo scritto bene (es. {example}).",
@@ -216,6 +224,12 @@ TEXTS = {
     "q_title": ("  Titolo della mappa [{default}]: ", "  Map title [{default}]: "),
     "default_title": ("Terre Selvagge", "Wild Lands"),
     "default_scale": ("6 miglia", "6 miles"),
+    "miles": ("{n} miglia", "{n} miles"),
+    "mile": ("{n} miglio", "{n} mile"),
+    "scale_how": ("\n  Quante miglia copre ogni esagono?", "\n  How many miles does each hex cover?"),
+    "scale_other": ("altro, lo scrivo io", "other, I'll type it"),
+    "ask_custom_scale": ("  Miglia per esagono (un numero, oppure un testo come \"5 km\"): ",
+                         "  Miles per hex (a number, or a text like \"5 km\"): "),
     "q_paper": ("  Formato di stampa per le due mappe (A4, A3, A2) [{default}]: ",
                 "  Print format for both maps (A4, A3, A2) [{default}]: "),
     "paper_retry": ("    Scrivi A4, A3 oppure A2.", "    Type A4, A3 or A2."),
@@ -255,6 +269,7 @@ TEXTS = {
     "err_size": ("{path}: {size} non è un foglio A4, A3 o A2 a 600 dpi",
                  "{path}: {size} is not an A4, A3 or A2 sheet at 600 dpi"),
     # step 1-2
+    "info_random": ("Siti, terreni e fiumi scelti a caso", "Sites, terrains and rivers picked at random"),
     "step_validate": ("Lettura e validazione dei parametri", "Reading and checking the settings"),
     "info_grid": ("Griglia: {c} x {r} = {n} esagoni", "Grid: {c} x {r} = {n} hexes"),
     "info_terrains": ("Terreni: {list}", "Terrains: {list}"),
@@ -396,7 +411,8 @@ TEXTS = {
                     "rebuilds the map of this seed; with a number seed from an earlier version it reads "
                     "the settings from its PNG (in maps_generated/<seed>, or in the --output folder)"),
     "h_title": ("titolo della mappa", "map title"),
-    "h_scale": ("testo della scala, es. '6 miglia'", "scale text, e.g. '6 miles'"),
+    "h_scale": ("miglia per esagono: 2, 6 (default), 12, 24 o un altro numero; oppure un testo libero, es. '5 km'",
+                "miles per hex: 2, 6 (default), 12, 24 or any other number; or free text, e.g. '5 km'"),
     "h_paper": ("formato di stampa delle due mappe; se manca, il programma lo chiede proponendo quello "
                 "consigliato (o lo usa direttamente, se non gira in un terminale)",
                 "print format of the two maps; if missing, the program asks for it, offering the suggested one "
@@ -412,6 +428,10 @@ TEXTS = {
                "small (k=2) or large (k=3) hexes; auto chooses from the print format"),
     "h_version": ("mostra la versione del programma ed esce", "show the program version and exit"),
     "h_font": ("file .ttf monospazio da usare", "monospaced .ttf font file to use"),
+    "h_random": ("città, fortezze, dungeon, percentuali di terreno e fiumi a caso "
+                 "(le opzioni corrispondenti vengono ignorate)",
+                 "random cities, fortresses, dungeons, terrain percentages and rivers "
+                 "(the matching options are ignored)"),
     "h_language": ("lingua dei testi: it (italiano) o en (inglese)", "language of the texts: it (Italian) or en (English)"),
 }
 
@@ -804,6 +824,7 @@ def complete_settings(p):
     for key, default in (("title", "default_title"), ("scale", "default_scale")):
         if p.get(key) in TEXTS[default]:
             p[key] = tr(default)
+    p["scale"] = scale_text(p["scale"])     # "12 miles" -> "12 miglia" and back
     return p
 
 
@@ -821,6 +842,64 @@ def split_hexes(total, perc):
     for k in sorted(perc, key=lambda k: exact[k] - counts[k], reverse=True)[:left_over]:
         counts[k] += 1
     return counts
+
+
+# range of each terrain before scaling everything to 100%
+RANDOM_TERRAIN = {PLAINS: (10, 40), SEA: (0, 35), LAKE: (0, 8), SWAMP: (0, 8),
+                  HILLS: (5, 25), MOUNTAINS: (3, 18), FOREST: (5, 35), DESERT: (0, 15)}
+
+
+def random_settings(p, number):
+    """Random sites, terrain % and rivers, for an already known grid size.
+    Seeded from the map number, so --seed N --random is repeatable."""
+    rng = random.Random(number * 31 + 7)     # not the land's rng
+    raw = {t: rng.uniform(lo, hi) for t, (lo, hi) in RANDOM_TERRAIN.items()}
+    total = sum(raw.values())
+    counts = split_hexes(100, {t: v * 100 / total for t, v in raw.items()})
+    p["percentages"] = {t: counts[t] for _, _, t, _ in TERRAIN_OPTIONS}
+
+    hexes = p["columns"] * p["rows"]
+    land = hexes - sum(n for t, n in split_hexes(hexes, p["percentages"]).items() if t in WATER)
+    sites = {"cities": max(1, round(land / rng.uniform(40, 90))),
+             "fortresses": round(land / rng.uniform(60, 140)),
+             "dungeons": max(1, round(land / rng.uniform(25, 60)))}
+    # tiny maps: drop sites until they fit on the land
+    for key in ("dungeons", "fortresses", "cities", "dungeons"):
+        while sum(sites.values()) > land and sites[key] > 0:
+            sites[key] -= 1
+    p.update({k: min(v, MAX_SITES) for k, v in sites.items()})
+    p["rivers"] = -1
+
+
+SCALE_PRESETS = (2, 6, 12, 24)               # miles per hex; 6 is the classic one
+MILES = re.compile(r"^(\d+(?:[.,]\d+)?)\s*(miglia|miglio|miles|mile|mi)?$", re.IGNORECASE)
+
+
+def scale_text(value):
+    """'12' or '12 miles' -> '12 miglia' (or '12 miles' in English). Anything
+    else, like '5 km', is kept as typed."""
+    m = MILES.match(value.strip())
+    if not m:
+        return value.strip()
+    n = float(m.group(1).replace(",", "."))
+    n = int(n) if n == int(n) else n
+    shown = f"{n:g}".replace(".", ",") if LANG == "it" else f"{n:g}"   # 2,5 miglia / 2.5 miles
+    return tr("mile" if n == 1 else "miles", n=shown)
+
+
+def ask_scale():
+    print(tr("scale_how"))
+    for i, miles in enumerate(SCALE_PRESETS, 1):
+        print(f"    {i} = {scale_text(str(miles))}")
+    other = len(SCALE_PRESETS) + 1
+    print(f"    {other} = {tr('scale_other')}")
+    choice = ask(tr("choice"), SCALE_PRESETS.index(6) + 1, int, 1, other)
+    if choice < other:
+        return scale_text(str(SCALE_PRESETS[choice - 1]))
+    while True:
+        answer = input(tr("ask_custom_scale")).strip()
+        if answer:
+            return scale_text(answer)
 
 
 def ask(question, default, kind=int, lowest=None, highest=None):
@@ -986,25 +1065,34 @@ def ask_settings():
     p = {}
     p["columns"] = ask(tr("q_columns"), "auto", int, 2, 80)
     p["rows"] = ask(tr("q_rows"), "auto", int, 2, 80)
-    p["dungeons"] = ask(tr("q_dungeons"), 4, int, 0, MAX_SITES)
-    p["cities"] = ask(tr("q_cities"), 3, int, 0, MAX_SITES)
-    p["fortresses"] = ask(tr("q_fortresses"), 2, int, 0, MAX_SITES)
-    print(tr("pct_intro"))
-    while True:
-        perc = {terrain: ask(f"% {pick(label).lower()}", DEFAULT_PERCENTAGES[terrain], int, 0, 100)
-                for _, _, terrain, label in TERRAIN_OPTIONS}
-        error = check_percentages(perc)
-        if not error:
-            break
-        print(tr("pct_retry", error=error))
-    p["percentages"] = perc
-    p["rivers"] = ask(tr("q_rivers"), -1, int, -1, MAX_RIVERS)
+    print(tr("values_how"))
+    print(tr("values_manual"))
+    print(tr("values_random"))
+    # random values need the grid size, which may still be "auto": main() fills them in
+    p["randomize"] = ask(tr("choice"), 1, int, 1, 2) == 2
+    if not p["randomize"]:
+        print()
+        p["dungeons"] = ask(tr("q_dungeons"), 4, int, 0, MAX_SITES)
+        p["cities"] = ask(tr("q_cities"), 3, int, 0, MAX_SITES)
+        p["fortresses"] = ask(tr("q_fortresses"), 2, int, 0, MAX_SITES)
+        print(tr("pct_intro"))
+        while True:
+            perc = {terrain: ask(f"% {pick(label).lower()}", DEFAULT_PERCENTAGES[terrain], int, 0, 100)
+                    for _, _, terrain, label in TERRAIN_OPTIONS}
+            error = check_percentages(perc)
+            if not error:
+                break
+            print(tr("pct_retry", error=error))
+        p["percentages"] = perc
+        p["rivers"] = ask(tr("q_rivers"), -1, int, -1, MAX_RIVERS)
+    print()
     if mode:
         p["seed"] = mode[0]          # an old number seed: we already know the random number
     else:
         p["seed"] = None             # a new map gets a new random number
     p["title"] = input(tr("q_title", default=tr("default_title"))).strip() or tr("default_title")
-    p["scale"] = tr("default_scale")
+    p["scale"] = ask_scale()
+    print()
     p["output"] = MAPS_FOLDER
     p["orientation"] = "auto"
     ask_look(p)
@@ -1039,6 +1127,7 @@ def settings_from_options(argv):
                         metavar="%", help=tr("h_terrain", label=pick(label).lower(),
                                              default=DEFAULT_PERCENTAGES[terrain]))
     ap.add_argument(*names("fiumi", "rivers"), dest="rivers", type=int, default=-1, metavar="N", help=tr("h_rivers"))
+    ap.add_argument(*names("casuale", "random"), dest="randomize", action="store_true", help=tr("h_random"))
     ap.add_argument(*names("seme", "seed"), dest="seed", default=None, metavar=tr("mv_seed"),
                     help=tr("h_seed", example=example_seed(), max=RANDOM_NUMBERS - 1))
     ap.add_argument(*names("riproduci", "reproduce"), dest="reproduce", default=None,
@@ -1103,10 +1192,10 @@ def settings_from_options(argv):
         "dungeons": a.dungeons, "cities": a.cities, "fortresses": a.fortresses,
         "percentages": {terrain: getattr(a, terrain) for _, _, terrain, _ in TERRAIN_OPTIONS},
         "rivers": a.rivers, "seed": None if a.seed is None else int(a.seed),
-        "title": a.title or tr("default_title"), "scale": a.scale or tr("default_scale"),
+        "title": a.title or tr("default_title"), "scale": scale_text(a.scale) if a.scale else tr("default_scale"),
         "orientation": orientation, "output": a.output, "paper": a.paper,
         "ascii_only": a.ascii_only, "size": size, "font": a.font,
-        "ask_paper": ask_for_paper,
+        "ask_paper": ask_for_paper, "randomize": a.randomize,
     }
 
 
@@ -2122,8 +2211,11 @@ def main():
     aspect = line_em / advance_em
     if "auto" in (params["columns"], params["rows"]):
         fill_page(params, font_spec, aspect, log)
-    counts = validate(params, log)
     number = params["seed"] if params["seed"] is not None else new_seed()
+    if params.pop("randomize", False):
+        random_settings(params, number)
+        log.info(tr("info_random"))
+    counts = validate(params, log)
     rng = random.Random(number)
     seed = make_seed(params, number)
     if seed is None:

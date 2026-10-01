@@ -148,11 +148,13 @@ Then the welcome screen appears, with the title and a picture: press **ENTER** t
 
 1. **What do you want to do?** Type `1` for a new map, `2` to rebuild a map you already made (see chapter 4).
 2. **Hexes across and down:** how many columns and rows of hexes you want. The ready-made answer is `auto`: the program works out by itself how many hexes fill an A4 sheet and stay easy to read (33 × 15).
-3. **Number of dungeons, cities and fortresses** to put on the map (up to 99 of each).
-4. **Terrain percentages:** how much of the map is plains, sea, lakes, swamps, hills, mountains, forests and deserts, as whole numbers. Swamps form in low ground, mostly along the coast and around lakes. They can't add up to more than 100; anything left over becomes plains. If you get it wrong, the program tells you and asks for the numbers again.
-5. **Number of rivers** (up to 100): with `-1` the program decides by itself.
-6. **Title** printed at the top of the map.
-7. Whether to use **only basic keyboard characters** (no symbols like ♣ ▲ ≈). You'll usually answer no: just press Enter.
+3. **Choose yourself or at random?** Type `1` to answer the next three questions yourself, or `2` to let the program pick the number of sites, the terrain percentages and the rivers at random, sized to the map. With `2` it skips straight to the title. The values it picks are shown while it works, and they end up in the seed like any other.
+4. **Number of dungeons, cities and fortresses** to put on the map (up to 99 of each).
+5. **Terrain percentages:** how much of the map is plains, sea, lakes, swamps, hills, mountains, forests and deserts, as whole numbers. Swamps form in low ground, mostly along the coast and around lakes. They can't add up to more than 100; anything left over becomes plains. If you get it wrong, the program tells you and asks for the numbers again.
+6. **Number of rivers** (up to 100): with `-1` the program decides by itself.
+7. **Title** printed at the top of the map.
+8. **Scale:** how many miles each hex covers. `1` = 2 miles, `2` = 6 miles (the ready-made answer), `3` = 12 miles, `4` = 24 miles, `5` = your own: type a number of miles, or any text such as `5 km` or `1 day`. It's printed under the title, as "1 hex = 6 miles".
+9. Whether to use **only basic keyboard characters** (no symbols like ♣ ▲ ≈). You'll usually answer no: just press Enter.
 
 Once the questions are done, a wizard appears with the words **"The conjuring spell begins!"**: from here the program gets to work.
 
@@ -164,7 +166,7 @@ While it works, it shows each step it's taking, each with a **progress bar** tha
 
 While it draws the two pictures, which is the longest part, a second bar shows the percentage and updates in place until it reaches `100%  done`. When the map is ready, it asks you one last thing:
 
-8. **Print format** for the two maps: `A4`, `A3` or `A2`. The program weighs up the format based on the number of hexes: before the question you'll see, for each format, how big the hexes and the letters will be and whether they'll be easy to read. The ready-made answer in brackets is the **suggested format**: the smallest one where the map reads well; the more hexes you chose, the bigger it gets. **The final choice is yours:** press Enter for the suggested format, or type another one. For example:
+10. **Print format** for the two maps: `A4`, `A3` or `A2`. The program weighs up the format based on the number of hexes: before the question you'll see, for each format, how big the hexes and the letters will be and whether they'll be easy to read. The ready-made answer in brackets is the **suggested format**: the smallest one where the map reads well; the more hexes you chose, the bigger it gets. **The final choice is yours:** press Enter for the suggested format, or type another one. For example:
 
    ```
    · Grid of 12 x 30 hexes: this is how it would print on each format (hex measured from flat side to flat side)
@@ -243,6 +245,7 @@ python wyrmhex.py --language en --grid 30x15 --cities 4 --dungeons 6
 python wyrmhex.py --language en --grid 50x30 --format A2
 python wyrmhex.py --language en --sea 30 --plains 15 --title "Isle of Winds"
 python wyrmhex.py --language en --reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164
+python wyrmhex.py --language en --grid 40x25 --random
 ```
 
 Without `--language en` the messages and the texts on the map are in Italian. Every option also has an Italian name (in the table after the slash `/`), and you can mix them as you like.
@@ -254,8 +257,9 @@ Without `--language en` the messages and the texts on the map are in Italian. Ev
 | `--cities`, `--fortresses`, `--dungeons` / `--citta`, `--fortezze`, `--dungeon` | How many sites of each kind (0 to 99) | `--cities 4` |
 | `--plains`, `--sea`, `--lakes`, `--swamps`, `--hills`, `--mountains`, `--forests`, `--deserts` / `--pianura`, `--mare`, `--laghi`, `--paludi`, `--colline`, `--montagne`, `--foreste`, `--deserti` | Percentage of each terrain, as a whole number | `--sea 25` |
 | `--rivers` / `--fiumi` | Number of rivers, up to 100 (`-1` = automatic) | `--rivers 3` |
+| `--random` / `--casuale` | Picks the number of sites, the terrain percentages and the rivers at random, sized to the map. The options above for sites, terrains and rivers are then ignored. With the same `--seed` number you always get the same values | `--random` |
 | `--title` / `--titolo` | Title at the top of the map | `--title "Northern Lands"` |
-| `--scale` / `--scala` | Scale text | `--scale "5 km"` |
+| `--scale` / `--scala` | Miles per hex: 2, 6 (default), 12, 24 or any other number. Free text, such as `"5 km"`, works too | `--scale 12` |
 | `--seed` / `--seme` | With a full seed, rebuilds that map (like `--reproduce`). With a number from 0 to 1048575, makes a new map with your settings and that number for the random choices | `--seed 42` |
 | `--reproduce` / `--riproduci` | Rebuilds the map of that seed. Title, scale and paper size come from its PNG if it's in `maps_generated/<seed>` (or in the `--output` folder); an old number seed needs its PNG | `--reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164` |
 | `--format` / `--formato` | Print format: `A4`, `A3` or `A2`. If you leave it out, the program asks you at the end, offering the suggested one (or, with `--reproduce`, the one from last time) | `--format A3` |
