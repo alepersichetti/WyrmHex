@@ -6,8 +6,9 @@ WyrmHex v0.0.3 - random hexcrawl maps for OSR games, all in ASCII.
 Looks like an old terminal game (Dwarf Fortress, NetHack): hexes drawn with
 _ / \\, terrain as CP437 symbols (forest ♣♠, mountains ▲^, hills ∩n, lakes ≈,
 deserts ░·, swamps ⌠"), empty plains, gray sea, rivers in ═║╔╗, and sites as
-white glyphs in black boxes. Prints black on white, A4/A3/A2 at 600 dpi;
-the sheet turns to match the map and the best paper size is suggested.
+white glyphs in black boxes. Black on white for printing, or in colour on a
+white or black background. A4/A3/A2 at 600 dpi; the sheet turns to match the
+map and the best paper size is suggested.
 
 Output goes to maps_generated/<seed>/ next to this file (or --output):
   <seed>_nonumber.png/.txt   for the players
@@ -36,6 +37,7 @@ Usage. Every option has an Italian and an English name, use whichever:
                     / --title "Northern Lands" --scale 12
       (miles per hex: 2, 6, 12, 24 or any number; free text like "5 km" works too)
   python wyrmhex.py --solo-ascii                 / --ascii-only
+  python wyrmhex.py --colori --sfondo nero       / --colors --background black
   python wyrmhex.py --lingua en                  / --language en  (default: Italian)
   python wyrmhex.py --help
 
@@ -145,6 +147,30 @@ RIVER_CHARS = {
 OPPOSITE = {"l": "r", "r": "l", "u": "d", "d": "u"}
 SEA_GRAY = 205              # 0 black, 255 white
 
+# Colour maps. Keys are canvas tags: terrains, sites, and a few extras. Anything
+# without its own colour is drawn in "ink". The black-and-white map is just one
+# more palette, in grayscale, where everything is ink.
+MONO = {"mode": "L", "paper": 255, "ink": 0, "sea": SEA_GRAY}
+PALETTES = {
+    "white": {"mode": "RGB", "paper": (255, 255, 255), "ink": (25, 25, 25),
+              "border": (100, 100, 100), "sea": (180, 211, 236), "sea_line": (115, 155, 195),
+              LAKE: (30, 100, 200), "river": (25, 95, 205), SWAMP: (85, 120, 55),
+              FOREST: (25, 125, 45), HILLS: (160, 110, 40), MOUNTAINS: (105, 90, 80),
+              DESERT: (205, 150, 40), CITY: (190, 35, 35), FORTRESS: (105, 60, 160),
+              DUNGEON: (25, 25, 25)},
+    "black": {"mode": "RGB", "paper": (12, 12, 16), "ink": (230, 230, 225),
+              "border": (110, 110, 115), "sea": (18, 42, 82), "sea_line": (60, 100, 150),
+              LAKE: (80, 150, 255), "river": (90, 160, 255), SWAMP: (125, 170, 95),
+              FOREST: (60, 190, 80), HILLS: (215, 165, 80), MOUNTAINS: (195, 180, 165),
+              DESERT: (235, 195, 95), CITY: (235, 75, 65), FORTRESS: (170, 120, 230),
+              DUNGEON: (230, 230, 225)},
+}
+BACKGROUND_FROM_USER = {"bianco": "white", "nero": "black", "white": "white", "black": "black"}
+
+
+def palette_for(p):
+    return PALETTES[p.get("background", "white")] if p.get("colors") else MONO
+
 # monospace (regular, bold), first one found wins. (path, index) for .ttc
 MONO_FONTS = [
     ("DejaVuSansMono.ttf", "DejaVuSansMono-Bold.ttf"),                        # Linux
@@ -210,6 +236,15 @@ TEXTS = {
                       "inserisci le STESSE impostazioni della mappa originale.\n",
                       "  This is a number seed from an earlier version, which is not enough on its own: "
                       "enter the SAME settings as the original map.\n"),
+    "colors_how": ("\n  Colori:", "\n  Colours:"),
+    "colors_mono": ("    1 = bianco e nero, per la stampa", "    1 = black and white, for printing"),
+    "colors_color": ("    2 = a colori", "    2 = colour"),
+    "background_how": ("\n  Sfondo:", "\n  Background:"),
+    "background_white": ("    1 = bianco", "    1 = white"),
+    "background_black": ("    2 = nero", "    2 = black"),
+    "err_background": ("--sfondo funziona solo insieme a --colori", "--background only works together with --colors"),
+    "h_colors": ("mappa a colori invece che in bianco e nero", "colour map instead of black and white"),
+    "h_background": ("sfondo della mappa a colori: bianco (default) o nero", "background of the colour map: white (default) or black"),
     "ask_ascii": ("  Usare solo i caratteri base della tastiera, senza simboli come ♣ ▲ ≈? (s/N): ",
                   "  Use only basic keyboard characters, without symbols like ♣ ▲ ≈? (y/N): "),
     "q_columns": ("Esagoni in base (colonne)", "Hexes across (columns)"),
@@ -813,7 +848,8 @@ def find_settings(base, seed):
 
 def complete_settings(p):
     """Fill in whatever a PNG from an older version doesn't have."""
-    for key, value in (("ascii_only", False), ("size", "auto"), ("font", None), ("paper", None),
+    for key, value in (("ascii_only", False), ("colors", False), ("background", "white"),
+                       ("size", "auto"), ("font", None), ("paper", None),
                        ("title", tr("default_title")), ("scale", tr("default_scale"))):
         p.setdefault(key, value)
     p["percentages"].setdefault(SWAMP, 0)
@@ -1047,6 +1083,16 @@ def ask_mode(folder=MAPS_FOLDER):
 def ask_look(p):
     """Doesn't change the land, so it's asked again when rebuilding a map."""
     p["ascii_only"] = input(tr("ask_ascii")).strip().lower().startswith(tr("yes_letter"))
+    print(tr("colors_how"))
+    print(tr("colors_mono"))
+    print(tr("colors_color"))
+    p["colors"] = ask(tr("choice"), 1, int, 1, 2) == 2
+    p["background"] = "white"
+    if p["colors"]:      # a black background only makes sense for a colour map
+        print(tr("background_how"))
+        print(tr("background_white"))
+        print(tr("background_black"))
+        p["background"] = "black" if ask(tr("choice"), 1, int, 1, 2) == 2 else "white"
 
 
 def ask_settings():
@@ -1143,12 +1189,19 @@ def settings_from_options(argv):
                     default="auto", metavar=shown(orientations), help=tr("h_orientation"))
     ap.add_argument("--output", default=MAPS_FOLDER, metavar=tr("mv_folder"), help=tr("h_output"))
     ap.add_argument(*names("solo-ascii", "ascii-only"), dest="ascii_only", action="store_true", help=tr("h_ascii"))
+    ap.add_argument(*names("colori", "colors"), dest="colors", action="store_true", help=tr("h_colors"))
+    backgrounds = {"it": ["bianco", "nero"], "en": ["white", "black"]}
+    ap.add_argument(*names("sfondo", "background"), dest="background", choices=list(BACKGROUND_FROM_USER),
+                    default=None, metavar=shown(backgrounds), help=tr("h_background"))
     sizes = {"it": ["auto", "piccola", "grande"], "en": ["auto", "small", "large"]}
     ap.add_argument(*names("dimensione", "size"), dest="size", choices=list(SIZE_FROM_USER), default="auto",
                     metavar=shown(sizes), help=tr("h_size"))
     ap.add_argument("--version", action="version", version=f"WyrmHex v{VERSION}", help=tr("h_version"))
     ap.add_argument("--font", default=None, metavar="FILE", help=tr("h_font"))
     a = ap.parse_args(argv)
+    if a.background and not a.colors:
+        ap.error(tr("err_background"))
+    background = BACKGROUND_FROM_USER[a.background or "white"]
     orientation = ORIENTATION_FROM_USER[a.orientation]
     ask_for_paper = a.paper is None and sys.stdin.isatty()
     size = SIZE_FROM_USER[a.size]
@@ -1167,7 +1220,7 @@ def settings_from_options(argv):
             ap.error(tr("err_bad_seed", seed=a.reproduce, example=example_seed()))
         saved["output"] = a.output
         # the look comes from this command line, not from the old PNG
-        saved.update(ascii_only=a.ascii_only)
+        saved.update(ascii_only=a.ascii_only, colors=a.colors, background=background)
         for key in ("title", "scale"):
             if getattr(a, key) is not None:
                 saved[key] = getattr(a, key)   # a title or scale typed now wins over the saved one
@@ -1194,7 +1247,7 @@ def settings_from_options(argv):
         "rivers": a.rivers, "seed": None if a.seed is None else int(a.seed),
         "title": a.title or tr("default_title"), "scale": scale_text(a.scale) if a.scale else tr("default_scale"),
         "orientation": orientation, "output": a.output, "paper": a.paper,
-        "ascii_only": a.ascii_only, "size": size, "font": a.font,
+        "ascii_only": a.ascii_only, "colors": a.colors, "background": background, "size": size, "font": a.font,
         "ask_paper": ask_for_paper, "randomize": a.randomize,
     }
 
@@ -1650,26 +1703,28 @@ class Canvas:
         self.width, self.height = width, height
         self.chars = [[" "] * width for _ in range(height)]     # the letters
         self.styles = [["n"] * width for _ in range(height)]    # the style of each letter
-        self.boxes = []            # site boxes: (x, y, width, height, symbol)
+        self.tags = [[None] * width for _ in range(height)]     # palette key, for colour maps
+        self.boxes = []            # site boxes: (x, y, width, height, symbol, tag)
 
-    def put(self, x, y, ch, style="n"):
+    def put(self, x, y, ch, style="n", tag=None):
         if 0 <= x < self.width and 0 <= y < self.height:
-            self.chars[y][x], self.styles[y][x] = ch, style
+            self.chars[y][x], self.styles[y][x], self.tags[y][x] = ch, style, tag
 
-    def write(self, x, y, text, style="n"):
+    def write(self, x, y, text, style="n", tag=None):
         for i, c in enumerate(text):
-            self.put(x + i, y, c, style)
+            self.put(x + i, y, c, style, tag)
 
     def paste(self, other, ox, oy):
         for y in range(other.height):
             for x in range(other.width):
-                self.put(ox + x, oy + y, other.chars[y][x], other.styles[y][x])
-        self.boxes += [(ox + x, oy + y, w, h, g) for x, y, w, h, g in other.boxes]
+                self.put(ox + x, oy + y, other.chars[y][x], other.styles[y][x], other.tags[y][x])
+        self.boxes += [(ox + x, oy + y, w, h, g, t) for x, y, w, h, g, t in other.boxes]
 
     def copy(self):
         c = Canvas(self.width, self.height)
         c.chars = [row[:] for row in self.chars]
         c.styles = [row[:] for row in self.styles]
+        c.tags = [row[:] for row in self.tags]
         c.boxes = list(self.boxes)
         return c
 
@@ -1807,13 +1862,13 @@ def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect):
         if kind == SEA:
             for (yy, xx) in inside:
                 # the ≈ only shows in the .txt
-                canvas.put(x0 + xx, y0 + yy, G("≈", "~"), "g")
+                canvas.put(x0 + xx, y0 + yy, G("≈", "~"), "g", SEA)
             continue
         choices = TERRAIN_GLYPHS[kind]
         if not choices:
             continue
         for (yy, xx) in inside:
-            canvas.put(x0 + xx, y0 + yy, pick_symbol(rng, choices, G))
+            canvas.put(x0 + xx, y0 + yy, pick_symbol(rng, choices, G), "n", kind)
 
     # borders between two sea hexes get the gray too, or the sea looks tiled
     shared = {}    # for each border square: [letter, "only sea hexes share it so far"]
@@ -1823,7 +1878,7 @@ def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect):
             shared.setdefault((x0 + xx, y0 + yy), [ch, True])
             shared[(x0 + xx, y0 + yy)][1] &= terrain[(c, r)] == SEA
     for (x, y), (ch, sea_only) in shared.items():
-        canvas.put(x, y, ch, "H" if sea_only else "b")
+        canvas.put(x, y, ch, "H" if sea_only else "b", "sea_line" if sea_only else "border")
 
     arms = {}
     for river in rivers:
@@ -1834,7 +1889,7 @@ def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect):
             arms.setdefault(b, set()).add(OPPOSITE[d])
     for (x, y), directions in arms.items():
         fancy, plain = RIVER_CHARS[frozenset(directions)]
-        canvas.put(x, y, G(fancy, plain), "b")
+        canvas.put(x, y, G(fancy, plain), "b", "river")
 
     # sites: [⌂⌂] in the .txt, a black box with one big white glyph in the PNG
     cx = 2 * k + 1
@@ -1843,7 +1898,7 @@ def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect):
         g = G(*SITE_GLYPHS[kind])
         for yy in (k, k + 1):
             canvas.write(x0 + cx - 2, y0 + yy, "[" + g + g + "]", "B")
-        canvas.boxes.append((x0 + cx - 2, y0 + k, 4, 2, g))
+        canvas.boxes.append((x0 + cx - 2, y0 + k, 4, 2, g, kind))
     return canvas
 
 
@@ -1868,26 +1923,29 @@ def write_hex_numbers(page, grid, k, ox, oy):
 
 # --- page: frame, title, legend ---
 def legend_entries(G):
+    # (sample, name, style, colour tag)
     terrains = [
-        (G("▲^", "^A"), tr("leg_mountains"), "b"), (G("∩n", "nm"), tr("leg_hills"), "b"),
-        (G("♣♠", "TY"), tr("leg_forest"), "b"), ("", tr("leg_plains"), "b"), (G("░·", ".:"), tr("leg_desert"), "b"),
-        (G("≈≈", "~~"), tr("leg_sea"), "g"),   # "g": this sample is drawn as a gray patch
-        (G("≈≈", "~~"), tr("leg_lake"), "b"), (G('⌠"', '",'), tr("leg_swamp"), "b"),
-        (G("═╗", "=+"), tr("leg_river"), "b"),
+        (G("▲^", "^A"), tr("leg_mountains"), "b", MOUNTAINS), (G("∩n", "nm"), tr("leg_hills"), "b", HILLS),
+        (G("♣♠", "TY"), tr("leg_forest"), "b", FOREST), ("", tr("leg_plains"), "b", None),
+        (G("░·", ".:"), tr("leg_desert"), "b", DESERT),
+        (G("≈≈", "~~"), tr("leg_sea"), "g", SEA),   # "g": this sample is drawn as a gray patch
+        (G("≈≈", "~~"), tr("leg_lake"), "b", LAKE), (G('⌠"', '",'), tr("leg_swamp"), "b", SWAMP),
+        (G("═╗", "=+"), tr("leg_river"), "b", "river"),
     ]
-    sites = [(G(*SITE_GLYPHS[kind]), pick(SITE_NAMES[kind])) for kind in (CITY, FORTRESS, DUNGEON)]
+    sites = [(G(*SITE_GLYPHS[kind]), pick(SITE_NAMES[kind]), kind) for kind in (CITY, FORTRESS, DUNGEON)]
     if G.ascii_only:
-        sites = [(g, name.replace("à", "a'")) for g, name in sites]
+        sites = [(g, name.replace("à", "a'"), kind) for g, name, kind in sites]
     return terrains, sites
 
 
 def pack_legend(G, max_width):
     terrains, sites = legend_entries(G)
-    entries = [[(g, style), (" " + name, "n")] if g else [(name, "n")] for g, name, style in terrains]
-    entries += [[("[" + g + "]", "i"), (" " + name, "n")] for g, name in sites]
+    entries = [[(g, style, tag), (" " + name, "n", None)] if g else [(name, "n", None)]
+               for g, name, style, tag in terrains]
+    entries += [[("[" + g + "]", "i", kind), (" " + name, "n", None)] for g, name, kind in sites]
     lines, line, length = [], [], 0
     for entry in entries:
-        w = sum(len(text) for text, _ in entry)
+        w = sum(len(text) for text, _, _ in entry)
         if line and length + 4 + w > max_width:
             lines.append(line)
             line, length = [], 0
@@ -1927,13 +1985,13 @@ def compose_page(map_canvas, n_cols, n_rows, legend_lines, title, subtitle, G):
     page.paste(map_canvas, ox, oy)
 
     for i, line in enumerate(legend_lines):
-        length = sum(sum(len(text) for text, _ in entry) for entry in line) + 4 * (len(line) - 1)
+        length = sum(sum(len(text) for text, _, _ in entry) for entry in line) + 4 * (len(line) - 1)
         x = (n_cols - length) // 2
         for j, entry in enumerate(line):
             if j:
                 x += 4
-            for text, style in entry:
-                page.write(x, y_legend_line + 1 + i, text, style)
+            for text, style, tag in entry:
+                page.write(x, y_legend_line + 1 + i, text, style, tag)
                 x += len(text)
     return page, ox, oy
 
@@ -2057,57 +2115,62 @@ def ask_paper(params, grid, fonts, G, ask_user, log):
     return default
 
 
-def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy, progress=None):
+def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy, progress=None, palette=MONO):
     """Rasterise the canvas. progress(fraction) is called after each row."""
-    img = Image.new("L", (width, height), 255)   # white grayscale picture
+    img = Image.new(palette["mode"], (width, height), palette["paper"])
     d = ImageDraw.Draw(img)
+    paper, sea = palette["paper"], palette["sea"]
+
+    def ink(tag):
+        return palette.get(tag, palette["ink"])
+
     thicken = max(1, size // 22)                 # shift used to fake a bold letter
     real_bold = bold is not None and bold is not regular
     probe = bold.font_variant(size=40) if real_bold else None
     bold_can_draw = {}                           # remembers which symbols the bold font has
 
-    def draw_bold(px, py, ch):
+    def draw_bold(px, py, ch, fill):
         # Menlo Bold (macOS) has no ═║╔╗: it drew empty boxes for the rivers.
         # Fake bold with the regular font drawn twice instead.
         if real_bold:
             if ch not in bold_can_draw:
                 bold_can_draw[ch] = ch.isascii() or font_has_glyph(probe, ch)
             if bold_can_draw[ch]:
-                d.text((px, py), ch, font=bold, fill=0, anchor="la")
+                d.text((px, py), ch, font=bold, fill=fill, anchor="la")
                 return
-        d.text((px, py), ch, font=regular, fill=0, anchor="la")
-        d.text((px + thicken, py), ch, font=regular, fill=0, anchor="la")
+        d.text((px, py), ch, font=regular, fill=fill, anchor="la")
+        d.text((px + thicken, py), ch, font=regular, fill=fill, anchor="la")
 
     for y in range(canvas.height):
         py = oy + y * char_h
         for x in range(canvas.width):
-            ch, style = canvas.chars[y][x], canvas.styles[y][x]
+            ch, style, tag = canvas.chars[y][x], canvas.styles[y][x], canvas.tags[y][x]
             if style == "B" or (ch == " " and style not in "igGH"):
                 continue
             px = ox + x * char_w
             if style in "gGH":
-                d.rectangle([px, py, px + char_w + 0.5, py + char_h + 0.5], fill=SEA_GRAY)
+                d.rectangle([px, py, px + char_w + 0.5, py + char_h + 0.5], fill=sea)
                 if style == "G":
-                    d.text((px, py), ch, font=regular, fill=0, anchor="la")
+                    d.text((px, py), ch, font=regular, fill=ink(tag), anchor="la")
                 elif style == "H":
-                    draw_bold(px, py, ch)
+                    draw_bold(px, py, ch, ink(tag))
                 continue
             if style == "i":
                 # the [ ] only make sense in the .txt
-                d.rectangle([px, py, px + char_w + 0.5, py + char_h + 0.5], fill=0)
+                d.rectangle([px, py, px + char_w + 0.5, py + char_h + 0.5], fill=ink(tag))
                 if ch not in "[] ":
-                    d.text((px, py), ch, font=regular, fill=255, anchor="la")
+                    d.text((px, py), ch, font=regular, fill=paper, anchor="la")
             elif style == "b":
-                draw_bold(px, py, ch)
+                draw_bold(px, py, ch, ink(tag))
             else:
-                d.text((px, py), ch, font=regular, fill=0, anchor="la")
+                d.text((px, py), ch, font=regular, fill=ink(tag), anchor="la")
         if progress:
             progress((y + 1) / canvas.height)
     big = regular.font_variant(size=int(size * 1.7))
-    for bx, by, bw, bh, g in canvas.boxes:
+    for bx, by, bw, bh, g, tag in canvas.boxes:
         x1, y1 = ox + bx * char_w, oy + by * char_h
-        d.rectangle([x1, y1, x1 + bw * char_w, y1 + bh * char_h], fill=0)
-        d.text((x1 + bw * char_w / 2, y1 + bh * char_h / 2), g, font=big, fill=255, anchor="mm")
+        d.rectangle([x1, y1, x1 + bw * char_w, y1 + bh * char_h], fill=ink(tag))
+        d.text((x1 + bw * char_w / 2, y1 + bh * char_h / 2), g, font=big, fill=paper, anchor="mm")
     return img
 
 
@@ -2130,12 +2193,13 @@ def save(canvas, layout, png_path, settings=None):
     live = LiveBar()
     drawing = tr("pb_drawing")
     # drawing is ~90% of the time
+    palette = palette_for(settings or {})
     img = render(canvas, regular, bold, char_w, char_h, size, work_w, work_h, ox, oy,
-                 progress=lambda done: live.update(0.9 * done, drawing))
+                 progress=lambda done: live.update(0.9 * done, drawing), palette=palette)
     if (work_w, work_h) != (width, height):
         f = min(width / work_w, height / work_h)
         smaller = img.resize((round(work_w * f), round(work_h * f)), Image.LANCZOS)
-        img = Image.new("L", (width, height), 255)
+        img = Image.new(palette["mode"], (width, height), palette["paper"])
         img.paste(smaller, ((width - smaller.width) // 2, (height - smaller.height) // 2))
     live.update(0.9, tr("pb_saving"))
     save_png(img, png_path, settings)
@@ -2172,7 +2236,7 @@ def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, 
     subtitle = next((v for v in versions if len(v) + 4 <= n_cols), versions[-1])
     legend = pack_legend(G, n_cols - 4)
     # still doesn't fit (very long title?): grow the page, save() shrinks it back
-    legend_width = max(sum(len(t) for entry in line for t, _ in entry) + 4 * (len(line) - 1) for line in legend)
+    legend_width = max(sum(len(t) for entry in line for t, _, _ in entry) + 4 * (len(line) - 1) for line in legend)
     need_cols = max(n_cols, map_w + 4, len(params["title"]) + 8, len(subtitle) + 4, legend_width + 4)
     need_rows = max(n_rows, map_h + len(legend) + 7)
     work_w, work_h, shrink = width, height, 1.0

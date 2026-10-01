@@ -45,7 +45,7 @@ Compatibile con qualunque gioco di ruolo analogico "OSR".
 - i **fiumi** sono doppie linee `═║╔╗`;
 - **città**, **fortezze** e **dungeon** sono riquadri neri con un simbolo bianco.
 
-La mappa esce in nero su sfondo bianco, pronta da stampare su un foglio **A4, A3 o A2** a 600 dpi: il programma ti consiglia il formato più adatto al numero di esagoni e gira il foglio in verticale o in orizzontale da solo, secondo la forma della mappa. Ogni volta ottieni due immagini della stessa mappa: una **senza numeri** (da mostrare ai giocatori) e una **con il numero in ogni esagono** (per il master).
+La mappa esce in nero su sfondo bianco, pronta da stampare su un foglio **A4, A3 o A2** a 600 dpi, oppure, se preferisci, **a colori** su sfondo bianco o nero: il programma ti consiglia il formato più adatto al numero di esagoni e gira il foglio in verticale o in orizzontale da solo, secondo la forma della mappa. Ogni volta ottieni due immagini della stessa mappa: una **senza numeri** (da mostrare ai giocatori) e una **con il numero in ogni esagono** (per il master).
 
 ---
 
@@ -155,6 +155,7 @@ Poi compare la schermata di benvenuto, con il titolo e un disegno: premi **INVIO
 7. **Titolo** stampato in cima alla mappa.
 8. **Scala:** quante miglia copre ogni esagono. `1` = 2 miglia, `2` = 6 miglia (la risposta pronta), `3` = 12 miglia, `4` = 24 miglia, `5` = lo scrivi tu: un numero di miglia, oppure un testo qualsiasi come `5 km` o `1 giorno`. Viene stampata sotto il titolo, come "1 esagono = 6 miglia".
 9. Se usare **solo i caratteri base della tastiera** (senza simboli come ♣ ▲ ≈). Di solito rispondi no: basta premere Invio.
+10. **Colori:** `1` = bianco e nero, per la stampa (la risposta pronta); `2` = a colori: foreste verdi, mare e laghi blu, deserti color sabbia, paludi verde oliva, città rosse e così via. Solo per la mappa a colori il programma chiede poi lo **sfondo**: `1` = bianco, `2` = nero.
 
 Finite le domande compare un mago con la scritta **"L'incantesimo di evocazione ha inizio!"** (in inglese: *"The conjuring spell begins!"*): da qui il programma si mette al lavoro.
 
@@ -166,7 +167,7 @@ Mentre lavora, mostra i passaggi che sta facendo, ognuno con una **barra di avan
 
 Durante il disegno delle due immagini, che è la parte più lunga, compare anche una seconda barra con la percentuale, che si aggiorna sul posto fino a `100%  fatto`. Quando la mappa è pronta ti chiede l'ultima cosa:
 
-10. **Formato di stampa** delle due mappe: `A4`, `A3` o `A2`. Il programma valuta il formato in base al numero di esagoni: prima della domanda vedi, per ogni formato, quanto verranno grandi gli esagoni e i caratteri, e se saranno ben leggibili. La risposta pronta tra parentesi è il **formato consigliato**, cioè il più piccolo in cui la mappa si legge bene; più esagoni hai scelto, più grande sarà. **La scelta finale è tua:** premi Invio per il formato consigliato, oppure scrivine un altro. Esempio:
+11. **Formato di stampa** delle due mappe: `A4`, `A3` o `A2`. Il programma valuta il formato in base al numero di esagoni: prima della domanda vedi, per ogni formato, quanto verranno grandi gli esagoni e i caratteri, e se saranno ben leggibili. La risposta pronta tra parentesi è il **formato consigliato**, cioè il più piccolo in cui la mappa si legge bene; più esagoni hai scelto, più grande sarà. **La scelta finale è tua:** premi Invio per il formato consigliato, oppure scrivine un altro. Esempio:
 
    ```
    · Griglia di 12 x 30 esagoni: ecco come verrebbe stampata su ogni formato (esagono misurato da lato piatto a lato piatto)
@@ -189,7 +190,7 @@ Ogni mappa ha un **seme**: un codice di 24 lettere e cifre a gruppi di quattro, 
 
 Il seme contiene tutto ciò che dà forma alla terra: il numero di esagoni, le città, le fortezze e i dungeon, le percentuali di terreno, i fiumi e tutte le scelte casuali. Per questo **lo stesso seme dà sempre la stessa mappa**, su qualunque computer, anche se i file della mappa non ci sono più. Per condividere una mappa con qualcuno basta dargli il suo seme.
 
-Per rifare una mappa, avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" rispondi `2` e scrivi il seme. Maiuscole, trattini e spazi non contano, e se sbagli un carattere il programma te lo dice, invece di fare in silenzio una mappa diversa. Poi ti chiede di nuovo solo se usare i caratteri base e, alla fine, il formato di stampa: così puoi rifare la stessa mappa, per esempio, in A3 invece che in A4.
+Per rifare una mappa, avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" rispondi `2` e scrivi il seme. Maiuscole, trattini e spazi non contano, e se sbagli un carattere il programma te lo dice, invece di fare in silenzio una mappa diversa. Poi ti chiede di nuovo solo se usare i caratteri base, il bianco e nero o i colori e, alla fine, il formato di stampa: così puoi rifare la stessa mappa, per esempio, in A3 invece che in A4.
 
 Il titolo, la scala e il formato di stampa non fanno parte del seme, perché non cambiano la terra. Se il PNG della mappa è ancora nella sua cartella `maps_generated/<seme>`, il programma li prende da lì (il formato diventa la risposta pronta); altrimenti usa il titolo e la scala di partenza. Da riga di comando puoi sceglierli tu, per esempio `--riproduci <seme> --titolo "Terre del Nord"`.
 
@@ -230,7 +231,8 @@ I numeri degli esagoni hanno quattro cifre: le prime due indicano la colonna, le
 
 Le immagini hanno già la misura esatta del foglio che hai scelto (A4, A3 o A2), a 600 dpi: si stampano nitide anche sui fogli grandi.
 
-- Stampa sul **formato che hai scelto**, in bianco e nero, con il foglio nello stesso verso dell'immagine (verticale o orizzontale).
+- Stampa sul **formato che hai scelto**, con il foglio nello stesso verso dell'immagine (verticale o orizzontale). Le mappe in bianco e nero vanno bene con qualsiasi stampante; quelle a colori richiedono una stampante a colori.
+- Una mappa a colori con lo **sfondo nero** consuma moltissimo inchiostro: è pensata per lo schermo (tablet, tavoli virtuali) più che per la carta.
 - Nelle opzioni di stampa scegli **"Dimensioni effettive"** o **"100%"**. Evita "Adatta alla pagina", che rimpicciolisce la mappa.
 - Se la tua stampante arriva solo all'A4, per A3 e A2 puoi rivolgerti a una copisteria: porta il file PNG così com'è.
 
@@ -267,6 +269,8 @@ Ogni opzione ha anche un nome inglese (nella tabella dopo la barra `/`), e puoi 
 | `--orientamento` / `--orientation` | Di solito non serve: il verso del foglio segue la forma della mappa. Puoi forzarlo con `verticale` o `orizzontale` (`portrait` o `landscape`) | `--orientamento verticale` |
 | `--output` | Cartella in cui salvare le mappe al posto di `maps_generated`; anche lì ogni mappa ha la sua cartella con il seme | `--output mappe` |
 | `--solo-ascii` / `--ascii-only` | Usa solo lettere e segni semplici della tastiera | `--solo-ascii` |
+| `--colori` / `--colors` | Mappa a colori invece che in bianco e nero | `--colori` |
+| `--sfondo` / `--background` | Sfondo della mappa a colori: `bianco` (default) o `nero` (`white` o `black`). Funziona solo insieme a `--colori` | `--colori --sfondo nero` |
 | `--dimensione` / `--size` | Esagoni `piccola` o `grande` (`small` o `large`) | `--dimensione grande` |
 | `--font` | Usa un file di carattere a tua scelta (deve avere tutte le lettere della stessa larghezza) | `--font consola.ttf` |
 
@@ -319,7 +323,7 @@ Quella barra si aggiorna sulla stessa riga, e compare solo quando il programma g
 La finestra del terminale è troppo stretta: il disegno è largo 94 caratteri e il programma lo taglia per non scombinarlo. Allarga la finestra e riavvia il programma.
 
 **Ho una mappa vecchia con lo sfondo nero.**
-Le versioni precedenti permettevano lo sfondo nero; ora le mappe sono sempre su sfondo bianco. Rifai la mappa dal suo seme (capitolo 4) oppure usa `--riproduci` con il seme: torna uguale, con lo sfondo bianco.
+Le versioni precedenti alla 0.0.2 potevano disegnare la mappa in bianco e nero come bianco su nero; ora non più, e lo sfondo nero è solo per le mappe a colori. Rifai la mappa dal suo seme (capitolo 4): torna uguale, nero su bianco, oppure a colori su nero se scegli i colori e lo sfondo nero.
 
 ---
 

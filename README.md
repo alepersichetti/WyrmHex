@@ -45,7 +45,7 @@ Compatible with any "OSR" tabletop RPG.
 - **rivers** are double lines `═║╔╗`;
 - **cities**, **fortresses** and **dungeons** are black boxes with a white symbol.
 
-The map comes out black on white, ready to print on **A4, A3 or A2** paper at 600 dpi. The program suggests the best paper size for the number of hexes, and turns the sheet upright or sideways by itself to match the shape of the map. Every time you get two pictures of the same map: one **without numbers** (to show your players) and one **with a number in every hex** (for the game master).
+The map comes out black on white, ready to print on **A4, A3 or A2** paper at 600 dpi, or, if you prefer, **in colour** on a white or black background. The program suggests the best paper size for the number of hexes, and turns the sheet upright or sideways by itself to match the shape of the map. Every time you get two pictures of the same map: one **without numbers** (to show your players) and one **with a number in every hex** (for the game master).
 
 ---
 
@@ -155,6 +155,7 @@ Then the welcome screen appears, with the title and a picture: press **ENTER** t
 7. **Title** printed at the top of the map.
 8. **Scale:** how many miles each hex covers. `1` = 2 miles, `2` = 6 miles (the ready-made answer), `3` = 12 miles, `4` = 24 miles, `5` = your own: type a number of miles, or any text such as `5 km` or `1 day`. It's printed under the title, as "1 hex = 6 miles".
 9. Whether to use **only basic keyboard characters** (no symbols like ♣ ▲ ≈). You'll usually answer no: just press Enter.
+10. **Colours:** `1` = black and white, for printing (the ready-made answer); `2` = colour: forests green, sea and lakes blue, deserts sandy, swamps olive, cities red and so on. Only for a colour map does the program then ask for the **background**: `1` = white, `2` = black.
 
 Once the questions are done, a wizard appears with the words **"The conjuring spell begins!"**: from here the program gets to work.
 
@@ -166,7 +167,7 @@ While it works, it shows each step it's taking, each with a **progress bar** tha
 
 While it draws the two pictures, which is the longest part, a second bar shows the percentage and updates in place until it reaches `100%  done`. When the map is ready, it asks you one last thing:
 
-10. **Print format** for the two maps: `A4`, `A3` or `A2`. The program weighs up the format based on the number of hexes: before the question you'll see, for each format, how big the hexes and the letters will be and whether they'll be easy to read. The ready-made answer in brackets is the **suggested format**: the smallest one where the map reads well; the more hexes you chose, the bigger it gets. **The final choice is yours:** press Enter for the suggested format, or type another one. For example:
+11. **Print format** for the two maps: `A4`, `A3` or `A2`. The program weighs up the format based on the number of hexes: before the question you'll see, for each format, how big the hexes and the letters will be and whether they'll be easy to read. The ready-made answer in brackets is the **suggested format**: the smallest one where the map reads well; the more hexes you chose, the bigger it gets. **The final choice is yours:** press Enter for the suggested format, or type another one. For example:
 
    ```
    · Grid of 12 x 30 hexes: this is how it would print on each format (hex measured from flat side to flat side)
@@ -189,7 +190,7 @@ Every map has a **seed**: a code of 24 letters and digits in groups of four, lik
 
 The seed holds everything that shapes the land: the number of hexes, the cities, fortresses and dungeons, the terrain percentages, the rivers and all the random choices. So **the same seed always gives the same map**, on any computer, even if the map's files are gone. To share a map with someone, just give them its seed.
 
-To rebuild a map, start the program, choose the language, answer `2` to "What do you want to do?" and type the seed. Capitals, dashes and spaces don't matter, and if you mistype a character the program tells you, instead of quietly making a different map. The program then only asks again whether to use basic characters and, at the end, the print format: so you can rebuild the same map in A3 instead of A4, for example.
+To rebuild a map, start the program, choose the language, answer `2` to "What do you want to do?" and type the seed. Capitals, dashes and spaces don't matter, and if you mistype a character the program tells you, instead of quietly making a different map. The program then only asks again whether to use basic characters, black and white or colour and, at the end, the print format: so you can rebuild the same map in A3 instead of A4, for example.
 
 The title, the scale and the paper size aren't part of the seed, because they don't change the land. If the map's PNG is still in its folder `maps_generated/<seed>`, the program takes them from there (the paper size becomes the ready-made answer); otherwise it uses the starting title and scale. From the command line you can choose them yourself, for example `--reproduce <seed> --title "Northern Lands"`.
 
@@ -230,7 +231,8 @@ Hex numbers have four digits: the first two are the column, the last two the row
 
 The pictures already have the exact size of the paper you chose (A4, A3 or A2), at 600 dpi: they print sharp even on big sheets.
 
-- Print on **the paper size you chose**, in black and white, with the sheet the same way round as the picture (portrait or landscape).
+- Print on **the paper size you chose**, with the sheet the same way round as the picture (portrait or landscape). Black-and-white maps print fine on any printer; colour maps need a colour printer.
+- A colour map with a **black background** uses a lot of ink: it's meant for screens (tablets, virtual tabletops) rather than paper.
 - In the print options choose **"Actual size"** or **"100%"**. Avoid "Fit to page", which shrinks the map.
 - If your printer only goes up to A4, a print shop can do A3 and A2: bring the PNG file as it is.
 
@@ -266,6 +268,8 @@ Without `--language en` the messages and the texts on the map are in Italian. Ev
 | `--orientation` / `--orientamento` | Usually not needed: the sheet direction follows the shape of the map. You can force it with `portrait` or `landscape` (`verticale` or `orizzontale`) | `--orientation portrait` |
 | `--output` | Folder to save the maps in instead of `maps_generated`; there too, every map gets its own folder named after its seed | `--output maps` |
 | `--ascii-only` / `--solo-ascii` | Use only plain keyboard letters and signs | `--ascii-only` |
+| `--colors` / `--colori` | Colour map instead of black and white | `--colors` |
+| `--background` / `--sfondo` | Background of the colour map: `white` (default) or `black` (`bianco` or `nero`). Only works together with `--colors` | `--colors --background black` |
 | `--size` / `--dimensione` | `small` or `large` hexes (`piccola` or `grande`) | `--size large` |
 | `--font` | Use a font file of your choice (all its letters must be the same width) | `--font consola.ttf` |
 
@@ -318,7 +322,7 @@ That bar updates on the same line, and it only shows up when the program runs in
 The terminal window is too narrow: the picture is 94 characters wide, and the program trims it so it doesn't get scrambled. Make the window wider and start the program again.
 
 **I have an old map with a black background.**
-Earlier versions allowed a black background; now maps are always on white. Rebuild the map from its seed (chapter 4) or use `--reproduce` with the seed: it comes back the same, on a white background.
+Versions before 0.0.2 could draw the black-and-white map as white on black; that's gone, and a black background is now only for colour maps. Rebuild the map from its seed (chapter 4): it comes back the same, black on white, or in colour on black if you choose colour and a black background.
 
 ---
 
