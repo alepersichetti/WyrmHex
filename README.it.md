@@ -182,6 +182,8 @@ Durante il disegno delle due immagini, che è la parte più lunga, compare anche
 
 Alla fine elenca dove sono le città, le fortezze e i dungeon, con il numero del loro esagono: comodo per gli appunti del master.
 
+Per ultima cosa ti chiede se vuoi **modificare questa mappa adesso**. Rispondi `s` per passare subito all'editor (capitolo 5) senza rifare la mappa: la versione modificata viene salvata accanto all'originale, nello stesso formato.
+
 ---
 
 ## 4. Rifare una mappa già fatta
@@ -204,7 +206,7 @@ La mappa rifatta finisce nella cartella `maps_generated/<seme>` e sostituisce i 
 
 ## 5. Modificare una mappa
 
-Puoi cambiare a mano una mappa, esagono per esagono, partendo dal suo seme. Avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" rispondi `3` e scrivi il seme. Come quando rifai una mappa, ti chiede del titolo, della scala e dell'aspetto; poi costruisce la mappa e mostra una tabella con una riga per ogni esagono:
+Puoi cambiare a mano una mappa, esagono per esagono, partendo dal suo seme. Se l'hai appena fatta, rispondi `s` quando il programma ti chiede se vuoi modificarla adesso (capitolo 3). Altrimenti avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" rispondi `3` e scrivi il seme. Come quando rifai una mappa, ti chiede del titolo, della scala e dell'aspetto; poi costruisce la mappa e mostra una tabella con una riga per ogni esagono:
 
 ```
   Esagono  Terreno   Dungeon  Città  Fiume  Direzione  Fortezza
@@ -219,7 +221,7 @@ Sulle mappe con più di 80 esagoni la tabella mostra solo gli esagoni con siti, 
 Poi:
 
 1. Scrivi l'esagono da cambiare come colonna.riga, per esempio `03.07` (vanno bene anche `3.7` e `0307`).
-2. Scegli cosa farne: cambiare il terreno; aggiungere o togliere un dungeon, una città o una fortezza; aggiungere un fiume che nasce da quell'esagono oppure, se ci passa già un fiume, toglierlo tutto, spostare quel tratto di un esagono in una delle sei direzioni, o accorciarlo in modo che finisca o nasca proprio lì.
+2. Scegli cosa farne: cambiare il terreno; aggiungere o togliere un dungeon, una città o una fortezza; aggiungere un fiume che nasce da quell'esagono (lo traccia il programma seguendo la discesa, oppure lo tracci tu) oppure, se ci passa già un fiume, toglierlo tutto, spostare quel tratto di un esagono in una delle sei direzioni, o accorciarlo in modo che finisca o nasca proprio lì.
 3. La tabella ricompare, aggiornata. Scegli se cambiare un altro esagono, generare la mappa con le modifiche, **annullare** l'ultima modifica (puoi annullarne più d'una, una alla volta) o **uscire** senza generare la mappa.
 
 Quando ti chiede l'esagono puoi anche scrivere `T` (tabella completa), `A` (annulla l'ultima modifica) o `E` (esci). In inglese sono `T`, `U` e `Q`.
@@ -229,14 +231,18 @@ Alcune regole tengono la mappa coerente:
 - In un esagono c'è al massimo un sito: se aggiungi una città dove c'è un dungeon, la città prende il suo posto.
 - Siti e fiumi non possono nascere sul mare o sui laghi. Se trasformi un esagono in acqua, il suo sito viene tolto e il fiume che ci passava ora finisce lì.
 - Un tratto di fiume spostato viene ricollegato al resto attraverso gli esagoni vicini. Se non si può (c'è acqua o un altro fiume, oppure il fiume si spezzerebbe), il programma te lo dice e non cambia nulla.
-- Un fiume nuovo scende verso il basso come gli altri; se non trova una strada, prova un esagono più in alto.
+- Un fiume nuovo tracciato dal programma scende verso il basso come gli altri. Le altezze seguono le tue modifiche: se hai trasformato una pianura in montagna, il fiume parte alto come le altre montagne della mappa.
+- In pianura spesso il programma non trova una strada in discesa. In quel caso ti propone di **tracciare il fiume tu**, cosa che puoi anche scegliere fin da subito. Scrivi gli esagoni dopo la sorgente, in ordine e separati da spazi, per esempio `03.08 04.08 05.09`: ognuno deve toccare quello prima. Per farlo sfociare, scrivi per ultimo un esagono di mare o di lago; per farlo confluire in un altro fiume, un esagono di quel fiume. Altrimenti finisce nell'ultimo esagono che hai scritto (o esce dalla mappa, se quell'esagono è sul bordo).
+- Se una modifica cambia il modo in cui finisce *un altro* fiume (hai riempito il lago in cui sfociava, o tolto il fiume in cui confluiva), il programma te lo dice con una nota, per esempio "il fiume che nasce in 09.08 ora finisce in 08.06 senza arrivare all'acqua". Con "annulla" torna com'era.
 - Tutto quello che non hai toccato resta identico alla mappa originale.
 
 La mappa modificata viene salvata nella stessa cartella dell'originale, che resta com'è: `<seme>_edit_nonumber.png` e `<seme>_edit_number.png` (più i .txt), con "(modificata)" dopo il seme sotto il titolo. Le modifiche vengono salvate in `<seme>_edit.json` dopo ogni singolo cambiamento, così non le perdi se esci o chiudi il programma a metà. Il seme da solo dà sempre la mappa originale, ma se scegli di nuovo `3` con lo stesso seme, il programma ti propone di riprendere le modifiche salvate: puoi continuare a modificare, oppure rigenerare subito la mappa modificata, per esempio in un altro formato o a colori.
 
 Le modifiche sono conservate anche dentro il PNG modificato: se `<seme>_edit.json` va perso, il programma le ritrova lì. E se rifai una mappa che ha una versione modificata (scelta `2`, oppure `--riproduci`), il programma ti ricorda che la versione modificata esiste e come ottenerla.
 
-L'editor funziona solo rispondendo alle domande: non c'è un'opzione da riga di comando.
+`<seme>_edit.json` è un file di testo, quindi puoi anche cambiarlo a mano. Quando lo legge, il programma salta quello che non ha senso (un esagono fuori dalla mappa, una città sul mare, un fiume con un buco) e ti dice quante voci ha saltato. Se il file non si legge proprio, il programma non ci scrive sopra: lo rinomina `<seme>_edit_broken.json`, così non va perso, e riparte dalle modifiche nel PNG modificato oppure, se non ci sono, dalla mappa originale.
+
+L'editor vero e proprio funziona solo rispondendo alle domande. Una volta salvate le modifiche, però, puoi rifare la mappa modificata anche da riga di comando con `--riproduci <seme> --modificata` (capitolo 8), per esempio in un altro formato o a colori.
 
 ---
 
@@ -286,6 +292,7 @@ python wyrmhex.py --griglia 30x15 --citta 4 --dungeon 6
 python wyrmhex.py --griglia 50x30 --formato A2
 python wyrmhex.py --mare 30 --pianura 15 --titolo "Isola dei Venti"
 python wyrmhex.py --riproduci 475T-4KM4-MY0B-JNDJ-ZYEQ-K164
+python wyrmhex.py --riproduci 475T-4KM4-MY0B-JNDJ-ZYEQ-K164 --modificata --formato A3
 python wyrmhex.py --griglia 40x25 --casuale
 python wyrmhex.py --language en --grid 30x15 --cities 4
 ```
@@ -304,6 +311,7 @@ Ogni opzione ha anche un nome inglese (nella tabella dopo la barra `/`), e puoi 
 | `--scala` / `--scale` | Miglia per esagono: 2, 6 (default), 12, 24 o un altro numero. Va bene anche un testo libero, come `"8 km"` | `--scala 12` |
 | `--seme` / `--seed` | Con un seme completo, rifà quella mappa (come `--riproduci`). Con un numero da 0 a 1048575, fa una mappa nuova con le tue impostazioni e quel numero per le scelte casuali | `--seme 42` |
 | `--riproduci` / `--reproduce` | Rifà la mappa di quel seme. Titolo, scala e formato vengono dal suo PNG, se è in `maps_generated/<seme>` (o nella cartella di `--output`); un vecchio seme numerico ha bisogno del suo PNG | `--riproduci 475T-4KM4-MY0B-JNDJ-ZYEQ-K164` |
+| `--modificata` / `--edited` | Insieme a `--riproduci` (o a `--seme` con un seme completo): rifà la versione modificata della mappa, con le modifiche salvate dall'editor (capitolo 5). Se la mappa non ha modifiche salvate, il programma lo dice e si ferma | `--riproduci <seme> --modificata` |
 | `--formato` / `--format` | Formato di stampa: `A4`, `A3` o `A2`. Se manca, il programma te lo chiede alla fine, proponendo quello consigliato (o, con `--riproduci`, quello della volta prima) | `--formato A3` |
 | `--orientamento` / `--orientation` | Di solito non serve: il verso del foglio segue la forma della mappa. Puoi forzarlo con `verticale` o `orizzontale` (`portrait` o `landscape`) | `--orientamento verticale` |
 | `--output` | Cartella in cui salvare le mappe al posto di `maps_generated`; anche lì ogni mappa ha la sua cartella con il seme | `--output mappe` |

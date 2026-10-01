@@ -182,6 +182,8 @@ While it draws the two pictures, which is the longest part, a second bar shows t
 
 At the end it lists where the cities, fortresses and dungeons are, with their hex numbers: handy for the game master's notes.
 
+Last of all it asks whether you want to **edit this map now**. Answer `y` to go straight into the editor (chapter 5) without making the map again: the edited version is saved next to the original, on the same paper.
+
 ---
 
 ## 4. Rebuilding a map you already made
@@ -204,7 +206,7 @@ The rebuilt map goes into the `maps_generated/<seed>` folder and replaces the fi
 
 ## 5. Editing a map
 
-You can change a map by hand, hex by hex, starting from its seed. Start the program, choose the language, answer `3` to "What do you want to do?" and type the seed. As when rebuilding a map, it asks about the title, the scale and the look; then it builds the map and shows a table with one line per hex:
+You can change a map by hand, hex by hex, starting from its seed. If you've just made it, answer `y` when the program asks whether to edit it now (chapter 3). Otherwise start the program, choose the language, answer `3` to "What do you want to do?" and type the seed. As when rebuilding a map, it asks about the title, the scale and the look; then it builds the map and shows a table with one line per hex:
 
 ```
   Hex    Terrain   Dungeon  City  River  Direction   Fortress
@@ -219,7 +221,7 @@ On maps with more than 80 hexes the table only lists the hexes with sites, river
 Then:
 
 1. Type the hex you want to change as column.row, for example `03.07` (`3.7` and `0307` work too).
-2. Choose what to do with it: change the terrain; add or remove a dungeon, a city or a fortress; add a river that springs from that hex or, if a river already flows through it, remove the whole river, move that stretch by one hex in one of the six directions, or shorten the river so that it ends or springs right there.
+2. Choose what to do with it: change the terrain; add or remove a dungeon, a city or a fortress; add a river that springs from that hex (the program traces it downhill, or you trace it yourself) or, if a river already flows through it, remove the whole river, move that stretch by one hex in one of the six directions, or shorten the river so that it ends or springs right there.
 3. The table comes back, updated. Choose whether to change another hex, make the map with the changes, **undo** the last change (you can undo several, one at a time), or **quit** without making the map.
 
 When it asks for a hex you can also type `T` (full table), `U` (undo the last change) or `Q` (quit). In Italian they are `T`, `A` and `E`.
@@ -229,14 +231,18 @@ A few rules keep the map consistent:
 - A hex holds at most one site: adding a city where there's a dungeon replaces the dungeon.
 - Sites and rivers can't start on the sea or on lakes. If you turn a hex into water, its site is removed and a river flowing through it now ends there.
 - A moved stretch of river is joined back to the rest through the nearby hexes. If that's not possible (there's water or another river, or the river would break apart), the program says so and changes nothing.
-- A new river flows downhill like the others; if it can't find a way, try a higher hex.
+- A new river traced by the program flows downhill like the others. Heights follow your changes: if you've turned a plain into a mountain, the river starts as high up as the other mountains on the map.
+- On low ground the program often can't find a way downhill. It then offers to let you **trace the river yourself**, which you can also choose straight away. Type the hexes after the spring, in order, separated by spaces, for example `03.08 04.08 05.09`: each one must touch the one before. To make the river flow into the water, end with a sea or lake hex; to make it join another river, end with a hex of that river. Otherwise it ends at the last hex you typed (or leaves the map, if that hex is on the edge).
+- If a change alters how *another* river ends (you filled in the lake it flowed into, or removed the river it joined), the program tells you with a note, for example "the river that springs at 09.08 now ends at 08.06 without reaching water". Undo puts it back.
 - Everything you didn't touch looks exactly as on the original map.
 
 The edited map is saved in the same folder as the original, which stays as it is: `<seed>_edit_nonumber.png` and `<seed>_edit_number.png` (plus the .txt files), with "(edited)" after the seed under the title. The changes are saved in `<seed>_edit.json` after every single change, so you don't lose them if you quit or close the program halfway. The seed alone still gives the original map, but if you choose `3` again with the same seed, the program offers to pick up the saved changes: you can carry on editing, or just make the edited map again, for example on another paper size or in colour.
 
 The changes are also stored inside the edited PNG: if `<seed>_edit.json` gets lost, the program finds them there. And if you rebuild a map that has an edited version (choice `2`, or `--reproduce`), it reminds you that the edited version exists and how to get it.
 
-The editor only works through the questions: there's no command-line option for it.
+`<seed>_edit.json` is plain text, so you can also change it by hand. When the program reads it, it skips anything that doesn't make sense (a hex off the map, a city on the sea, a river with a gap in it) and tells you how many entries it skipped. If the file can't be read at all, the program doesn't write over it: it renames it `<seed>_edit_broken.json`, so nothing is lost, and starts again from the edits in the edited PNG or, if there are none, from the original map.
+
+The editor itself only works through the questions. Once the changes are saved, though, you can make the edited map again from the command line with `--reproduce <seed> --edited` (chapter 8), for example on another paper size or in colour.
 
 ---
 
@@ -286,6 +292,7 @@ python wyrmhex.py --language en --grid 30x15 --cities 4 --dungeons 6
 python wyrmhex.py --language en --grid 50x30 --format A2
 python wyrmhex.py --language en --sea 30 --plains 15 --title "Isle of Winds"
 python wyrmhex.py --language en --reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164
+python wyrmhex.py --language en --reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164 --edited --format A3
 python wyrmhex.py --language en --grid 40x25 --random
 ```
 
@@ -303,6 +310,7 @@ Without `--language en` the messages and the texts on the map are in Italian. Ev
 | `--scale` / `--scala` | Miles per hex: 2, 6 (default), 12, 24 or any other number. Free text, such as `"5 km"`, works too | `--scale 12` |
 | `--seed` / `--seme` | With a full seed, rebuilds that map (like `--reproduce`). With a number from 0 to 1048575, makes a new map with your settings and that number for the random choices | `--seed 42` |
 | `--reproduce` / `--riproduci` | Rebuilds the map of that seed. Title, scale and paper size come from its PNG if it's in `maps_generated/<seed>` (or in the `--output` folder); an old number seed needs its PNG | `--reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164` |
+| `--edited` / `--modificata` | Together with `--reproduce` (or `--seed` with a full seed): makes the edited version of the map again, with the changes saved by the editor (chapter 5). If the map has no saved changes, the program says so and stops | `--reproduce <seed> --edited` |
 | `--format` / `--formato` | Print format: `A4`, `A3` or `A2`. If you leave it out, the program asks you at the end, offering the suggested one (or, with `--reproduce`, the one from last time) | `--format A3` |
 | `--orientation` / `--orientamento` | Usually not needed: the sheet direction follows the shape of the map. You can force it with `portrait` or `landscape` (`verticale` or `orizzontale`) | `--orientation portrait` |
 | `--output` | Folder to save the maps in instead of `maps_generated`; there too, every map gets its own folder named after its seed | `--output maps` |
