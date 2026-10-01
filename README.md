@@ -221,7 +221,7 @@ On maps with more than 80 hexes the table only lists the hexes with sites, river
 Then:
 
 1. Type the hex you want to change as column.row, for example `03.07` (`3.7` and `0307` work too).
-2. Choose what to do with it: change the terrain; add or remove a dungeon, a city or a fortress; add a river that springs from that hex (the program traces it downhill, or you trace it yourself) or, if a river already flows through it, remove the whole river, move that stretch by one hex in one of the six directions, or shorten the river so that it ends or springs right there.
+2. Choose what to do with it: change the terrain; add or remove a dungeon, a city or a fortress; add a river that springs from that hex (the program traces it downhill, or you trace it yourself) or, if a river already flows through it, remove the whole river, move that stretch by one hex (the program only offers the directions the river doesn't already come from or flow to: if it runs from north to south, north and south aren't listed), or shorten the river so that it ends or springs right there.
 3. The table comes back, updated. Choose whether to change another hex, make the map with the changes, **undo** the last change (you can undo several, one at a time), or **quit** without making the map.
 
 When it asks for a hex you can also type `T` (full table), `U` (undo the last change) or `Q` (quit). In Italian they are `T`, `A` and `E`.

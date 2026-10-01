@@ -430,6 +430,8 @@ TEXTS = {
     "ed_river_how": ("  Il fiume:", "  The river:"),
     "ed_river_all": ("togliere tutto il fiume", "remove the whole river"),
     "ed_river_move": ("spostare questo tratto di un esagono", "move this stretch by one hex"),
+    "ed_no_dirs": ("    Da qui il fiume non ha altre direzioni in cui spostarsi.",
+                   "    There's no other direction to move the river to from here."),
     "ed_which_dir": ("  In quale direzione?", "  Which way?"),
     "ed_next": ("\n  E adesso?", "\n  What next?"),
     "ed_next_more": ("modificare un altro esagono", "edit another hex"),
@@ -3006,16 +3008,24 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
                     done.append(tr("ed_did_cut_start", h=name))
         else:
             dirs = pick(TEXTS["ed_dirs"])
-            around = sorted(((direction(h, n), n) for n in grid.neighbours(h)))
-            print(tr("ed_which_dir"))
-            _, target = around[choose([dirs[d] for d, _ in around])]
-            why = move_river_piece(grid, terrain, rivers, river, river["path"].index(h), target)
-            if why:
-                print(tr("ed_no_move", why=tr(why)))
+            # the hexes the river already comes from and goes to are not a move
+            path = river["path"]
+            used = set(path[max(0, i - 1):i]) | set(path[i + 1:i + 2])
+            if i == len(path) - 1 and river["end"][1]:
+                used.add(river["end"][1])
+            around = sorted((direction(h, n), n) for n in grid.neighbours(h) if n not in used)
+            if not around:
+                print(tr("ed_no_dirs"))
             else:
-                for rv in rivers:
-                    fix_river_end(grid, terrain, rv, rivers)
-                done.append(tr("ed_did_river_move", h=show_hex(target), old=name))
+                print(tr("ed_which_dir"))
+                _, target = around[choose([dirs[d] for d, _ in around])]
+                why = move_river_piece(grid, terrain, rivers, river, i, target)
+                if why:
+                    print(tr("ed_no_move", why=tr(why)))
+                else:
+                    for rv in rivers:
+                        fix_river_end(grid, terrain, rv, rivers)
+                    done.append(tr("ed_did_river_move", h=show_hex(target), old=name))
 
     elif action == "river":
         if terrain[h] in WATER:

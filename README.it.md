@@ -221,7 +221,7 @@ Sulle mappe con più di 80 esagoni la tabella mostra solo gli esagoni con siti, 
 Poi:
 
 1. Scrivi l'esagono da cambiare come colonna.riga, per esempio `03.07` (vanno bene anche `3.7` e `0307`).
-2. Scegli cosa farne: cambiare il terreno; aggiungere o togliere un dungeon, una città o una fortezza; aggiungere un fiume che nasce da quell'esagono (lo traccia il programma seguendo la discesa, oppure lo tracci tu) oppure, se ci passa già un fiume, toglierlo tutto, spostare quel tratto di un esagono in una delle sei direzioni, o accorciarlo in modo che finisca o nasca proprio lì.
+2. Scegli cosa farne: cambiare il terreno; aggiungere o togliere un dungeon, una città o una fortezza; aggiungere un fiume che nasce da quell'esagono (lo traccia il programma seguendo la discesa, oppure lo tracci tu) oppure, se ci passa già un fiume, toglierlo tutto, spostare quel tratto di un esagono (il programma propone solo le direzioni da cui il fiume non arriva e verso cui non va già: se scorre da nord a sud, nord e sud non compaiono), o accorciarlo in modo che finisca o nasca proprio lì.
 3. La tabella ricompare, aggiornata. Scegli se cambiare un altro esagono, generare la mappa con le modifiche, **annullare** l'ultima modifica (puoi annullarne più d'una, una alla volta) o **uscire** senza generare la mappa.
 
 Quando ti chiede l'esagono puoi anche scrivere `T` (tabella completa), `A` (annulla l'ultima modifica) o `E` (esci). In inglese sono `T`, `U` e `Q`.
