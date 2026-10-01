@@ -40,7 +40,7 @@ Compatible with any "OSR" tabletop RPG.
 
 **WyrmHex** is a small program that draws a random hex map for old-school (OSR) role-playing campaigns. The map is made only of letters and symbols, like the video games Dwarf Fortress and NetHack:
 
-- **forests** `♣♠`, **mountains** `▲^`, **hills** `∩n`, **deserts** `░·`, **lakes** `≈`;
+- **forests** `♣♠`, **mountains** `▲^`, **hills** `∩n`, **deserts** `░·`, **lakes** `≈`, **swamps** `⌠"` (reeds and tufts of marsh grass, as in Dwarf Fortress);
 - **plains** stay empty and the **sea** is a flat gray area;
 - **rivers** are double lines `═║╔╗`;
 - **cities**, **fortresses** and **dungeons** are black boxes with a white symbol.
@@ -149,7 +149,7 @@ Then the welcome screen appears, with the title and a picture: press **ENTER** t
 1. **What do you want to do?** Type `1` for a new map, `2` to rebuild a map you already made (see chapter 4).
 2. **Hexes across and down:** how many columns and rows of hexes you want. The ready-made answer is `auto`: the program works out by itself how many hexes fill an A4 sheet and stay easy to read (33 × 15).
 3. **Number of dungeons, cities and fortresses** to put on the map (up to 99 of each).
-4. **Terrain percentages:** how much of the map is plains, sea, lakes, hills, mountains, forests and deserts, as whole numbers. They can't add up to more than 100; anything left over becomes plains. If you get it wrong, the program tells you and asks for the numbers again.
+4. **Terrain percentages:** how much of the map is plains, sea, lakes, swamps, hills, mountains, forests and deserts, as whole numbers. Swamps form in low ground, mostly along the coast and around lakes. They can't add up to more than 100; anything left over becomes plains. If you get it wrong, the program tells you and asks for the numbers again.
 5. **Number of rivers** (up to 100): with `-1` the program decides by itself.
 6. **Title** printed at the top of the map.
 7. Whether to use **only basic keyboard characters** (no symbols like ♣ ▲ ≈). You'll usually answer no: just press Enter.
@@ -183,7 +183,7 @@ At the end it lists where the cities, fortresses and dungeons are, with their he
 
 ## 4. Rebuilding a map you already made
 
-Every map has a **seed**: a code of 24 letters and digits in groups of four, like `0RY5-P688-H9F9-56PA-CEQK-194V`. The program shows it while it works and prints it under the title of the map. It's also the name of the map's folder inside `maps_generated` and the start of its file names.
+Every map has a **seed**: a code of 24 letters and digits in groups of four, like `475T-4KM4-MY0B-JNDJ-ZYEQ-K164`. The program shows it while it works and prints it under the title of the map. It's also the name of the map's folder inside `maps_generated` and the start of its file names.
 
 The seed holds everything that shapes the land: the number of hexes, the cities, fortresses and dungeons, the terrain percentages, the rivers and all the random choices. So **the same seed always gives the same map**, on any computer, even if the map's files are gone. To share a map with someone, just give them its seed.
 
@@ -195,7 +195,7 @@ If you rebuild the map in a different language from the first time, the starting
 
 The rebuilt map goes into the `maps_generated/<seed>` folder and replaces the files that were there. The letters are drawn with a font found on your computer: on a different computer they may look a little different, but hexes, terrains, rivers and sites are exactly the same.
 
-**Maps made with earlier versions.** Before, the seed was a plain number, like `482913`, and it only worked together with the settings saved in the map's PNG. You can still type that number: if the PNG is found (in `maps_generated/482913` or in the program's folder), the map comes back the same and gets a seed of the new kind. If the PNG is gone, the program asks you to type in the same settings you used the first time.
+**Maps made with earlier versions.** The first seeds of this kind, made before swamps existed, still work: they give the same map as before, without swamps. Even earlier, the seed was a plain number, like `482913`, and it only worked together with the settings saved in the map's PNG. You can still type that number: if the PNG is found (in `maps_generated/482913` or in the program's folder), the map comes back the same and gets a seed of the new kind. If the PNG is gone, the program asks you to type in the same settings you used the first time.
 
 ---
 
@@ -205,11 +205,11 @@ The first time you use it, the program creates a folder called **`maps_generated
 
 ```
 maps_generated/
-  0RY5-P688-H9F9-56PA-CEQK-194V/
-    0RY5-P688-H9F9-56PA-CEQK-194V_nonumber.png
-    0RY5-P688-H9F9-56PA-CEQK-194V_nonumber.txt
-    0RY5-P688-H9F9-56PA-CEQK-194V_number.png
-    0RY5-P688-H9F9-56PA-CEQK-194V_number.txt
+  475T-4KM4-MY0B-JNDJ-ZYEQ-K164/
+    475T-4KM4-MY0B-JNDJ-ZYEQ-K164_nonumber.png
+    475T-4KM4-MY0B-JNDJ-ZYEQ-K164_nonumber.txt
+    475T-4KM4-MY0B-JNDJ-ZYEQ-K164_number.png
+    475T-4KM4-MY0B-JNDJ-ZYEQ-K164_number.txt
 ```
 
 At the end, the program tells you which folder it saved the files in.
@@ -242,7 +242,7 @@ Instead of answering the questions, you can type everything on one line. Any set
 python wyrmhex.py --language en --grid 30x15 --cities 4 --dungeons 6
 python wyrmhex.py --language en --grid 50x30 --format A2
 python wyrmhex.py --language en --sea 30 --plains 15 --title "Isle of Winds"
-python wyrmhex.py --language en --reproduce 0RY5-P688-H9F9-56PA-CEQK-194V
+python wyrmhex.py --language en --reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164
 ```
 
 Without `--language en` the messages and the texts on the map are in Italian. Every option also has an Italian name (in the table after the slash `/`), and you can mix them as you like.
@@ -252,12 +252,12 @@ Without `--language en` the messages and the texts on the map are in Italian. Ev
 | `--language` / `--lingua` | Language of the messages and of the texts on the map: `en` or `it` | `--language en` |
 | `--grid` / `--griglia` | Columns x rows of hexes (`auto` = fills an A4) | `--grid 20x15` |
 | `--cities`, `--fortresses`, `--dungeons` / `--citta`, `--fortezze`, `--dungeon` | How many sites of each kind (0 to 99) | `--cities 4` |
-| `--plains`, `--sea`, `--lakes`, `--hills`, `--mountains`, `--forests`, `--deserts` / `--pianura`, `--mare`, `--laghi`, `--colline`, `--montagne`, `--foreste`, `--deserti` | Percentage of each terrain, as a whole number | `--sea 25` |
+| `--plains`, `--sea`, `--lakes`, `--swamps`, `--hills`, `--mountains`, `--forests`, `--deserts` / `--pianura`, `--mare`, `--laghi`, `--paludi`, `--colline`, `--montagne`, `--foreste`, `--deserti` | Percentage of each terrain, as a whole number | `--sea 25` |
 | `--rivers` / `--fiumi` | Number of rivers, up to 100 (`-1` = automatic) | `--rivers 3` |
 | `--title` / `--titolo` | Title at the top of the map | `--title "Northern Lands"` |
 | `--scale` / `--scala` | Scale text | `--scale "5 km"` |
 | `--seed` / `--seme` | With a full seed, rebuilds that map (like `--reproduce`). With a number from 0 to 1048575, makes a new map with your settings and that number for the random choices | `--seed 42` |
-| `--reproduce` / `--riproduci` | Rebuilds the map of that seed. Title, scale and paper size come from its PNG if it's in `maps_generated/<seed>` (or in the `--output` folder); an old number seed needs its PNG | `--reproduce 0RY5-P688-H9F9-56PA-CEQK-194V` |
+| `--reproduce` / `--riproduci` | Rebuilds the map of that seed. Title, scale and paper size come from its PNG if it's in `maps_generated/<seed>` (or in the `--output` folder); an old number seed needs its PNG | `--reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164` |
 | `--format` / `--formato` | Print format: `A4`, `A3` or `A2`. If you leave it out, the program asks you at the end, offering the suggested one (or, with `--reproduce`, the one from last time) | `--format A3` |
 | `--orientation` / `--orientamento` | Usually not needed: the sheet direction follows the shape of the map. You can force it with `portrait` or `landscape` (`verticale` or `orizzontale`) | `--orientation portrait` |
 | `--output` | Folder to save the maps in instead of `maps_generated`; there too, every map gets its own folder named after its seed | `--output maps` |

@@ -7,11 +7,11 @@ WyrmHex v0.0.2 - hexcrawl map generator for OSR campaigns
 This program draws a random map made of hexagons ("hexes") for old-school
 role-playing campaigns. The map looks like an old computer screen made
 only of letters and symbols, in the style of the games Dwarf Fortress
-and Moonring:
+and NetHack:
 
   - hexes are drawn with the characters  _ / \\
   - terrains are made of symbols: forest ♣ ♠, mountains ▲ ^, hills ∩ n,
-    lakes ≈, deserts ░ · ; plains are left empty and the sea is plain gray
+    lakes ≈, deserts ░ ·, swamps ⌠ " ; plains are left empty and the sea is plain gray
   - rivers use double-line characters: ═ ║ ╔ ╗ ╚ ╝
   - cities, fortresses and dungeons are white symbols in black boxes
 
@@ -28,7 +28,7 @@ in there, named with its seed (--output chooses another place for them):
   maps_generated/<seed>/<seed>_nonumber.png / .txt   the map without hex numbers
   maps_generated/<seed>/<seed>_number.png / .txt     the same map with a number in every hex
                                      (column + row, e.g. 0101 is the top-left hex)
-  e.g. maps_generated/0RY5-P688-H9F9-56PA-CEQK-194V/0RY5-P688-H9F9-56PA-CEQK-194V_nonumber.png
+  e.g. maps_generated/475T-4KM4-MY0B-JNDJ-ZYEQ-K164/475T-4KM4-MY0B-JNDJ-ZYEQ-K164_nonumber.png
 
 What happens when it runs without options: it asks for the language
 (Italian or English), shows a welcome screen with a wyvern, asks its
@@ -37,7 +37,7 @@ questions, then shows a wizard casting the spell and builds the map in
 the whole job is done; while the two big pictures are drawn and saved, a
 second bar fills up on the same line with the percentage.
 
-The "seed" is a code like 0RY5-P688-H9F9-56PA-CEQK-194V that holds
+The "seed" is a code like 475T-4KM4-MY0B-JNDJ-ZYEQ-K164 that holds
 everything that shapes the land (grid size, sites, terrain percentages,
 rivers and a random number): the same seed always gives the same map, on
 any computer, even without its picture. Title, scale, paper and plain
@@ -48,7 +48,7 @@ How to run it:
   python wyrmhex.py                      (welcome screen, then the program asks you questions)
   python wyrmhex.py --seme 42            (a new map whose random number is 42)
   python wyrmhex.py --griglia 20x15      (choose the grid size yourself)
-  python wyrmhex.py --riproduci 0RY5-P688-H9F9-56PA-CEQK-194V   (rebuild the map of that seed)
+  python wyrmhex.py --riproduci 475T-4KM4-MY0B-JNDJ-ZYEQ-K164   (rebuild the map of that seed)
   python wyrmhex.py --formato A3         (print format: A4, A3 or A2)
   python wyrmhex.py --language en --seed 42   (English texts; every option also has an English name)
   python wyrmhex.py --solo-ascii         (only the most basic keyboard characters)
@@ -94,12 +94,13 @@ Image.MAX_IMAGE_PIXELS = None
 VERSION = "0.0.2"
 
 # The seven terrain types a hex can have.
-PLAINS, SEA, LAKE, HILLS, MOUNTAINS, FOREST, DESERT = (
-    "plains", "sea", "lake", "hills", "mountains", "forest", "desert")
+PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT = (
+    "plains", "sea", "lake", "swamp", "hills", "mountains", "forest", "desert")
 WATER = (SEA, LAKE)   # the two "water" terrains
 
 # Terrain names as the user reads them in the console: (Italian, English).
 TERRAIN_NAMES = {PLAINS: ("pianura", "plains"), SEA: ("mare", "sea"), LAKE: ("lago", "lake"),
+                 SWAMP: ("palude", "swamp"),
                  HILLS: ("colline", "hills"), MOUNTAINS: ("montagne", "mountains"),
                  FOREST: ("foresta", "forest"), DESERT: ("deserto", "desert")}
 
@@ -109,13 +110,14 @@ TERRAIN_OPTIONS = [
     ("pianura", "plains", PLAINS, ("Pianura", "Plains")),
     ("mare", "sea", SEA, ("Mare", "Sea")),
     ("laghi", "lakes", LAKE, ("Laghi", "Lakes")),
+    ("paludi", "swamps", SWAMP, ("Paludi", "Swamps")),
     ("colline", "hills", HILLS, ("Colline", "Hills")),
     ("montagne", "mountains", MOUNTAINS, ("Montagne", "Mountains")),
     ("foreste", "forests", FOREST, ("Foreste", "Forests")),
     ("deserti", "deserts", DESERT, ("Deserti", "Deserts")),
 ]
 # Percentages used when the user does not choose their own.
-DEFAULT_PERCENTAGES = {PLAINS: 30, SEA: 15, LAKE: 3, HILLS: 15,
+DEFAULT_PERCENTAGES = {PLAINS: 27, SEA: 15, LAKE: 3, SWAMP: 3, HILLS: 15,
                        MOUNTAINS: 10, FOREST: 20, DESERT: 5}
 
 # The three kinds of sites placed on the map, and their printed names.
@@ -156,6 +158,8 @@ TERRAIN_GLYPHS = {
     FOREST:    [("♣", "T", 5), ("♠", "Y", 3), (" ", " ", 1)],
     DESERT:    [("░", ".", 3), ("·", ":", 3), (":", ".", 1), (" ", " ", 2)],
     LAKE:      [("≈", "~", 6), (" ", " ", 1)],        # ≈ prints more clearly than ~
+    # swamps as in Dwarf Fortress: reeds ⌠ and tufts of marsh grass "
+    SWAMP:     [("⌠", '"', 4), ('"', ",", 4), (" ", " ", 2)],
 }
 # symbol for each kind of site: (fancy, plain)
 SITE_GLYPHS = {CITY: ("⌂", "C"), FORTRESS: ("Ω", "F"), DUNGEON: (">", ">")}
@@ -338,8 +342,10 @@ TEXTS = {
     "step_relief": ("Rilievi: gli esagoni più alti diventano montagne, i successivi colline",
                     "Relief: the highest hexes become mountains, the next ones hills"),
     "info_relief": ("{m} montagne, {h} colline", "{m} mountains, {h} hills"),
-    "step_wetness": ("Umidità: foreste nelle zone umide e vicino all'acqua, deserti in quelle aride, il resto pianura",
-                     "Wetness: forests where it is wet and near water, deserts where it is dry, plains elsewhere"),
+    "step_wetness": ("Umidità: paludi nelle zone basse vicino all'acqua, foreste nelle zone umide, "
+                     "deserti in quelle aride, il resto pianura",
+                     "Wetness: swamps in low ground near water, forests where it is wet, "
+                     "deserts where it is dry, plains elsewhere"),
     "info_result": ("Risultato: {list}", "Result: {list}"),
     "step_rivers": ("Fiumi: dalle sorgenti in quota verso il basso fino a mare, lago o bordo",
                     "Rivers: from high springs downhill to the sea, a lake or the edge"),
@@ -411,11 +417,12 @@ TEXTS = {
     "leg_desert": ("Deserto", "Desert"),
     "leg_sea": ("Mare", "Sea"),
     "leg_lake": ("Lago", "Lake"),
+    "leg_swamp": ("Palude", "Swamp"),
     "leg_river": ("Fiume", "River"),
     # command-line help
-    "cli_description": ("WyrmHex: genera una mappa hexcrawl OSR in stile ASCII (Dwarf Fortress / Moonring), "
+    "cli_description": ("WyrmHex: genera una mappa hexcrawl OSR in stile ASCII (Dwarf Fortress / NetHack), "
                         "PNG a 600 dpi in formato A4, A3 o A2 + TXT.",
-                        "WyrmHex: makes an ASCII-style OSR hexcrawl map (Dwarf Fortress / Moonring), "
+                        "WyrmHex: makes an ASCII-style OSR hexcrawl map (Dwarf Fortress / NetHack), "
                         "600 dpi PNG on A4, A3 or A2 + TXT."),
     "mv_grid": ("BASExALTEZZA", "COLSxROWS"),
     "mv_seed": ("SEME", "SEED"),
@@ -651,31 +658,36 @@ def check_percentages(perc):
 # THE SEED
 #
 # A seed is a code of 24 letters and digits, written in groups of four:
-#   e.g. 0RY5-P688-H9F9-56PA-CEQK-194V
+#   e.g. 475T-4KM4-MY0B-JNDJ-ZYEQ-K164
 # It holds everything that shapes the land: grid size, number of sites,
-# terrain percentages, number of rivers, and a random number. So the same
+# terrain percentages (swamps included), number of rivers, and a random number. So the same
 # seed always gives the same map, on any computer, even without the picture
 # it came from. What only changes the look of the page (title, scale, paper,
 # plain symbols) is not in the seed: it is chosen each time.
 #
 # How it works: all those numbers are packed into one big whole number
 # (like writing a date as 20260930), which is then written with the 32
-# symbols below. The last 3 symbols are a check: if a symbol is typed wrong,
+# symbols below. The last 2 symbols are a check: if a symbol is typed wrong,
 # the check does not match and the program says the seed is not valid,
 # instead of quietly making a different map.
 #
-# Older versions used a plain number (e.g. 482913) as the seed, together
-# with settings saved in the PNG. Those maps can still be rebuilt from their
-# PNG; they then get a seed of the new kind.
+# The first seeds of this kind (version 1) had no swamps: they are still
+# read, and give the same map as before. Even older versions used a plain
+# number (e.g. 482913) as the seed, together with settings saved in the PNG.
+# Those maps can still be rebuilt from their PNG; they then get a new seed.
 # ==========================================================================
-SEED_VERSION = 1                     # changes only if the way maps are built ever changes
+SEED_VERSION = 2                     # changes when something new goes into the seed
 SEED_SYMBOLS = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"   # no I, L, O, U: too easy to misread
-SEED_DATA_SYMBOLS, SEED_CHECK_SYMBOLS = 21, 3
+SEED_LENGTH = 24                     # symbols in a seed, check included
 MAX_SITES = 99                       # at most 99 cities, 99 fortresses and 99 dungeons
 MAX_RIVERS = 100
 RANDOM_NUMBERS = 2 ** 20             # the random part of a seed goes from 0 to 1048575
 # The plains are not in the seed: they are whatever the other terrains leave free.
-SEED_TERRAINS = (SEA, LAKE, HILLS, MOUNTAINS, FOREST, DESERT)
+# Version 1 seeds (before swamps) are still read: they simply have no swamps.
+SEED_TERRAINS = {1: (SEA, LAKE, HILLS, MOUNTAINS, FOREST, DESERT),
+                 2: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)}
+# How a seed is split into data and check symbols, for each version.
+SEED_CHECK_SYMBOLS = {1: 3, 2: 2}
 
 
 def new_seed():
@@ -683,11 +695,11 @@ def new_seed():
     return secrets.randbelow(RANDOM_NUMBERS)
 
 
-def seed_fields(p, number):
+def seed_fields(p, number, version=SEED_VERSION):
     """The numbers packed into a seed, each with how many different values it can take."""
-    fields = [(SEED_VERSION, 16), (p["columns"] - 2, 79), (p["rows"] - 2, 79),
+    fields = [(version, 16), (p["columns"] - 2, 79), (p["rows"] - 2, 79),
               (p["dungeons"], MAX_SITES + 1), (p["cities"], MAX_SITES + 1), (p["fortresses"], MAX_SITES + 1)]
-    fields += [(p["percentages"][terrain], 101) for terrain in SEED_TERRAINS]
+    fields += [(p["percentages"].get(terrain, 0), 101) for terrain in SEED_TERRAINS[version]]
     fields += [(p["rivers"] + 1, MAX_RIVERS + 2), (number, RANDOM_NUMBERS)]
     return fields
 
@@ -701,9 +713,16 @@ def to_symbols(value, length):
     return symbols
 
 
-def seed_check(data):
-    """The 3 check symbols of a seed, worked out from its other 21 symbols."""
-    return to_symbols(zlib.crc32(data.encode()) % 32 ** SEED_CHECK_SYMBOLS, SEED_CHECK_SYMBOLS)
+def seed_check(data, version=SEED_VERSION):
+    """The check symbols at the end of a seed, worked out from the symbols before them.
+    Version 2: each symbol's value is multiplied by its position (1, 2, 3...), everything
+    is added up and divided by 1021; the remainder is the check. A single wrong symbol,
+    or two neighbouring symbols swapped, always changes the remainder, so the mistake
+    is always noticed. (Version 1 used a different sum, kept to read old seeds.)"""
+    if version == 1:
+        return to_symbols(zlib.crc32(data.encode()) % 32 ** 3, 3)
+    total = sum((i + 1) * SEED_SYMBOLS.index(c) for i, c in enumerate(data))
+    return to_symbols(total % 1021, SEED_CHECK_SYMBOLS[version])
 
 
 def make_seed(p, number):
@@ -715,7 +734,7 @@ def make_seed(p, number):
         if value != int(value) or not 0 <= value < choices:
             return None
         packed = packed * choices + int(value)
-    data = to_symbols(packed, SEED_DATA_SYMBOLS)
+    data = to_symbols(packed, SEED_LENGTH - SEED_CHECK_SYMBOLS[SEED_VERSION])
     code = data + seed_check(data)
     return "-".join(code[i:i + 4] for i in range(0, len(code), 4))
 
@@ -726,26 +745,38 @@ def read_seed(text):
     letters, missing dashes or spaces, O typed for 0, I or L typed for 1."""
     code = text.strip().upper().replace("-", "").replace(" ", "")
     code = code.replace("O", "0").replace("I", "1").replace("L", "1")
-    if len(code) != SEED_DATA_SYMBOLS + SEED_CHECK_SYMBOLS or any(c not in SEED_SYMBOLS for c in code):
+    if len(code) != SEED_LENGTH or any(c not in SEED_SYMBOLS for c in code):
         return None
-    data, check = code[:SEED_DATA_SYMBOLS], code[SEED_DATA_SYMBOLS:]
-    if seed_check(data) != check:
+    # try the newest kind of seed first, then the older ones
+    for version in sorted(SEED_TERRAINS, reverse=True):
+        unpacked = unpack_seed(code, version)
+        if unpacked:
+            return unpacked
+    return None
+
+
+def unpack_seed(code, version):
+    """Read a seed as one of version 'version'. Returns (land settings, random number), or None."""
+    split = SEED_LENGTH - SEED_CHECK_SYMBOLS[version]
+    data, check = code[:split], code[split:]
+    if seed_check(data, version) != check:
         return None
     packed = 0
     for c in data:
         packed = packed * 32 + SEED_SYMBOLS.index(c)
     # take the numbers out again, last one first
-    blank = {"columns": 2, "rows": 2, "dungeons": 0, "cities": 0, "fortresses": 0,
-             "percentages": {terrain: 0 for terrain in SEED_TERRAINS}, "rivers": 0}
+    blank = {"columns": 2, "rows": 2, "dungeons": 0, "cities": 0, "fortresses": 0, "percentages": {}, "rivers": 0}
     values = []
-    for _, choices in reversed(seed_fields(blank, 0)):
+    for _, choices in reversed(seed_fields(blank, 0, version)):
         packed, value = divmod(packed, choices)
         values.append(value)
-    if packed or values.pop() != SEED_VERSION:
+    if packed or values.pop() != version:
         return None
+    terrains = SEED_TERRAINS[version]
     columns, rows, dungeons, cities, fortresses, *rest = [v for v in reversed(values)]
-    percentages = dict(zip(SEED_TERRAINS, rest[:len(SEED_TERRAINS)]))
-    rivers, number = rest[len(SEED_TERRAINS)] - 1, rest[-1]
+    percentages = dict(zip(terrains, rest[:len(terrains)]))
+    rivers, number = rest[len(terrains)] - 1, rest[-1]
+    percentages.setdefault(SWAMP, 0)
     percentages[PLAINS] = 100 - sum(percentages.values())
     land = {"columns": columns + 2, "rows": rows + 2, "dungeons": dungeons, "cities": cities,
             "fortresses": fortresses, "rivers": rivers,
@@ -882,6 +913,8 @@ def complete_settings(p):
     for key, value in (("ascii_only", False), ("size", "auto"), ("font", None), ("paper", None),
                        ("title", tr("default_title")), ("scale", tr("default_scale"))):
         p.setdefault(key, value)
+    # maps made before swamps existed have no swamp percentage: they had no swamps
+    p["percentages"].setdefault(SWAMP, 0)
     # maps are always black on white now: an old "white on black" choice is dropped
     p.pop("inverted", None)
     # the sheet direction follows the shape of the map
@@ -1395,6 +1428,23 @@ def place_mountains_and_hills(grid, height, n_mountains, n_hills, rng, terrain):
         terrain[h] = HILLS
 
 
+def place_swamps(grid, height, n, rng, terrain):
+    """Turn 'n' free hexes into swamps: low ground, best of all next to the sea or a lake.
+    The lowest free hexes are close to each other, so swamps come out in patches."""
+    if n <= 0:
+        # no random numbers are used: a map without swamps comes out exactly as before swamps existed
+        return
+    to_water = grid.distances_from([h for h in grid.hexes if terrain[h] in WATER])
+    score = {}
+    for h in grid.hexes:
+        if terrain[h] is None:
+            d = to_water[h] if to_water[h] is not None else 4
+            # lower is better: low height, close to water, plus a pinch of chance
+            score[h] = height[h] + 0.06 * min(d, 4) + 0.05 * rng.random()
+    for h in sorted(score, key=score.get)[:n]:
+        terrain[h] = SWAMP
+
+
 def place_forests_and_deserts(grid, n_forests, n_deserts, rng, terrain):
     """Fill the remaining hexes: forests where it is wet, deserts where it is dry, plains elsewhere."""
     # a random "wetness" map, made of big and small patches
@@ -1493,9 +1543,9 @@ def place_sites(grid, terrain, rivers, wanted, rng, log):
 
     # how much each kind of site likes each terrain (higher = more likely)
     base_weights = {
-        CITY: {PLAINS: 4, HILLS: 2, FOREST: 1.2, DESERT: 0.6, MOUNTAINS: 0.2},
-        FORTRESS: {HILLS: 4, MOUNTAINS: 3, PLAINS: 1.5, FOREST: 1, DESERT: 0.8},
-        DUNGEON: {MOUNTAINS: 4, HILLS: 3.5, FOREST: 3, DESERT: 2.5, PLAINS: 1},
+        CITY: {PLAINS: 4, HILLS: 2, FOREST: 1.2, DESERT: 0.6, SWAMP: 0.3, MOUNTAINS: 0.2},
+        FORTRESS: {HILLS: 4, MOUNTAINS: 3, PLAINS: 1.5, FOREST: 1, DESERT: 0.8, SWAMP: 0.5},
+        DUNGEON: {MOUNTAINS: 4, HILLS: 3.5, FOREST: 3, SWAMP: 3, DESERT: 2.5, PLAINS: 1},
     }
     sites, taken = [], set()
     for kind, n in ((CITY, wanted[CITY]), (FORTRESS, wanted[FORTRESS]), (DUNGEON, wanted[DUNGEON])):
@@ -1553,8 +1603,8 @@ def place_sites(grid, terrain, rivers, wanted, rng, log):
 
 
 def build_land(params, counts, grid, rng, log):
-    """Steps 3 to 9: heights, sea, lakes, mountains and hills, forests and
-    deserts, rivers, sites. Returns (terrain of every hex, rivers, sites)."""
+    """Steps 3 to 9: heights, sea, lakes, mountains and hills, swamps, forests
+    and deserts, rivers, sites. Returns (terrain of every hex, rivers, sites)."""
     log.step(tr("step_heights"))
     height = make_heights(grid, rng)
     log.info(tr("info_heights", n=len(grid.hexes)))
@@ -1579,9 +1629,10 @@ def build_land(params, counts, grid, rng, log):
     log.info(tr("info_relief", m=counts[MOUNTAINS], h=counts[HILLS]))
 
     log.step(tr("step_wetness"))
+    place_swamps(grid, height, counts[SWAMP], rng, terrain)
     place_forests_and_deserts(grid, counts[FOREST], counts[DESERT], rng, terrain)
     actual = {t: sum(1 for h in grid.hexes if terrain[h] == t)
-              for t in (PLAINS, SEA, LAKE, HILLS, MOUNTAINS, FOREST, DESERT)}
+              for t in (PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)}
     log.info(tr("info_result", list=", ".join(f"{pick(TERRAIN_NAMES[t])} {n}" for t, n in actual.items())))
 
     log.step(tr("step_rivers"))
@@ -1998,7 +2049,8 @@ def legend_entries(G):
         (G("▲^", "^A"), tr("leg_mountains"), "b"), (G("∩n", "nm"), tr("leg_hills"), "b"),
         (G("♣♠", "TY"), tr("leg_forest"), "b"), ("", tr("leg_plains"), "b"), (G("░·", ".:"), tr("leg_desert"), "b"),
         (G("≈≈", "~~"), tr("leg_sea"), "g"),   # "g": this sample is drawn as a gray patch
-        (G("≈≈", "~~"), tr("leg_lake"), "b"), (G("═╗", "=+"), tr("leg_river"), "b"),
+        (G("≈≈", "~~"), tr("leg_lake"), "b"), (G('⌠"', '",'), tr("leg_swamp"), "b"),
+        (G("═╗", "=+"), tr("leg_river"), "b"),
     ]
     sites = [(G(*SITE_GLYPHS[kind]), pick(SITE_NAMES[kind])) for kind in (CITY, FORTRESS, DUNGEON)]
     if G.ascii_only:

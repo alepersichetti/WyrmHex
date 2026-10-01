@@ -40,7 +40,7 @@ Compatibile con qualunque gioco di ruolo analogico "OSR".
 
 **WyrmHex** è un piccolo programma che disegna a caso una mappa a esagoni per campagne di gioco di ruolo old school (OSR). La mappa è fatta solo di lettere e simboli, come nei videogiochi Dwarf Fortress e NetHack:
 
-- **foreste** `♣♠`, **montagne** `▲^`, **colline** `∩n`, **deserti** `░·`, **laghi** `≈`;
+- **foreste** `♣♠`, **montagne** `▲^`, **colline** `∩n`, **deserti** `░·`, **laghi** `≈`, **paludi** `⌠"` (canne e ciuffi d'erba palustre, come in Dwarf Fortress);
 - la **pianura** resta vuota e il **mare** è una campitura grigia;
 - i **fiumi** sono doppie linee `═║╔╗`;
 - **città**, **fortezze** e **dungeon** sono riquadri neri con un simbolo bianco.
@@ -149,7 +149,7 @@ Poi compare la schermata di benvenuto, con il titolo e un disegno: premi **INVIO
 1. **Cosa vuoi fare?** Scrivi `1` per una mappa nuova, `2` per rifare una mappa già fatta (vedi il capitolo 4).
 2. **Esagoni in base e in altezza:** quante colonne e quante righe di esagoni vuoi. La risposta pronta è `auto`: il programma sceglie da solo quanti esagoni riempiono un foglio A4 restando leggibili (33 × 15).
 3. **Numero di dungeon, città e fortezze** da mettere sulla mappa (fino a 99 per tipo).
-4. **Percentuali di terreno:** quanta parte della mappa è pianura, mare, laghi, colline, montagne, foreste e deserti, in numeri interi. La somma non può superare 100; se resta qualcosa, diventa pianura. Se sbagli, il programma te lo dice e ti fa reinserire i numeri.
+4. **Percentuali di terreno:** quanta parte della mappa è pianura, mare, laghi, paludi, colline, montagne, foreste e deserti, in numeri interi. Le paludi nascono nelle zone basse, soprattutto lungo la costa e attorno ai laghi. La somma non può superare 100; se resta qualcosa, diventa pianura. Se sbagli, il programma te lo dice e ti fa reinserire i numeri.
 5. **Numero di fiumi** (fino a 100): con `-1` il programma decide da solo.
 6. **Titolo** stampato in cima alla mappa.
 7. Se usare **solo i caratteri base della tastiera** (senza simboli come ♣ ▲ ≈). Di solito rispondi no: basta premere Invio.
@@ -183,7 +183,7 @@ Alla fine elenca dove sono le città, le fortezze e i dungeon, con il numero del
 
 ## 4. Rifare una mappa già fatta
 
-Ogni mappa ha un **seme**: un codice di 24 lettere e cifre a gruppi di quattro, come `0RY5-P688-H9F9-56PA-CEQK-194V`. Il programma lo mostra mentre lavora e lo stampa sotto il titolo della mappa. È anche il nome della cartella della mappa dentro `maps_generated` e l'inizio del nome dei suoi file.
+Ogni mappa ha un **seme**: un codice di 24 lettere e cifre a gruppi di quattro, come `475T-4KM4-MY0B-JNDJ-ZYEQ-K164`. Il programma lo mostra mentre lavora e lo stampa sotto il titolo della mappa. È anche il nome della cartella della mappa dentro `maps_generated` e l'inizio del nome dei suoi file.
 
 Il seme contiene tutto ciò che dà forma alla terra: il numero di esagoni, le città, le fortezze e i dungeon, le percentuali di terreno, i fiumi e tutte le scelte casuali. Per questo **lo stesso seme dà sempre la stessa mappa**, su qualunque computer, anche se i file della mappa non ci sono più. Per condividere una mappa con qualcuno basta dargli il suo seme.
 
@@ -195,7 +195,7 @@ Se rifai la mappa in una lingua diversa da quella della prima volta, il titolo e
 
 La mappa rifatta finisce nella cartella `maps_generated/<seme>` e sostituisce i file che c'erano. Le lettere sono disegnate con un carattere trovato sul tuo computer: su un altro computer possono avere un aspetto un po' diverso, ma esagoni, terreni, fiumi e siti sono identici.
 
-**Mappe fatte con le versioni precedenti.** Prima il seme era un semplice numero, come `482913`, e funzionava solo insieme alle impostazioni salvate nel PNG della mappa. Puoi ancora scrivere quel numero: se il PNG viene trovato (in `maps_generated/482913` o nella cartella del programma), la mappa torna uguale e riceve un seme del nuovo tipo. Se il PNG non c'è più, il programma ti chiede di reinserire le stesse impostazioni usate la prima volta.
+**Mappe fatte con le versioni precedenti.** I primi semi di questo tipo, fatti prima che esistessero le paludi, funzionano ancora: danno la stessa mappa di prima, senza paludi. Ancora prima il seme era un semplice numero, come `482913`, e funzionava solo insieme alle impostazioni salvate nel PNG della mappa. Puoi ancora scrivere quel numero: se il PNG viene trovato (in `maps_generated/482913` o nella cartella del programma), la mappa torna uguale e riceve un seme del nuovo tipo. Se il PNG non c'è più, il programma ti chiede di reinserire le stesse impostazioni usate la prima volta.
 
 ---
 
@@ -205,11 +205,11 @@ La prima volta che lo usi, il programma crea accanto a `wyrmhex.py` una cartella
 
 ```
 maps_generated/
-  0RY5-P688-H9F9-56PA-CEQK-194V/
-    0RY5-P688-H9F9-56PA-CEQK-194V_nonumber.png
-    0RY5-P688-H9F9-56PA-CEQK-194V_nonumber.txt
-    0RY5-P688-H9F9-56PA-CEQK-194V_number.png
-    0RY5-P688-H9F9-56PA-CEQK-194V_number.txt
+  475T-4KM4-MY0B-JNDJ-ZYEQ-K164/
+    475T-4KM4-MY0B-JNDJ-ZYEQ-K164_nonumber.png
+    475T-4KM4-MY0B-JNDJ-ZYEQ-K164_nonumber.txt
+    475T-4KM4-MY0B-JNDJ-ZYEQ-K164_number.png
+    475T-4KM4-MY0B-JNDJ-ZYEQ-K164_number.txt
 ```
 
 Alla fine il programma ti dice in quale cartella ha messo i file.
@@ -242,7 +242,7 @@ Invece di rispondere alle domande, puoi scrivere tutto su una riga. Le impostazi
 python wyrmhex.py --griglia 30x15 --citta 4 --dungeon 6
 python wyrmhex.py --griglia 50x30 --formato A2
 python wyrmhex.py --mare 30 --pianura 15 --titolo "Isola dei Venti"
-python wyrmhex.py --riproduci 0RY5-P688-H9F9-56PA-CEQK-194V
+python wyrmhex.py --riproduci 475T-4KM4-MY0B-JNDJ-ZYEQ-K164
 python wyrmhex.py --language en --grid 30x15 --cities 4
 ```
 
@@ -253,12 +253,12 @@ Ogni opzione ha anche un nome inglese (nella tabella dopo la barra `/`), e puoi 
 | `--lingua` / `--language` | Lingua dei messaggi e dei testi della mappa: `it` o `en` | `--lingua en` |
 | `--griglia` / `--grid` | Colonne x righe di esagoni (`auto` = riempie un A4) | `--griglia 20x15` |
 | `--citta`, `--fortezze`, `--dungeon` / `--cities`, `--fortresses`, `--dungeons` | Quanti siti di ogni tipo (da 0 a 99) | `--citta 4` |
-| `--pianura`, `--mare`, `--laghi`, `--colline`, `--montagne`, `--foreste`, `--deserti` / `--plains`, `--sea`, `--lakes`, `--hills`, `--mountains`, `--forests`, `--deserts` | Percentuale di ogni terreno, in numero intero | `--mare 25` |
+| `--pianura`, `--mare`, `--laghi`, `--paludi`, `--colline`, `--montagne`, `--foreste`, `--deserti` / `--plains`, `--sea`, `--lakes`, `--swamps`, `--hills`, `--mountains`, `--forests`, `--deserts` | Percentuale di ogni terreno, in numero intero | `--mare 25` |
 | `--fiumi` / `--rivers` | Numero di fiumi, fino a 100 (`-1` = automatico) | `--fiumi 3` |
 | `--titolo` / `--title` | Titolo in cima alla mappa | `--titolo "Terre del Nord"` |
 | `--scala` / `--scale` | Testo della scala | `--scala "8 km"` |
 | `--seme` / `--seed` | Con un seme completo, rifà quella mappa (come `--riproduci`). Con un numero da 0 a 1048575, fa una mappa nuova con le tue impostazioni e quel numero per le scelte casuali | `--seme 42` |
-| `--riproduci` / `--reproduce` | Rifà la mappa di quel seme. Titolo, scala e formato vengono dal suo PNG, se è in `maps_generated/<seme>` (o nella cartella di `--output`); un vecchio seme numerico ha bisogno del suo PNG | `--riproduci 0RY5-P688-H9F9-56PA-CEQK-194V` |
+| `--riproduci` / `--reproduce` | Rifà la mappa di quel seme. Titolo, scala e formato vengono dal suo PNG, se è in `maps_generated/<seme>` (o nella cartella di `--output`); un vecchio seme numerico ha bisogno del suo PNG | `--riproduci 475T-4KM4-MY0B-JNDJ-ZYEQ-K164` |
 | `--formato` / `--format` | Formato di stampa: `A4`, `A3` o `A2`. Se manca, il programma te lo chiede alla fine, proponendo quello consigliato (o, con `--riproduci`, quello della volta prima) | `--formato A3` |
 | `--orientamento` / `--orientation` | Di solito non serve: il verso del foglio segue la forma della mappa. Puoi forzarlo con `verticale` o `orizzontale` (`portrait` o `landscape`) | `--orientamento verticale` |
 | `--output` | Cartella in cui salvare le mappe al posto di `maps_generated`; anche lì ogni mappa ha la sua cartella con il seme | `--output mappe` |
