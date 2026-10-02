@@ -75,7 +75,7 @@ Image.MAX_IMAGE_PIXELS = None
 
 # --- settings ---
 
-VERSION = "0.0.3"
+VERSION = "0.0.4"
 
 PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT = (
     "plains", "sea", "lake", "swamp", "hills", "mountains", "forest", "desert")
