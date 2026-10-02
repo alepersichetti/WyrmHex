@@ -174,9 +174,10 @@ While it works, it shows each step it's taking, each with a **progress bar** tha
 [████░░░░░░░░]  4/12  Sea: flooding from the lowest edge hex towards lower ground
 ```
 
-While it draws the two pictures, which is the longest part, a second bar shows the percentage and updates in place until it reaches `100%  done`. When the map is ready, it asks you one last thing:
+While it draws the two pictures, which is the longest part, a second bar shows the percentage and updates in place until it reaches `100%  done`. When the map is ready, it asks you the last few things:
 
-11. **Print format** for the two maps: `A4`, `A3` or `A2`. The program weighs up the format based on the number of hexes: before the question you'll see, for each format, how big the hexes and the letters will be and whether they'll be easy to read. The ready-made answer in brackets is the **suggested format**: the smallest one where the map reads well; the more hexes you chose, the bigger it gets. **The final choice is yours:** press Enter for the suggested format, or type another one. For example:
+11. **Site names:** for every city, fortress and dungeon the program tells you which hex it's in and on what terrain, and asks whether you want to give it a name, for example `City 1, hex 2712 (hills). Give it a name? (y/N)`. If you answer `y`, type the name (up to 24 characters): it shows in bold on the map, under the site's symbol. Press Enter to leave the site without a name. If you chose random values at question 3, the program doesn't ask and the sites stay without names.
+12. **Print format** for the two maps: `A4`, `A3` or `A2`. The program weighs up the format based on the number of hexes: before the question you'll see, for each format, how big the hexes and the letters will be and whether they'll be easy to read. The ready-made answer in brackets is the **suggested format**: the smallest one where the map reads well; the more hexes you chose, the bigger it gets. **The final choice is yours:** press Enter for the suggested format, or type another one. For example:
 
    ```
    · Grid of 12 x 30 hexes: this is how it would print on each format (hex measured from flat side to flat side)
@@ -189,7 +190,7 @@ While it draws the two pictures, which is the longest part, a second bar shows t
 
    On big sheets, if there's room, the program uses bigger hexes, so the map keeps good proportions.
 
-At the end it lists where the cities, fortresses and dungeons are, with their hex numbers: handy for the game master's notes.
+At the end it lists where the cities, fortresses and dungeons are, with their hex numbers and their names, if you gave them any: handy for the game master's notes.
 
 Last of all it asks whether you want to **edit this map now**. Answer `y` to go straight into the editor (chapter 5) without making the map again: the edited version is saved next to the original, on the same paper.
 
@@ -201,9 +202,9 @@ Every map has a **seed**: a code of 24 letters and digits in groups of four, lik
 
 The seed holds everything that shapes the land: the number of hexes, the cities, fortresses and dungeons, the terrain percentages, the rivers and all the random choices. So **the same seed always gives the same map**, on any computer, even if the map's files are gone. To share a map with someone, just give them its seed.
 
-To rebuild a map, start the program, choose the language, answer `2` to "What do you want to do?" and type the seed. Capitals, dashes and spaces don't matter, and if you mistype a character the program tells you, instead of quietly making a different map. The program then shows the map's current title and scale and asks whether you want to **rename the map** and whether you want to **change the scale** (miles per hex: the same choices as for a new map, plus keeping a custom one as it is). Just press Enter to keep them. Then it asks again whether to use basic characters, black and white or colour and, at the end, the print format: so you can rebuild the same map under another name, at 24 miles per hex, or in A3 instead of A4, for example.
+To rebuild a map, start the program, choose the language, answer `2` to "What do you want to do?" and type the seed. Capitals, dashes and spaces don't matter, and if you mistype a character the program tells you, instead of quietly making a different map. The program then shows the map's current title and scale and asks whether you want to **rename the map** and whether you want to **change the scale** (miles per hex: the same choices as for a new map, plus keeping a custom one as it is). Just press Enter to keep them. It also asks whether you want to **give or change the names** of cities, fortresses and dungeons: if you answer `y`, once the map is ready it goes through the sites one by one, showing the name they already have. Then it asks again whether to use basic characters, black and white or colour and, at the end, the print format: so you can rebuild the same map under another name, at 24 miles per hex, or in A3 instead of A4, for example.
 
-The title, the scale and the paper size aren't part of the seed, because they don't change the land. If the map's PNG is still in its folder `maps_generated/<seed>`, the program takes them from there (the paper size becomes the ready-made answer); otherwise it uses the starting title and scale. From the command line you can choose them yourself, for example `--reproduce <seed> --title "Northern Lands"`.
+The title, the scale, the site names and the paper size aren't part of the seed, because they don't change the land. If the map's PNG is still in its folder `maps_generated/<seed>`, the program takes them from there (the paper size becomes the ready-made answer); otherwise it uses the starting title and scale. From the command line you can choose them yourself, for example `--reproduce <seed> --title "Northern Lands"`.
 
 If you rebuild the map in a different language from the first time, the starting title and scale are translated (for example "Terre Selvagge" becomes "Wild Lands"); a title you chose yourself stays as it is.
 

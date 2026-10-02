@@ -58,6 +58,7 @@ import re
 import secrets
 import sys
 import time
+import unicodedata
 import zlib
 from collections import deque
 
@@ -514,6 +515,20 @@ TEXTS = {
     "err_edited_needs_seed": ("--modificata funziona solo insieme a --riproduci, o a --seme con un seme completo",
                               "--edited only works together with --reproduce, or --seed with a full seed"),
     "sites_header": ("\nELENCO DEI SITI (codice esagono)", "\nLIST OF SITES (hex code)"),
+    "labels_intro": ("\n  Nomi dei siti: per ogni città, fortezza e dungeon puoi scrivere un nome, che compare "
+                     "sulla mappa.\n  Premi Invio per lasciarlo senza nome.",
+                     "\n  Site names: for every city, fortress and dungeon you can type a name, which shows on "
+                     "the map.\n  Press Enter to leave it without one."),
+    "ask_label": ("  {site} {i}, esagono {h} ({terrain}). Vuoi dare un nome? (s/N): ",
+                  "  {site} {i}, hex {h} ({terrain}). Give it a name? (y/N): "),
+    "ask_relabel": ("  {site} {i}, esagono {h} ({terrain}), si chiama \"{name}\". Vuoi cambiare il nome? (s/N): ",
+                    "  {site} {i}, hex {h} ({terrain}), is called \"{name}\". Change the name? (y/N): "),
+    "q_label": ("    Nome (massimo {n} caratteri; vuoto = nessun nome): ",
+                "    Name (up to {n} characters; empty = no name): "),
+    "label_cut": ("    Troppo lungo: diventa \"{name}\"", "    Too long: it becomes \"{name}\""),
+    "ask_labels_again": ("  Vuoi dare o cambiare i nomi di città, fortezze e dungeon? (s/N): ",
+                         "  Do you want to give or change the names of cities, fortresses and dungeons? (y/N): "),
+    "info_labels": ("{n} siti con un nome", "{n} named sites"),
     "on_river": (", sul fiume", ", on a river"),
     # step 10: print format
     "step_paper": ("Formato di stampa: la direzione del foglio segue la forma della mappa",
@@ -926,7 +941,7 @@ def rebuild_settings(text, base):
         return None
     land, number = unpacked
     picture = find_settings(base, make_seed(land, number)) or {}
-    settings = {key: picture[key] for key in ("title", "scale", "paper", "size", "font") if key in picture}
+    settings = {key: picture[key] for key in ("title", "scale", "paper", "size", "font", "labels") if key in picture}
     settings.update(land, seed=number)
     return settings
 
@@ -1018,6 +1033,7 @@ def complete_settings(p):
                        ("size", "auto"), ("font", None), ("paper", None),
                        ("title", tr("default_title")), ("scale", tr("default_scale"))):
         p.setdefault(key, value)
+    p.setdefault("labels", {})
     p["percentages"].setdefault(SWAMP, 0)
     # white-on-black was dropped in 0.0.2
     p.pop("inverted", None)
@@ -1290,6 +1306,8 @@ def ask_settings():
         if input(tr("ask_rescale", scale=saved["scale"])).strip().lower().startswith(tr("yes_letter")):
             saved["scale"] = ask_scale(saved["scale"])
             print()
+        # the sites are known only once the land is made: main() asks then
+        saved["ask_labels"] = input(tr("ask_labels_again")).strip().lower().startswith(tr("yes_letter"))
         ask_look(saved)
         return saved
     print()
@@ -1330,6 +1348,8 @@ def ask_settings():
     p["orientation"] = "auto"
     ask_look(p)
     p["size"], p["font"], p["paper"] = "auto", None, None   # paper: asked after the map is built
+    # site names too, but not with random values: those maps start without names
+    p["ask_labels"] = not p["randomize"]
     return p
 
 
@@ -1971,13 +1991,63 @@ def build_land(params, counts, grid, rng, log):
     return terrain, rivers, sites, height
 
 
-def print_sites(grid, terrain, rivers, sites):
+def print_sites(grid, terrain, rivers, sites, labels=None):
     digits = max(2, len(str(max(grid.cols, grid.rows))))
     print(tr("sites_header"))
     for kind in (CITY, FORTRESS, DUNGEON):
         for i, (_, h) in enumerate([s for s in sites if s[0] == kind], 1):
             extra = tr("on_river") if any(h in r["path"] for r in rivers) else ""
-            print(f"  {pick(SITE_NAMES[kind]):<9} {i:>2}  →  {hex_code(h, digits)}  ({pick(TERRAIN_NAMES[terrain[h]])}{extra})")
+            name = (labels or {}).get(label_key(h))
+            name = f"  \"{name}\"" if name else ""
+            print(f"  {pick(SITE_NAMES[kind]):<9} {i:>2}  →  {hex_code(h, digits)}  "
+                  f"({pick(TERRAIN_NAMES[terrain[h]])}{extra}){name}")
+
+
+# --- site names ---
+# Typed after the land is made, since only then are the sites known. Kept in
+# the settings (and so in the PNG) as {"CCRR": name}, like the title: the seed
+# can't hold text. A name whose site is gone (editor) is just not drawn.
+MAX_LABEL = 24
+
+
+def label_key(h):
+    return hex_code(h, 2)            # grids are at most 80 x 80
+
+
+def site_labels(sites, labels):
+    """Only the names of sites that are still there, in drawing order."""
+    labels = labels or {}
+    return [(h, labels[label_key(h)]) for _, h in sites if labels.get(label_key(h))]
+
+
+def ask_labels(grid, terrain, sites, labels):
+    """One question per site, cities first. Returns the new {"CCRR": name}."""
+    labels = dict(labels or {})
+    digits = max(2, len(str(max(grid.cols, grid.rows))))
+    print(tr("labels_intro"))
+    for kind in (CITY, FORTRESS, DUNGEON):
+        for i, (_, h) in enumerate([s for s in sites if s[0] == kind], 1):
+            key, old = label_key(h), labels.get(label_key(h))
+            values = dict(site=pick(SITE_NAMES[kind]), i=i, h=hex_code(h, digits),
+                          terrain=pick(TERRAIN_NAMES[terrain[h]]).lower(), name=old)
+            question = tr("ask_relabel" if old else "ask_label", **values)
+            if not input(question).strip().lower().startswith(tr("yes_letter")):
+                continue
+            name = " ".join(input(tr("q_label", n=MAX_LABEL)).split())
+            if len(name) > MAX_LABEL:
+                cut = name[:MAX_LABEL + 1]
+                name = (cut.rsplit(" ", 1)[0] if " " in cut else cut[:MAX_LABEL]).rstrip()
+                print(tr("label_cut", name=name))
+            if name:
+                labels[key] = name
+            else:
+                labels.pop(key, None)
+    return labels
+
+
+def ascii_label(name):
+    """For --ascii-only: è -> e, and anything else non-ASCII goes."""
+    return unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
 
 
 # --- fonts ---
@@ -2223,7 +2293,7 @@ def line_to_squares(points, aspect):
 
 
 # --- drawing the map ---
-def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect, original=None):
+def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect, original=None, labels=None, ascii_only=False):
     """Terrain, then hex borders, then rivers, then sites; each layer can
     overwrite the previous one.
     original = (terrain, rivers) before editing. Its glyphs and river wiggles
@@ -2290,7 +2360,43 @@ def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect, original=None):
         for yy in (k, k + 1):
             canvas.write(x0 + cx - 2, y0 + yy, "[" + g + g + "]", "B")
         canvas.boxes.append((x0 + cx - 2, y0 + k, 4, 2, g, kind))
+    draw_labels(canvas, site_labels(sites, labels), sites, k, ascii_only)
     return canvas
+
+
+def draw_labels(canvas, labels, sites, k, ascii_only):
+    """Each name in bold, one space either side, on the row under its site's
+    box (the hex's bottom side when k = 2). If that runs into another name or
+    a box it slides sideways, then tries the row above the box (not when
+    k = 2: the hex numbers go there), and as a last resort goes under the box
+    anyway. Over sea the gray stays."""
+    taken = set()
+    for x, y, w, h, _, _ in canvas.boxes:
+        taken.update((x + i, y + j) for i in range(w) for j in range(h))
+    centre = 2 * k + 1
+    for h, name in labels:
+        text = f" {ascii_label(name) if ascii_only else name} "
+        x0, y0 = hex_origin(*h, k)
+        rows = [y0 + k + 2] + ([y0 + k - 1] if k > 2 else [])
+        start = x0 + centre - len(text) // 2
+        tries = [(row, start + shift) for row in rows for shift in (0, -2, 2, -4, 4, -6, 6)]
+        spot = tries[0]
+        for row, x in tries:
+            x = max(0, min(x, canvas.width - len(text)))
+            if not any((x + i, row) in taken for i in range(len(text))):
+                spot = (row, x)
+                break
+        row, x = spot
+        x = max(0, min(x, canvas.width - len(text)))
+        for i, ch in enumerate(text):
+            if not 0 <= row < canvas.height or not 0 <= x + i < canvas.width:
+                continue
+            on_sea = canvas.styles[row][x + i] in "gGH"
+            if ch == " ":
+                canvas.put(x + i, row, " ", "g" if on_sea else "n")
+            else:
+                canvas.put(x + i, row, ch, "H" if on_sea else "b", "label")
+            taken.add((x + i, row))
 
 
 def write_hex_numbers(page, grid, k, ox, oy):
@@ -3265,7 +3371,8 @@ def save_maps(params, grid, land, look, seed, number, log, layout_log):
 
     # glyphs get their own rng, independent from the land's
     drawing_rng = random.Random(number + 1)
-    map_canvas = draw_map(grid, terrain, rivers, sites, k, G, drawing_rng, aspect, original)
+    map_canvas = draw_map(grid, terrain, rivers, sites, k, G, drawing_rng, aspect, original,
+                          params.get("labels"), params["ascii_only"])
     page, mx, my = compose_page(map_canvas, n_cols, n_rows, legend, params["title"], subtitle, G)
     plain_path, numbered_path = output_names(params["output"], seed, "_edit" if original else "")
 
@@ -3280,7 +3387,7 @@ def save_maps(params, grid, land, look, seed, number, log, layout_log):
     write_hex_numbers(numbered, grid, k, mx, my)
     save(numbered, layout, numbered_path, params)
     log.info(tr("saved", a=short_path(numbered_path), b=short_path(numbered_path[:-4] + ".txt")))
-    print_sites(grid, terrain, rivers, sites)
+    print_sites(grid, terrain, rivers, sites, params.get("labels"))
 
 
 def main():
@@ -3354,6 +3461,13 @@ def main():
             log.warn(tr("warn_edits_dropped", n=skipped))
     elif has_edits(edit_base):
         log.info(tr("info_has_edits", s=seed))
+
+    params.setdefault("labels", {})
+    if params.pop("ask_labels", False) and sys.stdin.isatty() and sites:
+        params["labels"] = ask_labels(grid, terrain, sites, params["labels"])
+    named = len(site_labels(sites, params["labels"]))
+    if named:
+        log.info(tr("info_labels", n=named))
 
     # 10: paper
     log.step(tr("step_paper"))

@@ -174,9 +174,10 @@ Mentre lavora, mostra i passaggi che sta facendo, ognuno con una **barra di avan
 [████░░░░░░░░]  4/12  Mare: allagamento dall'esagono di bordo più basso verso le quote minori
 ```
 
-Durante il disegno delle due immagini, che è la parte più lunga, compare anche una seconda barra con la percentuale, che si aggiorna sul posto fino a `100%  fatto`. Quando la mappa è pronta ti chiede l'ultima cosa:
+Durante il disegno delle due immagini, che è la parte più lunga, compare anche una seconda barra con la percentuale, che si aggiorna sul posto fino a `100%  fatto`. Quando la mappa è pronta ti chiede le ultime cose:
 
-11. **Formato di stampa** delle due mappe: `A4`, `A3` o `A2`. Il programma valuta il formato in base al numero di esagoni: prima della domanda vedi, per ogni formato, quanto verranno grandi gli esagoni e i caratteri, e se saranno ben leggibili. La risposta pronta tra parentesi è il **formato consigliato**, cioè il più piccolo in cui la mappa si legge bene; più esagoni hai scelto, più grande sarà. **La scelta finale è tua:** premi Invio per il formato consigliato, oppure scrivine un altro. Esempio:
+11. **Nomi dei siti:** per ogni città, fortezza e dungeon il programma ti dice in che esagono si trova e su che terreno, e ti chiede se vuoi dargli un nome, per esempio `Città 1, esagono 2712 (colline). Vuoi dare un nome? (s/N)`. Se rispondi `s`, scrivi il nome (fino a 24 caratteri): compare in grassetto sulla mappa, sotto il simbolo del sito. Premi Invio per lasciare il sito senza nome. Se nella domanda 3 hai scelto i valori a caso, il programma non chiede niente e i siti restano senza nome.
+12. **Formato di stampa** delle due mappe: `A4`, `A3` o `A2`. Il programma valuta il formato in base al numero di esagoni: prima della domanda vedi, per ogni formato, quanto verranno grandi gli esagoni e i caratteri, e se saranno ben leggibili. La risposta pronta tra parentesi è il **formato consigliato**, cioè il più piccolo in cui la mappa si legge bene; più esagoni hai scelto, più grande sarà. **La scelta finale è tua:** premi Invio per il formato consigliato, oppure scrivine un altro. Esempio:
 
    ```
    · Griglia di 12 x 30 esagoni: ecco come verrebbe stampata su ogni formato (esagono misurato da lato piatto a lato piatto)
@@ -189,7 +190,7 @@ Durante il disegno delle due immagini, che è la parte più lunga, compare anche
 
    Sui fogli grandi, se c'è spazio, il programma usa esagoni più grandi, così la mappa resta ben proporzionata.
 
-Alla fine elenca dove sono le città, le fortezze e i dungeon, con il numero del loro esagono: comodo per gli appunti del master.
+Alla fine elenca dove sono le città, le fortezze e i dungeon, con il numero del loro esagono e il loro nome, se gliel'hai dato: comodo per gli appunti del master.
 
 Per ultima cosa ti chiede se vuoi **modificare questa mappa adesso**. Rispondi `s` per passare subito all'editor (capitolo 5) senza rifare la mappa: la versione modificata viene salvata accanto all'originale, nello stesso formato.
 
@@ -201,9 +202,9 @@ Ogni mappa ha un **seme**: un codice di 24 lettere e cifre a gruppi di quattro, 
 
 Il seme contiene tutto ciò che dà forma alla terra: il numero di esagoni, le città, le fortezze e i dungeon, le percentuali di terreno, i fiumi e tutte le scelte casuali. Per questo **lo stesso seme dà sempre la stessa mappa**, su qualunque computer, anche se i file della mappa non ci sono più. Per condividere una mappa con qualcuno basta dargli il suo seme.
 
-Per rifare una mappa, avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" rispondi `2` e scrivi il seme. Maiuscole, trattini e spazi non contano, e se sbagli un carattere il programma te lo dice, invece di fare in silenzio una mappa diversa. Poi ti mostra il titolo e la scala attuali della mappa e ti chiede se vuoi **rinominare la mappa** e se vuoi **cambiare la scala** (miglia per esagono: le stesse scelte della mappa nuova, più la possibilità di lasciare com'è una scala scritta a mano). Basta premere Invio per lasciarli come sono. Poi ti chiede di nuovo se usare i caratteri base, il bianco e nero o i colori e, alla fine, il formato di stampa: così puoi rifare la stessa mappa, per esempio, con un altro nome, a 24 miglia per esagono, oppure in A3 invece che in A4.
+Per rifare una mappa, avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" rispondi `2` e scrivi il seme. Maiuscole, trattini e spazi non contano, e se sbagli un carattere il programma te lo dice, invece di fare in silenzio una mappa diversa. Poi ti mostra il titolo e la scala attuali della mappa e ti chiede se vuoi **rinominare la mappa** e se vuoi **cambiare la scala** (miglia per esagono: le stesse scelte della mappa nuova, più la possibilità di lasciare com'è una scala scritta a mano). Basta premere Invio per lasciarli come sono. Ti chiede anche se vuoi **dare o cambiare i nomi** di città, fortezze e dungeon: se rispondi `s`, quando la mappa è pronta ti propone i siti uno per uno, con il nome che hanno già. Poi ti chiede di nuovo se usare i caratteri base, il bianco e nero o i colori e, alla fine, il formato di stampa: così puoi rifare la stessa mappa, per esempio, con un altro nome, a 24 miglia per esagono, oppure in A3 invece che in A4.
 
-Il titolo, la scala e il formato di stampa non fanno parte del seme, perché non cambiano la terra. Se il PNG della mappa è ancora nella sua cartella `maps_generated/<seme>`, il programma li prende da lì (il formato diventa la risposta pronta); altrimenti usa il titolo e la scala di partenza. Da riga di comando puoi sceglierli tu, per esempio `--riproduci <seme> --titolo "Terre del Nord"`.
+Il titolo, la scala, i nomi dei siti e il formato di stampa non fanno parte del seme, perché non cambiano la terra. Se il PNG della mappa è ancora nella sua cartella `maps_generated/<seme>`, il programma li prende da lì (il formato diventa la risposta pronta); altrimenti usa il titolo e la scala di partenza. Da riga di comando puoi sceglierli tu, per esempio `--riproduci <seme> --titolo "Terre del Nord"`.
 
 Se rifai la mappa in una lingua diversa da quella della prima volta, il titolo e la scala di partenza vengono tradotti (per esempio "Terre Selvagge" diventa "Wild Lands"); un titolo scelto da te resta com'è.
 
