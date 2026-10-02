@@ -347,6 +347,13 @@ TEXTS = {
     "step_sea": ("Mare: allagamento dall'esagono di bordo più basso verso le quote minori",
                  "Sea: flooding from the lowest edge hex towards lower ground"),
     "info_no_sea": ("Nessun mare richiesto", "No sea wanted"),
+    "info_archipelago": ("Mare oltre metà mappa: {n} esagoni allagati, terre sparse in un arcipelago (isole: {i})",
+                         "Sea over half the map: {n} hexes flooded, land scattered in an archipelago "
+                         "(islands: {i})"),
+    "info_peninsulas": ("Mare oltre metà mappa: {n} esagoni allagati, terraferma a {side} con penisole e baie, "
+                        "isole al largo: {i}",
+                        "Sea over half the map: {n} hexes flooded, mainland to the {side} with peninsulas "
+                        "and bays, islands offshore: {i}"),
     "info_sea": ("Mare partito da {h}, {n} esagoni allagati", "Sea started at {h}, {n} hexes flooded"),
     "step_lakes": ("Laghi: bacini interni scavati nelle conche", "Lakes: inland basins dug in the dips"),
     "info_lakes": ("{n} laghi per {h} esagoni", "{n} lakes, {h} hexes"),
@@ -782,10 +789,11 @@ def check_percentages(perc):
 # map, anywhere, no PNG needed. Title/scale/paper/ascii aren't in it.
 # All the fields go into one big mixed-radix integer, written in Crockford-ish
 # base 32 (no I L O U), plus 2 check symbols at the end.
-# v1 seeds (no swamps) and v2 seeds (no wind) still decode and give the same
-# map as before: the version also picks how the land is made. Before that the seed was a plain number
+# v1 seeds (no swamps), v2 seeds (no wind) and v3 seeds (no islands) still
+# decode and give the same map as before: the version also picks how the land
+# is made. Before that the seed was a plain number
 # that only worked together with the settings stored in the PNG.
-SEED_VERSION = 3                     # 2 = swamps, 3 = prevailing wind (same fields as 2)
+SEED_VERSION = 4                     # 2 = swamps, 3 = prevailing wind, 4 = islands (3, 4: same fields as 2)
 SEED_SYMBOLS = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"   # no I, L, O, U: too easy to misread
 SEED_LENGTH = 24
 MAX_SITES = 99                       # per kind
@@ -794,10 +802,12 @@ RANDOM_NUMBERS = 2 ** 20             # old 6-digit seeds (<= 999999) still fit
 # no plains: they're whatever is left
 SEED_TERRAINS = {1: (SEA, LAKE, HILLS, MOUNTAINS, FOREST, DESERT),
                  2: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT),
-                 3: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)}
-SEED_CHECK_SYMBOLS = {1: 3, 2: 2, 3: 2}
+                 3: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT),
+                 4: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)}
+SEED_CHECK_SYMBOLS = {1: 3, 2: 2, 3: 2, 4: 2}
 # the land of v1 and v2 seeds (and of old number seeds) is made the same way
 LAND_BEFORE_WIND = 2
+LAND_WITH_ISLANDS = 4                # from here on, a mostly-sea map gets peninsulas and archipelagos
 
 
 def new_seed():
@@ -1505,6 +1515,106 @@ def make_heights(grid, rng):
     return normalize(height)
 
 
+ISLAND_SEA = 50                      # more sea than this (%) -> peninsulas and archipelagos
+SIDES = (("nord", "north"), ("est", "east"), ("sud", "south"), ("ovest", "west"))
+
+
+def side_distance(grid, h, side):
+    """0 on the given map side (index into SIDES), 1 on the opposite one."""
+    c, r = h
+    return ((r, grid.cols - 1 - c, grid.rows - 1 - r, c)[side]
+            / max(1, (grid.rows, grid.cols)[side % 2] - 1))
+
+
+def ridge_noise(grid, rng, passes, axis):
+    """Noise smoothed mostly along `axis` (a unit vector in hex_xy units):
+    long ridges and troughs that point that way."""
+    pos = {h: hex_xy(h) for h in grid.hexes}
+    weights = {}
+    for h in grid.hexes:
+        for nb in grid.neighbours(h):
+            along = abs((pos[nb][0] - pos[h][0]) * axis[0] + (pos[nb][1] - pos[h][1]) * axis[1]) / math.sqrt(3)
+            weights[h, nb] = 0.1 + 2.0 * along ** 4
+    f = {h: rng.random() for h in grid.hexes}
+    for _ in range(passes):
+        f = {h: (f[h] + sum(weights[h, nb] * f[nb] for nb in grid.neighbours(h)))
+                / (1 + sum(weights[h, nb] for nb in grid.neighbours(h)))
+             for h in grid.hexes}
+    return normalize(f)
+
+
+def make_island_heights(grid, rng, sea_percent):
+    """For maps that are mostly sea. Unless the sea is nearly everything, a
+    mainland along one side, its coast cut into long peninsulas and bays by
+    ridges pointing out to sea; out in the water, bumps that rise as islands.
+    The open-sea edges are pulled down so the islands sit inside the map.
+    Returns (heights, mainland side or None)."""
+    side = rng.randrange(len(SIDES)) if sea_percent < 80 else None
+    blobs = noise_field(grid, rng, max(2, (grid.cols + grid.rows) // 12))   # islands
+    small = noise_field(grid, rng, 1)                                       # ragged coasts
+    ridges = None
+    if side is not None:
+        axis = (0.0, 1.0) if side % 2 == 0 else (1.0, 0.0)                  # out to sea
+        ridges = ridge_noise(grid, rng, max(3, (grid.cols + grid.rows) // 6), axis)
+    land = (100 - sea_percent) / 100
+    band = max(1.0, min(grid.cols, grid.rows) * 0.2)
+    height = {}
+    for h in grid.hexes:
+        c, r = h
+        edges = [r, grid.cols - 1 - c, grid.rows - 1 - r, c]
+        if side is not None:
+            edges.pop(side)
+        sink = 0.25 * max(0.0, 1.0 - min(edges) / band)
+        value = 0.55 * blobs[h] + 0.2 * small[h] - sink
+        if side is not None:
+            # the mainland rises near its side; the ridges reach further out,
+            # into the sea, and become peninsulas with bays between them
+            d = side_distance(grid, h, side)
+            value += 0.25 * max(0.0, 1.0 - d / min(1.0, 1.5 * land))
+            value += 0.4 * (ridges[h] - 0.35) * max(0.0, 1.0 - d / min(1.0, 3 * land))
+        height[h] = value
+    return normalize(height), side
+
+
+def flood_open_sea(grid, height, n, rng, terrain, side):
+    """Like flood_sea, but the water comes in from every edge except the
+    mainland's, so it surrounds the islands and fills the bays."""
+    starts = [h for h in grid.hexes if grid.on_edge(h) and (side is None or side_distance(grid, h, side) > 0)]
+    queue = [(height[h] + rng.uniform(0, 0.04), h) for h in starts]
+    heapq.heapify(queue)
+    seen, placed = set(starts), 0
+    while queue and placed < n:
+        _, hex_ = heapq.heappop(queue)
+        terrain[hex_] = SEA
+        placed += 1
+        for nb in grid.neighbours(hex_):
+            if nb not in seen:
+                seen.add(nb)
+                heapq.heappush(queue, (height[nb] + rng.uniform(0, 0.04), nb))
+    return placed
+
+
+def count_islands(grid, terrain, side):
+    """Pieces of land not touching the mainland side (all of them if there's
+    no mainland)."""
+    seen, islands = set(), 0
+    for h in grid.hexes:
+        if terrain[h] == SEA or h in seen:
+            continue
+        piece, queue = [], deque([h])
+        seen.add(h)
+        while queue:
+            current = queue.popleft()
+            piece.append(current)
+            for nb in grid.neighbours(current):
+                if terrain[nb] != SEA and nb not in seen:
+                    seen.add(nb)
+                    queue.append(nb)
+        if side is None or not any(side_distance(grid, p, side) == 0 for p in piece):
+            islands += 1
+    return islands
+
+
 def flood_sea(grid, height, n, rng, terrain):
     """Start from the lowest edge hex and keep taking the lowest hex next to the
     water, like a basin filling up."""
@@ -1793,17 +1903,30 @@ def place_sites(grid, terrain, rivers, wanted, rng, log):
 
 def build_land(params, counts, grid, rng, log):
     """Steps 3-9. Returns (terrain of every hex, rivers, sites, heights)."""
+    islands = (params.get("version", SEED_VERSION) >= LAND_WITH_ISLANDS
+               and params["percentages"][SEA] > ISLAND_SEA)
     log.step(tr("step_heights"))
-    height = make_heights(grid, rng)
+    if islands:
+        height, side = make_island_heights(grid, rng, params["percentages"][SEA])
+    else:
+        height = make_heights(grid, rng)
     log.info(tr("info_heights", n=len(grid.hexes)))
 
     terrain = {h: None for h in grid.hexes}
     log.step(tr("step_sea"))
-    start = flood_sea(grid, height, counts[SEA], rng, terrain)
-    if start is None:
-        log.info(tr("info_no_sea"))
+    if islands:
+        flood_open_sea(grid, height, counts[SEA], rng, terrain, side)
+        n_islands = count_islands(grid, terrain, side)
+        if side is None:
+            log.info(tr("info_archipelago", n=counts[SEA], i=n_islands))
+        else:
+            log.info(tr("info_peninsulas", n=counts[SEA], side=pick(SIDES[side]), i=n_islands))
     else:
-        log.info(tr("info_sea", h=hex_code(start, 2), n=counts[SEA]))
+        start = flood_sea(grid, height, counts[SEA], rng, terrain)
+        if start is None:
+            log.info(tr("info_no_sea"))
+        else:
+            log.info(tr("info_sea", h=hex_code(start, 2), n=counts[SEA]))
 
     log.step(tr("step_lakes"))
     placed, n_lakes = dig_lakes(grid, height, counts[LAKE], rng, terrain)
