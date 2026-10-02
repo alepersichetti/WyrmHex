@@ -164,7 +164,7 @@ Then the welcome screen appears, with the title and a picture: press **ENTER** t
 7. **Title** printed at the top of the map.
 8. **Scale:** how many miles each hex covers. `1` = 2 miles, `2` = 6 miles (the ready-made answer), `3` = 12 miles, `4` = 24 miles, `5` = your own: type a number of miles, or any text such as `5 km` or `1 day`. It's printed under the title, as "1 hex = 6 miles".
 9. Whether to use **only basic keyboard characters** (no symbols like ♣ ▲ ≈). You'll usually answer no: just press Enter.
-10. **Colours:** `1` = black and white, for printing (the ready-made answer); `2` = colour: forests green, sea and lakes blue, deserts sandy, swamps olive, cities red and so on. Only for a colour map does the program then ask for the **background**: `1` = white, `2` = black.
+10. **Colours:** `1` = black and white, for printing (the ready-made answer); `2` = colour: forests green, sea and lakes blue, deserts sandy, swamps purple, cities red and so on. Only for a colour map does the program then ask for the **background**: `1` = white, `2` = black.
 
 Once the questions are done, a wizard appears with the words **"The conjuring spell begins!"**: from here the program gets to work.
 

@@ -155,16 +155,18 @@ SEA_GRAY = 205              # 0 black, 255 white
 # without its own colour is drawn in "ink". The black-and-white map is just one
 # more palette, in grayscale, where everything is ink.
 MONO = {"mode": "L", "paper": 255, "ink": 0, "sea": SEA_GRAY}
+# Swamps are a magenta-leaning purple: olive got lost among the forests, and a
+# bluer purple would clash with the fortresses, also for colour-blind eyes.
 PALETTES = {
     "white": {"mode": "RGB", "paper": (255, 255, 255), "ink": (25, 25, 25),
               "border": (100, 100, 100), "sea": (180, 211, 236), "sea_line": (115, 155, 195),
-              LAKE: (30, 100, 200), "river": (25, 95, 205), SWAMP: (85, 120, 55),
+              LAKE: (30, 100, 200), "river": (25, 95, 205), SWAMP: (118, 30, 95),
               FOREST: (25, 125, 45), HILLS: (160, 110, 40), MOUNTAINS: (105, 90, 80),
               DESERT: (205, 150, 40), CITY: (190, 35, 35), FORTRESS: (105, 60, 160),
               DUNGEON: (25, 25, 25)},
     "black": {"mode": "RGB", "paper": (12, 12, 16), "ink": (230, 230, 225),
               "border": (110, 110, 115), "sea": (18, 42, 82), "sea_line": (60, 100, 150),
-              LAKE: (80, 150, 255), "river": (90, 160, 255), SWAMP: (125, 170, 95),
+              LAKE: (80, 150, 255), "river": (90, 160, 255), SWAMP: (195, 105, 165),
               FOREST: (60, 190, 80), HILLS: (215, 165, 80), MOUNTAINS: (195, 180, 165),
               DESERT: (235, 195, 95), CITY: (235, 75, 65), FORTRESS: (170, 120, 230),
               DUNGEON: (230, 230, 225)},
