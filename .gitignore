@@ -3,3 +3,4 @@
 /maps_generated
 .DS_Store
 /_to_delete
+__pycache__/
