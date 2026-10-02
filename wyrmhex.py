@@ -1110,33 +1110,36 @@ def ask(question, default, kind=int, lowest=None, highest=None):
 
 
 # --- welcome screen, wizard, questions ---
-TITLE_ART = r"""
- _       __                     __  __
-| |     / /_  ___________ ___  / / / /__  _  __
-| | /| / / / / / ___/ __ `__ \/ /_/ / _ \| |/_/
-| |/ |/ / /_/ / /  / / / / / / __  /  __/>  <
-|__/|__/\__, /_/  /_/ /_/ /_/_/ /_/\___/_/|_|
-       /____/
-"""
+WELCOME_ART = r"""
+\ ___                     \       /   /)                 ___ /
+ \    \_______________     \\ _ //   // _______________/    /
+  \      //-  -    / \\__,- .\ /. -,((_// \   -  - \\      /
+   \    //   ****************) (*****************   \\    /
+    \  //   /****************,_,*****************\   \\  /
+     \// __/ *             WyrmHex              * \__ \\/
+     /       *@VERSION@*       \
+             *************M********M*************
 
-WYVERN_CASTLE = r"""
-                                                                          /\
-                                                                         /¨¨\
-               ______________                /\    *                    /¨¨¨¨\
-           _.-'            ,.`:===,         /__\   |                   / ¨ ¨ ¨\
-       _.-'         __.---'.:'              (..)---+                  /        \        /\
-     .'         .--'     .:'               /|##|   |                 /.  .      \      /¨¨\
-   .'         .'        ./                _.|__|.__|_               /   .        \    /¨ ¨ \
-,.'-,____   .'         ./    ,),,)        |_|_|_|_|_|              /      .       \  /      \
-         `.'___.--,   ./   \'     `,)      |       |              /   |>     |>    \/.       \
-         '         `;./   ,'  .--,  `,  ,  |  []   |             /   [_]_n_n[_]     \
-                    ;/    :  /    } ,C}'   |       |            / .  | |'  '| |      \
-                    \\    \  \    `,,V     |    [] |           /     |_|_/\_|_|       \
-    ,      .---,    .\\-, `,  \    ;;l     |       |          /                  .     \
-    \`,   /  _  \  /  _  \ `,  \   `;/     |  []   |         /    | σ                   \
-     \ `.'  / \  `'  / \  `'   /           |   _   |        /     ´√))θ                 .\  .
-      `,__.'   `,__.'   `,___.'           _|__/ \__|_      /       / \      .             \
- ,     .     ,,     .      ,      .    ,     .     ,,     .      ,      .     ,,     .      ,
+       /\         /\                    .           /\
+      /  \       /  \                   |@>        /  \
+     /    \     / .  \                  |         /    \
+    /      \   /  |@> \       /\       / \       /      \
+   /     /\ \ /   |    \     /  \     /   \     /        \
+  /     /  \ /  _ | _   \   /    \    | O |    /          _   _   _
+ /     /    \  |_|_|_|   \ /      \   |___|   /          | |_| |_| |
+/     /      \  | O |     /        \  | |_|  /      /\   |         |
+    _   _   _ \ |___|    /          \ |__|| /      /  \  |  O   O  |
+   | |_| |_| |  | |_|   /             | |_|       /    \ |   __ _  |
+   |         |  |__||  /              |_| |      /       |     |   |
+   | O  O  O |  | |_| /               |__ |     /        | O  O  O |
+   |  _      |  _   _   _        ______   |   _   _   _  |  _      |
+   | |__|_ | |_| |_| |_| |______|      |_____| |_| |_| |_| |__|_ |_|
+   |  |   _| |        _  |  | _|  ____     _||        _  |  |    | |
+   |   _| _  ||_|   _|_  | _|_   |||||| |_| _||_|   _|_  |   _| _| |
+   |  __|  |_|  |_       | | |__ |++++|   |_||  |_      ||  __|  |_|
+   |_________|___________|-------------------|___________|_________|
+                                 /_/_/
+                                /_/_/
 """
 
 
@@ -1148,25 +1151,19 @@ def terminal_width():
 
 
 def show_welcome():
-    art = WYVERN_CASTLE.strip("\n").split("\n")
-    title = TITLE_ART.strip("\n").split("\n")
-    subtitle = f"v{VERSION}  ·  " + tr("welcome_subtitle")
+    # the sign holds the name and the version, centred in its 34 letters
+    art = WELCOME_ART.strip("\n").replace("@VERSION@", f"v{VERSION}".center(34)).split("\n")
+    subtitle = tr("welcome_subtitle")
     width = max(len(line) for line in art)
     # wrapped lines would scramble the drawing, so cut it at the window edge
     columns = terminal_width()
     if columns and columns <= width:
         width = columns - 1
-    title_width = max(len(line) for line in title)
     screen = [
         "═" * width,
-        "",
-        # centre it as one block or the letters won't line up
-        *[" " * max(0, (width - title_width) // 2) + line for line in title],
+        *[line[:width] for line in art],
         "",
         " " * max(0, (width - len(subtitle)) // 2) + subtitle,
-        "",
-        "═" * width,
-        *[line[:width] for line in art],
         "═" * width,
     ]
     print("\n" + "\n".join(line.rstrip() for line in screen) + "\n")
