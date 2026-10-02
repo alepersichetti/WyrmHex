@@ -359,6 +359,10 @@ TEXTS = {
                      "deserti in quelle aride, il resto pianura",
                      "Wetness: swamps in low ground near water, forests where it is wet, "
                      "deserts where it is dry, plains elsewhere"),
+    "info_wind": ("Vento prevalente da {wind}: piove sui versanti rivolti a {wind}, "
+                  "a {lee} dei rilievi resta secco",
+                  "Prevailing wind from the {wind}: rain on the slopes facing {wind}, "
+                  "dry land {lee} of the high ground"),
     "info_result": ("Risultato: {list}", "Result: {list}"),
     "step_rivers": ("Fiumi: dalle sorgenti in quota verso il basso fino a mare, lago o bordo",
                     "Rivers: from high springs downhill to the sea, a lake or the edge"),
@@ -778,9 +782,10 @@ def check_percentages(perc):
 # map, anywhere, no PNG needed. Title/scale/paper/ascii aren't in it.
 # All the fields go into one big mixed-radix integer, written in Crockford-ish
 # base 32 (no I L O U), plus 2 check symbols at the end.
-# v1 seeds (no swamps) still decode. Before that the seed was a plain number
+# v1 seeds (no swamps) and v2 seeds (no wind) still decode and give the same
+# map as before: the version also picks how the land is made. Before that the seed was a plain number
 # that only worked together with the settings stored in the PNG.
-SEED_VERSION = 2                     # 2 = swamps
+SEED_VERSION = 3                     # 2 = swamps, 3 = prevailing wind (same fields as 2)
 SEED_SYMBOLS = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"   # no I, L, O, U: too easy to misread
 SEED_LENGTH = 24
 MAX_SITES = 99                       # per kind
@@ -788,8 +793,11 @@ MAX_RIVERS = 100
 RANDOM_NUMBERS = 2 ** 20             # old 6-digit seeds (<= 999999) still fit
 # no plains: they're whatever is left
 SEED_TERRAINS = {1: (SEA, LAKE, HILLS, MOUNTAINS, FOREST, DESERT),
-                 2: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)}
-SEED_CHECK_SYMBOLS = {1: 3, 2: 2}
+                 2: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT),
+                 3: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)}
+SEED_CHECK_SYMBOLS = {1: 3, 2: 2, 3: 2}
+# the land of v1 and v2 seeds (and of old number seeds) is made the same way
+LAND_BEFORE_WIND = 2
 
 
 def new_seed():
@@ -825,13 +833,14 @@ def seed_check(data, version=SEED_VERSION):
 
 def make_seed(p, number):
     """None if p doesn't fit in a seed (only old saved maps, e.g. sea 12.5%)."""
+    version = p.get("version", SEED_VERSION)
     packed = 0
-    for value, choices in seed_fields(p, number):
+    for value, choices in seed_fields(p, number, version):
         if value != int(value) or not 0 <= value < choices:
             return None
         packed = packed * choices + int(value)
-    data = to_symbols(packed, SEED_LENGTH - SEED_CHECK_SYMBOLS[SEED_VERSION])
-    code = data + seed_check(data)
+    data = to_symbols(packed, SEED_LENGTH - SEED_CHECK_SYMBOLS[version])
+    code = data + seed_check(data, version)
     return "-".join(code[i:i + 4] for i in range(0, len(code), 4))
 
 
@@ -870,8 +879,9 @@ def unpack_seed(code, version):
     rivers, number = rest[len(terrains)] - 1, rest[-1]
     percentages.setdefault(SWAMP, 0)
     percentages[PLAINS] = 100 - sum(percentages.values())
+    # a v1 seed comes back as v2: same land, and it always has been rewritten so
     land = {"columns": columns + 2, "rows": rows + 2, "dungeons": dungeons, "cities": cities,
-            "fortresses": fortresses, "rivers": rivers,
+            "fortresses": fortresses, "rivers": rivers, "version": max(version, LAND_BEFORE_WIND),
             "percentages": {terrain: percentages[terrain] for _, _, terrain, _ in TERRAIN_OPTIONS}}
     if check_percentages(land["percentages"]) or percentages[PLAINS] < 0:
         return None
@@ -897,6 +907,7 @@ def rebuild_settings(text, base):
         saved = find_settings(base, int(text))
         if saved:
             saved["seed"] = int(text)
+            saved.setdefault("version", LAND_BEFORE_WIND)
         return saved
     unpacked = read_seed(text)
     if unpacked is None:
@@ -1296,6 +1307,7 @@ def ask_settings():
     print()
     if mode:
         p["seed"] = mode[0]          # an old number seed: we already know the random number
+        p["version"] = LAND_BEFORE_WIND
         p["edit"] = mode[-1] is True
     else:
         p["seed"] = None             # a new map gets a new random number
@@ -1462,8 +1474,10 @@ def validate(p, log):
 
 # --- land ---
 # Random heightmap -> sea at the low edges, lakes in the dips, mountains and
-# hills on top. Then swamps in the low wet bits, a second noise map for
-# forest (wet) / desert (dry), rivers downhill, sites last.
+# hills on top. Then a prevailing wind carries rain across the map: the slopes
+# facing it get wet, the land behind the ranges stays dry. Swamps in the low
+# wet bits, forest where it rains / desert where it doesn't (plus some noise),
+# rivers downhill, sites last.
 def normalize(values):
     low, high = min(values.values()), max(values.values())
     spread = (high - low) or 1.0
@@ -1565,8 +1579,57 @@ def place_mountains_and_hills(grid, height, n_mountains, n_hills, rng, terrain):
         terrain[h] = HILLS
 
 
-def place_swamps(grid, height, n, rng, terrain):
-    """Lowest free hexes, nearer to water first. Patches come out by themselves."""
+# where the prevailing wind blows from, clockwise from north; the vector is
+# where it blows to, in map units (x right, y down)
+WIND_NAMES = (("nord", "north"), ("nord-est", "north-east"), ("est", "east"), ("sud-est", "south-east"),
+              ("sud", "south"), ("sud-ovest", "south-west"), ("ovest", "west"), ("nord-ovest", "north-west"))
+WIND_VECTORS = tuple((-math.sin(i * math.pi / 4), math.cos(i * math.pi / 4)) for i in range(8))
+WIND_LIFT = {MOUNTAINS: 0.45, HILLS: 0.2}    # share of the air's water a hex wrings out
+WIND_DRIZZLE = 0.04                          # same, on flat land
+WIND_DRYING = 0.985                          # air loses a bit every hex inland
+WIND_SEA_PICKUP = 0.25                       # and gets it back over sea and lakes
+
+
+def hex_xy(h):
+    """Centre of a flat-top odd-q hex: neighbours are all sqrt(3) apart."""
+    c, r = h
+    return 1.5 * c, math.sqrt(3) * (r + 0.5 * (c & 1))
+
+
+def rain_map(grid, height, terrain, wind):
+    """Air comes in wet from the upwind edge and crosses the map with the wind.
+    Climbing hills and mountains wrings the water out of it, so the slopes
+    facing the wind get the rain and the land behind them stays dry (rain
+    shadow). Over sea and lakes it fills up again. 0-1 for every land hex."""
+    dx, dy = WIND_VECTORS[wind]
+    pos = {h: hex_xy(h) for h in grid.hexes}
+    along = {h: pos[h][0] * dx + pos[h][1] * dy for h in grid.hexes}
+    air, rain = {}, {}
+    for h in sorted(grid.hexes, key=along.get):           # upwind hexes first
+        moist = rise = weight = 0.0
+        for nb in grid.neighbours(h):
+            # how straight the wind blows from nb into h: 1 = head on
+            w = (along[h] - along[nb]) / math.sqrt(3)
+            if w > 0.3:
+                weight += w
+                moist += w * air[nb]
+                rise += w * (height[h] - height[nb])
+        if weight:
+            moist, rise = moist / weight, rise / weight
+        else:
+            moist, rise = 1.0, 0.0                        # fresh air from off the map
+        if terrain[h] in WATER:
+            air[h] = min(1.0, moist + WIND_SEA_PICKUP)
+            continue
+        wrung = moist * min(0.8, WIND_LIFT.get(terrain[h], WIND_DRIZZLE) + max(0.0, rise))
+        rain[h] = 0.4 * moist + wrung
+        air[h] = (moist - wrung) * WIND_DRYING
+    return normalize(rain) if rain else rain
+
+
+def place_swamps(grid, height, n, rng, terrain, rain=None):
+    """Lowest free hexes, nearer to water first (and where it rains, if there
+    is wind). Patches come out by themselves."""
     if n <= 0:
         # don't touch rng here: maps without swamps must match pre-0.0.3 ones
         return
@@ -1576,16 +1639,22 @@ def place_swamps(grid, height, n, rng, terrain):
         if terrain[h] is None:
             d = to_water[h] if to_water[h] is not None else 4
             score[h] = height[h] + 0.06 * min(d, 4) + 0.05 * rng.random()
+            if rain:
+                score[h] -= 0.1 * rain[h]
     for h in sorted(score, key=score.get)[:n]:
         terrain[h] = SWAMP
 
 
-def place_forests_and_deserts(grid, n_forests, n_deserts, rng, terrain):
+def place_forests_and_deserts(grid, n_forests, n_deserts, rng, terrain, rain=None):
+    """Wettest free hexes become forest, driest desert. Wetness is noise, plus
+    the rain brought by the wind if there is one, plus being near water."""
     wetness = {h: 0.7 * v for h, v in noise_field(grid, rng, max(2, (grid.cols + grid.rows) // 7)).items()}
     fine = noise_field(grid, rng, 1)
     to_water = grid.distances_from([h for h in grid.hexes if terrain[h] in WATER])
     for h in grid.hexes:
         wetness[h] += 0.3 * fine[h]
+        if rain and h in rain:
+            wetness[h] = 0.4 * wetness[h] + 0.6 * rain[h]
         d = to_water[h]
         if d == 1:
             wetness[h] += 0.25
@@ -1747,8 +1816,13 @@ def build_land(params, counts, grid, rng, log):
     log.info(tr("info_relief", m=counts[MOUNTAINS], h=counts[HILLS]))
 
     log.step(tr("step_wetness"))
-    place_swamps(grid, height, counts[SWAMP], rng, terrain)
-    place_forests_and_deserts(grid, counts[FOREST], counts[DESERT], rng, terrain)
+    rain = None
+    if params.get("version", SEED_VERSION) > LAND_BEFORE_WIND:
+        wind = rng.randrange(len(WIND_NAMES))
+        rain = rain_map(grid, height, terrain, wind)
+        log.info(tr("info_wind", wind=pick(WIND_NAMES[wind]), lee=pick(WIND_NAMES[(wind + 4) % 8])))
+    place_swamps(grid, height, counts[SWAMP], rng, terrain, rain)
+    place_forests_and_deserts(grid, counts[FOREST], counts[DESERT], rng, terrain, rain)
     actual = {t: sum(1 for h in grid.hexes if terrain[h] == t)
               for t in (PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)}
     log.info(tr("info_result", list=", ".join(f"{pick(TERRAIN_NAMES[t])} {n}" for t, n in actual.items())))
@@ -3102,6 +3176,7 @@ def main():
     if "auto" in (params["columns"], params["rows"]):
         fill_page(params, font_spec, aspect, log)
     number = params["seed"] if params["seed"] is not None else new_seed()
+    params.setdefault("version", SEED_VERSION)
     if params.pop("randomize", False):
         random_settings(params, number)
         log.info(tr("info_random"))
