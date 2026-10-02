@@ -29,6 +29,9 @@ Usage. Every option has an Italian and an English name, use whichever:
       (also --laghi/--lakes, --colline/--hills, --montagne/--mountains,
        --foreste/--forests, --deserti/--deserts; whole numbers, max 100 in
        total, whatever is left becomes plains)
+  python wyrmhex.py --vento o                    / --wind w
+      (where the prevailing wind blows from: n, ne, e, se, s, so/sw, o/w,
+       no/nw; rain on the slopes facing it, dry behind them; default random)
   python wyrmhex.py --casuale                    / --random
       (random sites, terrain % and rivers; ignores the options above)
   python wyrmhex.py --riproduci 475T-4KM4-MY0B-JNDJ-ZYEQ-K164
@@ -261,6 +264,8 @@ TEXTS = {
                   "\n  Terrain percentages (they must not add up to more than 100; the rest becomes plains)"),
     "pct_retry": ("\n  ERRORE: {error}\n  Reinserisci le percentuali.\n", "\n  ERROR: {error}\n  Enter the percentages again.\n"),
     "q_rivers": ("Numero di fiumi (-1 = automatico)", "Number of rivers (-1 = automatic)"),
+    "q_wind": ("  Vento prevalente: {options} (Invio = a caso): ",
+               "  Prevailing wind: {options} (Enter = random): "),
     "q_title": ("  Titolo della mappa [{default}]: ", "  Map title [{default}]: "),
     "default_title": ("Terre Selvagge", "Wild Lands"),
     "default_scale": ("6 miglia", "6 miles"),
@@ -502,6 +507,14 @@ TEXTS = {
                       "la mappa nell'editor (scelta 3) per ricominciare.",
                       "\nERROR: the edits saved in {path} can't be read: fix the file, or open the map "
                       "in the editor again (choice 3) to start over."),
+    "err_wind": ("vento '{value}' sconosciuto: usa {options} (o nord, nord-est...), oppure casuale",
+                 "unknown wind '{value}': use {options} (or north, north-east...), or random"),
+    "err_wind_reproduce": ("--vento non si usa con --riproduci: il vento è già nel seme",
+                           "--wind can't go with --reproduce: the wind is already in the seed"),
+    "err_wind_seed": ("con --seme {n} il vento viene da {wind}: togli --vento, oppure togli --seme "
+                      "e il programma sceglierà un numero con il vento che vuoi",
+                      "with --seed {n} the wind comes from the {wind}: drop --wind, or drop --seed "
+                      "and the program will pick a number with the wind you want"),
     "err_edited_needs_seed": ("--modificata funziona solo insieme a --riproduci, o a --seme con un seme completo",
                               "--edited only works together with --reproduce, or --seed with a full seed"),
     "sites_header": ("\nELENCO DEI SITI (codice esagono)", "\nLIST OF SITES (hex code)"),
@@ -605,6 +618,10 @@ TEXTS = {
                "small (k=2) or large (k=3) hexes; auto chooses from the print format"),
     "h_version": ("mostra la versione del programma ed esce", "show the program version and exit"),
     "h_font": ("file .ttf monospazio da usare", "monospaced .ttf font file to use"),
+    "h_wind": ("da dove soffia il vento prevalente (piove sui versanti rivolti verso il vento, dietro i rilievi "
+               "è secco); default: a caso",
+               "where the prevailing wind blows from (rain on the slopes facing it, dry land behind the high "
+               "ground); default: random"),
     "h_random": ("città, fortezze, dungeon, percentuali di terreno e fiumi a caso "
                  "(le opzioni corrispondenti vengono ignorate)",
                  "random cities, fortresses, dungeons, terrain percentages and rivers "
@@ -1263,6 +1280,17 @@ def ask_look(p):
         p["background"] = "black" if ask(tr("choice"), 1, int, 1, 2) == 2 else "white"
 
 
+def ask_wind():
+    while True:
+        answer = input(tr("q_wind", options=", ".join(pick(pair) for pair in WIND_SHORT))).strip()
+        if not answer:
+            return None
+        try:
+            return parse_wind(answer)
+        except KeyError:
+            print(tr("invalid_value"))
+
+
 def ask_settings():
     ask_language()
     show_welcome()
@@ -1304,6 +1332,8 @@ def ask_settings():
             print(tr("pct_retry", error=error))
         p["percentages"] = perc
         p["rivers"] = ask(tr("q_rivers"), -1, int, -1, MAX_RIVERS)
+    if not mode:                     # old number seeds were made before the wind
+        p["wind"] = ask_wind()
     print()
     if mode:
         p["seed"] = mode[0]          # an old number seed: we already know the random number
@@ -1348,6 +1378,8 @@ def settings_from_options(argv):
                         metavar="%", help=tr("h_terrain", label=pick(label).lower(),
                                              default=DEFAULT_PERCENTAGES[terrain]))
     ap.add_argument(*names("fiumi", "rivers"), dest="rivers", type=int, default=-1, metavar="N", help=tr("h_rivers"))
+    winds = {"it": [it for it, _ in WIND_SHORT], "en": [en for _, en in WIND_SHORT]}
+    ap.add_argument(*names("vento", "wind"), dest="wind", default=None, metavar=shown(winds), help=tr("h_wind"))
     ap.add_argument(*names("casuale", "random"), dest="randomize", action="store_true", help=tr("h_random"))
     ap.add_argument(*names("seme", "seed"), dest="seed", default=None, metavar=tr("mv_seed"),
                     help=tr("h_seed", example=example_seed(), max=RANDOM_NUMBERS - 1))
@@ -1389,6 +1421,16 @@ def settings_from_options(argv):
         ap.error(tr("err_seed_number", max=RANDOM_NUMBERS - 1, example=example_seed()))
     if a.edited and a.reproduce is None:
         ap.error(tr("err_edited_needs_seed"))
+    wind = None
+    if a.wind is not None:
+        try:
+            wind = parse_wind(a.wind)
+        except KeyError:
+            ap.error(tr("err_wind", value=a.wind, options=", ".join(winds[LANG])))
+        if a.reproduce is not None:
+            ap.error(tr("err_wind_reproduce"))
+        if wind is not None and a.seed is not None and wind_of(int(a.seed)) != wind:
+            ap.error(tr("err_wind_seed", n=a.seed, wind=pick(WIND_NAMES[wind_of(int(a.seed))])))
 
     if a.reproduce is not None:
         saved = rebuild_settings(a.reproduce, a.output)
@@ -1427,7 +1469,7 @@ def settings_from_options(argv):
         "title": a.title or tr("default_title"), "scale": scale_text(a.scale) if a.scale else tr("default_scale"),
         "orientation": orientation, "output": a.output, "paper": a.paper,
         "ascii_only": a.ascii_only, "colors": a.colors, "background": background, "size": size, "font": a.font,
-        "ask_paper": ask_for_paper, "randomize": a.randomize,
+        "ask_paper": ask_for_paper, "randomize": a.randomize, "wind": wind,
     }
 
 
@@ -1583,6 +1625,14 @@ def place_mountains_and_hills(grid, height, n_mountains, n_hills, rng, terrain):
 # where it blows to, in map units (x right, y down)
 WIND_NAMES = (("nord", "north"), ("nord-est", "north-east"), ("est", "east"), ("sud-est", "south-east"),
               ("sud", "south"), ("sud-ovest", "south-west"), ("ovest", "west"), ("nord-ovest", "north-west"))
+# what can be typed after --vento/--wind or at the question: short or long,
+# Italian or English, with or without the dash; None = picked at random
+WIND_SHORT = (("n", "n"), ("ne", "ne"), ("e", "e"), ("se", "se"), ("s", "s"), ("so", "sw"), ("o", "w"), ("no", "nw"))
+WIND_FROM_USER = {"casuale": None, "caso": None, "random": None, "auto": None}
+for _i, (_short, _long) in enumerate(zip(WIND_SHORT, WIND_NAMES)):
+    for _name in (*_short, *_long):
+        WIND_FROM_USER[_name] = WIND_FROM_USER[_name.replace("-", "")] = _i
+del _i, _short, _long, _name
 WIND_VECTORS = tuple((-math.sin(i * math.pi / 4), math.cos(i * math.pi / 4)) for i in range(8))
 WIND_LIFT = {MOUNTAINS: 0.45, HILLS: 0.2}    # share of the air's water a hex wrings out
 WIND_DRIZZLE = 0.04                          # same, on flat land
@@ -1791,7 +1841,18 @@ def place_sites(grid, terrain, rivers, wanted, rng, log):
     return sites
 
 
-def build_land(params, counts, grid, rng, log):
+def parse_wind(text):
+    """Wind index (0 = from the north, clockwise), None for random. KeyError if unknown."""
+    return WIND_FROM_USER[text.strip().lower().replace(" ", "").replace("_", "-")]
+
+
+def wind_of(number):
+    """The wind comes from the map's random number, so a seed needs no room for it.
+    Choosing the wind means choosing a number that gives it (see main())."""
+    return number % len(WIND_NAMES)
+
+
+def build_land(params, counts, grid, rng, log, number):
     """Steps 3-9. Returns (terrain of every hex, rivers, sites, heights)."""
     log.step(tr("step_heights"))
     height = make_heights(grid, rng)
@@ -1818,7 +1879,7 @@ def build_land(params, counts, grid, rng, log):
     log.step(tr("step_wetness"))
     rain = None
     if params.get("version", SEED_VERSION) > LAND_BEFORE_WIND:
-        wind = rng.randrange(len(WIND_NAMES))
+        wind = wind_of(number)
         rain = rain_map(grid, height, terrain, wind)
         log.info(tr("info_wind", wind=pick(WIND_NAMES[wind]), lee=pick(WIND_NAMES[(wind + 4) % 8])))
     place_swamps(grid, height, counts[SWAMP], rng, terrain, rain)
@@ -3176,6 +3237,9 @@ def main():
     if "auto" in (params["columns"], params["rows"]):
         fill_page(params, font_spec, aspect, log)
     number = params["seed"] if params["seed"] is not None else new_seed()
+    wind = params.pop("wind", None)
+    if wind is not None and params["seed"] is None:
+        number += wind - wind_of(number)      # RANDOM_NUMBERS is a multiple of 8: still in range
     params.setdefault("version", SEED_VERSION)
     if params.pop("randomize", False):
         random_settings(params, number)
@@ -3200,7 +3264,7 @@ def main():
     log.info(tr("info_font", name=font_name(font_spec), fake="" if bold_spec else tr("fake_bold"), a=aspect))
 
     # 3-9: land
-    terrain, rivers, sites, height = build_land(params, counts, grid, rng, log)
+    terrain, rivers, sites, height = build_land(params, counts, grid, rng, log, number)
     original = None
     if params.pop("edit", False):
         original = (terrain, rivers)

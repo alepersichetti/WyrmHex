@@ -157,14 +157,15 @@ Then the welcome screen appears, with the title and a picture: press **ENTER** t
 
 1. **What do you want to do?** Type `1` for a new map, `2` to rebuild a map you already made (see chapter 4), `3` to edit a map by hand, hex by hex (see chapter 5).
 2. **Hexes across and down:** how many columns and rows of hexes you want. The ready-made answer is `auto`: the program works out by itself how many hexes fill an A4 sheet and stay easy to read (33 × 15).
-3. **Choose yourself or at random?** Type `1` to answer the next three questions yourself, or `2` to let the program pick the number of sites, the terrain percentages and the rivers at random, sized to the map. With `2` it skips straight to the title. The values it picks are shown while it works, and they end up in the seed like any other.
+3. **Choose yourself or at random?** Type `1` to answer the next three questions yourself, or `2` to let the program pick the number of sites, the terrain percentages and the rivers at random, sized to the map. With `2` it skips straight to the wind. The values it picks are shown while it works, and they end up in the seed like any other.
 4. **Number of dungeons, cities and fortresses** to put on the map (up to 99 of each).
-5. **Terrain percentages:** how much of the map is plains, sea, lakes, swamps, hills, mountains, forests and deserts, as whole numbers. Swamps form in low ground, mostly along the coast and around lakes. Every map also has a **prevailing wind**, picked at random and shown while the map is being made (for example "from the west"): it brings rain to the hill and mountain slopes facing it, where forests grow, while the land on the other side of the high ground stays dry, so that is where deserts tend to form. They can't add up to more than 100; anything left over becomes plains. If you get it wrong, the program tells you and asks for the numbers again.
+5. **Terrain percentages:** how much of the map is plains, sea, lakes, swamps, hills, mountains, forests and deserts, as whole numbers. Swamps form in low ground, mostly along the coast and around lakes. They can't add up to more than 100; anything left over becomes plains. If you get it wrong, the program tells you and asks for the numbers again.
 6. **Number of rivers** (up to 100): with `-1` the program decides by itself.
-7. **Title** printed at the top of the map.
-8. **Scale:** how many miles each hex covers. `1` = 2 miles, `2` = 6 miles (the ready-made answer), `3` = 12 miles, `4` = 24 miles, `5` = your own: type a number of miles, or any text such as `5 km` or `1 day`. It's printed under the title, as "1 hex = 6 miles".
-9. Whether to use **only basic keyboard characters** (no symbols like ♣ ▲ ≈). You'll usually answer no: just press Enter.
-10. **Colours:** `1` = black and white, for printing (the ready-made answer); `2` = colour: forests green, sea and lakes blue, deserts sandy, swamps olive, cities red and so on. Only for a colour map does the program then ask for the **background**: `1` = white, `2` = black.
+7. **Prevailing wind:** where the wind blows from across the map: `n`, `ne`, `e`, `se`, `s`, `sw`, `w`, `nw` (full names such as `west` or `north-east` work too). The ready-made answer is random: press Enter and the program picks one, and tells you which while it makes the map. The wind brings rain to the hill and mountain slopes facing it, where forests grow, while the land on the other side of the high ground stays dry, so that is where deserts tend to form. The wind ends up in the seed too.
+8. **Title** printed at the top of the map.
+9. **Scale:** how many miles each hex covers. `1` = 2 miles, `2` = 6 miles (the ready-made answer), `3` = 12 miles, `4` = 24 miles, `5` = your own: type a number of miles, or any text such as `5 km` or `1 day`. It's printed under the title, as "1 hex = 6 miles".
+10. Whether to use **only basic keyboard characters** (no symbols like ♣ ▲ ≈). You'll usually answer no: just press Enter.
+11. **Colours:** `1` = black and white, for printing (the ready-made answer); `2` = colour: forests green, sea and lakes blue, deserts sandy, swamps olive, cities red and so on. Only for a colour map does the program then ask for the **background**: `1` = white, `2` = black.
 
 Once the questions are done, a wizard appears with the words **"The conjuring spell begins!"**: from here the program gets to work.
 
@@ -314,6 +315,7 @@ Without `--language en` the messages and the texts on the map are in Italian. Ev
 | `--cities`, `--fortresses`, `--dungeons` / `--citta`, `--fortezze`, `--dungeon` | How many sites of each kind (0 to 99) | `--cities 4` |
 | `--plains`, `--sea`, `--lakes`, `--swamps`, `--hills`, `--mountains`, `--forests`, `--deserts` / `--pianura`, `--mare`, `--laghi`, `--paludi`, `--colline`, `--montagne`, `--foreste`, `--deserti` | Percentage of each terrain, as a whole number | `--sea 25` |
 | `--rivers` / `--fiumi` | Number of rivers, up to 100 (`-1` = automatic) | `--rivers 3` |
+| `--wind` / `--vento` | Where the prevailing wind blows from: `n`, `ne`, `e`, `se`, `s`, `sw`, `w`, `nw` (in Italian `n`, `ne`, `e`, `se`, `s`, `so`, `o`, `no`; full names such as `west` or `ovest` work too). Rain falls on the slopes facing the wind, the land behind the high ground stays dry. Without this option the wind is picked at random. The wind comes from the map's random number, so it can't go with `--reproduce`, and with `--seed <number>` it must be the one that number gives | `--wind w` |
 | `--random` / `--casuale` | Picks the number of sites, the terrain percentages and the rivers at random, sized to the map. The options above for sites, terrains and rivers are then ignored. With the same `--seed` number you always get the same values | `--random` |
 | `--title` / `--titolo` | Title at the top of the map | `--title "Northern Lands"` |
 | `--scale` / `--scala` | Miles per hex: 2, 6 (default), 12, 24 or any other number. Free text, such as `"5 km"`, works too | `--scale 12` |
