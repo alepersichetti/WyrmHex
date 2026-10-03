@@ -158,14 +158,19 @@ SEA_GRAY = 205              # 0 black, 255 white
 # Colour maps. Keys are canvas tags: terrains, sites, and a few extras. Anything
 # without its own colour is drawn in "ink". The black-and-white map is just one
 # more palette, in grayscale, where everything is ink.
-MONO = {"mode": "L", "paper": 255, "ink": 0, "sea": SEA_GRAY}
 def bg(terrain):
     """Palette key of a terrain's hex background. Only palettes that have one fill it."""
     return "bg:" + terrain
 
 
+# the sea is filled hex by hex: painted letter square by letter square, it left
+# white notches along the coast and squares sticking out at the map edge
+MONO = {"mode": "L", "paper": 255, "ink": 0, "sea": SEA_GRAY, bg(SEA): SEA_GRAY}
+
+
 def has_backgrounds(p):
-    return any(isinstance(k, str) and k.startswith("bg:") for k in palette_for(p))
+    """Coloured land hexes (not just the sea): the legend then shows swatches."""
+    return bg(PLAINS) in palette_for(p)
 
 
 # Swamps are a magenta-leaning purple: olive got lost among the forests, and a
@@ -187,7 +192,9 @@ PALETTES = {
               LAKE: (80, 150, 255), "river": (90, 160, 255), SWAMP: (195, 105, 165),
               FOREST: (60, 190, 80), HILLS: (215, 165, 80), MOUNTAINS: (195, 180, 165),
               DESERT: (235, 195, 95), CITY: (235, 75, 65), FORTRESS: (170, 120, 230),
-              DUNGEON: (230, 230, 225)},
+              DUNGEON: (230, 230, 225),
+              # sea hexes as hexagons; hex codes go straight on them, no box
+              bg(SEA): (18, 42, 82)},
 }
 BACKGROUND_FROM_USER = {"bianco": "white", "nero": "black", "white": "white", "black": "black"}
 
@@ -2498,7 +2505,7 @@ def write_hex_numbers(page, grid, k, ox, oy):
             style = page.styles[y][ox + x0 + xx]
             if style != "b":
                 page.put(ox + x0 + xx, y, " ", "g" if style in "gG" else "n")
-        # white background even in the sea, cheap printers turn gray digits to mush
+        # straight on the hex's own background, sea included: no box behind
         code = hex_code((c, r), digits)
         x_num = ox + x0 + 2 * k + 1 - len(code) // 2
         for i, digit in enumerate(code):
