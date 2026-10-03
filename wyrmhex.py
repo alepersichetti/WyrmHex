@@ -165,8 +165,7 @@ def bg(terrain):
 
 # the sea is filled hex by hex: painted letter square by letter square, it left
 # white notches along the coast and squares sticking out at the map edge
-NUMBER_BACKGROUND = "number_bg"     # behind the hex codes, where the palette has one
-MONO = {"mode": "L", "paper": 255, "ink": 0, "sea": SEA_GRAY, bg(SEA): SEA_GRAY, NUMBER_BACKGROUND: 255}
+MONO = {"mode": "L", "paper": 255, "ink": 0, "sea": SEA_GRAY, bg(SEA): SEA_GRAY}
 
 
 def has_backgrounds(p):
@@ -194,8 +193,8 @@ PALETTES = {
               FOREST: (60, 190, 80), HILLS: (215, 165, 80), MOUNTAINS: (195, 180, 165),
               DESERT: (235, 195, 95), CITY: (235, 75, 65), FORTRESS: (170, 120, 230),
               DUNGEON: (230, 230, 225),
-              # sea hexes as hexagons, hex codes on the page black as before
-              bg(SEA): (18, 42, 82), NUMBER_BACKGROUND: (12, 12, 16)},
+              # sea hexes as hexagons; hex codes go straight on them, no box
+              bg(SEA): (18, 42, 82)},
 }
 BACKGROUND_FROM_USER = {"bianco": "white", "nero": "black", "white": "white", "black": "black"}
 
@@ -2506,14 +2505,11 @@ def write_hex_numbers(page, grid, k, ox, oy):
             style = page.styles[y][ox + x0 + xx]
             if style != "b":
                 page.put(ox + x0 + xx, y, " ", "g" if style in "gG" else "n")
-        # white background even in the sea, cheap printers turn gray digits to mush
+        # straight on the hex's own background, sea included: no box behind
         code = hex_code((c, r), digits)
         x_num = ox + x0 + 2 * k + 1 - len(code) // 2
         for i, digit in enumerate(code):
             page.put(x_num + i, y, digit, "n")
-        # the sea hexagon is painted under the letters: put the white back
-        page.fills.append(([(x_num, y), (x_num + len(code), y), (x_num + len(code), y + 1), (x_num, y + 1)],
-                           NUMBER_BACKGROUND))
 
 
 # --- page: frame, title, legend ---
