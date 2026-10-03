@@ -158,14 +158,20 @@ SEA_GRAY = 205              # 0 black, 255 white
 # Colour maps. Keys are canvas tags: terrains, sites, and a few extras. Anything
 # without its own colour is drawn in "ink". The black-and-white map is just one
 # more palette, in grayscale, where everything is ink.
-MONO = {"mode": "L", "paper": 255, "ink": 0, "sea": SEA_GRAY}
 def bg(terrain):
     """Palette key of a terrain's hex background. Only palettes that have one fill it."""
     return "bg:" + terrain
 
 
+# the sea is filled hex by hex: painted letter square by letter square, it left
+# white notches along the coast and squares sticking out at the map edge
+NUMBER_BACKGROUND = "number_bg"     # behind the hex codes; only black and white has one
+MONO = {"mode": "L", "paper": 255, "ink": 0, "sea": SEA_GRAY, bg(SEA): SEA_GRAY, NUMBER_BACKGROUND: 255}
+
+
 def has_backgrounds(p):
-    return any(isinstance(k, str) and k.startswith("bg:") for k in palette_for(p))
+    """Coloured land hexes (not just the sea): the legend then shows swatches."""
+    return bg(PLAINS) in palette_for(p)
 
 
 # Swamps are a magenta-leaning purple: olive got lost among the forests, and a
@@ -2503,6 +2509,9 @@ def write_hex_numbers(page, grid, k, ox, oy):
         x_num = ox + x0 + 2 * k + 1 - len(code) // 2
         for i, digit in enumerate(code):
             page.put(x_num + i, y, digit, "n")
+        # the sea hexagon is painted under the letters: put the white back
+        page.fills.append(([(x_num, y), (x_num + len(code), y), (x_num + len(code), y + 1), (x_num, y + 1)],
+                           NUMBER_BACKGROUND))
 
 
 # --- page: frame, title, legend ---
