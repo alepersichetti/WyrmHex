@@ -165,7 +165,7 @@ def bg(terrain):
 
 # the sea is filled hex by hex: painted letter square by letter square, it left
 # white notches along the coast and squares sticking out at the map edge
-NUMBER_BACKGROUND = "number_bg"     # behind the hex codes; only black and white has one
+NUMBER_BACKGROUND = "number_bg"     # behind the hex codes, where the palette has one
 MONO = {"mode": "L", "paper": 255, "ink": 0, "sea": SEA_GRAY, bg(SEA): SEA_GRAY, NUMBER_BACKGROUND: 255}
 
 
@@ -193,7 +193,9 @@ PALETTES = {
               LAKE: (80, 150, 255), "river": (90, 160, 255), SWAMP: (195, 105, 165),
               FOREST: (60, 190, 80), HILLS: (215, 165, 80), MOUNTAINS: (195, 180, 165),
               DESERT: (235, 195, 95), CITY: (235, 75, 65), FORTRESS: (170, 120, 230),
-              DUNGEON: (230, 230, 225)},
+              DUNGEON: (230, 230, 225),
+              # sea hexes as hexagons, hex codes on the page black as before
+              bg(SEA): (18, 42, 82), NUMBER_BACKGROUND: (12, 12, 16)},
 }
 BACKGROUND_FROM_USER = {"bianco": "white", "nero": "black", "white": "white", "black": "black"}
 
