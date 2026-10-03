@@ -180,7 +180,7 @@ PALETTES = {
               # hex backgrounds, light enough for the symbols on top (hills brown and
               # desert ochre above are darker than on black for the yellows); lakes get
               # the sea's blue, their ≈ tells them apart
-              bg(PLAINS): (222, 239, 200), bg(LAKE): (180, 211, 236), bg(FOREST): (168, 208, 150), bg(SWAMP): (250, 208, 226),
+              bg(PLAINS): (222, 239, 200), bg(SEA): (180, 211, 236), bg(LAKE): (180, 211, 236), bg(FOREST): (168, 208, 150), bg(SWAMP): (250, 208, 226),
               bg(DESERT): (252, 238, 160), bg(HILLS): (232, 200, 100), bg(MOUNTAINS): (228, 210, 180)},
     "black": {"mode": "RGB", "paper": (12, 12, 16), "ink": (230, 230, 225),
               "border": (110, 110, 115), "sea": (18, 42, 82), "sea_line": (60, 100, 150),
@@ -2393,10 +2393,10 @@ def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect, original=None, lab
         chars = glyphs(old_terrain[(c, r)], rng)
         if kind != old_terrain[(c, r)]:
             chars = glyphs(kind, random.Random(f"{c},{r},{kind}"))
-        if kind != SEA:
-            # the hexagon through the middle of its border letters: neighbours'
-            # fills meet right under the / \ _ drawn on top
-            canvas.fills.append(([(x0 + x, y0 + y) for x, y in corners], bg(kind)))
+        # the hexagon through the middle of its border letters: neighbours'
+        # fills meet right under the / \ _ drawn on top. Sea too, or the coast
+        # keeps white notches between its gray squares and the land
+        canvas.fills.append(([(x0 + x, y0 + y) for x, y in corners], bg(kind)))
         if kind == SEA:
             for (yy, xx) in inside:
                 # the ≈ only shows in the .txt
@@ -2586,7 +2586,7 @@ def compose_page(map_canvas, n_cols, n_rows, legend_lines, title, subtitle, G):
             for text, style, tag in entry:
                 y = y_legend_line + 1 + i
                 page.write(x, y, text, style, tag)
-                if tag in (PLAINS, FERTILE, FOREST, LAKE, SWAMP, DESERT, HILLS, MOUNTAINS):
+                if tag in (PLAINS, FERTILE, FOREST, SEA, LAKE, SWAMP, DESERT, HILLS, MOUNTAINS):
                     # the same background as on the map (if the palette has one)
                     swatch = [(x, y), (x + len(text), y), (x + len(text), y + 1), (x, y + 1)]
                     page.fills.append((swatch, bg(PLAINS if tag == FERTILE else tag)))
@@ -2722,6 +2722,7 @@ def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy, p
         if tag in palette:
             d.polygon([(ox + x * char_w, oy + y * char_h) for x, y in points], fill=palette[tag])
     paper, sea = palette["paper"], palette["sea"]
+    sea_hexes = bg(SEA) in palette            # the sea is filled hex by hex, like the land
 
     def ink(tag):
         return palette.get(tag, palette["ink"])
@@ -2751,7 +2752,8 @@ def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy, p
                 continue
             px = ox + x * char_w
             if style in "gGH":
-                d.rectangle([px, py, px + char_w + 0.5, py + char_h + 0.5], fill=sea)
+                if not sea_hexes:      # with sea hexagons the squares would stick out at the map edge
+                    d.rectangle([px, py, px + char_w + 0.5, py + char_h + 0.5], fill=sea)
                 if style == "G":
                     d.text((px, py), ch, font=regular, fill=ink(tag), anchor="la")
                 elif style == "H":
