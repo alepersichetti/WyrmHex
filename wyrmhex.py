@@ -80,6 +80,7 @@ VERSION = "0.1.0"
 
 PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT = (
     "plains", "sea", "lake", "swamp", "hills", "mountains", "forest", "desert")
+FERTILE = "fertile"                  # not a terrain: plains whose soil isn't too salty to farm
 WATER = (SEA, LAKE)
 
 # (it, en) pairs everywhere below
@@ -135,6 +136,8 @@ TERRAIN_GLYPHS = {
     LAKE:      [("≈", "~", 6), (" ", " ", 1)],        # ~ is too faint on paper
     # DF swamp: reeds and grass tufts
     SWAMP:     [("⌠", '"', 4), ('"', ",", 4), (" ", " ", 2)],
+    # sprouts, sparse: farmland is still open plains
+    FERTILE:   [("τ", "v", 2), (" ", " ", 5)],
 }
 SITE_GLYPHS = {CITY: ("⌂", "C"), FORTRESS: ("Ω", "F"), DUNGEON: (">", ">")}
 
@@ -373,6 +376,10 @@ TEXTS = {
                   "a {lee} dei rilievi resta secco",
                   "Prevailing wind from the {wind}: rain on the slopes facing {wind}, "
                   "dry land {lee} of the high ground"),
+    "info_salt": ("Salinità: {f} pianure su {p} abbastanza dolci da coltivare; paludi: {s} salmastre "
+                  "lungo la costa, {w} d'acqua dolce",
+                  "Salinity: {f} of {p} plains fresh enough to farm; swamps: {s} salt marshes on the coast, "
+                  "{w} freshwater"),
     "info_result": ("Risultato: {list}", "Result: {list}"),
     "step_rivers": ("Fiumi: dalle sorgenti in quota verso il basso fino a mare, lago o bordo",
                     "Rivers: from high springs downhill to the sea, a lake or the edge"),
@@ -582,6 +589,8 @@ TEXTS = {
     "leg_hills": ("Colline", "Hills"),
     "leg_forest": ("Foresta", "Forest"),
     "leg_plains": ("Pianura = esagono vuoto", "Plains = empty hex"),
+    "leg_fertile": ("Pianura coltivabile", "Farmland"),
+    "leg_barren": ("Pianura incolta = esagono vuoto", "Barren plains = empty hex"),
     "leg_desert": ("Deserto", "Desert"),
     "leg_sea": ("Mare", "Sea"),
     "leg_lake": ("Lago", "Lake"),
@@ -806,11 +815,11 @@ def check_percentages(perc):
 # map, anywhere, no PNG needed. Title/scale/paper/ascii aren't in it.
 # All the fields go into one big mixed-radix integer, written in Crockford-ish
 # base 32 (no I L O U), plus 2 check symbols at the end.
-# v1 seeds (no swamps), v2 seeds (no wind) and v3 seeds (no islands) still
-# decode and give the same map as before: the version also picks how the land
-# is made. Before that the seed was a plain number
+# v1 seeds (no swamps), v2 seeds (no wind), v3 seeds (no islands) and v4
+# seeds (no salinity) still decode and give the same map as before: the
+# version also picks how the land is made. Before that the seed was a plain number
 # that only worked together with the settings stored in the PNG.
-SEED_VERSION = 4                     # 2 = swamps, 3 = prevailing wind, 4 = islands (3, 4: same fields as 2)
+SEED_VERSION = 5                     # 2 = swamps, 3 = wind, 4 = islands, 5 = salinity (3-5: same fields as 2)
 SEED_SYMBOLS = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"   # no I, L, O, U: too easy to misread
 SEED_LENGTH = 24
 MAX_SITES = 99                       # per kind
@@ -820,11 +829,13 @@ RANDOM_NUMBERS = 2 ** 20             # old 6-digit seeds (<= 999999) still fit
 SEED_TERRAINS = {1: (SEA, LAKE, HILLS, MOUNTAINS, FOREST, DESERT),
                  2: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT),
                  3: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT),
-                 4: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)}
-SEED_CHECK_SYMBOLS = {1: 3, 2: 2, 3: 2, 4: 2}
+                 4: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT),
+                 5: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)}
+SEED_CHECK_SYMBOLS = {1: 3, 2: 2, 3: 2, 4: 2, 5: 2}
 # the land of v1 and v2 seeds (and of old number seeds) is made the same way
 LAND_BEFORE_WIND = 2
 LAND_WITH_ISLANDS = 4                # from here on, a mostly-sea map gets peninsulas and archipelagos
+LAND_WITH_SALT = 5                   # from here on, salinity steers swamps, fertile plains and cities
 
 
 def new_seed():
@@ -1759,7 +1770,35 @@ def rain_map(grid, height, terrain, wind):
     return normalize(rain) if rain else rain
 
 
-def place_swamps(grid, height, n, rng, terrain, rain=None):
+# Salt in the soil comes from two places: the sea (spray and salt water
+# seeping into low coastal ground) and dry ground, where water evaporates and
+# leaves its salt behind, worst in closed dips with nowhere to drain. Rain,
+# lakes and rivers wash it out.
+SALT_SEA_REACH = 3                   # hexes inland the sea still salts the soil
+FERTILE_SALT = 0.16                  # plains saltier than this can't be farmed
+
+
+def salinity_map(grid, terrain, height, rain, rivers=()):
+    """(salt, the part of it that comes from the sea) for every land hex, 0-1."""
+    to_sea = grid.distances_from([h for h in grid.hexes if terrain[h] == SEA])
+    fresh = [h for h in grid.hexes if terrain[h] == LAKE] + [h for r in rivers for h in r["path"]]
+    to_fresh = grid.distances_from(fresh)
+    salt, sea_salt = {}, {}
+    for h in grid.hexes:
+        if terrain[h] in WATER:
+            continue
+        d = to_sea[h]
+        from_sea = 0.0 if d is None else max(0.0, 1.0 - (d - 1) / SALT_SEA_REACH) * (1.0 - 0.7 * height[h])
+        dry = (1.0 - rain[h]) * (1.0 - 0.6 * height[h])
+        if all(height[nb] >= height[h] for nb in grid.neighbours(h)):
+            dry *= 1.4                                   # a closed dip: the salt can't drain away
+        washed = {0: 0.45, 1: 0.3, 2: 0.12}.get(to_fresh[h], 0.0)
+        salt[h] = min(1.0, max(0.0, 0.6 * from_sea + 0.5 * dry - washed))
+        sea_salt[h] = 0.6 * from_sea
+    return salt, sea_salt
+
+
+def place_swamps(grid, height, n, rng, terrain, rain=None, salt=None):
     """Lowest free hexes, nearer to water first (and where it rains, if there
     is wind). Patches come out by themselves."""
     if n <= 0:
@@ -1773,6 +1812,10 @@ def place_swamps(grid, height, n, rng, terrain, rain=None):
             score[h] = height[h] + 0.06 * min(d, 4) + 0.05 * rng.random()
             if rain:
                 score[h] -= 0.1 * rain[h]
+            if salt:
+                # salt marshes are fine on the coast; inland, salty dry
+                # ground turns into a crust, not a marsh
+                score[h] += 0.15 * max(0.0, salt[0][h] - salt[1][h])
     for h in sorted(score, key=score.get)[:n]:
         terrain[h] = SWAMP
 
@@ -1860,7 +1903,7 @@ def trace_rivers(grid, terrain, height, n, rng):
     return rivers
 
 
-def place_sites(grid, terrain, rivers, wanted, rng, log):
+def place_sites(grid, terrain, rivers, wanted, rng, log, fertile=()):
     """Weighted random choice by terrain, with a minimum distance between sites
     of the same kind (relaxed if the map is too crowded)."""
     land = [h for h in grid.hexes if terrain[h] not in WATER]
@@ -1909,6 +1952,7 @@ def place_sites(grid, terrain, rivers, wanted, rng, log):
                 w = base_weights[kind][terrain[h]]
                 if kind == CITY:
                     w *= 3 if near_water(h) else 1
+                    w *= 2 if h in fertile else 1             # farmland to feed it
                     w *= 0.5 if grid.on_edge(h) else 1       # ...and not the map edge
                 elif kind == FORTRESS:
                     w *= 1 + 0.5 * sum(terrain[nb] in (MOUNTAINS, HILLS) for nb in grid.neighbours(h))
@@ -1924,7 +1968,7 @@ def place_sites(grid, terrain, rivers, wanted, rng, log):
 
 
 def build_land(params, counts, grid, rng, log):
-    """Steps 3-9. Returns (terrain of every hex, rivers, sites, heights)."""
+    """Steps 3-9. Returns (terrain of every hex, rivers, sites, heights, farmable plains)."""
     islands = (params.get("version", SEED_VERSION) >= LAND_WITH_ISLANDS
                and params["percentages"][SEA] > ISLAND_SEA)
     log.step(tr("step_heights"))
@@ -1966,7 +2010,9 @@ def build_land(params, counts, grid, rng, log):
         wind = rng.randrange(len(WIND_NAMES))
         rain = rain_map(grid, height, terrain, wind)
         log.info(tr("info_wind", wind=pick(WIND_NAMES[wind]), lee=pick(WIND_NAMES[(wind + 4) % 8])))
-    place_swamps(grid, height, counts[SWAMP], rng, terrain, rain)
+    salty = params.get("version", SEED_VERSION) >= LAND_WITH_SALT
+    place_swamps(grid, height, counts[SWAMP], rng, terrain, rain,
+                 salinity_map(grid, terrain, height, rain) if salty else None)
     place_forests_and_deserts(grid, counts[FOREST], counts[DESERT], rng, terrain, rain)
     actual = {t: sum(1 for h in grid.hexes if terrain[h] == t)
               for t in (PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)}
@@ -1983,12 +2029,22 @@ def build_land(params, counts, grid, rng, log):
     if len(rivers) < n_rivers:
         log.warn(tr("warn_rivers", d=len(rivers), n=n_rivers))
 
+    # rivers wash the salt out too, so the farmland is worked out once they're there
+    fertile = set()
+    if salty:
+        salt, sea_salt = salinity_map(grid, terrain, height, rain, rivers)
+        plains = [h for h in grid.hexes if terrain[h] == PLAINS]
+        fertile = {h for h in plains if salt[h] < FERTILE_SALT}
+        swamps = [h for h in grid.hexes if terrain[h] == SWAMP]
+        marsh = sum(1 for h in swamps if sea_salt[h] > 0.25)
+        log.info(tr("info_salt", f=len(fertile), p=len(plains), s=marsh, w=len(swamps) - marsh))
+
     log.step(tr("step_sites"))
     sites = place_sites(grid, terrain, rivers,
                         {CITY: params["cities"], FORTRESS: params["fortresses"], DUNGEON: params["dungeons"]},
-                        rng, log)
+                        rng, log, fertile)
 
-    return terrain, rivers, sites, height
+    return terrain, rivers, sites, height, fertile
 
 
 def print_sites(grid, terrain, rivers, sites, labels=None):
@@ -2293,7 +2349,8 @@ def line_to_squares(points, aspect):
 
 
 # --- drawing the map ---
-def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect, original=None, labels=None, ascii_only=False):
+def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect, original=None, labels=None, ascii_only=False,
+             fertile=()):
     """Terrain, then hex borders, then rivers, then sites; each layer can
     overwrite the previous one.
     original = (terrain, rivers) before editing. Its glyphs and river wiggles
@@ -2322,6 +2379,11 @@ def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect, original=None, lab
         elif chars:
             for (yy, xx), ch in zip(inside, chars):
                 canvas.put(x0 + xx, y0 + yy, ch, "n", kind)
+        elif kind == PLAINS and (c, r) in fertile:
+            # own dice: the rest of the map rolls exactly as without farmland
+            dice = random.Random(f"{c},{r},{FERTILE}")
+            for (yy, xx) in inside:
+                canvas.put(x0 + xx, y0 + yy, pick_symbol(dice, TERRAIN_GLYPHS[FERTILE], G), "n", FERTILE)
 
     # borders between two sea hexes get the gray too, or the sea looks tiled
     shared = {}    # for each border square: [letter, "only sea hexes share it so far"]
@@ -2419,11 +2481,12 @@ def write_hex_numbers(page, grid, k, ox, oy):
 
 
 # --- page: frame, title, legend ---
-def legend_entries(G):
+def legend_entries(G, fertile=False):
     # (sample, name, style, colour tag)
     terrains = [
         (G("▲^", "^A"), tr("leg_mountains"), "b", MOUNTAINS), (G("∩n", "nm"), tr("leg_hills"), "b", HILLS),
-        (G("♣♠", "TY"), tr("leg_forest"), "b", FOREST), ("", tr("leg_plains"), "b", None),
+        (G("♣♠", "TY"), tr("leg_forest"), "b", FOREST), ("", tr("leg_barren" if fertile else "leg_plains"), "b", None),
+        *([(G("τ", "v"), tr("leg_fertile"), "b", FERTILE)] if fertile else []),
         (G("░·", ".:"), tr("leg_desert"), "b", DESERT),
         (G("≈≈", "~~"), tr("leg_sea"), "g", SEA),   # "g": this sample is drawn as a gray patch
         (G("≈≈", "~~"), tr("leg_lake"), "b", LAKE), (G('⌠"', '",'), tr("leg_swamp"), "b", SWAMP),
@@ -2435,8 +2498,13 @@ def legend_entries(G):
     return terrains, sites
 
 
-def pack_legend(G, max_width):
-    terrains, sites = legend_entries(G)
+def has_farmland(params):
+    """Maps made with salinity have farmland, and its line in the legend."""
+    return params.get("version", SEED_VERSION) >= LAND_WITH_SALT
+
+
+def pack_legend(G, max_width, fertile=False):
+    terrains, sites = legend_entries(G, fertile)
     entries = [[(g, style, tag), (" " + name, "n", None)] if g else [(name, "n", None)]
                for g, name, style, tag in terrains]
     entries += [[("[" + g + "]", "i", kind), (" " + name, "n", None)] for g, name, kind in sites]
@@ -2531,7 +2599,8 @@ def fill_page(params, font_spec, aspect, log):
     k = 3 if params["size"] == "large" else 2
     n_cols = int((w_mm - 2 * MARGIN_MM) / READABLE_CHAR_MM)
     n_rows = int((h_mm - 2 * MARGIN_MM) / (READABLE_CHAR_MM * aspect))
-    legend_lines = len(pack_legend(Glyphs(open_font(font_spec, 40), params["ascii_only"]), n_cols - 4))
+    legend_lines = len(pack_legend(Glyphs(open_font(font_spec, 40), params["ascii_only"]), n_cols - 4,
+                                   has_farmland(params)))
     columns = max(2, (n_cols - 4 - (4 * k + 1)) // (3 * k) + 1)
     rows = max(2, (n_rows - legend_lines - 7 - (k + 1)) // (2 * k))
     if params["columns"] == "auto":
@@ -2724,14 +2793,14 @@ def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, 
         area_w = width - 2 * mm(MARGIN_MM)
         area_h = height - 2 * mm(MARGIN_MM)
         n_cols, n_rows = int(area_w // char_w), int(area_h // char_h)
-        legend = pack_legend(G, n_cols - 4)
+        legend = pack_legend(G, n_cols - 4, has_farmland(params))
         if len(legend) <= legend_guess and n_rows >= map_h + len(legend) + 7:
             break
         legend_guess = max(len(legend), legend_guess + 1)
     values = dict(scale=params["scale"], dot=G("·", "-"), c=grid.cols, x=G("×", "x"), r=grid.rows, seed=seed)
     versions = [tr(key, **values) for key in ("subtitle", "subtitle_tight", "subtitle_short", "subtitle_seed")]
     subtitle = next((v for v in versions if len(v) + 4 <= n_cols), versions[-1])
-    legend = pack_legend(G, n_cols - 4)
+    legend = pack_legend(G, n_cols - 4, has_farmland(params))
     # still doesn't fit (very long title?): grow the page, save() shrinks it back
     legend_width = max(sum(len(t) for entry in line for t, _, _ in entry) + 4 * (len(line) - 1) for line in legend)
     need_cols = max(n_cols, map_w + 4, len(params["title"]) + 8, len(subtitle) + 4, legend_width + 4)
@@ -3361,9 +3430,10 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
 
 def save_maps(params, grid, land, look, seed, number, log, layout_log):
     """Steps 11-12: draw the page and save the two maps (PNG + TXT).
-    land is (terrain, rivers, sites, original): original is the unedited
-    (terrain, rivers) for an edited map, None otherwise."""
-    terrain, rivers, sites, original = land
+    land is (terrain, rivers, sites, original, fertile): original is the
+    unedited (terrain, rivers) for an edited map, None otherwise; fertile the
+    farmable plains (only drawn where the hex is still plains)."""
+    terrain, rivers, sites, original, fertile = land
     font_spec, bold_spec, advance_em, aspect, G, paper, k = look
     label = f"{seed} {tr('ed_edited')}" if original else seed
     layout, n_cols, n_rows, legend, subtitle = page_layout(
@@ -3372,7 +3442,7 @@ def save_maps(params, grid, land, look, seed, number, log, layout_log):
     # glyphs get their own rng, independent from the land's
     drawing_rng = random.Random(number + 1)
     map_canvas = draw_map(grid, terrain, rivers, sites, k, G, drawing_rng, aspect, original,
-                          params.get("labels"), params["ascii_only"])
+                          params.get("labels"), params["ascii_only"], fertile)
     page, mx, my = compose_page(map_canvas, n_cols, n_rows, legend, params["title"], subtitle, G)
     plain_path, numbered_path = output_names(params["output"], seed, "_edit" if original else "")
 
@@ -3432,7 +3502,7 @@ def main():
     log.info(tr("info_font", name=font_name(font_spec), fake="" if bold_spec else tr("fake_bold"), a=aspect))
 
     # 3-9: land
-    terrain, rivers, sites, height = build_land(params, counts, grid, rng, log)
+    terrain, rivers, sites, height, fertile = build_land(params, counts, grid, rng, log)
     original = None
     if params.pop("edit", False):
         original = (terrain, rivers)
@@ -3478,7 +3548,7 @@ def main():
     look = (font_spec, bold_spec, advance_em, aspect, G, paper, k)
 
     # 11-12: the two maps
-    save_maps(params, grid, (terrain, rivers, sites, original), look, seed, number, log, log)
+    save_maps(params, grid, (terrain, rivers, sites, original, fertile), look, seed, number, log, log)
     log.done()
 
     # a map just made can be edited straight away, on the same paper
@@ -3491,7 +3561,7 @@ def main():
             log = Log(12)
             log.step_number = 10            # only the last two steps are done again
             log.info(tr("info_edits", path=short_path(edit_base + ".json")))
-            save_maps(params, grid, (new_terrain, new_rivers, new_sites, (terrain, rivers)), look, seed, number,
+            save_maps(params, grid, (new_terrain, new_rivers, new_sites, (terrain, rivers), fertile), look, seed, number,
                       log, QuietLog())
             log.done()
 
