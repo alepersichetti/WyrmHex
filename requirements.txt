@@ -1,4 +1,4 @@
-# WyrmHex v0.1.0 - libraries to install
+# WyrmHex v0.1.1 - libraries to install
 # Install with:  pip install -r requirements.txt
 # (with the virtual environment active: see step 4 and 5 in the README)
 #
