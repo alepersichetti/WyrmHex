@@ -159,15 +159,29 @@ SEA_GRAY = 205              # 0 black, 255 white
 # without its own colour is drawn in "ink". The black-and-white map is just one
 # more palette, in grayscale, where everything is ink.
 MONO = {"mode": "L", "paper": 255, "ink": 0, "sea": SEA_GRAY}
+def bg(terrain):
+    """Palette key of a terrain's hex background. Only palettes that have one fill it."""
+    return "bg:" + terrain
+
+
+def has_backgrounds(p):
+    return any(isinstance(k, str) and k.startswith("bg:") for k in palette_for(p))
+
+
 # Swamps are a magenta-leaning purple: olive got lost among the forests, and a
 # bluer purple would clash with the fortresses, also for colour-blind eyes.
 PALETTES = {
     "white": {"mode": "RGB", "paper": (255, 255, 255), "ink": (25, 25, 25),
               "border": (100, 100, 100), "sea": (180, 211, 236), "sea_line": (115, 155, 195),
               LAKE: (30, 100, 200), "river": (25, 95, 205), SWAMP: (118, 30, 95),
-              FOREST: (25, 125, 45), HILLS: (160, 110, 40), MOUNTAINS: (105, 90, 80),
-              DESERT: (205, 150, 40), CITY: (190, 35, 35), FORTRESS: (105, 60, 160),
-              DUNGEON: (25, 25, 25)},
+              FOREST: (25, 125, 45), HILLS: (130, 85, 25), MOUNTAINS: (105, 90, 80),
+              DESERT: (180, 125, 25), CITY: (190, 35, 35), FORTRESS: (105, 60, 160),
+              DUNGEON: (25, 25, 25),
+              # hex backgrounds, light enough for the symbols on top (hills brown and
+              # desert ochre above are darker than on black for the yellows); lakes get
+              # the sea's blue, their ≈ tells them apart
+              bg(PLAINS): (222, 239, 200), bg(LAKE): (180, 211, 236), bg(FOREST): (168, 208, 150), bg(SWAMP): (250, 208, 226),
+              bg(DESERT): (252, 238, 160), bg(HILLS): (232, 200, 100), bg(MOUNTAINS): (228, 210, 180)},
     "black": {"mode": "RGB", "paper": (12, 12, 16), "ink": (230, 230, 225),
               "border": (110, 110, 115), "sea": (18, 42, 82), "sea_line": (60, 100, 150),
               LAKE: (80, 150, 255), "river": (90, 160, 255), SWAMP: (195, 105, 165),
@@ -591,6 +605,8 @@ TEXTS = {
     "leg_plains": ("Pianura = esagono vuoto", "Plains = empty hex"),
     "leg_fertile": ("Pianura coltivabile", "Farmland"),
     "leg_barren": ("Pianura incolta = esagono vuoto", "Barren plains = empty hex"),
+    "leg_plains_bg": ("Pianura", "Plains"),
+    "leg_barren_bg": ("Pianura incolta", "Barren plains"),
     "leg_desert": ("Deserto", "Desert"),
     "leg_sea": ("Mare", "Sea"),
     "leg_lake": ("Lago", "Lake"),
@@ -2203,6 +2219,7 @@ class Canvas:
         self.styles = [["n"] * width for _ in range(height)]    # the style of each letter
         self.tags = [[None] * width for _ in range(height)]     # palette key, for colour maps
         self.boxes = []            # site boxes: (x, y, width, height, symbol, tag)
+        self.fills = []            # backgrounds drawn first: ([(x, y) corners, in letter squares], tag)
 
     def put(self, x, y, ch, style="n", tag=None):
         if 0 <= x < self.width and 0 <= y < self.height:
@@ -2217,6 +2234,7 @@ class Canvas:
             for x in range(other.width):
                 self.put(ox + x, oy + y, other.chars[y][x], other.styles[y][x], other.tags[y][x])
         self.boxes += [(ox + x, oy + y, w, h, g, t) for x, y, w, h, g, t in other.boxes]
+        self.fills += [([(ox + x, oy + y) for x, y in points], t) for points, t in other.fills]
 
     def copy(self):
         c = Canvas(self.width, self.height)
@@ -2224,6 +2242,7 @@ class Canvas:
         c.styles = [row[:] for row in self.styles]
         c.tags = [row[:] for row in self.tags]
         c.boxes = list(self.boxes)
+        c.fills = list(self.fills)
         return c
 
     def lines(self):
@@ -2359,6 +2378,8 @@ def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect, original=None, lab
     width, height = map_size(grid.cols, grid.rows, k)
     canvas = Canvas(width, height)
     border, inside = hex_template(k)
+    u = 2 * k
+    corners = ((k + 1, 1), (k + u + 1, 1), (2 * k + u + 1, k + 1), (k + u + 1, 2 * k + 1), (k + 1, 2 * k + 1), (1, k + 1))
     old_terrain, old_rivers = original or (terrain, rivers)
 
     def glyphs(kind, dice):
@@ -2372,6 +2393,10 @@ def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect, original=None, lab
         chars = glyphs(old_terrain[(c, r)], rng)
         if kind != old_terrain[(c, r)]:
             chars = glyphs(kind, random.Random(f"{c},{r},{kind}"))
+        if kind != SEA:
+            # the hexagon through the middle of its border letters: neighbours'
+            # fills meet right under the / \ _ drawn on top
+            canvas.fills.append(([(x0 + x, y0 + y) for x, y in corners], bg(kind)))
         if kind == SEA:
             for (yy, xx) in inside:
                 # the ≈ only shows in the .txt
@@ -2481,11 +2506,14 @@ def write_hex_numbers(page, grid, k, ox, oy):
 
 
 # --- page: frame, title, legend ---
-def legend_entries(G, fertile=False):
-    # (sample, name, style, colour tag)
+def legend_entries(G, fertile=False, filled=False):
+    # (sample, name, style, colour tag). filled: the hexes have coloured
+    # backgrounds, so plains get a swatch instead of "empty hex"
+    plains = ("  ", tr("leg_barren_bg" if fertile else "leg_plains_bg"), "b", PLAINS) if filled else \
+        ("", tr("leg_barren" if fertile else "leg_plains"), "b", None)
     terrains = [
         (G("▲^", "^A"), tr("leg_mountains"), "b", MOUNTAINS), (G("∩n", "nm"), tr("leg_hills"), "b", HILLS),
-        (G("♣♠", "TY"), tr("leg_forest"), "b", FOREST), ("", tr("leg_barren" if fertile else "leg_plains"), "b", None),
+        (G("♣♠", "TY"), tr("leg_forest"), "b", FOREST), plains,
         *([(G("τ", "v"), tr("leg_fertile"), "b", FERTILE)] if fertile else []),
         (G("░·", ".:"), tr("leg_desert"), "b", DESERT),
         (G("≈≈", "~~"), tr("leg_sea"), "g", SEA),   # "g": this sample is drawn as a gray patch
@@ -2503,8 +2531,8 @@ def has_farmland(params):
     return params.get("version", SEED_VERSION) >= LAND_WITH_SALT
 
 
-def pack_legend(G, max_width, fertile=False):
-    terrains, sites = legend_entries(G, fertile)
+def pack_legend(G, max_width, fertile=False, filled=False):
+    terrains, sites = legend_entries(G, fertile, filled)
     entries = [[(g, style, tag), (" " + name, "n", None)] if g else [(name, "n", None)]
                for g, name, style, tag in terrains]
     entries += [[("[" + g + "]", "i", kind), (" " + name, "n", None)] for g, name, kind in sites]
@@ -2556,7 +2584,12 @@ def compose_page(map_canvas, n_cols, n_rows, legend_lines, title, subtitle, G):
             if j:
                 x += 4
             for text, style, tag in entry:
-                page.write(x, y_legend_line + 1 + i, text, style, tag)
+                y = y_legend_line + 1 + i
+                page.write(x, y, text, style, tag)
+                if tag in (PLAINS, FERTILE, FOREST, LAKE, SWAMP, DESERT, HILLS, MOUNTAINS):
+                    # the same background as on the map (if the palette has one)
+                    swatch = [(x, y), (x + len(text), y), (x + len(text), y + 1), (x, y + 1)]
+                    page.fills.append((swatch, bg(PLAINS if tag == FERTILE else tag)))
                 x += len(text)
     return page, ox, oy
 
@@ -2600,7 +2633,7 @@ def fill_page(params, font_spec, aspect, log):
     n_cols = int((w_mm - 2 * MARGIN_MM) / READABLE_CHAR_MM)
     n_rows = int((h_mm - 2 * MARGIN_MM) / (READABLE_CHAR_MM * aspect))
     legend_lines = len(pack_legend(Glyphs(open_font(font_spec, 40), params["ascii_only"]), n_cols - 4,
-                                   has_farmland(params)))
+                                   has_farmland(params), has_backgrounds(params)))
     columns = max(2, (n_cols - 4 - (4 * k + 1)) // (3 * k) + 1)
     rows = max(2, (n_rows - legend_lines - 7 - (k + 1)) // (2 * k))
     if params["columns"] == "auto":
@@ -2685,6 +2718,9 @@ def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy, p
     """Rasterise the canvas. progress(fraction) is called after each row."""
     img = Image.new(palette["mode"], (width, height), palette["paper"])
     d = ImageDraw.Draw(img)
+    for points, tag in canvas.fills:
+        if tag in palette:
+            d.polygon([(ox + x * char_w, oy + y * char_h) for x, y in points], fill=palette[tag])
     paper, sea = palette["paper"], palette["sea"]
 
     def ink(tag):
@@ -2793,14 +2829,14 @@ def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, 
         area_w = width - 2 * mm(MARGIN_MM)
         area_h = height - 2 * mm(MARGIN_MM)
         n_cols, n_rows = int(area_w // char_w), int(area_h // char_h)
-        legend = pack_legend(G, n_cols - 4, has_farmland(params))
+        legend = pack_legend(G, n_cols - 4, has_farmland(params), has_backgrounds(params))
         if len(legend) <= legend_guess and n_rows >= map_h + len(legend) + 7:
             break
         legend_guess = max(len(legend), legend_guess + 1)
     values = dict(scale=params["scale"], dot=G("·", "-"), c=grid.cols, x=G("×", "x"), r=grid.rows, seed=seed)
     versions = [tr(key, **values) for key in ("subtitle", "subtitle_tight", "subtitle_short", "subtitle_seed")]
     subtitle = next((v for v in versions if len(v) + 4 <= n_cols), versions[-1])
-    legend = pack_legend(G, n_cols - 4, has_farmland(params))
+    legend = pack_legend(G, n_cols - 4, has_farmland(params), has_backgrounds(params))
     # still doesn't fit (very long title?): grow the page, save() shrinks it back
     legend_width = max(sum(len(t) for entry in line for t, _, _ in entry) + 4 * (len(line) - 1) for line in legend)
     need_cols = max(n_cols, map_w + 4, len(params["title"]) + 8, len(subtitle) + 4, legend_width + 4)
