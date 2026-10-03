@@ -164,7 +164,7 @@ Poi compare la schermata di benvenuto, con il titolo e un disegno: premi **INVIO
 7. **Titolo** stampato in cima alla mappa.
 8. **Scala:** quante miglia copre ogni esagono. `1` = 2 miglia, `2` = 6 miglia (la risposta pronta), `3` = 12 miglia, `4` = 24 miglia, `5` = lo scrivi tu: un numero di miglia, oppure un testo qualsiasi come `5 km` o `1 giorno`. Viene stampata sotto il titolo, come "1 esagono = 6 miglia".
 9. Se usare **solo i caratteri base della tastiera** (senza simboli come ♣ ▲ ≈). Di solito rispondi no: basta premere Invio.
-10. **Colori:** `1` = bianco e nero, per la stampa (la risposta pronta); `2` = a colori: foreste verdi, mare e laghi blu, deserti color sabbia, paludi viola, città rosse e così via. Solo per la mappa a colori il programma chiede poi lo **sfondo**: `1` = bianco, `2` = nero.
+10. **Colori:** `1` = bianco e nero, per la stampa (la risposta pronta); `2` = a colori: foreste verdi, mare e laghi blu, deserti color sabbia, paludi viola, città rosse e così via. Solo per la mappa a colori il programma chiede poi lo **sfondo**: `1` = bianco, `2` = nero. Sullo sfondo bianco anche gli esagoni sono colorati, per leggere la mappa a colpo d'occhio: verde chiaro le pianure, verde più scuro le foreste, rosa le paludi, giallo il deserto, giallo più scuro le colline, beige le montagne, azzurro il mare e i laghi (i laghi si riconoscono dai simboli `≈`).
 
 Finite le domande compare un mago con la scritta **"L'incantesimo di evocazione ha inizio!"** (in inglese: *"The conjuring spell begins!"*): da qui il programma si mette al lavoro.
 
