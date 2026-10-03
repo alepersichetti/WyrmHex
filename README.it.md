@@ -386,17 +386,7 @@ Le versioni precedenti alla 0.0.2 potevano disegnare la mappa in bianco e nero c
 
 ## 10. Galleria Mappe
 
-### 12 × 10 esagoni
-
-![Mappa 12 x 10 senza numeri](img_examples/example_12x10_nonumber.png)
-![Mappa 12 x 10 con i numeri](img_examples/example_12x10_number.png)
-
-### 20 × 5 esagoni
-
-![Mappa 20 x 5 senza numeri](img_examples/example_20x5_nonumber.png)
-![Mappa 20 x 5 con i numeri](img_examples/example_20x5_number.png)
-
-### 80 × 80 esagoni
-
-![Mappa 80 x 80 senza numeri](img_examples/example_80x80_nonumber.png)
-![Mappa 80 x 80 con i numeri](img_examples/example_80x80.png)
+![8x8](img_examples/example_8x8_bw.png)
+![20x20](img_examples/example_20x20_color_white.png)
+![30x30](img_examples/example_30x30_color_black.png)
+![80x80](img_examples/example_80x80_nonumber.png)

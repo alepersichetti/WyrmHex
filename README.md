@@ -385,17 +385,7 @@ Versions before 0.0.2 could draw the black-and-white map as white on black; that
 
 ## 10. Map Gallery
 
-### 12 × 10 hexes
-
-![12 x 10 map without numbers](img_examples/example_12x10_nonumber.png)
-![12 x 10 map with numbers](img_examples/example_12x10_number.png)
-
-### 20 × 5 hexes
-
-![20 x 5 map without numbers](img_examples/example_20x5_nonumber.png)
-![20 x 5 map with numbers](img_examples/example_20x5_number.png)
-
-### 80 × 80 hexes
-
-![80 x 80 map without numbers](img_examples/example_80x80_nonumber.png)
-![80 x 80 map with numbers](img_examples/example_80x80.png)
+![8x8](img_examples/example_8x8_bw.png)
+![20x20](img_examples/example_20x20_color_white.png)
+![30x30](img_examples/example_30x30_color_black.png)
+![80x80](img_examples/example_80x80_nonumber.png)
