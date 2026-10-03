@@ -544,15 +544,18 @@ TEXTS = {
                               "--edited only works together with --reproduce, or --seed with a full seed"),
     "sites_header": ("\nELENCO DEI SITI (codice esagono)", "\nLIST OF SITES (hex code)"),
     "labels_intro": ("\n  Nomi dei siti: per ogni città, fortezza e dungeon puoi scrivere un nome, che compare "
-                     "sulla mappa.\n  Premi Invio per lasciarlo senza nome.",
+                     "sulla mappa.\n  Rispondi s e poi scrivi il nome, oppure scrivilo subito; "
+                     "premi Invio per lasciarlo senza nome.",
                      "\n  Site names: for every city, fortress and dungeon you can type a name, which shows on "
-                     "the map.\n  Press Enter to leave it without one."),
+                     "the map.\n  Answer y and then type the name, or just type it straight away; "
+                     "press Enter to leave it without one."),
     "ask_label": ("  {site} {i}, esagono {h} ({terrain}). Vuoi dare un nome? (s/N): ",
                   "  {site} {i}, hex {h} ({terrain}). Give it a name? (y/N): "),
     "ask_relabel": ("  {site} {i}, esagono {h} ({terrain}), si chiama \"{name}\". Vuoi cambiare il nome? (s/N): ",
                     "  {site} {i}, hex {h} ({terrain}), is called \"{name}\". Change the name? (y/N): "),
     "q_label": ("    Nome (massimo {n} caratteri; vuoto = nessun nome): ",
                 "    Name (up to {n} characters; empty = no name): "),
+    "label_taken": ("    Nome: \"{name}\"", "    Name: \"{name}\""),
     "label_cut": ("    Troppo lungo: diventa \"{name}\"", "    Too long: it becomes \"{name}\""),
     "ask_labels_again": ("  Vuoi dare o cambiare i nomi di città, fortezze e dungeon? (s/N): ",
                          "  Do you want to give or change the names of cities, fortresses and dungeons? (y/N): "),
@@ -1341,7 +1344,7 @@ def ask_settings():
             saved["scale"] = ask_scale(saved["scale"])
             print()
         # the sites are known only once the land is made: main() asks then
-        saved["ask_labels"] = input(tr("ask_labels_again")).strip().lower().startswith(tr("yes_letter"))
+        saved["ask_labels"] = input(tr("ask_labels_again")).strip().lower() in YES_WORDS
         ask_look(saved)
         return saved
     print()
@@ -2099,6 +2102,11 @@ def site_labels(sites, labels):
     return [(h, labels[label_key(h)]) for _, h in sites if labels.get(label_key(h))]
 
 
+# answers to "give it a name?": in both languages, whatever the program speaks
+YES_WORDS = {"s", "si", "sì", "y", "yes"}
+NO_WORDS = {"", "n", "no"}
+
+
 def ask_labels(grid, terrain, sites, labels):
     """One question per site, cities first. Returns the new {"CCRR": name}."""
     labels = dict(labels or {})
@@ -2109,14 +2117,19 @@ def ask_labels(grid, terrain, sites, labels):
             key, old = label_key(h), labels.get(label_key(h))
             values = dict(site=pick(SITE_NAMES[kind]), i=i, h=hex_code(h, digits),
                           terrain=pick(TERRAIN_NAMES[terrain[h]]).lower(), name=old)
-            question = tr("ask_relabel" if old else "ask_label", **values)
-            if not input(question).strip().lower().startswith(tr("yes_letter")):
+            answer = " ".join(input(tr("ask_relabel" if old else "ask_label", **values)).split())
+            if answer.lower() in NO_WORDS:
                 continue
-            name = " ".join(input(tr("q_label", n=MAX_LABEL)).split())
+            # the name typed straight away, without the "yes" first, is taken as
+            # it is (it used to count as "no": the site silently stayed nameless)
+            typed = answer.lower() not in YES_WORDS
+            name = answer if typed else " ".join(input(tr("q_label", n=MAX_LABEL)).split())
             if len(name) > MAX_LABEL:
                 cut = name[:MAX_LABEL + 1]
                 name = (cut.rsplit(" ", 1)[0] if " " in cut else cut[:MAX_LABEL]).rstrip()
                 print(tr("label_cut", name=name))
+            elif typed:
+                print(tr("label_taken", name=name))
             if name:
                 labels[key] = name
             else:
