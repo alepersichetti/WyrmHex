@@ -386,7 +386,18 @@ Le versioni precedenti alla 0.0.2 potevano disegnare la mappa in bianco e nero c
 
 ## 10. Galleria Mappe
 
-![8x8](img_examples/example_8x8_bw.png)
-![20x20](img_examples/example_20x20_color_white.png)
-![30x30](img_examples/example_30x30_color_black.png)
-![80x80](img_examples/example_80x80_nonumber.png)
+Fai clic su una mappa per aprirla a grandezza intera.
+
+### Black & White
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <a style="width: calc(33.33% - 10px);" href="img_examples/example_8x8_bw.png"><img src="img_examples/thumbs/example_8x8_bw.png" alt="Mappa 8 x 8 in bianco e nero" width="32%" style="width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px;" /></a>
+  <a style="width: calc(33.33% - 10px);" href="img_examples/example_80x80_nonumber.png"><img src="img_examples/thumbs/example_80x80_nonumber.png" alt="Mappa 80 x 80 in bianco e nero" width="32%" style="width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px;" /></a>
+</div>
+
+### Colored
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <a style="width: calc(33.33% - 10px);" href="img_examples/example_20x20_color_white.png"><img src="img_examples/thumbs/example_20x20_color_white.png" alt="Mappa 20 x 20 a colori su bianco" width="32%" style="width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px;" /></a>
+  <a style="width: calc(33.33% - 10px);" href="img_examples/example_30x30_color_black.png"><img src="img_examples/thumbs/example_30x30_color_black.png" alt="Mappa 30 x 30 a colori su nero" width="32%" style="width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px;" /></a>
+</div>
