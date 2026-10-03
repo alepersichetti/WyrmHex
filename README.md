@@ -385,7 +385,18 @@ Versions before 0.0.2 could draw the black-and-white map as white on black; that
 
 ## 10. Map Gallery
 
-![8x8](img_examples/example_8x8_bw.png)
-![20x20](img_examples/example_20x20_color_white.png)
-![30x30](img_examples/example_30x30_color_black.png)
-![80x80](img_examples/example_80x80_nonumber.png)
+Click a map to open it full size.
+
+### Black & White
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <a style="width: calc(33.33% - 10px);" href="img_examples/example_8x8_bw.png"><img src="img_examples/thumbs/example_8x8_bw.png" alt="8 x 8 map, black and white" width="32%" style="width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px;" /></a>
+  <a style="width: calc(33.33% - 10px);" href="img_examples/example_80x80_nonumber.png"><img src="img_examples/thumbs/example_80x80_nonumber.png" alt="80 x 80 map, black and white" width="32%" style="width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px;" /></a>
+</div>
+
+### Colored
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <a style="width: calc(33.33% - 10px);" href="img_examples/example_20x20_color_white.png"><img src="img_examples/thumbs/example_20x20_color_white.png" alt="20 x 20 map, colour on white" width="32%" style="width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px;" /></a>
+  <a style="width: calc(33.33% - 10px);" href="img_examples/example_30x30_color_black.png"><img src="img_examples/thumbs/example_30x30_color_black.png" alt="30 x 30 map, colour on black" width="32%" style="width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px;" /></a>
+</div>
