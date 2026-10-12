@@ -123,7 +123,7 @@ Da qui in poi la riga in cui scrivi comincia con `(.venv)`: è il segno che è a
 
 ### Passo 5 — Installa le librerie
 
-Con l'ambiente virtuale attivo, scarica **Pillow**, la libreria che serve a creare le immagini. Il comando è uguale su tutti i sistemi:
+Con l'ambiente virtuale attivo, scarica **Pillow**, la libreria che serve a creare le immagini, e **asciimatics**, quella che disegna i menu da scorrere con le frecce. Il comando è uguale su tutti i sistemi (su Windows installa da solo anche `pywin32`, che serve ad asciimatics):
 
 ```
 pip install -r requirements.txt
@@ -151,20 +151,20 @@ python wyrmhex.py
 
 Basta attivarlo una volta ogni volta che apri un terminale: finché la riga comincia con `(.venv)` è attivo, e puoi fare tutte le mappe che vuoi con `python wyrmhex.py`. Quando hai finito, scrivi `deactivate` o chiudi semplicemente il terminale. Se hai appena finito l'installazione nella stessa finestra, l'ambiente è già attivo.
 
-Per prima cosa il programma ti chiede la **lingua**: scrivi `1` per l'italiano o `2` per l'inglese (con Invio resta l'italiano). Da lì in poi domande, messaggi e anche i testi stampati sulla mappa (legenda, scala, titolo di partenza) sono nella lingua scelta.
+Per prima cosa il programma ti chiede la **lingua**: scegli **Italiano** o **English** (con Invio resta l'italiano). Da lì in poi domande, messaggi e anche i testi stampati sulla mappa (legenda, scala, titolo di partenza) sono nella lingua scelta.
 
-Poi compare la schermata di benvenuto, con il titolo e un disegno: premi **INVIO** per cominciare. Il programma ti fa alcune domande. **Ogni domanda ha una risposta già pronta tra parentesi quadre: se ti va bene, premi solo Invio.**
+Poi compare la schermata di benvenuto, con il titolo e un disegno: premi **INVIO** per cominciare. Il programma ti fa alcune domande. Quando ci sono delle scelte, compare un **menu**: muoviti con le frecce **↑ ↓** e conferma con **Invio** (puoi anche premere il numero della scelta, o farci clic sopra). Le altre domande, come i numeri o il titolo, si rispondono scrivendo. **Ogni domanda ha una risposta già pronta, evidenziata nel menu oppure tra parentesi quadre: se ti va bene, premi solo Invio.**
 
-1. **Cosa vuoi fare?** Scrivi `1` per una mappa nuova, `2` per rifare una mappa già fatta (vedi il capitolo 4), `3` per modificare una mappa a mano, esagono per esagono (vedi il capitolo 5).
+1. **Cosa vuoi fare?** Scegli **creare una mappa nuova**, **riprodurre una mappa già fatta** (vedi il capitolo 4) oppure **modificare una mappa** a mano, esagono per esagono (vedi il capitolo 5).
 2. **Esagoni in base e in altezza:** quante colonne e quante righe di esagoni vuoi. La risposta pronta è `auto`: il programma sceglie da solo quanti esagoni riempiono un foglio A4 restando leggibili (33 × 15).
-3. **Scegli tu o a caso?** Scrivi `1` per rispondere tu alle tre domande successive, oppure `2` per far scegliere al programma a caso il numero di siti, le percentuali di terreno e i fiumi, in proporzione alla mappa. Con `2` passa direttamente al titolo. I valori scelti vengono mostrati mentre lavora e finiscono nel seme come tutti gli altri.
+3. **Scegli tu o a caso?** Scegli **li scelgo io** per rispondere tu alle tre domande successive, oppure **a caso** per far scegliere al programma a caso il numero di siti, le percentuali di terreno e i fiumi, in proporzione alla mappa. Con **a caso** passa direttamente al titolo. I valori scelti vengono mostrati mentre lavora e finiscono nel seme come tutti gli altri.
 4. **Numero di dungeon, città e fortezze** da mettere sulla mappa (fino a 99 per tipo).
 5. **Percentuali di terreno:** quanta parte della mappa è pianura, mare, laghi, paludi, colline, montagne, foreste e deserti, in numeri interi. Le paludi nascono nelle zone basse, soprattutto lungo la costa e attorno ai laghi. Se il mare supera il 50%, la mappa diventa una costa frastagliata: una terraferma lungo un lato, con penisole che si allungano nel mare e baie tra l'una e l'altra, e isole al largo. Oltre l'80% di mare la terraferma sparisce e resta un arcipelago di isole. Il programma calcola anche la **salinità del terreno**: il sale arriva dal mare, sulle terre basse vicino alla costa, e dalle zone basse e asciutte, dove l'acqua evapora e lo lascia lì; la pioggia, i fiumi e i laghi lo portano via. Lungo la costa nascono così paludi salmastre, mentre all'interno le paludi stanno dove l'acqua è dolce e non nelle conche salate e aride. Le pianure abbastanza dolci diventano **pianure coltivabili** e le città le preferiscono; quelle salate restano incolte. Ogni mappa ha anche un **vento prevalente**, scelto a caso e indicato mentre la mappa viene creata (per esempio "da ovest"): porta la pioggia sui versanti delle colline e delle montagne rivolti verso il vento, dove crescono le foreste, mentre dall'altra parte dei rilievi il terreno resta secco e lì si formano più facilmente i deserti. La somma non può superare 100; se resta qualcosa, diventa pianura. Se sbagli, il programma te lo dice e ti fa reinserire i numeri.
 6. **Numero di fiumi** (fino a 100): con `-1` il programma decide da solo.
 7. **Titolo** stampato in cima alla mappa.
-8. **Scala:** quante miglia copre ogni esagono. `1` = 2 miglia, `2` = 6 miglia (la risposta pronta), `3` = 12 miglia, `4` = 24 miglia, `5` = lo scrivi tu: un numero di miglia, oppure un testo qualsiasi come `5 km` o `1 giorno`. Viene stampata sotto il titolo, come "1 esagono = 6 miglia".
+8. **Scala:** quante miglia copre ogni esagono: 2, 6 (la risposta pronta), 12 o 24 miglia, oppure **altro, lo scrivo io**: un numero di miglia, oppure un testo qualsiasi come `5 km` o `1 giorno`. Viene stampata sotto il titolo, come "1 esagono = 6 miglia".
 9. Se usare **solo i caratteri base della tastiera** (senza simboli come ♣ ▲ ≈). Di solito rispondi no: basta premere Invio.
-10. **Colori:** `1` = bianco e nero, per la stampa (la risposta pronta); `2` = a colori: foreste verdi, mare e laghi blu, deserti color sabbia, paludi viola, città rosse e così via. Solo per la mappa a colori il programma chiede poi lo **sfondo**: `1` = bianco, `2` = nero. Sullo sfondo bianco anche gli esagoni sono colorati, per leggere la mappa a colpo d'occhio: verde chiaro le pianure, verde più scuro le foreste, rosa le paludi, giallo il deserto, giallo più scuro le colline, beige le montagne, azzurro il mare e i laghi (i laghi si riconoscono dai simboli `≈`).
+10. **Colori:** **bianco e nero**, per la stampa (la risposta pronta), oppure **a colori**: foreste verdi, mare e laghi blu, deserti color sabbia, paludi viola, città rosse e così via. Solo per la mappa a colori il programma chiede poi lo **sfondo**: **bianco** o **nero**. Sullo sfondo bianco anche gli esagoni sono colorati, per leggere la mappa a colpo d'occhio: verde chiaro le pianure, verde più scuro le foreste, rosa le paludi, giallo il deserto, giallo più scuro le colline, beige le montagne, azzurro il mare e i laghi (i laghi si riconoscono dai simboli `≈`).
 
 Finite le domande compare un mago con la scritta **"L'incantesimo di evocazione ha inizio!"** (in inglese: *"The conjuring spell begins!"*): da qui il programma si mette al lavoro.
 
@@ -177,15 +177,17 @@ Mentre lavora, mostra i passaggi che sta facendo, ognuno con una **barra di avan
 Durante il disegno delle due immagini, che è la parte più lunga, compare anche una seconda barra con la percentuale, che si aggiorna sul posto fino a `100%  fatto`. Quando la mappa è pronta ti chiede le ultime cose:
 
 11. **Nomi dei siti:** per ogni città, fortezza e dungeon il programma ti dice in che esagono si trova e su che terreno, e ti chiede se vuoi dargli un nome, per esempio `Città 1, esagono 2712 (colline). Vuoi dare un nome? (s/N)`. Se rispondi `s`, scrivi il nome (fino a 24 caratteri): compare in grassetto sulla mappa, sotto il simbolo del sito. Premi Invio per lasciare il sito senza nome. Se nella domanda 3 hai scelto i valori a caso, il programma non chiede niente e i siti restano senza nome.
-12. **Formato di stampa** delle due mappe: `A4`, `A3` o `A2`. Il programma valuta il formato in base al numero di esagoni: prima della domanda vedi, per ogni formato, quanto verranno grandi gli esagoni e i caratteri, e se saranno ben leggibili. La risposta pronta tra parentesi è il **formato consigliato**, cioè il più piccolo in cui la mappa si legge bene; più esagoni hai scelto, più grande sarà. **La scelta finale è tua:** premi Invio per il formato consigliato, oppure scrivine un altro. Esempio:
+12. **Formato di stampa** delle due mappe: `A4`, `A3` o `A2`. Il programma valuta il formato in base al numero di esagoni: prima della domanda vedi, per ogni formato, quanto verranno grandi gli esagoni e i caratteri, e se saranno ben leggibili. La risposta pronta, già evidenziata nel menu, è il **formato consigliato**, cioè il più piccolo in cui la mappa si legge bene; più esagoni hai scelto, più grande sarà. **La scelta finale è tua:** premi Invio per il formato consigliato, oppure spostati su un altro. Esempio:
 
    ```
-   · Griglia di 12 x 30 esagoni: ecco come verrebbe stampata su ogni formato (esagono misurato da lato piatto a lato piatto)
-   · A4 verticale   esagoni piccoli da  8 mm, caratteri da 1.07 mm (troppo piccoli)
-   · A3 verticale   esagoni piccoli da 12 mm, caratteri da 1.53 mm (ben leggibili)   <- consigliato
-   · A2 verticale   esagoni grandi  da 18 mm, caratteri da 1.50 mm (ben leggibili)
-     La scelta finale è tua: premi Invio per il formato consigliato, oppure scrivine un altro.
-     Formato di stampa per le due mappe (A4, A3, A2) [A3]:
+   Griglia di 12 x 30 esagoni: ecco come verrebbe stampata su ogni formato (esagono misurato da
+   lato piatto a lato piatto)
+
+   Formato di stampa per le due mappe (la scelta finale è tua):
+
+       1  A4 verticale, esagoni piccoli 8 mm, caratteri 1.07 mm (troppo piccoli)
+    ▶  2  A3 verticale, esagoni piccoli 12 mm, caratteri 1.53 mm (ben leggibili)  ← consigliato
+       3  A2 verticale, esagoni grandi 18 mm, caratteri 1.50 mm (ben leggibili)
    ```
 
    Sui fogli grandi, se c'è spazio, il programma usa esagoni più grandi, così la mappa resta ben proporzionata.
@@ -202,7 +204,7 @@ Ogni mappa ha un **seme**: un codice di 24 lettere e cifre a gruppi di quattro, 
 
 Il seme contiene tutto ciò che dà forma alla terra: il numero di esagoni, le città, le fortezze e i dungeon, le percentuali di terreno, i fiumi e tutte le scelte casuali. Per questo **lo stesso seme dà sempre la stessa mappa**, su qualunque computer, anche se i file della mappa non ci sono più. Per condividere una mappa con qualcuno basta dargli il suo seme.
 
-Per rifare una mappa, avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" rispondi `2` e scrivi il seme. Maiuscole, trattini e spazi non contano, e se sbagli un carattere il programma te lo dice, invece di fare in silenzio una mappa diversa. Poi ti mostra il titolo e la scala attuali della mappa e ti chiede se vuoi **rinominare la mappa** e se vuoi **cambiare la scala** (miglia per esagono: le stesse scelte della mappa nuova, più la possibilità di lasciare com'è una scala scritta a mano). Basta premere Invio per lasciarli come sono. Ti chiede anche se vuoi **dare o cambiare i nomi** di città, fortezze e dungeon: se rispondi `s`, quando la mappa è pronta ti propone i siti uno per uno, con il nome che hanno già. Poi ti chiede di nuovo se usare i caratteri base, il bianco e nero o i colori e, alla fine, il formato di stampa: così puoi rifare la stessa mappa, per esempio, con un altro nome, a 24 miglia per esagono, oppure in A3 invece che in A4.
+Per rifare una mappa, avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" scegli **riprodurre una mappa già fatta** e scrivi il seme. Maiuscole, trattini e spazi non contano, e se sbagli un carattere il programma te lo dice, invece di fare in silenzio una mappa diversa. Poi ti mostra il titolo e la scala attuali della mappa e ti chiede se vuoi **rinominare la mappa** e se vuoi **cambiare la scala** (miglia per esagono: le stesse scelte della mappa nuova, più la possibilità di lasciare com'è una scala scritta a mano). Basta premere Invio per lasciarli come sono. Ti chiede anche se vuoi **dare o cambiare i nomi** di città, fortezze e dungeon: se rispondi `s`, quando la mappa è pronta ti propone i siti uno per uno, con il nome che hanno già. Poi ti chiede di nuovo se usare i caratteri base, il bianco e nero o i colori e, alla fine, il formato di stampa: così puoi rifare la stessa mappa, per esempio, con un altro nome, a 24 miglia per esagono, oppure in A3 invece che in A4.
 
 Il titolo, la scala, i nomi dei siti e il formato di stampa non fanno parte del seme, perché non cambiano la terra. Se il PNG della mappa è ancora nella sua cartella `maps_generated/<seme>`, il programma li prende da lì (il formato diventa la risposta pronta); altrimenti usa il titolo e la scala di partenza. Da riga di comando puoi sceglierli tu, per esempio `--riproduci <seme> --titolo "Terre del Nord"`.
 
@@ -216,7 +218,7 @@ La mappa rifatta finisce nella cartella `maps_generated/<seme>` e sostituisce i 
 
 ## 5. Modificare una mappa
 
-Puoi cambiare a mano una mappa, esagono per esagono, partendo dal suo seme. Se l'hai appena fatta, rispondi `s` quando il programma ti chiede se vuoi modificarla adesso (capitolo 3). Altrimenti avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" rispondi `3` e scrivi il seme. Come quando rifai una mappa, ti chiede del titolo, della scala e dell'aspetto; poi costruisce la mappa e mostra una tabella con una riga per ogni esagono:
+Puoi cambiare a mano una mappa, esagono per esagono, partendo dal suo seme. Se l'hai appena fatta, rispondi `s` quando il programma ti chiede se vuoi modificarla adesso (capitolo 3). Altrimenti avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" scegli **modificare una mappa** e scrivi il seme. Come quando rifai una mappa, ti chiede del titolo, della scala e dell'aspetto; poi costruisce la mappa e mostra una tabella con una riga per ogni esagono:
 
 ```
   Esagono  Terreno   Dungeon  Città  Fiume  Direzione  Fortezza
@@ -248,7 +250,7 @@ Alcune regole tengono la mappa coerente:
 
 La mappa modificata viene salvata nella stessa cartella dell'originale, che resta com'è: `<seme>_edit_nonumber.png` e `<seme>_edit_number.png` (più i .txt), con "(modificata)" dopo il seme sotto il titolo. Le modifiche vengono salvate in `<seme>_edit.json` dopo ogni singolo cambiamento, così non le perdi se esci o chiudi il programma a metà. Il seme da solo dà sempre la mappa originale, ma se scegli di nuovo `3` con lo stesso seme, il programma ti propone di riprendere le modifiche salvate: puoi continuare a modificare, oppure rigenerare subito la mappa modificata, per esempio in un altro formato o a colori.
 
-Le modifiche sono conservate anche dentro il PNG modificato: se `<seme>_edit.json` va perso, il programma le ritrova lì. E se rifai una mappa che ha una versione modificata (scelta `2`, oppure `--riproduci`), il programma ti ricorda che la versione modificata esiste e come ottenerla.
+Le modifiche sono conservate anche dentro il PNG modificato: se `<seme>_edit.json` va perso, il programma le ritrova lì. E se rifai una mappa che ha una versione modificata (**riprodurre una mappa già fatta**, oppure `--riproduci`), il programma ti ricorda che la versione modificata esiste e come ottenerla.
 
 `<seme>_edit.json` è un file di testo, quindi puoi anche cambiarlo a mano. Quando lo legge, il programma salta quello che non ha senso (un esagono fuori dalla mappa, una città sul mare, un fiume con un buco) e ti dice quante voci ha saltato. Se il file non si legge proprio, il programma non ci scrive sopra: lo rinomina `<seme>_edit_broken.json`, così non va perso, e riparte dalle modifiche nel PNG modificato oppure, se non ci sono, dalla mappa originale.
 
@@ -339,6 +341,9 @@ Per vedere l'elenco completo delle opzioni, aggiungi `--help` dopo il nome del f
 
 **"py" / "python3" non è riconosciuto come comando.**
 Python non è installato, oppure su Windows non è stato aggiunto al PATH. Reinstallalo spuntando "Add python.exe to PATH", poi chiudi e riapri il terminale.
+
+**Al posto dei menu compaiono domande con i numeri.**
+I menu da scorrere con le frecce hanno bisogno di **asciimatics** e di un terminale vero. Se la libreria manca, installala con `pip install -r requirements.txt` (capitolo 2, passo 5). Senza un terminale vero, per esempio nella finestra di Git Bash su Windows o con le risposte lette da un file, il programma chiede il numero della scelta come una volta: funziona lo stesso. Puoi anche chiederlo apposta impostando la variabile `WYRMHEX_NO_MENUS=1`.
 
 **"Manca la libreria Pillow".**
 L'ambiente virtuale non è attivo: la riga in cui scrivi non comincia con `(.venv)`. Attivalo (passo 4 dell'installazione) e riavvia il programma. Se succede ancora, le librerie non sono ancora installate: fai il passo 5.
