@@ -218,7 +218,32 @@ La mappa rifatta finisce nella cartella `maps_generated/<seme>` e sostituisce i 
 
 ## 5. Modificare una mappa
 
-Puoi cambiare a mano una mappa, esagono per esagono, partendo dal suo seme. Se l'hai appena fatta, rispondi `s` quando il programma ti chiede se vuoi modificarla adesso (capitolo 3). Altrimenti avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" scegli **modificare una mappa** e scrivi il seme. Come quando rifai una mappa, ti chiede del titolo, della scala e dell'aspetto; poi costruisce la mappa e mostra una tabella con una riga per ogni esagono:
+Puoi cambiare a mano una mappa, esagono per esagono, partendo dal suo seme. Se l'hai appena fatta, rispondi `s` quando il programma ti chiede se vuoi modificarla adesso (capitolo 3). Altrimenti avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" scegli **modificare una mappa** e scrivi il seme. Come quando rifai una mappa, ti chiede del titolo, della scala e dell'aspetto; poi costruisce la mappa e apre l'**editor**, che la disegna direttamente nel terminale:
+
+![L'editor di WyrmHex nel terminale](img_examples/editor_it.png)
+
+A sinistra c'è la mappa, con i colori dei terreni, i fiumi, i siti e i loro nomi; l'esagono evidenziato in giallo è il **cursore**. A destra vedi cosa c'è in quell'esagono (terreno, sito, nome, se ci passa un fiume e in che direzione scorre) e i tasti delle azioni. Se la mappa non sta tutta nella finestra, la vista scorre da sola seguendo il cursore; sotto la mappa c'è scritto quali colonne e righe stai guardando.
+
+- **Frecce ← ↑ ↓ →** spostano il cursore; puoi anche fare **clic** su un esagono.
+- **Invio**, o un clic sull'esagono già scelto, apre il menu con tutto quello che puoi fare lì.
+- **T** cambia il terreno: scegli quello nuovo dal riquadro che compare.
+- **C**, **F** e **D** mettono o tolgono una città, una fortezza o un dungeon.
+- **N** dà un nome al sito dell'esagono, o lo cambia (fino a 24 caratteri; lascialo vuoto per togliere il nome).
+- **R** fa nascere un fiume da quell'esagono (lo traccia il programma seguendo la discesa, oppure lo tracci tu) oppure, se ci passa già un fiume, lo toglie tutto, ne sposta quel tratto di un esagono (il programma propone solo le direzioni da cui il fiume non arriva e verso cui non va già: se scorre da nord a sud, nord e sud non compaiono) o lo accorcia in modo che finisca o nasca proprio lì.
+- **Z** annulla l'ultima modifica: puoi annullarne più d'una, una alla volta.
+- **S** genera la mappa con le modifiche.
+- **Q** esce senza generare la mappa: le modifiche restano salvate.
+- **?** mostra l'aiuto con tutti i tasti.
+
+Nei riquadri che compaiono sopra la mappa ti muovi con **↑ ↓** e confermi con **Invio** (o con il numero della scelta, o con un clic); **Esc** chiude il riquadro senza cambiare niente. Il pannello a destra conferma ogni modifica e conta quante ne hai fatte, e quando l'editor si chiude l'elenco delle modifiche resta scritto nel terminale.
+
+Per **tracciare tu un fiume** scegli i suoi esagoni sulla mappa, uno dopo l'altro: porta il cursore su un esagono vicino all'ultimo e premi Invio (o fai clic): il fiume ci passa, e il percorso si colora. Un esagono di mare o di lago lo fa sfociare lì, un esagono di un altro fiume lo fa confluire in quello; **F** lo fa finire dove sei arrivato. **Backspace** toglie l'ultimo esagono scelto, **Esc** rinuncia al fiume.
+
+Visto che i nomi dei siti si danno nell'editor, con **N**, quando modifichi una mappa il programma non ti chiede i nomi a parte.
+
+### L'editor a domande
+
+Se il terminale è troppo piccolo (servono almeno 80 colonne e 24 righe) o non è un terminale vero (capitolo 9), l'editor funziona a domande, con le stesse azioni. Il programma mostra una tabella con una riga per ogni esagono:
 
 ```
   Esagono  Terreno   Dungeon  Città  Fiume  Direzione  Fortezza
@@ -236,25 +261,27 @@ Poi:
 2. Scegli cosa farne: cambiare il terreno; aggiungere o togliere un dungeon, una città o una fortezza; aggiungere un fiume che nasce da quell'esagono (lo traccia il programma seguendo la discesa, oppure lo tracci tu) oppure, se ci passa già un fiume, toglierlo tutto, spostare quel tratto di un esagono (il programma propone solo le direzioni da cui il fiume non arriva e verso cui non va già: se scorre da nord a sud, nord e sud non compaiono), o accorciarlo in modo che finisca o nasca proprio lì.
 3. La tabella ricompare, aggiornata. Scegli se cambiare un altro esagono, generare la mappa con le modifiche, **annullare** l'ultima modifica (puoi annullarne più d'una, una alla volta) o **uscire** senza generare la mappa.
 
-Quando ti chiede l'esagono puoi anche scrivere `T` (tabella completa), `A` (annulla l'ultima modifica) o `E` (esci). In inglese sono `T`, `U` e `Q`.
+Quando ti chiede l'esagono puoi anche scrivere `T` (tabella completa), `A` (annulla l'ultima modifica) o `E` (esci). In inglese sono `T`, `U` e `Q`. Un fiume tracciato a mano qui si scrive: gli esagoni dopo la sorgente, in ordine e separati da spazi, per esempio `03.08 04.08 05.09`. In questo caso i nomi dei siti non si danno nell'editor: il programma ti chiede se vuoi darli e poi te li propone uno per uno, come quando rifai una mappa (capitolo 4).
 
-Alcune regole tengono la mappa coerente:
+### Le regole
+
+Alcune regole tengono la mappa coerente, in tutti e due gli editor:
 
 - In un esagono c'è al massimo un sito: se aggiungi una città dove c'è un dungeon, la città prende il suo posto.
 - Siti e fiumi non possono nascere sul mare o sui laghi. Se trasformi un esagono in acqua, il suo sito viene tolto e il fiume che ci passava ora finisce lì.
 - Un tratto di fiume spostato viene ricollegato al resto attraverso gli esagoni vicini. Se non si può (c'è acqua o un altro fiume, oppure il fiume si spezzerebbe), il programma te lo dice e non cambia nulla.
 - Un fiume nuovo tracciato dal programma scende verso il basso come gli altri. Le altezze seguono le tue modifiche: se hai trasformato una pianura in montagna, il fiume parte alto come le altre montagne della mappa.
-- In pianura spesso il programma non trova una strada in discesa. In quel caso ti propone di **tracciare il fiume tu**, cosa che puoi anche scegliere fin da subito. Scrivi gli esagoni dopo la sorgente, in ordine e separati da spazi, per esempio `03.08 04.08 05.09`: ognuno deve toccare quello prima. Per farlo sfociare, scrivi per ultimo un esagono di mare o di lago; per farlo confluire in un altro fiume, un esagono di quel fiume. Altrimenti finisce nell'ultimo esagono che hai scritto (o esce dalla mappa, se quell'esagono è sul bordo).
+- In pianura spesso il programma non trova una strada in discesa. In quel caso ti propone di **tracciare il fiume tu**, cosa che puoi anche scegliere fin da subito. Ogni esagono deve toccare quello prima. Per farlo sfociare, finiscilo con un esagono di mare o di lago; per farlo confluire in un altro fiume, con un esagono di quel fiume. Altrimenti finisce nell'ultimo esagono che hai scelto (o esce dalla mappa, se quell'esagono è sul bordo).
 - Se una modifica cambia il modo in cui finisce *un altro* fiume (hai riempito il lago in cui sfociava, o tolto il fiume in cui confluiva), il programma te lo dice con una nota, per esempio "il fiume che nasce in 09.08 ora finisce in 08.06 senza arrivare all'acqua". Con "annulla" torna com'era.
 - Tutto quello che non hai toccato resta identico alla mappa originale.
 
-La mappa modificata viene salvata nella stessa cartella dell'originale, che resta com'è: `<seme>_edit_nonumber.png` e `<seme>_edit_number.png` (più i .txt), con "(modificata)" dopo il seme sotto il titolo. Le modifiche vengono salvate in `<seme>_edit.json` dopo ogni singolo cambiamento, così non le perdi se esci o chiudi il programma a metà. Il seme da solo dà sempre la mappa originale, ma se scegli di nuovo `3` con lo stesso seme, il programma ti propone di riprendere le modifiche salvate: puoi continuare a modificare, oppure rigenerare subito la mappa modificata, per esempio in un altro formato o a colori.
+La mappa modificata viene salvata nella stessa cartella dell'originale, che resta com'è: `<seme>_edit_nonumber.png` e `<seme>_edit_number.png` (più i .txt), con "(modificata)" dopo il seme sotto il titolo. Le modifiche, compresi i nomi dati ai siti nell'editor, vengono salvate in `<seme>_edit.json` dopo ogni singolo cambiamento, così non le perdi se esci o chiudi il programma a metà. Il seme da solo dà sempre la mappa originale, ma se scegli di nuovo `3` con lo stesso seme, il programma ti propone di riprendere le modifiche salvate: puoi continuare a modificare, oppure rigenerare subito la mappa modificata, per esempio in un altro formato o a colori.
 
 Le modifiche sono conservate anche dentro il PNG modificato: se `<seme>_edit.json` va perso, il programma le ritrova lì. E se rifai una mappa che ha una versione modificata (**riprodurre una mappa già fatta**, oppure `--riproduci`), il programma ti ricorda che la versione modificata esiste e come ottenerla.
 
 `<seme>_edit.json` è un file di testo, quindi puoi anche cambiarlo a mano. Quando lo legge, il programma salta quello che non ha senso (un esagono fuori dalla mappa, una città sul mare, un fiume con un buco) e ti dice quante voci ha saltato. Se il file non si legge proprio, il programma non ci scrive sopra: lo rinomina `<seme>_edit_broken.json`, così non va perso, e riparte dalle modifiche nel PNG modificato oppure, se non ci sono, dalla mappa originale.
 
-L'editor vero e proprio funziona solo rispondendo alle domande. Una volta salvate le modifiche, però, puoi rifare la mappa modificata anche da riga di comando con `--riproduci <seme> --modificata` (capitolo 8), per esempio in un altro formato o a colori.
+L'editor si apre solo avviando il programma senza opzioni. Una volta salvate le modifiche, però, puoi rifare la mappa modificata anche da riga di comando con `--riproduci <seme> --modificata` (capitolo 8), per esempio in un altro formato o a colori.
 
 ---
 
@@ -343,7 +370,13 @@ Per vedere l'elenco completo delle opzioni, aggiungi `--help` dopo il nome del f
 Python non è installato, oppure su Windows non è stato aggiunto al PATH. Reinstallalo spuntando "Add python.exe to PATH", poi chiudi e riapri il terminale.
 
 **Al posto dei menu compaiono domande con i numeri.**
-I menu da scorrere con le frecce hanno bisogno di **asciimatics** e di un terminale vero. Se la libreria manca, installala con `pip install -r requirements.txt` (capitolo 2, passo 5). Senza un terminale vero, per esempio nella finestra di Git Bash su Windows o con le risposte lette da un file, il programma chiede il numero della scelta come una volta: funziona lo stesso. Puoi anche chiederlo apposta impostando la variabile `WYRMHEX_NO_MENUS=1`.
+I menu da scorrere con le frecce, e l'editor che disegna la mappa nel terminale, hanno bisogno di **asciimatics** e di un terminale vero. Se la libreria manca, installala con `pip install -r requirements.txt` (capitolo 2, passo 5). Senza un terminale vero, per esempio nella finestra di Git Bash su Windows o con le risposte lette da un file, il programma chiede il numero della scelta come una volta e l'editor funziona a domande: funziona lo stesso. Puoi anche chiederlo apposta impostando la variabile `WYRMHEX_NO_MENUS=1`.
+
+**L'editor dice che il terminale è troppo piccolo e passa alle domande.**
+L'editor sulla mappa ha bisogno di una finestra di almeno 80 colonne e 24 righe. Allargala (o rimpicciolisci il carattere del terminale) e apri di nuovo la mappa nell'editor: le modifiche fatte fin lì sono salvate.
+
+**Nell'editor i simboli sono lettere semplici, come `T` per le foreste.**
+Il terminale non usa la codifica UTF-8, quindi l'editor mostra i simboli in versione solo ASCII; la mappa generata invece ha i simboli normali. Sui terminali moderni di macOS e Linux succede di rado; su Windows usa il Terminale di Windows invece del vecchio prompt dei comandi.
 
 **"Manca la libreria Pillow".**
 L'ambiente virtuale non è attivo: la riga in cui scrivi non comincia con `(.venv)`. Attivalo (passo 4 dell'installazione) e riavvia il programma. Se succede ancora, le librerie non sono ancora installate: fai il passo 5.

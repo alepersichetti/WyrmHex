@@ -536,6 +536,78 @@ TEXTS = {
     "ed_why_river": ("c'è già un fiume", "there's already a river"),
     "ed_why_break": ("il fiume si spezzerebbe", "the river would break apart"),
     "ed_edited": ("(modificata)", "(edited)"),
+    # the editor drawn in the terminal
+    "ve_title": (" WyrmHex v{v} · Editor ", " WyrmHex v{v} · Editor "),
+    "ve_seed": ("seme {s}", "seed {s}"),
+    "ve_hex": ("Esagono {h}", "Hex {h}"),
+    "ve_rows": (("Terreno", "Sito", "Nome", "Fiume", "Quota"), ("Terrain", "Site", "Name", "River", "Height")),
+    "ve_farmland": ("pianura coltivabile", "plains, farmland"),
+    "ve_river_dir": ("sì, verso {d}", "yes, flows {d}"),
+    "ve_no": ("no", "no"),
+    "ve_actions": ("Azioni", "Actions"),
+    "ve_enter": ("Invio  tutte le azioni", "Enter  all the actions"),
+    "ve_keys": ((("T", "terreno"), ("C", "città"), ("F", "fortezza"), ("D", "dungeon"), ("R", "fiume"),
+                 ("N", "nome"), ("Z", "annulla"), ("?", "aiuto"), ("S", "genera mappa"), ("Q", "esci")),
+                (("T", "terrain"), ("C", "city"), ("F", "fortress"), ("D", "dungeon"), ("R", "river"),
+                 ("N", "name"), ("Z", "undo"), ("?", "help"), ("S", "make the map"), ("Q", "quit"))),
+    "ve_changes": ("Modifiche: {n}", "Changes: {n}"),
+    "ve_view": ("Mappa {c}×{r} esagoni · in vista colonne {a}–{b}, righe {d}–{e}",
+                "Map {c}×{r} hexes · in view columns {a}–{b}, rows {d}–{e}"),
+    "ve_bar": (" ←↑↓→ o clic: muovi   Invio: azioni   S: genera la mappa   Q: esci   ?: aiuto ",
+               " ←↑↓→ or click: move   Enter: actions   S: make the map   Q: quit   ?: help "),
+    "ve_trace_bar": (" ←↑↓→ muovi   Invio o clic: aggiungi   Backspace: togli l'ultimo   F: fine   Esc: annulla ",
+                     " ←↑↓→ move   Enter or click: add   Backspace: drop the last   F: done   Esc: cancel "),
+    "ve_popup_keys": ("↑ ↓ scegli · Invio conferma · Esc annulla", "↑ ↓ choose · Enter confirms · Esc cancels"),
+    "ve_text_keys": ("Invio conferma · Esc annulla · vuoto = nessun nome",
+                     "Enter confirms · Esc cancels · empty = no name"),
+    "ve_yes": ("sì", "yes"),
+    "ve_quit_q": ("Uscire senza generare la mappa? Le modifiche restano salvate.",
+                  "Quit without making the map? The changes stay saved."),
+    "ve_quit_no": ("no, continuo a modificare", "no, keep editing"),
+    "ve_quit_yes": ("sì, esci", "yes, quit"),
+    "ve_name_title": ("{site} in {h}: nome (massimo {n} caratteri)", "{site} at {h}: name (up to {n} characters)"),
+    "ve_no_site": ("Qui non c'è un sito: i nomi vanno a città, fortezze e dungeon.",
+                   "There's no site here: names go to cities, fortresses and dungeons."),
+    "ve_did_name": ("{h} ora si chiama \"{name}\"", "{h} is now called \"{name}\""),
+    "ve_did_unname": ("tolto il nome in {h}", "removed the name at {h}"),
+    "ve_trace_title": ("Nuovo fiume da {h}", "New river from {h}"),
+    "ve_trace_help": ("Porta il cursore su un esagono vicino all'ultimo e premi Invio: il fiume ci passa. "
+                      "Un esagono di mare, di lago o di un altro fiume lo chiude. F lo finisce dov'è.",
+                      "Move the cursor to a hex next to the last one and press Enter: the river goes "
+                      "through it. A sea, lake or other river's hex ends it. F ends it where it is."),
+    "ve_trace_path": ("Percorso ({n} esagoni):", "Path ({n} hexes):"),
+    "ve_trace_cancel": ("Nuovo fiume annullato.", "New river cancelled."),
+    "ve_help_title": ("Aiuto", "Help"),
+    "ve_help": (("←↑↓→, clic   sposta il cursore",
+                 "Invio        tutte le azioni sull'esagono",
+                 "T            cambia il terreno",
+                 "C F D        mette o toglie città, fortezza, dungeon",
+                 "N            dà un nome al sito, o lo cambia",
+                 "R            nuovo fiume da qui, o togli e sposta",
+                 "             quello che c'è",
+                 "Z            annulla l'ultima modifica",
+                 "S            genera la mappa con le modifiche",
+                 "Q            esci: le modifiche restano salvate",
+                 "",
+                 "Ogni modifica è salvata subito in {file}."),
+                ("←↑↓→, click  move the cursor",
+                 "Enter        all the actions on the hex",
+                 "T            change the terrain",
+                 "C F D        add or remove a city, fortress, dungeon",
+                 "N            name the site, or rename it",
+                 "R            new river from here, or remove and",
+                 "             move the one that's there",
+                 "Z            undo the last change",
+                 "S            make the map with the changes",
+                 "Q            quit: the changes stay saved",
+                 "",
+                 "Every change is saved at once in {file}.")),
+    "ve_any_key": ("un tasto qualsiasi per chiudere", "any key to close"),
+    "ve_too_small": ("  Il terminale è troppo piccolo per l'editor sulla mappa (serve almeno {w}×{h}): "
+                     "uso quello a domande.",
+                     "  The terminal is too small for the editor on the map (it needs at least {w}×{h}): "
+                     "using the one with questions."),
+    "ve_log": ("  Nell'editor:", "  In the editor:"),
     "info_edits": ("Modifiche salvate in {path}", "Edits saved in {path}"),
     "info_edits_applied": ("Modifiche prese da {path}", "Edits taken from {path}"),
     "warn_json_broken": ("{path} non si legge: uso le modifiche salvate nella mappa modificata",
@@ -1446,8 +1518,12 @@ def ask_settings():
         if input(tr("ask_rescale", scale=saved["scale"])).strip().lower().startswith(tr("yes_letter")):
             saved["scale"] = ask_scale(saved["scale"])
             print()
-        # the sites are known only once the land is made: main() asks then
-        saved["ask_labels"] = input(tr("ask_labels_again")).strip().lower() in YES_WORDS
+        # the sites are known only once the land is made: main() asks then.
+        # In the editor on the map they're named there, with N
+        if saved["edit"] and menus_available():
+            saved["ask_labels"] = "later"        # asked after the editor, if it had to be the typed one
+        else:
+            saved["ask_labels"] = input(tr("ask_labels_again")).strip().lower() in YES_WORDS
         ask_look(saved)
         return saved
     print()
@@ -3290,6 +3366,29 @@ def set_aside(path):
     return new
 
 
+def edit_labels(data):
+    """The site names kept in an edits file, or None if it has none."""
+    saved = data.get("labels") if isinstance(data, dict) else None
+    if not isinstance(saved, dict):
+        return None
+    return {key: name.strip()[:MAX_LABEL] for key, name in saved.items()
+            if isinstance(key, str) and isinstance(name, str) and name.strip()}
+
+
+def save_edit_labels(edit_base, labels):
+    """Put the site names into <seed>_edit.json, where the editor finds them."""
+    try:
+        with open(edit_base + ".json", encoding="utf-8") as f:
+            data = json.load(f)
+        if not isinstance(data, dict):
+            return
+        data["labels"] = labels
+        with open(edit_base + ".json", "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False)
+    except (OSError, ValueError):
+        pass                 # a broken file is the editor's business, next time it opens
+
+
 def snapshot(terrain, rivers, sites):
     return dict(terrain), [{"path": list(rv["path"]), "end": rv["end"]} for rv in rivers], list(sites)
 
@@ -3302,11 +3401,15 @@ def restore(state, terrain, rivers, sites):
     sites[:] = st
 
 
-def edit_map(grid, terrain, rivers, sites, height, edit_base):
-    """The interactive editor. Returns the edited (terrain, rivers, sites, edits),
-    or None if the user quits without making the map. The edits are written to
-    <seed>_edit.json after every change, so nothing is lost on Ctrl+C."""
+def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, fertile=()):
+    """The interactive editor. Returns the edited (terrain, rivers, sites, edits,
+    on_map), or None if the user quits without making the map. on_map is True
+    when it was the editor drawn in the terminal, where the sites get their
+    names too: labels ({"CCRR": name}) is changed in place. The edits are
+    written to <seed>_edit.json after every change, so nothing is lost on Ctrl+C."""
+    labels = {} if labels is None else labels
     original = dict(terrain)
+    unedited = (original, snapshot(terrain, rivers, sites)[1])     # to draw what wasn't touched as before
     terrain, rivers, sites = snapshot(terrain, rivers, sites)
     print(tr("ed_header"))
     resumed = False
@@ -3324,6 +3427,10 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base):
             try:
                 terrain, rivers, sites, skipped = edits_from_json(data, grid, terrain)
                 resumed = True
+                saved_labels = edit_labels(data)
+                if saved_labels is not None:           # the names as they were in the editor last time
+                    labels.clear()
+                    labels.update(saved_labels)
                 if skipped:
                     print(tr("ed_dropped", n=skipped))
             except ValueError:
@@ -3334,8 +3441,21 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base):
         print(tr("ed_start_over"))
 
     def save_edits():
+        data = edits_to_json(original, terrain, rivers, sites)
+        data["labels"] = labels
         with open(edit_base + ".json", "w", encoding="utf-8") as f:
-            json.dump(edits_to_json(original, terrain, rivers, sites), f, ensure_ascii=False)
+            json.dump(data, f, ensure_ascii=False)
+
+    def undo():
+        """False if there's nothing to undo."""
+        if not history:
+            return False
+        state, old_labels = history.pop()
+        restore(state, terrain, rivers, sites)
+        labels.clear()
+        labels.update(old_labels)
+        save_edits()
+        return True
 
     def show(focus=None, full=False):
         if full or len(grid.hexes) <= 80:
@@ -3357,7 +3477,21 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base):
             print(tr("ed_quit_nothing"))
         return None
 
-    history, focus = [], None
+    history, focus = [], None       # history: (snapshot, labels) before each change
+    if menus_available():
+        editor = VisualEditor(grid, terrain, rivers, sites, height, unedited, labels, fertile,
+                              os.path.basename(edit_base)[:-len("_edit")], history, save_edits, undo)
+        outcome = editor.run()
+        if outcome != "small":
+            if editor.log:              # the full screen is gone: leave a trace of what was done
+                print(tr("ve_log"))
+                for line in editor.log:
+                    print(f"    {line}")
+            if outcome == "quit":
+                return quit_editor()
+            save_edits()
+            return terrain, rivers, sites, edits_to_json(original, terrain, rivers, sites), True
+        print(tr("ve_too_small", w=VE_MIN_SIZE[0], h=VE_MIN_SIZE[1]))
     last = show_hex((grid.cols - 1, grid.rows - 1))
     show()
     ask_next = resumed           # picked up old edits: maybe they just want the map again
@@ -3371,9 +3505,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base):
             if answer == 3:
                 return quit_editor()
             if answer == 2:
-                if history:
-                    restore(history.pop(), terrain, rivers, sites)
-                    save_edits()
+                if undo():
                     print(tr("ed_undone"))
                     show(focus)
                 else:
@@ -3386,9 +3518,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base):
             continue
         if answer in ("a", "u"):
             ask_next = True
-            if history:
-                restore(history.pop(), terrain, rivers, sites)
-                save_edits()
+            if undo():
                 print(tr("ed_undone"))
                 show(focus)
             else:
@@ -3405,7 +3535,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base):
         if snapshot(terrain, rivers, sites) != before:
             for note in end_notes(before[1], rivers):
                 print(note)
-            history.append(before)
+            history.append((before, dict(labels)))
             save_edits()
         else:
             print(tr("ed_no_change"))
@@ -3413,7 +3543,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base):
         show(focus)
         ask_next = True
     save_edits()
-    return terrain, rivers, sites, edits_to_json(original, terrain, rivers, sites)
+    return terrain, rivers, sites, edits_to_json(original, terrain, rivers, sites), False
 
 
 def trace_by_hand(grid, terrain, rivers, spring):
@@ -3461,7 +3591,30 @@ def trace_by_hand(grid, terrain, rivers, spring):
         print(error)
 
 
-def edit_hex(grid, terrain, rivers, sites, height, h):
+class TextEditorUI:
+    """edit_hex's questions as numbered menus and typed answers."""
+
+    def intro(self, text):
+        print(text)
+
+    def choose(self, title, options, default=1, context=()):
+        return choose(title, options, default, context)
+
+    def say(self, text):
+        print(text)
+
+    def confirm(self, question):
+        return not input(question).strip().lower().startswith("n")
+
+    def trace(self, grid, terrain, rivers, spring):
+        return trace_by_hand(grid, terrain, rivers, spring)
+
+
+def edit_hex(grid, terrain, rivers, sites, height, h, ui=None, action=None):
+    """One change to hex h. ui asks the questions (TextEditorUI or the
+    VisualEditor): its choose() returns None when the user backs out.
+    action: already chosen with a key ("terrain", "river" or a site kind)."""
+    ui = ui or TextEditorUI()
     name = show_hex(h)
     site = next((kind for kind, at in sites if at == h), None)
     river = next((rv for rv in rivers if h in rv["path"]), None)
@@ -3473,7 +3626,7 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
         desc += ", " + pick(TEXTS["ed_columns"])[4].lower()
         if d is not None:
             desc += " → " + pick(TEXTS["ed_dirs"])[d]
-    print(tr("ed_hex_is", h=name, desc=desc))
+    ui.intro(tr("ed_hex_is", h=name, desc=desc))
     here = [tr("ed_hex_is", h=name, desc=desc)]     # the menu screen hides the log: say which hex
     actions = [("terrain", tr("ed_terrain"))]
     for kind in (DUNGEON, CITY, FORTRESS):
@@ -3481,12 +3634,19 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
         actions.append((kind, tr("ed_remove", what=tr(the)) if site == kind else tr("ed_add", what=tr(a))))
     actions.append(("river", tr("ed_river_piece") if river else tr("ed_add_river")))
     actions.append(("nothing", tr("ed_nothing")))
-    action = actions[choose(tr("ed_what"), [text for _, text in actions], len(actions), here)][0]
+    if action is None:
+        answer = ui.choose(tr("ed_what"), [text for _, text in actions], len(actions), here)
+        if answer is None:
+            return
+        action = actions[answer][0]
     done = []
 
     if action == "terrain":
-        new = TERRAIN_ORDER[choose(tr("ed_which_terrain"), [pick(TERRAIN_NAMES[t]) for t in TERRAIN_ORDER],
-                                   TERRAIN_ORDER.index(terrain[h]) + 1, here)]
+        answer = ui.choose(tr("ed_which_terrain"), [pick(TERRAIN_NAMES[t]) for t in TERRAIN_ORDER],
+                           TERRAIN_ORDER.index(terrain[h]) + 1, here)
+        if answer is None:
+            return
+        new = TERRAIN_ORDER[answer]
         terrain[h] = new
         done.append(tr("ed_did_terrain", h=name, t=pick(TERRAIN_NAMES[new])))
         if new in WATER:
@@ -3510,7 +3670,7 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
             sites.remove((site, h))
             done.append(tr("ed_did_remove", what=tr(the), h=name))
         elif terrain[h] in WATER:
-            print(tr("ed_no_water_site"))
+            ui.say(tr("ed_no_water_site"))
         else:
             if site:
                 sites.remove((site, h))
@@ -3520,8 +3680,10 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
             sites.append((action, h))
 
     elif action == "river" and river:
-        how = choose(tr("ed_river_how"), [tr("ed_river_all"), tr("ed_river_move"), tr("ed_river_cut_end"),
-                                          tr("ed_river_cut_start")], 1, here)
+        how = ui.choose(tr("ed_river_how"), [tr("ed_river_all"), tr("ed_river_move"), tr("ed_river_cut_end"),
+                                             tr("ed_river_cut_start")], 1, here)
+        if how is None:
+            return
         i = river["path"].index(h)
         if how == 0:
             rivers.remove(river)
@@ -3531,7 +3693,7 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
         elif how in (2, 3):
             path = river["path"][:i + 1] if how == 2 else river["path"][i:]
             if len(path) < 2:
-                print(tr("ed_too_short"))
+                ui.say(tr("ed_too_short"))
             else:
                 river["path"] = path
                 for rv in rivers:
@@ -3551,12 +3713,15 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
                 used.add(river["end"][1])
             around = sorted((direction(h, n), n) for n in grid.neighbours(h) if n not in used)
             if not around:
-                print(tr("ed_no_dirs"))
+                ui.say(tr("ed_no_dirs"))
             else:
-                _, target = around[choose(tr("ed_which_dir"), [dirs[d] for d, _ in around], 1, here)]
+                answer = ui.choose(tr("ed_which_dir"), [dirs[d] for d, _ in around], 1, here)
+                if answer is None:
+                    return
+                _, target = around[answer]
                 why = move_river_piece(grid, terrain, rivers, river, i, target)
                 if why:
-                    print(tr("ed_no_move", why=tr(why)))
+                    ui.say(tr("ed_no_move", why=tr(why)))
                 else:
                     for rv in rivers:
                         fix_river_end(grid, terrain, rv, rivers)
@@ -3564,10 +3729,13 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
 
     elif action == "river":
         if terrain[h] in WATER:
-            print(tr("ed_no_water_river"))
+            ui.say(tr("ed_no_water_river"))
         else:
             new = None
-            if choose(tr("ed_river_way"), [tr("ed_river_auto"), tr("ed_river_manual")], 1, here) == 0:
+            way = ui.choose(tr("ed_river_way"), [tr("ed_river_auto"), tr("ed_river_manual")], 1, here)
+            if way is None:
+                return
+            if way == 0:
                 busy = {x for rv in rivers for x in rv["path"]}
                 path, end = follow_river(grid, terrain, height, h, busy, random.Random(f"river {h}"),
                                          grid.cols + grid.rows)
@@ -3575,11 +3743,11 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
                     new = {"path": path, "end": end}
                 else:
                     # usually a low hex: every way out goes uphill
-                    print(tr("ed_no_river_path"))
-                    if not input(tr("ed_try_manual")).strip().lower().startswith("n"):
-                        new = trace_by_hand(grid, terrain, rivers, h)
+                    ui.say(tr("ed_no_river_path"))
+                    if ui.confirm(tr("ed_try_manual")):
+                        new = ui.trace(grid, terrain, rivers, h)
             else:
-                new = trace_by_hand(grid, terrain, rivers, h)
+                new = ui.trace(grid, terrain, rivers, h)
             if new:
                 rivers.append(new)
                 fix_river_end(grid, terrain, new, rivers)
@@ -3588,7 +3756,539 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
                 done.append(tr("ed_did_river_add", h=name, n=len(new["path"]), how=end_text(new)))
 
     for what in done:
-        print(tr("ed_done", what=what))
+        ui.say(tr("ed_done", what=what))
+
+
+# --- the editor on the map ---
+# The same editor, drawn in the terminal with asciimatics: the map itself with
+# a cursor to move around, a panel with the hex under the cursor and one key
+# per action. The actions are edit_hex's, asked in boxes over the map, so the
+# two editors change the map in exactly the same way; the one with typed
+# answers stays for when there's no terminal or it's too small.
+VE_MIN_SIZE = (80, 24)
+VE_PANEL = 34                    # columns on the right for the panel
+VE_K = 2                         # hex size in the terminal: 10 letters wide, 5 high
+VE_ASPECT = 2.0                  # a terminal letter is about twice as tall as it is wide
+VE_PLAIN = str.maketrans({"×": "x", "–": "-", "—": "-", "·": "-", "→": "->", "↑": "^", "↓": "v",
+                          "←": "<", "è": "e", "à": "a", "ì": "i", "ò": "o", "ù": "u", "é": "e"})
+
+
+class VisualEditor:
+    def __init__(self, grid, terrain, rivers, sites, height, unedited, labels, fertile, seed, history, save, undo):
+        self.grid, self.terrain, self.rivers, self.sites = grid, terrain, rivers, sites
+        self.height, self.unedited, self.labels, self.fertile = height, unedited, labels, set(fertile)
+        self.seed, self.history, self.save, self.undo = seed, history, save, undo
+        self.cursor = sites[0][1] if sites else (grid.cols // 2, grid.rows // 2)
+        self.ox = self.oy = None         # top-left corner of the map in view
+        self.messages = []               # in the panel until the next key
+        self.log = []                    # everything done, printed when the editor closes
+        self.canvas = None               # drawn again after every change
+        self.screen = None
+
+    # --- running ---
+    def run(self):
+        """"go" (make the map), "quit", or "small" if the terminal is too small."""
+        from asciimatics.exceptions import ResizeScreenError
+        from asciimatics.screen import Screen
+        while True:
+            try:
+                return Screen.wrapper(self.main_loop)
+            except ResizeScreenError:
+                self.canvas = None              # the window changed size: draw it all again
+                continue
+
+    def main_loop(self, screen):
+        from asciimatics.event import KeyboardEvent, MouseEvent
+        from asciimatics.screen import Screen
+        self.screen, self.S = screen, Screen
+        if screen.width < VE_MIN_SIZE[0] or screen.height < VE_MIN_SIZE[1]:
+            return "small"
+        self.fancy = screen.unicode_aware
+        while True:
+            self.draw()
+            screen.refresh()
+            event = self.next_event()
+            if isinstance(event, MouseEvent):
+                if event.buttons & MouseEvent.LEFT_CLICK:
+                    h = self.hex_at(event.x, event.y)
+                    if h == self.cursor:
+                        self.messages = []
+                        self.act(None)          # a click on the hex already chosen: its actions
+                    elif h:
+                        self.move_to(h)
+                continue
+            if not isinstance(event, KeyboardEvent):
+                continue
+            key = event.key_code
+            letter = chr(key).lower() if 0 < key < 0x110000 else ""
+            if self.arrow(key):
+                continue
+            self.messages = []
+            if key in (10, 13):
+                self.act(None)
+            elif letter == "t":
+                self.act("terrain")
+            elif letter and letter in "cfd":
+                self.act({"c": CITY, "f": FORTRESS, "d": DUNGEON}[letter])
+            elif letter == "r":
+                self.act("river")
+            elif letter == "n":
+                self.name_site()
+            elif letter in ("z", "u"):
+                if self.undo():
+                    self.canvas = None
+                    self.say(tr("ed_undone"))
+                else:
+                    self.say(tr("ed_nothing_to_undo"))
+            elif letter == "s":
+                return "go"
+            elif letter in ("q", "e"):
+                if not self.history or self.confirm_box(tr("ve_quit_q"), tr("ve_quit_yes"), tr("ve_quit_no")):
+                    return "quit"
+            elif letter in ("?", "h"):
+                self.help_box()
+
+    def next_event(self):
+        from asciimatics.exceptions import ResizeScreenError
+        while True:
+            self.screen.wait_for_input(0.5)
+            event = self.screen.get_event()
+            if self.screen.has_resized():
+                raise ResizeScreenError("resized")
+            if event is None:
+                continue
+            if getattr(event, "key_code", None) == 3:    # Ctrl+C, when the terminal hands it over as a key
+                raise KeyboardInterrupt
+            return event
+
+    def arrow(self, key):
+        """Move the cursor with the arrow keys. False if key isn't an arrow."""
+        S = self.S
+        steps = {S.KEY_LEFT: (-1, 0), S.KEY_RIGHT: (1, 0), S.KEY_UP: (0, -1), S.KEY_DOWN: (0, 1)}
+        if key not in steps:
+            return False
+        h = (self.cursor[0] + steps[key][0], self.cursor[1] + steps[key][1])
+        if self.grid.inside(h):
+            self.move_to(h)
+        return True
+
+    def move_to(self, h):
+        self.cursor = h
+        self.messages = []
+
+    # --- changes ---
+    def act(self, action):
+        terrain, rivers, sites = self.terrain, self.rivers, self.sites
+        before = snapshot(terrain, rivers, sites)
+        edit_hex(self.grid, terrain, rivers, sites, edited_heights(self.height, self.unedited[0], terrain),
+                 self.cursor, self, action)
+        if snapshot(terrain, rivers, sites) != before:
+            for note in end_notes(before[1], rivers):
+                self.say(note)
+            self.history.append((before, dict(self.labels)))
+            self.save()
+            self.canvas = None
+
+    def name_site(self):
+        h = self.cursor
+        kind = next((k for k, at in self.sites if at == h), None)
+        if not kind:
+            self.say(tr("ve_no_site"))
+            return
+        key = label_key(h)
+        old = self.labels.get(key, "")
+        title = tr("ve_name_title", site=pick(SITE_NAMES[kind]), h=show_hex(h), n=MAX_LABEL)
+        name = self.text_box(title, old, MAX_LABEL)
+        if name is None:
+            return
+        name = " ".join(name.split())
+        if name == old:
+            return
+        before = (snapshot(self.terrain, self.rivers, self.sites), dict(self.labels))
+        if name:
+            self.labels[key] = name
+            self.say(tr("ed_done", what=tr("ve_did_name", h=show_hex(h), name=name)))
+        else:
+            self.labels.pop(key, None)
+            self.say(tr("ed_done", what=tr("ve_did_unname", h=show_hex(h))))
+        self.history.append(before)
+        self.save()
+        self.canvas = None
+
+    # --- what edit_hex asks ---
+    def intro(self, text):
+        pass                                    # the panel already says what's in the hex
+
+    def say(self, text):
+        text = text.strip()
+        self.messages.append(text)
+        self.log.append(text)
+
+    def choose(self, title, options, default=1, context=()):
+        return self.menu_box(title.strip(), options, default - 1)
+
+    def confirm(self, question):
+        question = re.sub(r"\s*\(\w/\w\):?\s*$", "", question.strip())     # the "(Y/n):" of the typed editor
+        return self.confirm_box(question, tr("ve_yes"), tr("ve_no"), True)
+
+    def trace(self, grid, terrain, rivers, spring):
+        """The new river's hexes, picked one by one on the map."""
+        from asciimatics.event import KeyboardEvent, MouseEvent
+        busy = {h for rv in rivers for h in rv["path"]}
+        path, problem = [spring], ""
+        self.cursor = spring
+        while True:
+            self.draw(trace=(path, problem))
+            self.screen.refresh()
+            event = self.next_event()
+            add = False
+            if isinstance(event, MouseEvent):
+                h = self.hex_at(event.x, event.y) if event.buttons & MouseEvent.LEFT_CLICK else None
+                if h:
+                    self.cursor, add = h, True
+            elif isinstance(event, KeyboardEvent):
+                key = event.key_code
+                letter = chr(key).lower() if 0 < key < 0x110000 else ""
+                if self.arrow(key):
+                    continue
+                problem = ""
+                if key in (10, 13):
+                    add = True
+                elif key in (self.S.KEY_BACK, self.S.KEY_DELETE, 8, 127):
+                    if len(path) > 1:
+                        path.pop()
+                        self.cursor = path[-1]
+                elif key == self.S.KEY_ESCAPE:
+                    self.cursor = spring
+                    self.say(tr("ve_trace_cancel"))
+                    return None
+                elif letter == "f":
+                    if len(path) >= 2:
+                        self.cursor = spring
+                        return {"path": path, "end": ("stop", None)}
+                    problem = tr("ed_path_short", h=show_hex(spring))
+            if not add:
+                continue
+            h, end = self.cursor, None
+            if h in path:
+                problem = tr("ed_path_twice", h=show_hex(h))
+            elif h not in grid.neighbours(path[-1]):
+                problem = tr("ed_path_not_near", a=show_hex(path[-1]), b=show_hex(h))
+            elif terrain[h] in WATER:
+                end = ("water", h)
+            elif h in busy:
+                end = ("join", h)
+            else:
+                path.append(h)
+                problem = ""
+            if end:
+                if len(path) >= 2:
+                    self.cursor = spring
+                    return {"path": path, "end": end}
+                problem = tr("ed_path_short", h=show_hex(spring))
+
+    # --- drawing ---
+    def plain(self, text):
+        return text if self.fancy else text.replace("←↑↓→", "<^v>").translate(VE_PLAIN)
+
+    def put(self, text, x, y, colour=None, attr=None, bg=None):
+        S = self.S
+        self.screen.print_at(self.plain(text), x, y, S.COLOUR_WHITE if colour is None else colour,
+                             S.A_NORMAL if attr is None else attr, S.COLOUR_BLACK if bg is None else bg)
+
+    def view_size(self):
+        return self.screen.width - VE_PANEL - 3, self.screen.height - 4
+
+    def redraw_map(self):
+        G = lambda fancy, plain: fancy if self.fancy else plain
+        self.canvas = draw_map(self.grid, self.terrain, self.rivers, self.sites, VE_K, G,
+                               random.Random(len(self.grid.hexes)), VE_ASPECT, self.unedited, self.labels,
+                               not self.fancy, self.fertile)
+        self.heights = edited_heights(self.height, self.unedited[0], self.terrain)
+
+    def scroll(self):
+        """Move the view only when the cursor's hex would leave it."""
+        view_w, view_h = self.view_size()
+        x0, y0 = hex_origin(*self.cursor, VE_K)
+        w, h = 4 * VE_K + 2, 2 * VE_K + 1
+        if self.ox is None:                     # at first, the cursor in the middle
+            self.ox, self.oy = x0 + w // 2 - view_w // 2, y0 + h // 2 - view_h // 2
+        ox, oy = self.ox, self.oy
+        if x0 < ox:
+            ox = x0 - 3 * VE_K
+        if x0 + w > ox + view_w:
+            ox = x0 + w - view_w + 3 * VE_K
+        if y0 < oy:
+            oy = y0 - 2 * VE_K
+        if y0 + h > oy + view_h:
+            oy = y0 + h - view_h + 2 * VE_K
+        self.ox = max(0, min(ox, self.canvas.width - view_w))
+        self.oy = max(0, min(oy, self.canvas.height - view_h))
+
+    def hex_at(self, x, y):
+        """The hex under screen square (x, y), or None outside the map."""
+        view_w, view_h = self.view_size()
+        if not (1 <= x < 1 + view_w and 2 <= y < 2 + view_h) or self.ox is None:
+            return None
+        cx, cy = x - 1 + self.ox, y - 2 + self.oy
+        if cx >= self.canvas.width or cy >= self.canvas.height:
+            return None
+        # nearest centre; a row is sqrt(3) times as far as a column step in a real hexagon
+        def distance(h):
+            x0, y0 = hex_origin(*h, VE_K)
+            return (cx - x0 - 2 * VE_K - 0.5) ** 2 + 3 * (cy - y0 - VE_K) ** 2
+        return min(self.grid.hexes, key=distance)
+
+    def draw(self, trace=None):
+        S, screen = self.S, self.screen
+        if self.canvas is None:
+            self.redraw_map()
+        self.scroll()
+        w, h = screen.width, screen.height
+        screen.clear_buffer(S.COLOUR_WHITE, S.A_NORMAL, S.COLOUR_BLACK)
+        self.put(tr("ve_title", v=VERSION).ljust(w), 0, 0, S.COLOUR_BLACK, S.A_BOLD, S.COLOUR_YELLOW)
+        seed = tr("ve_seed", s=self.seed)
+        self.put(seed, max(0, w - len(seed) - 2), 0, S.COLOUR_BLACK, S.A_NORMAL, S.COLOUR_YELLOW)
+        self.draw_map_view(trace[0] if trace else ())
+        for y in range(1, h - 1):
+            self.put("│" if self.fancy else "|", w - VE_PANEL - 2, y)
+        if trace:
+            self.draw_trace_panel(*trace)
+        else:
+            self.draw_panel()
+        bar = tr("ve_trace_bar" if trace else "ve_bar")
+        self.put(self.plain(bar)[:w].ljust(w), 0, h - 1, S.COLOUR_BLACK, S.A_NORMAL, S.COLOUR_WHITE)
+
+    def draw_map_view(self, marks):
+        S, canvas = self.S, self.canvas
+        view_w, view_h = self.view_size()
+        ox, oy = self.ox, self.oy
+        terrain_fg = {FOREST: S.COLOUR_GREEN, HILLS: S.COLOUR_YELLOW, MOUNTAINS: S.COLOUR_WHITE,
+                      DESERT: S.COLOUR_YELLOW, LAKE: S.COLOUR_CYAN, SWAMP: S.COLOUR_MAGENTA,
+                      FERTILE: S.COLOUR_GREEN, "river": S.COLOUR_BLUE, "label": S.COLOUR_WHITE}
+        box_bg = {CITY: S.COLOUR_RED, FORTRESS: S.COLOUR_MAGENTA, DUNGEON: S.COLOUR_WHITE}
+        box_fg = {CITY: S.COLOUR_WHITE, FORTRESS: S.COLOUR_WHITE, DUNGEON: S.COLOUR_BLACK}
+        rows, cols = min(view_h, canvas.height - oy), min(view_w, canvas.width - ox)
+        for y in range(rows):
+            for x in range(cols):
+                X, Y = ox + x, oy + y
+                ch, style, tag = canvas.chars[Y][X], canvas.styles[Y][X], canvas.tags[Y][X]
+                if style in "gGH":              # the sea: one blue sheet with a few waves
+                    if tag == "label":
+                        self.put(ch, 1 + x, 2 + y, S.COLOUR_WHITE, S.A_BOLD, S.COLOUR_BLUE)
+                    else:
+                        ch = ch if style != "g" else ("~" if (X + Y) % 3 == 0 else " ")
+                        self.put(ch, 1 + x, 2 + y, S.COLOUR_CYAN, S.A_NORMAL, S.COLOUR_BLUE)
+                elif ch != " " and style != "B":
+                    colour = S.COLOUR_WHITE if tag == "border" else terrain_fg.get(tag, S.COLOUR_WHITE)
+                    bold = style == "b" and tag != "border"
+                    self.put(ch, 1 + x, 2 + y, colour, S.A_BOLD if bold else S.A_NORMAL)
+        for bx, by, bw, bh, g, tag in canvas.boxes:     # sites: one big symbol on their colour
+            for yy in range(bh):
+                for xx in range(bw):
+                    X, Y = bx + xx - ox, by + yy - oy
+                    if 0 <= X < cols and 0 <= Y < rows:
+                        self.put(g if xx in (1, 2) else " ", 1 + X, 2 + Y, box_fg[tag], S.A_BOLD, box_bg[tag])
+        border, inside = hex_template(VE_K)
+        for h in marks:                         # the new river's hexes
+            self.highlight(h, inside, (), S.COLOUR_CYAN)
+        self.highlight(self.cursor, inside, border, S.COLOUR_YELLOW)
+
+    def highlight(self, h, inside, border, colour):
+        """The hex's inside on colour (site boxes stay on top), its outline in colour."""
+        S, canvas = self.S, self.canvas
+        view_w, view_h = self.view_size()
+        x0, y0 = hex_origin(*h, VE_K)
+        for yy, xx in inside:
+            X, Y = x0 + xx - self.ox, y0 + yy - self.oy
+            if 0 <= X < view_w and 0 <= Y < view_h and canvas.styles[y0 + yy][x0 + xx] != "B":
+                ch = canvas.chars[y0 + yy][x0 + xx]
+                ch = " " if canvas.styles[y0 + yy][x0 + xx] == "g" else ch
+                self.put(ch, 1 + X, 2 + Y, S.COLOUR_BLACK, S.A_BOLD, colour)
+        for yy, xx, ch in border:
+            X, Y = x0 + xx - self.ox, y0 + yy - self.oy
+            if 0 <= X < view_w and 0 <= Y < view_h:
+                if canvas.tags[y0 + yy][x0 + xx] == "label":    # a name on the border stays as it is
+                    self.put(canvas.chars[y0 + yy][x0 + xx], 1 + X, 2 + Y, S.COLOUR_WHITE, S.A_BOLD)
+                else:
+                    self.put(ch, 1 + X, 2 + Y, colour, S.A_BOLD)
+
+    def wrap(self, text, width):
+        return textwrap.wrap(self.plain(text), width) or [""]
+
+    def draw_panel(self):
+        S, h = self.S, self.cursor
+        px, bottom = self.screen.width - VE_PANEL, self.screen.height - 2
+        site = next((k for k, at in self.sites if at == h), None)
+        river = next((rv for rv in self.rivers if h in rv["path"]), None)
+        kind = self.terrain[h]
+        terrain = tr("ve_farmland") if kind == PLAINS and h in self.fertile else pick(TERRAIN_NAMES[kind])
+        none = "—" if self.fancy else "-"
+        if river:
+            d = river_direction(self.grid, river, h)
+            river = tr("ve_river_dir", d=pick(TEXTS["ed_dirs"])[d]) if d is not None else tr("ed_yes")
+        values = (terrain, pick(SITE_NAMES[site]) if site else none,
+                  (self.labels.get(label_key(h)) or none) if site else none,
+                  river or tr("ve_no"), f"{self.heights[h]:.2f}")
+        self.put(tr("ve_hex", h=show_hex(h)), px, 2, S.COLOUR_YELLOW, S.A_BOLD)
+        y = 3
+        for name, value in zip(pick(TEXTS["ve_rows"]), values):
+            self.put(f"{name:<8}", px, y, S.COLOUR_CYAN)
+            self.put(value[:VE_PANEL - 10], px + 9, y, S.COLOUR_WHITE, S.A_BOLD)
+            y += 1
+        y += 1
+        self.put(tr("ve_actions"), px, y, S.COLOUR_YELLOW, S.A_BOLD)
+        y += 1
+        key, text = tr("ve_enter").split(" ", 1)
+        self.put(f" {key} ", px, y, S.COLOUR_BLACK, S.A_BOLD, S.COLOUR_WHITE)
+        self.put(text.strip(), px + len(key) + 3, y)
+        y += 1
+        keys = pick(TEXTS["ve_keys"])
+        for i in range(0, len(keys), 2):
+            for j, (key, text) in enumerate(keys[i:i + 2]):
+                x = px + j * 17
+                self.put(f" {key} ", x, y, S.COLOUR_BLACK, S.A_BOLD, S.COLOUR_WHITE)
+                self.put(text[:12], x + 4, y)
+            y += 1
+        y += 1
+        self.put(tr("ve_changes", n=len(self.history)), px, y)
+        y += 2
+        for message in self.messages:
+            for piece in self.wrap(message, VE_PANEL - 1):
+                if y < bottom:
+                    self.put(piece, px, y, S.COLOUR_GREEN, S.A_BOLD)
+                y += 1
+        self.draw_view_line()
+
+    def draw_trace_panel(self, path, problem):
+        S = self.S
+        px, bottom = self.screen.width - VE_PANEL, self.screen.height - 2
+        self.put(tr("ve_trace_title", h=show_hex(path[0])), px, 2, S.COLOUR_YELLOW, S.A_BOLD)
+        y = 4
+        for piece in self.wrap(tr("ve_trace_help"), VE_PANEL - 1):
+            self.put(piece, px, y, S.COLOUR_CYAN)
+            y += 1
+        y += 1
+        self.put(tr("ve_trace_path", n=len(path)), px, y)
+        y += 1
+        arrow = " → " if self.fancy else " > "
+        for piece in self.wrap(arrow.join(show_hex(h) for h in path), VE_PANEL - 1):
+            if y < bottom - 3:
+                self.put(piece, px, y, S.COLOUR_WHITE, S.A_BOLD)
+            y += 1
+        y += 1
+        for piece in self.wrap(problem, VE_PANEL - 1) if problem else ():
+            if y < bottom:
+                self.put(piece, px, y, S.COLOUR_RED, S.A_BOLD)
+            y += 1
+        self.draw_view_line()
+
+    def draw_view_line(self):
+        """Under the map: which columns and rows are in view."""
+        view_w, view_h = self.view_size()
+        cols = [c for c in range(self.grid.cols)
+                if hex_origin(c, 0, VE_K)[0] < self.ox + view_w and hex_origin(c, 0, VE_K)[0] + 4 * VE_K > self.ox]
+        rows = [r for r in range(self.grid.rows)
+                if 2 * VE_K * r < self.oy + view_h and 2 * VE_K * (r + 1) > self.oy]
+        text = tr("ve_view", c=self.grid.cols, r=self.grid.rows, a=cols[0] + 1, b=cols[-1] + 1,
+                  d=rows[0] + 1, e=rows[-1] + 1)
+        self.put(self.plain(text)[:view_w], 1, self.screen.height - 2, self.S.COLOUR_WHITE)
+
+    # --- boxes over the map ---
+    def box(self, title, lines, width=None):
+        """A framed box over the map, with room for lines. Returns (x, y, width) of its inside."""
+        S = self.S
+        view_w, _ = self.view_size()
+        width = min(view_w - 2, max(width or 0, len(title) + 6, *(len(line) + 4 for line in lines)))
+        height = len(lines) + 2
+        x, y = max(1, (view_w - width) // 2), 3
+        h_line, v_line, corners = ("─", "│", "┌┐└┘") if self.fancy else ("-", "|", "++++")
+        self.put(corners[0] + h_line * (width - 2) + corners[1], x, y, S.COLOUR_YELLOW)
+        for i in range(1, height - 1):
+            self.put(v_line + " " * (width - 2) + v_line, x, y + i, S.COLOUR_YELLOW)
+        self.put(corners[2] + h_line * (width - 2) + corners[3], x, y + height - 1, S.COLOUR_YELLOW)
+        self.put(f" {title[:width - 6]} ", x + 2, y, S.COLOUR_YELLOW, S.A_BOLD)
+        return x + 2, y + 1, width - 4
+
+    def menu_box(self, title, options, current=0):
+        """Index of the chosen option, or None for Esc."""
+        from asciimatics.event import KeyboardEvent, MouseEvent
+        S = self.S
+        numbered = [self.plain(f" {i + 1}  {text} " if len(options) < 10 else f" {text} ")
+                    for i, text in enumerate(options)]
+        keys = self.plain(tr("ve_popup_keys"))
+        while True:
+            self.draw()
+            x, y, width = self.box(self.plain(title), [""] + ["  " + text for text in numbered] + ["", keys])
+            for i, text in enumerate(numbered):
+                if i == current:
+                    self.put("▶" if self.fancy else ">", x, y + 1 + i, S.COLOUR_YELLOW, S.A_BOLD)
+                    self.put(text[:width - 2].ljust(width - 2), x + 2, y + 1 + i, S.COLOUR_BLACK, S.A_NORMAL,
+                             S.COLOUR_YELLOW)
+                else:
+                    self.put(text[:width - 2], x + 2, y + 1 + i, S.COLOUR_WHITE)
+            self.put(keys[:width], x, y + len(options) + 2, S.COLOUR_CYAN)
+            self.screen.refresh()
+            event = self.next_event()
+            if isinstance(event, KeyboardEvent):
+                key = event.key_code
+                if key in (S.KEY_UP, ord("k")):
+                    current = (current - 1) % len(options)
+                elif key in (S.KEY_DOWN, ord("j"), S.KEY_TAB):
+                    current = (current + 1) % len(options)
+                elif key in (10, 13):
+                    return current
+                elif key == S.KEY_ESCAPE:
+                    return None
+                elif ord("1") <= key <= ord("9") and key - ord("1") < len(options):
+                    return key - ord("1")
+            elif isinstance(event, MouseEvent) and event.buttons & MouseEvent.LEFT_CLICK:
+                if y + 1 <= event.y < y + 1 + len(options) and x <= event.x < x + width:
+                    return event.y - y - 1
+
+    def confirm_box(self, question, yes, no, yes_first=False):
+        options = [yes, no] if yes_first else [no, yes]
+        answer = self.menu_box(question, options)
+        return answer is not None and options[answer] == yes
+
+    def text_box(self, title, text, limit):
+        """A line typed in a box: the text, or None for Esc."""
+        from asciimatics.event import KeyboardEvent
+        S = self.S
+        keys = self.plain(tr("ve_text_keys"))
+        while True:
+            self.draw()
+            x, y, width = self.box(self.plain(title), ["", " " * (limit + 2), "", keys], limit + 6)
+            self.put(" " * (limit + 2), x, y + 1, S.COLOUR_BLACK, S.A_NORMAL, S.COLOUR_WHITE)
+            self.put(text, x + 1, y + 1, S.COLOUR_BLACK, S.A_BOLD, S.COLOUR_WHITE)
+            self.put("_" if len(text) < limit else " ", x + 1 + len(text), y + 1, S.COLOUR_BLACK, S.A_BOLD,
+                     S.COLOUR_WHITE)
+            self.put(keys[:width], x, y + 3, S.COLOUR_CYAN)
+            self.screen.refresh()
+            event = self.next_event()
+            if not isinstance(event, KeyboardEvent):
+                continue
+            key = event.key_code
+            if key in (10, 13):
+                return text
+            if key == S.KEY_ESCAPE:
+                return None
+            if key in (S.KEY_BACK, S.KEY_DELETE, 8, 127):
+                text = text[:-1]
+            elif 32 <= key < 0x110000 and chr(key).isprintable() and len(text) < limit:
+                text += chr(key)
+
+    def help_box(self):
+        room = self.view_size()[0] - 6
+        lines = [""]
+        for line in pick(TEXTS["ve_help"]) + ("", tr("ve_any_key")):
+            lines += self.wrap(line.format(file=f"{self.seed}_edit.json"), room)
+        self.draw()
+        x, y, width = self.box(self.plain(tr("ve_help_title")), lines)
+        for i, line in enumerate(lines):
+            self.put(line[:width], x, y + i, self.S.COLOUR_CYAN if i == len(lines) - 1 else self.S.COLOUR_WHITE)
+        self.screen.refresh()
+        self.next_event()
 
 
 def save_maps(params, grid, land, look, seed, number, log, layout_log):
@@ -3667,13 +4367,18 @@ def main():
     # 3-9: land
     terrain, rivers, sites, height, fertile = build_land(params, counts, grid, rng, log)
     original = None
+    params.setdefault("labels", {})
     if params.pop("edit", False):
         original = (terrain, rivers)
         os.makedirs(map_folder(params["output"], seed), exist_ok=True)
-        edited = edit_map(grid, terrain, rivers, sites, height, edit_base)
+        edited = edit_map(grid, terrain, rivers, sites, height, edit_base, params["labels"], fertile)
         if edited is None:
             return
-        terrain, rivers, sites, params["edits"] = edited
+        terrain, rivers, sites, params["edits"], on_map = edited
+        if on_map:              # the names were given on the map, with N
+            params.pop("ask_labels", None)
+        elif params.get("ask_labels") == "later":
+            params["ask_labels"] = input(tr("ask_labels_again")).strip().lower() in YES_WORDS
         log.info(tr("info_edits", path=short_path(edit_base + ".json")))
     elif apply_edits:
         data, source = load_edits(edit_base)
@@ -3689,15 +4394,18 @@ def main():
         original = (terrain, rivers)
         terrain, rivers, sites, skipped = edited
         params["edits"] = edits_to_json(original[0], terrain, rivers, sites)
+        if edit_labels(data) is not None:         # names given in the editor
+            params["labels"] = edit_labels(data)
         log.info(tr("info_edits_applied", path=short_path(where)))
         if skipped:
             log.warn(tr("warn_edits_dropped", n=skipped))
     elif has_edits(edit_base):
         log.info(tr("info_has_edits", s=seed))
 
-    params.setdefault("labels", {})
     if params.pop("ask_labels", False) and sys.stdin.isatty() and sites:
         params["labels"] = ask_labels(grid, terrain, sites, params["labels"])
+        if original and os.path.exists(edit_base + ".json"):
+            save_edit_labels(edit_base, params["labels"])     # or the editor would bring back the old ones
     named = len(site_labels(sites, params["labels"]))
     if named:
         log.info(tr("info_labels", n=named))
@@ -3717,10 +4425,10 @@ def main():
     # a map just made can be edited straight away, on the same paper
     if interactive and original is None and sys.stdin.isatty():
         if input(tr("ask_edit_now")).strip().lower().startswith(tr("yes_letter")):
-            edited = edit_map(grid, terrain, rivers, sites, height, edit_base)
+            edited = edit_map(grid, terrain, rivers, sites, height, edit_base, params["labels"], fertile)
             if edited is None:
                 return
-            new_terrain, new_rivers, new_sites, params["edits"] = edited
+            new_terrain, new_rivers, new_sites, params["edits"], _ = edited
             log = Log(12)
             log.step_number = 10            # only the last two steps are done again
             log.info(tr("info_edits", path=short_path(edit_base + ".json")))

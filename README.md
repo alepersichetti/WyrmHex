@@ -218,7 +218,32 @@ The rebuilt map goes into the `maps_generated/<seed>` folder and replaces the fi
 
 ## 5. Editing a map
 
-You can change a map by hand, hex by hex, starting from its seed. If you've just made it, answer `y` when the program asks whether to edit it now (chapter 3). Otherwise start the program, choose the language, choose **edit a map** at "What do you want to do?" and type the seed. As when rebuilding a map, it asks about the title, the scale and the look; then it builds the map and shows a table with one line per hex:
+You can change a map by hand, hex by hex, starting from its seed. If you've just made it, answer `y` when the program asks whether to edit it now (chapter 3). Otherwise start the program, choose the language, choose **edit a map** at "What do you want to do?" and type the seed. As when rebuilding a map, it asks about the title, the scale and the look; then it builds the map and opens the **editor**, which draws it right in the terminal:
+
+![The WyrmHex editor in the terminal](img_examples/editor_en.png)
+
+On the left is the map, with the terrain colours, the rivers, the sites and their names; the hex highlighted in yellow is the **cursor**. On the right you see what's in that hex (terrain, site, name, whether a river flows through it and which way) and the keys for the actions. If the map doesn't fit in the window, the view scrolls by itself to follow the cursor; under the map it says which columns and rows you're looking at.
+
+- The **← ↑ ↓ → arrow keys** move the cursor; you can also **click** a hex.
+- **Enter**, or a click on the hex already chosen, opens the menu with everything you can do there.
+- **T** changes the terrain: pick the new one from the box that pops up.
+- **C**, **F** and **D** add or remove a city, a fortress or a dungeon.
+- **N** names the hex's site, or renames it (up to 24 characters; leave it empty to remove the name).
+- **R** makes a river spring from that hex (the program traces it downhill, or you trace it yourself) or, if a river already flows through it, removes the whole river, moves that stretch by one hex (the program only offers the directions the river doesn't already come from or flow to: if it runs from north to south, north and south aren't listed), or shortens it so that it ends or springs right there.
+- **Z** undoes the last change: you can undo several, one at a time.
+- **S** makes the map with the changes.
+- **Q** quits without making the map: the changes stay saved.
+- **?** shows the help with all the keys.
+
+In the boxes that pop up over the map, move with **↑ ↓** and confirm with **Enter** (or the choice's number, or a click); **Esc** closes the box without changing anything. The panel on the right confirms every change and counts how many you've made, and when the editor closes the list of changes stays written in the terminal.
+
+To **trace a river yourself**, you pick its hexes on the map, one after the other: move the cursor to a hex next to the last one and press Enter (or click): the river goes through it, and the path lights up. A sea or lake hex makes it flow into the water there, a hex of another river makes it join that one; **F** ends it where you've got to. **Backspace** drops the last hex you picked, **Esc** gives up on the river.
+
+Since the sites get their names in the editor, with **N**, the program doesn't ask for names separately when you edit a map.
+
+### The editor with questions
+
+If the terminal is too small (it needs at least 80 columns and 24 rows) or isn't a real terminal (chapter 9), the editor works through questions, with the same actions. The program shows a table with one line per hex:
 
 ```
   Hex    Terrain   Dungeon  City  River  Direction   Fortress
@@ -236,25 +261,27 @@ Then:
 2. Choose what to do with it: change the terrain; add or remove a dungeon, a city or a fortress; add a river that springs from that hex (the program traces it downhill, or you trace it yourself) or, if a river already flows through it, remove the whole river, move that stretch by one hex (the program only offers the directions the river doesn't already come from or flow to: if it runs from north to south, north and south aren't listed), or shorten the river so that it ends or springs right there.
 3. The table comes back, updated. Choose whether to change another hex, make the map with the changes, **undo** the last change (you can undo several, one at a time), or **quit** without making the map.
 
-When it asks for a hex you can also type `T` (full table), `U` (undo the last change) or `Q` (quit). In Italian they are `T`, `A` and `E`.
+When it asks for a hex you can also type `T` (full table), `U` (undo the last change) or `Q` (quit). In Italian they are `T`, `A` and `E`. Here a river you trace yourself is typed: the hexes after the spring, in order, separated by spaces, for example `03.08 04.08 05.09`. In this case the sites don't get their names in the editor: the program asks whether you want to name them and then goes through them one by one, as when rebuilding a map (chapter 4).
 
-A few rules keep the map consistent:
+### The rules
+
+A few rules keep the map consistent, in both editors:
 
 - A hex holds at most one site: adding a city where there's a dungeon replaces the dungeon.
 - Sites and rivers can't start on the sea or on lakes. If you turn a hex into water, its site is removed and a river flowing through it now ends there.
 - A moved stretch of river is joined back to the rest through the nearby hexes. If that's not possible (there's water or another river, or the river would break apart), the program says so and changes nothing.
 - A new river traced by the program flows downhill like the others. Heights follow your changes: if you've turned a plain into a mountain, the river starts as high up as the other mountains on the map.
-- On low ground the program often can't find a way downhill. It then offers to let you **trace the river yourself**, which you can also choose straight away. Type the hexes after the spring, in order, separated by spaces, for example `03.08 04.08 05.09`: each one must touch the one before. To make the river flow into the water, end with a sea or lake hex; to make it join another river, end with a hex of that river. Otherwise it ends at the last hex you typed (or leaves the map, if that hex is on the edge).
+- On low ground the program often can't find a way downhill. It then offers to let you **trace the river yourself**, which you can also choose straight away. Each hex must touch the one before. To make the river flow into the water, end with a sea or lake hex; to make it join another river, end with a hex of that river. Otherwise it ends at the last hex you picked (or leaves the map, if that hex is on the edge).
 - If a change alters how *another* river ends (you filled in the lake it flowed into, or removed the river it joined), the program tells you with a note, for example "the river that springs at 09.08 now ends at 08.06 without reaching water". Undo puts it back.
 - Everything you didn't touch looks exactly as on the original map.
 
-The edited map is saved in the same folder as the original, which stays as it is: `<seed>_edit_nonumber.png` and `<seed>_edit_number.png` (plus the .txt files), with "(edited)" after the seed under the title. The changes are saved in `<seed>_edit.json` after every single change, so you don't lose them if you quit or close the program halfway. The seed alone still gives the original map, but if you choose `3` again with the same seed, the program offers to pick up the saved changes: you can carry on editing, or just make the edited map again, for example on another paper size or in colour.
+The edited map is saved in the same folder as the original, which stays as it is: `<seed>_edit_nonumber.png` and `<seed>_edit_number.png` (plus the .txt files), with "(edited)" after the seed under the title. The changes, including the names given to sites in the editor, are saved in `<seed>_edit.json` after every single change, so you don't lose them if you quit or close the program halfway. The seed alone still gives the original map, but if you choose `3` again with the same seed, the program offers to pick up the saved changes: you can carry on editing, or just make the edited map again, for example on another paper size or in colour.
 
 The changes are also stored inside the edited PNG: if `<seed>_edit.json` gets lost, the program finds them there. And if you rebuild a map that has an edited version (**rebuild a map you already made**, or `--reproduce`), it reminds you that the edited version exists and how to get it.
 
 `<seed>_edit.json` is plain text, so you can also change it by hand. When the program reads it, it skips anything that doesn't make sense (a hex off the map, a city on the sea, a river with a gap in it) and tells you how many entries it skipped. If the file can't be read at all, the program doesn't write over it: it renames it `<seed>_edit_broken.json`, so nothing is lost, and starts again from the edits in the edited PNG or, if there are none, from the original map.
 
-The editor itself only works through the questions. Once the changes are saved, though, you can make the edited map again from the command line with `--reproduce <seed> --edited` (chapter 8), for example on another paper size or in colour.
+The editor only opens when you start the program without options. Once the changes are saved, though, you can make the edited map again from the command line with `--reproduce <seed> --edited` (chapter 8), for example on another paper size or in colour.
 
 ---
 
@@ -342,7 +369,13 @@ To see the full list of options, add `--help` after the file name (with `--langu
 Python isn't installed, or on Windows it wasn't added to the PATH. Reinstall it with "Add python.exe to PATH" ticked, then close and reopen the terminal.
 
 **Instead of the menus, I get questions with numbers.**
-The menus you move through with the arrow keys need **asciimatics** and a real terminal. If the library is missing, install it with `pip install -r requirements.txt` (chapter 2, step 5). Without a real terminal, for example in the Git Bash window on Windows or with the answers read from a file, the program asks for the number of the choice as it used to: it works all the same. You can also ask for this on purpose by setting the variable `WYRMHEX_NO_MENUS=1`.
+The menus you move through with the arrow keys, and the editor that draws the map in the terminal, need **asciimatics** and a real terminal. If the library is missing, install it with `pip install -r requirements.txt` (chapter 2, step 5). Without a real terminal, for example in the Git Bash window on Windows or with the answers read from a file, the program asks for the number of the choice as it used to and the editor works through questions: it works all the same. You can also ask for this on purpose by setting the variable `WYRMHEX_NO_MENUS=1`.
+
+**The editor says the terminal is too small and switches to questions.**
+The editor on the map needs a window of at least 80 columns and 24 rows. Make it bigger (or the terminal's font smaller) and open the map in the editor again: the changes made so far are saved.
+
+**In the editor the symbols are plain letters, like `T` for forests.**
+The terminal isn't using the UTF-8 encoding, so the editor shows the ASCII-only symbols; the map it makes still has the usual ones. On modern macOS and Linux terminals this rarely happens; on Windows, use Windows Terminal instead of the old Command Prompt.
 
 **"Pillow is missing".**
 The virtual environment isn't active: the line where you type doesn't start with `(.venv)`. Activate it (step 4 of the installation) and start the program again. If it still happens, the libraries aren't installed yet: do step 5.
