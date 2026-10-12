@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-WyrmHex v0.1.1 - random hexcrawl maps for OSR games, all in ASCII.
+WyrmHex v1.0.0 - random hexcrawl maps for OSR games, all in ASCII.
 
 Looks like an old terminal game (Dwarf Fortress, NetHack): hexes drawn with
 _ / \\, terrain as CP437 symbols (forest ♣♠, mountains ▲^, hills ∩n, lakes ≈,
@@ -57,6 +57,7 @@ import random
 import re
 import secrets
 import sys
+import textwrap
 import time
 import unicodedata
 import zlib
@@ -76,7 +77,7 @@ Image.MAX_IMAGE_PIXELS = None
 
 # --- settings ---
 
-VERSION = "0.1.1"
+VERSION = "1.0.0"
 
 PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT = (
     "plains", "sea", "lake", "swamp", "hills", "mountains", "forest", "desert")
@@ -243,15 +244,19 @@ TEXTS = {
     "enter_accepts": ("  Premi Invio per accettare il valore tra parentesi\n",
                       "  Press Enter to accept the value in brackets\n"),
     "what_to_do": ("  Cosa vuoi fare?", "  What do you want to do?"),
-    "mode_new": ("    1 = creare una mappa nuova", "    1 = make a new map"),
-    "mode_edit": ("    3 = modificare una mappa, a partire dal suo seme", "    3 = edit a map, starting from its seed"),
-    "mode_rebuild": ("    2 = riprodurre una mappa già fatta, a partire dal suo seme",
-                     "    2 = rebuild a map you already made, from its seed"),
+    "mode_new": ("creare una mappa nuova", "make a new map"),
+    "mode_edit": ("modificare una mappa, a partire dal suo seme", "edit a map, starting from its seed"),
+    "mode_rebuild": ("riprodurre una mappa già fatta, a partire dal suo seme",
+                     "rebuild a map you already made, from its seed"),
     "choice": ("Scelta", "Choice"),
+    "menu_keys": ("↑ ↓ per scegliere   ·   Invio per confermare   ·   oppure il numero",
+                  "↑ ↓ to choose   ·   Enter to confirm   ·   or the number"),
+    "menu_keys_ascii": ("su/giu per scegliere - Invio per confermare - oppure il numero",
+                        "up/down to choose - Enter to confirm - or the number"),
     "values_how": ("\n  Città, fortezze, dungeon, percentuali di terreno e fiumi:",
                    "\n  Cities, fortresses, dungeons, terrain percentages and rivers:"),
-    "values_manual": ("    1 = li scelgo io", "    1 = I'll choose them"),
-    "values_random": ("    2 = a caso", "    2 = random"),
+    "values_manual": ("li scelgo io", "I'll choose them"),
+    "values_random": ("a caso", "random"),
     "ask_seed": ("  Seme della mappa da rifare (è anche il nome della sua cartella, es. {example}): ",
                  "  Seed of the map to rebuild (it is also the name of its folder, e.g. {example}): "),
     "seed_invalid": ("    Questo seme non è valido: controlla di averlo scritto bene (es. {example}).",
@@ -269,11 +274,11 @@ TEXTS = {
                       "  This is a number seed from an earlier version, which is not enough on its own: "
                       "enter the SAME settings as the original map.\n"),
     "colors_how": ("\n  Colori:", "\n  Colours:"),
-    "colors_mono": ("    1 = bianco e nero, per la stampa", "    1 = black and white, for printing"),
-    "colors_color": ("    2 = a colori", "    2 = colour"),
+    "colors_mono": ("bianco e nero, per la stampa", "black and white, for printing"),
+    "colors_color": ("a colori", "colour"),
     "background_how": ("\n  Sfondo:", "\n  Background:"),
-    "background_white": ("    1 = bianco", "    1 = white"),
-    "background_black": ("    2 = nero", "    2 = black"),
+    "background_white": ("bianco", "white"),
+    "background_black": ("nero", "black"),
     "err_background": ("--sfondo funziona solo insieme a --colori", "--background only works together with --colors"),
     "h_colors": ("mappa a colori invece che in bianco e nero", "colour map instead of black and white"),
     "h_background": ("sfondo della mappa a colori: bianco (default) o nero", "background of the colour map: white (default) or black"),
@@ -305,6 +310,11 @@ TEXTS = {
                          "  Miles per hex (a number, or a text like \"5 km\"): "),
     "q_paper": ("  Formato di stampa per le due mappe (A4, A3, A2) [{default}]: ",
                 "  Print format for both maps (A4, A3, A2) [{default}]: "),
+    "paper_menu_option": ("{paper} {o}, {hexes} {hex_mm:.0f} mm, caratteri {mm:.2f} mm ({v}){note}",
+                          "{paper} {o}, {hexes} {hex_mm:.0f} mm, letters {mm:.2f} mm ({v}){note}"),
+    "suggested_short": ("  ← consigliato", "  ← suggested"),
+    "q_paper_menu": ("Formato di stampa per le due mappe (la scelta finale è tua):",
+                     "Print format for both maps (the final choice is yours):"),
     "paper_retry": ("    Scrivi A4, A3 oppure A2.", "    Type A4, A3 or A2."),
     # checks and errors
     "pct_out_of_range": ("La percentuale di {label} deve essere tra 0 e 100 (ricevuto {value:g}).",
@@ -697,6 +707,10 @@ def normalize_language(value):
 
 def ask_language():
     global LANG
+    if menus_available():
+        print()
+        LANG = ("it", "en")[menu("Lingua / Language:", ["Italiano", "English"])]
+        return
     print("\n  Lingua / Language:")
     print("    1 = Italiano")
     print("    2 = English")
@@ -1145,23 +1159,19 @@ def scale_text(value):
 def ask_scale(current=None):
     """current: the scale of a map being rebuilt, offered as the default."""
     presets = [scale_text(str(miles)) for miles in SCALE_PRESETS]
-    print(tr("scale_how"))
-    for i, text in enumerate(presets, 1):
-        print(f"    {i} = {text}")
-    other = len(presets) + 1
-    print(f"    {other} = {tr('scale_other')}")
-    default, highest = SCALE_PRESETS.index(6) + 1, other
+    options = presets + [tr("scale_other")]
+    default = SCALE_PRESETS.index(6)
     if current in presets:
-        default = presets.index(current) + 1
+        default = presets.index(current)
     elif current:                    # a custom scale: offer to keep it
-        highest = other + 1
-        print(f"    {highest} = {tr('scale_keep', scale=current)}")
-        default = highest
-    choice = ask(tr("choice"), default, int, 1, highest)
-    if choice == other + 1:
+        options.append(tr("scale_keep", scale=current))
+        default = len(options) - 1
+    print()
+    choice = menu(tr("scale_how"), options, default)
+    if choice == len(presets) + 1:
         return current
-    if choice < other:
-        return presets[choice - 1]
+    if choice < len(presets):
+        return presets[choice]
     while True:
         answer = input(tr("ask_custom_scale")).strip()
         if answer:
@@ -1183,6 +1193,106 @@ def ask(question, default, kind=int, lowest=None, highest=None):
             print(tr("value_range", lo=lowest, hi=highest))
             continue
         return value
+
+
+# --- menus ---
+# In a terminal the options are a full-screen menu (asciimatics): arrow keys
+# and Enter, or the option's number, or a click. Without a terminal (pipes,
+# tests) or without asciimatics it falls back to the numbered question, so
+# the program keeps working either way. The choice is echoed afterwards, so
+# the scrolling log still says what was picked.
+def menus_available():
+    if os.environ.get("WYRMHEX_NO_MENUS") or not (sys.stdin.isatty() and sys.stdout.isatty()):
+        return False
+    try:
+        import asciimatics.screen   # noqa: F401
+    except ImportError:
+        return False
+    return True
+
+
+def menu(title, options, default=0, context=()):
+    """Index (0-based) of the chosen option. context: lines shown above the
+    question, for what the full-screen menu would otherwise hide."""
+    title = title.strip()
+    if menus_available():
+        from asciimatics.exceptions import ResizeScreenError
+        from asciimatics.screen import Screen
+        while True:
+            try:
+                choice = Screen.wrapper(draw_menu, arguments=[title, options, default, context])
+                break
+            except ResizeScreenError:
+                continue                       # the window changed size: draw it again
+        print(f"  {title} {options[choice]}")
+        return choice
+    print(f"  {title}")                         # context: the caller printed it already
+    for i, text in enumerate(options, 1):
+        print(f"    {i} = {text}")
+    return ask(tr("choice"), default + 1, int, 1, len(options)) - 1
+
+
+def draw_menu(screen, title, options, current, context):
+    from asciimatics.event import KeyboardEvent, MouseEvent
+    from asciimatics.screen import Screen
+    fancy = screen.unicode_aware
+    marker = "▶" if fancy else ">"
+    width, height = screen.width, screen.height
+
+    def cut(text, room):
+        return text if len(text) <= room else text[:max(0, room - 1)] + ("…" if fancy else "~")
+
+    while True:
+        screen.clear_buffer(Screen.COLOUR_WHITE, Screen.A_NORMAL, Screen.COLOUR_BLACK)
+        screen.print_at(cut(f"WyrmHex v{VERSION}", width - 4), 2, 1, Screen.COLOUR_YELLOW, Screen.A_BOLD)
+        y = 3
+        for line in context:                   # long lines wrap, they're there to be read
+            for piece in textwrap.wrap(line.strip(), max(20, width - 4)) or [""]:
+                screen.print_at(piece, 2, y, Screen.COLOUR_CYAN)
+                y += 1
+        if context:
+            y += 1
+        for piece in textwrap.wrap(title, max(20, width - 4)):
+            screen.print_at(piece, 2, y, Screen.COLOUR_WHITE, Screen.A_BOLD)
+            y += 1
+        y += 1
+        rows = {}
+        for i, text in enumerate(options):
+            label = cut(f" {i + 1}  {text} " if len(options) < 10 else f" {text} ", width - 8)
+            if i == current:
+                screen.print_at(marker, 3, y, Screen.COLOUR_YELLOW, Screen.A_BOLD)
+                screen.print_at(label, 5, y, Screen.COLOUR_BLACK, Screen.A_NORMAL, Screen.COLOUR_YELLOW)
+            else:
+                screen.print_at(label, 5, y, Screen.COLOUR_WHITE)
+            rows[y] = i
+            y += 1
+        keys = tr("menu_keys" if fancy else "menu_keys_ascii")
+        screen.print_at(cut(keys, width - 4), 2, max(y + 1, height - 2), Screen.COLOUR_WHITE)
+        screen.refresh()
+
+        screen.wait_for_input(0.5)
+        event = screen.get_event()
+        if screen.has_resized():
+            from asciimatics.exceptions import ResizeScreenError
+            raise ResizeScreenError("resized")
+        if isinstance(event, KeyboardEvent):
+            key = event.key_code
+            if key in (Screen.KEY_UP, ord("k")):
+                current = (current - 1) % len(options)
+            elif key in (Screen.KEY_DOWN, ord("j"), Screen.KEY_TAB):
+                current = (current + 1) % len(options)
+            elif key == Screen.KEY_HOME:
+                current = 0
+            elif key == Screen.KEY_END:
+                current = len(options) - 1
+            elif key in (10, 13):
+                return current
+            elif ord("1") <= key <= ord("9") and key - ord("1") < len(options):
+                return key - ord("1")
+            elif key == 3:                     # Ctrl+C, when the terminal hands it over as a key
+                raise KeyboardInterrupt
+        elif isinstance(event, MouseEvent) and event.buttons & MouseEvent.LEFT_CLICK and event.y in rows:
+            return rows[event.y]
 
 
 # --- welcome screen, wizard, questions ---
@@ -1277,14 +1387,10 @@ def ask_mode(folder=MAPS_FOLDER):
     """None for a new map, otherwise (number, settings[, edit]). settings is None
     only for an old number seed whose PNG is gone: then everything is asked again.
     settings["edit"] is True when the map is going to be edited."""
-    print(tr("what_to_do"))
-    print(tr("mode_new"))
-    print(tr("mode_rebuild"))
-    print(tr("mode_edit"))
-    choice = ask(tr("choice"), 1, int, 1, 3)
-    if choice == 1:
+    choice = menu(tr("what_to_do"), [tr("mode_new"), tr("mode_rebuild"), tr("mode_edit")])
+    if choice == 0:
         return None
-    edit = choice == 3
+    edit = choice == 2
     while True:
         answer = input(tr("ask_seed", example=example_seed())).strip()
         if is_old_seed(answer) or read_seed(answer):
@@ -1316,16 +1422,13 @@ def ask_mode(folder=MAPS_FOLDER):
 def ask_look(p):
     """Doesn't change the land, so it's asked again when rebuilding a map."""
     p["ascii_only"] = input(tr("ask_ascii")).strip().lower().startswith(tr("yes_letter"))
-    print(tr("colors_how"))
-    print(tr("colors_mono"))
-    print(tr("colors_color"))
-    p["colors"] = ask(tr("choice"), 1, int, 1, 2) == 2
+    print()
+    p["colors"] = menu(tr("colors_how"), [tr("colors_mono"), tr("colors_color")]) == 1
     p["background"] = "white"
     if p["colors"]:      # a black background only makes sense for a colour map
-        print(tr("background_how"))
-        print(tr("background_white"))
-        print(tr("background_black"))
-        p["background"] = "black" if ask(tr("choice"), 1, int, 1, 2) == 2 else "white"
+        print()
+        p["background"] = ("white", "black")[menu(tr("background_how"),
+                                                  [tr("background_white"), tr("background_black")])]
 
 
 def ask_settings():
@@ -1351,11 +1454,9 @@ def ask_settings():
     p = {}
     p["columns"] = ask(tr("q_columns"), "auto", int, 2, 80)
     p["rows"] = ask(tr("q_rows"), "auto", int, 2, 80)
-    print(tr("values_how"))
-    print(tr("values_manual"))
-    print(tr("values_random"))
     # random values need the grid size, which may still be "auto": main() fills them in
-    p["randomize"] = ask(tr("choice"), 1, int, 1, 2) == 2
+    print()
+    p["randomize"] = menu(tr("values_how"), [tr("values_manual"), tr("values_random")]) == 1
     if not p["randomize"]:
         print()
         p["dungeons"] = ask(tr("q_dungeons"), 4, int, 0, MAX_SITES)
@@ -2707,6 +2808,7 @@ def ask_paper(params, grid, fonts, G, ask_user, log):
     suggested, options = suggest_paper(params, grid, fonts, G)
     aspect = fonts[3]
     log.info(tr("info_paper_intro", c=grid.cols, r=grid.rows))
+    rows = []
     for paper, (char_mm, orientation, k) in options.items():
         if char_mm < SMALL_CHAR_MM:
             verdict = tr("v_too_small")
@@ -2720,7 +2822,15 @@ def ask_paper(params, grid, fonts, G, ask_user, log):
         hex_mm = 2 * k * aspect * char_mm
         log.info(tr("info_paper_option", paper=paper, o=pick(ORIENTATION_NAMES[orientation]), hexes=hexes,
                     hex_mm=hex_mm, mm=char_mm, v=verdict, note=note))
+        rows.append(tr("paper_menu_option", paper=paper, o=pick(ORIENTATION_NAMES[orientation]), hexes=hexes,
+                       hex_mm=hex_mm, mm=char_mm, v=verdict, note=tr("suggested_short") if note else ""))
     default = params.get("paper") or suggested
+    if ask_user and menus_available():
+        # the table itself is the menu; the line above it tells what it is
+        print()
+        papers = list(options)
+        return papers[menu(tr("q_paper_menu"), rows, papers.index(default),
+                           [tr("info_paper_intro", c=grid.cols, r=grid.rows)])]
     if ask_user:
         print()
         print(tr("paper_choice"))
@@ -3067,11 +3177,9 @@ def move_river_piece(grid, terrain, rivers, river, i, target):
     return None
 
 
-def choose(options, default=1):
-    """Print a numbered menu and return the index (0-based) of the answer."""
-    for i, text in enumerate(options, 1):
-        print(f"    {i} = {text}")
-    return ask(tr("choice"), default, int, 1, len(options)) - 1
+def choose(title, options, default=1, context=()):
+    """The editor's menus: index (0-based) of the answer. default is 1-based."""
+    return menu(title, options, default - 1, context)
 
 
 def edits_to_json(original, terrain, rivers, sites):
@@ -3255,9 +3363,9 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base):
     ask_next = resumed           # picked up old edits: maybe they just want the map again
     while True:
         if ask_next:
-            print(tr("ed_next"))
             options = [tr("ed_next_more"), tr("ed_next_go"), tr("ed_next_undo"), tr("ed_next_quit")]
-            answer = choose(options)
+            print()
+            answer = choose(tr("ed_next"), options)
             if answer == 1:
                 break
             if answer == 3:
@@ -3366,20 +3474,19 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
         if d is not None:
             desc += " → " + pick(TEXTS["ed_dirs"])[d]
     print(tr("ed_hex_is", h=name, desc=desc))
-    print(tr("ed_what"))
+    here = [tr("ed_hex_is", h=name, desc=desc)]     # the menu screen hides the log: say which hex
     actions = [("terrain", tr("ed_terrain"))]
     for kind in (DUNGEON, CITY, FORTRESS):
         a, the = SITE_KEYS[kind]
         actions.append((kind, tr("ed_remove", what=tr(the)) if site == kind else tr("ed_add", what=tr(a))))
     actions.append(("river", tr("ed_river_piece") if river else tr("ed_add_river")))
     actions.append(("nothing", tr("ed_nothing")))
-    action = actions[choose([text for _, text in actions], len(actions))][0]
+    action = actions[choose(tr("ed_what"), [text for _, text in actions], len(actions), here)][0]
     done = []
 
     if action == "terrain":
-        print(tr("ed_which_terrain"))
-        new = TERRAIN_ORDER[choose([pick(TERRAIN_NAMES[t]) for t in TERRAIN_ORDER],
-                                   TERRAIN_ORDER.index(terrain[h]) + 1)]
+        new = TERRAIN_ORDER[choose(tr("ed_which_terrain"), [pick(TERRAIN_NAMES[t]) for t in TERRAIN_ORDER],
+                                   TERRAIN_ORDER.index(terrain[h]) + 1, here)]
         terrain[h] = new
         done.append(tr("ed_did_terrain", h=name, t=pick(TERRAIN_NAMES[new])))
         if new in WATER:
@@ -3413,8 +3520,8 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
             sites.append((action, h))
 
     elif action == "river" and river:
-        print(tr("ed_river_how"))
-        how = choose([tr("ed_river_all"), tr("ed_river_move"), tr("ed_river_cut_end"), tr("ed_river_cut_start")])
+        how = choose(tr("ed_river_how"), [tr("ed_river_all"), tr("ed_river_move"), tr("ed_river_cut_end"),
+                                          tr("ed_river_cut_start")], 1, here)
         i = river["path"].index(h)
         if how == 0:
             rivers.remove(river)
@@ -3446,8 +3553,7 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
             if not around:
                 print(tr("ed_no_dirs"))
             else:
-                print(tr("ed_which_dir"))
-                _, target = around[choose([dirs[d] for d, _ in around])]
+                _, target = around[choose(tr("ed_which_dir"), [dirs[d] for d, _ in around], 1, here)]
                 why = move_river_piece(grid, terrain, rivers, river, i, target)
                 if why:
                     print(tr("ed_no_move", why=tr(why)))
@@ -3460,9 +3566,8 @@ def edit_hex(grid, terrain, rivers, sites, height, h):
         if terrain[h] in WATER:
             print(tr("ed_no_water_river"))
         else:
-            print(tr("ed_river_way"))
             new = None
-            if choose([tr("ed_river_auto"), tr("ed_river_manual")]) == 0:
+            if choose(tr("ed_river_way"), [tr("ed_river_auto"), tr("ed_river_manual")], 1, here) == 0:
                 busy = {x for rv in rivers for x in rv["path"]}
                 path, end = follow_river(grid, terrain, height, h, busy, random.Random(f"river {h}"),
                                          grid.cols + grid.rows)

@@ -13,7 +13,7 @@
    \    //   ****************) (*****************   \\    /
     \  //   /****************,_,*****************\   \\  /
      \// __/ *             WyrmHex              * \__ \\/
-     /       *              v0.1.1              *       \
+     /       *              v1.0.0              *       \
              *************M********M*************
 &nbsp;
        /\         /\                    .           /\
@@ -123,7 +123,7 @@ From now on, the line where you type starts with `(.venv)`: that's how you know 
 
 ### Step 5 — Install the libraries
 
-With the virtual environment active, download **Pillow**, the library that creates the pictures. The command is the same on every system:
+With the virtual environment active, download **Pillow**, the library that creates the pictures, and **asciimatics**, the one that draws the menus you move through with the arrow keys. The command is the same on every system (on Windows it also installs `pywin32`, which asciimatics needs):
 
 ```
 pip install -r requirements.txt
@@ -151,20 +151,20 @@ python wyrmhex.py
 
 You only need to activate it once each time you open a terminal: while the line starts with `(.venv)`, it is active and you can make as many maps as you like with `python wyrmhex.py`. When you're done, type `deactivate` or just close the terminal. If you've just finished the installation in the same window, the environment is already active.
 
-First the program asks for the **language**: type `1` for Italian or `2` for English (pressing Enter keeps Italian). From then on the questions, the messages and even the texts printed on the map (legend, scale, starting title) are in the language you chose.
+First the program asks for the **language**: choose **Italiano** or **English** (pressing Enter keeps Italian). From then on the questions, the messages and even the texts printed on the map (legend, scale, starting title) are in the language you chose.
 
-Then the welcome screen appears, with the title and a picture: press **ENTER** to begin. The program asks you a few questions. **Every question has a ready-made answer in square brackets: if you're happy with it, just press Enter.**
+Then the welcome screen appears, with the title and a picture: press **ENTER** to begin. The program asks you a few questions. When there are choices, a **menu** appears: move with the **↑ ↓** arrow keys and confirm with **Enter** (you can also press the choice's number, or click it). The other questions, like numbers or the title, are answered by typing. **Every question has a ready-made answer, highlighted in the menu or in square brackets: if you're happy with it, just press Enter.**
 
-1. **What do you want to do?** Type `1` for a new map, `2` to rebuild a map you already made (see chapter 4), `3` to edit a map by hand, hex by hex (see chapter 5).
+1. **What do you want to do?** Choose **make a new map**, **rebuild a map you already made** (see chapter 4) or **edit a map** by hand, hex by hex (see chapter 5).
 2. **Hexes across and down:** how many columns and rows of hexes you want. The ready-made answer is `auto`: the program works out by itself how many hexes fill an A4 sheet and stay easy to read (33 × 15).
-3. **Choose yourself or at random?** Type `1` to answer the next three questions yourself, or `2` to let the program pick the number of sites, the terrain percentages and the rivers at random, sized to the map. With `2` it skips straight to the title. The values it picks are shown while it works, and they end up in the seed like any other.
+3. **Choose yourself or at random?** Choose **I'll choose them** to answer the next three questions yourself, or **random** to let the program pick the number of sites, the terrain percentages and the rivers at random, sized to the map. With **random** it skips straight to the title. The values it picks are shown while it works, and they end up in the seed like any other.
 4. **Number of dungeons, cities and fortresses** to put on the map (up to 99 of each).
 5. **Terrain percentages:** how much of the map is plains, sea, lakes, swamps, hills, mountains, forests and deserts, as whole numbers. Swamps form in low ground, mostly along the coast and around lakes. If the sea is over 50%, the map becomes a ragged coastline: a mainland along one side, with peninsulas reaching out into the sea, bays between them, and islands offshore. Over 80% sea the mainland disappears and what is left is an archipelago of islands. The program also works out how **salty the soil** is: salt comes from the sea, on low ground near the coast, and from low dry ground, where water evaporates and leaves it behind; rain, rivers and lakes wash it out. So salt marshes form along the coast, while inland, swamps sit where the water is fresh rather than in salty dry dips. Plains that are fresh enough become **farmland**, which cities prefer; the salty ones stay barren. Every map also has a **prevailing wind**, picked at random and shown while the map is being made (for example "from the west"): it brings rain to the hill and mountain slopes facing it, where forests grow, while the land on the other side of the high ground stays dry, so that is where deserts tend to form. They can't add up to more than 100; anything left over becomes plains. If you get it wrong, the program tells you and asks for the numbers again.
 6. **Number of rivers** (up to 100): with `-1` the program decides by itself.
 7. **Title** printed at the top of the map.
-8. **Scale:** how many miles each hex covers. `1` = 2 miles, `2` = 6 miles (the ready-made answer), `3` = 12 miles, `4` = 24 miles, `5` = your own: type a number of miles, or any text such as `5 km` or `1 day`. It's printed under the title, as "1 hex = 6 miles".
+8. **Scale:** how many miles each hex covers: 2, 6 (the ready-made answer), 12 or 24 miles, or **other, I'll type it**: type a number of miles, or any text such as `5 km` or `1 day`. It's printed under the title, as "1 hex = 6 miles".
 9. Whether to use **only basic keyboard characters** (no symbols like ♣ ▲ ≈). You'll usually answer no: just press Enter.
-10. **Colours:** `1` = black and white, for printing (the ready-made answer); `2` = colour: forests green, sea and lakes blue, deserts sandy, swamps purple, cities red and so on. Only for a colour map does the program then ask for the **background**: `1` = white, `2` = black. On the white background the hexes are coloured too, so the map reads at a glance: light green plains, darker green forests, pink swamps, yellow desert, darker yellow hills, beige mountains, light blue sea and lakes (lakes show their `≈` symbols).
+10. **Colours:** **black and white**, for printing (the ready-made answer), or **colour**: forests green, sea and lakes blue, deserts sandy, swamps purple, cities red and so on. Only for a colour map does the program then ask for the **background**: **white** or **black**. On the white background the hexes are coloured too, so the map reads at a glance: light green plains, darker green forests, pink swamps, yellow desert, darker yellow hills, beige mountains, light blue sea and lakes (lakes show their `≈` symbols).
 
 Once the questions are done, a wizard appears with the words **"The conjuring spell begins!"**: from here the program gets to work.
 
@@ -177,15 +177,17 @@ While it works, it shows each step it's taking, each with a **progress bar** tha
 While it draws the two pictures, which is the longest part, a second bar shows the percentage and updates in place until it reaches `100%  done`. When the map is ready, it asks you the last few things:
 
 11. **Site names:** for every city, fortress and dungeon the program tells you which hex it's in and on what terrain, and asks whether you want to give it a name, for example `City 1, hex 2712 (hills). Give it a name? (y/N)`. If you answer `y`, type the name (up to 24 characters): it shows in bold on the map, under the site's symbol. Press Enter to leave the site without a name. If you chose random values at question 3, the program doesn't ask and the sites stay without names.
-12. **Print format** for the two maps: `A4`, `A3` or `A2`. The program weighs up the format based on the number of hexes: before the question you'll see, for each format, how big the hexes and the letters will be and whether they'll be easy to read. The ready-made answer in brackets is the **suggested format**: the smallest one where the map reads well; the more hexes you chose, the bigger it gets. **The final choice is yours:** press Enter for the suggested format, or type another one. For example:
+12. **Print format** for the two maps: `A4`, `A3` or `A2`. The program weighs up the format based on the number of hexes: before the question you'll see, for each format, how big the hexes and the letters will be and whether they'll be easy to read. The ready-made answer, already highlighted in the menu, is the **suggested format**: the smallest one where the map reads well; the more hexes you chose, the bigger it gets. **The final choice is yours:** press Enter for the suggested format, or move to another one. For example:
 
    ```
-   · Grid of 12 x 30 hexes: this is how it would print on each format (hex measured from flat side to flat side)
-   · A4 portrait    small hexes  8 mm, letters 1.07 mm wide (too small)
-   · A3 portrait    small hexes 12 mm, letters 1.53 mm wide (easy to read)   <- suggested
-   · A2 portrait    large hexes 18 mm, letters 1.50 mm wide (easy to read)
-     The final choice is yours: press Enter for the suggested format, or type another one.
-     Print format for both maps (A4, A3, A2) [A3]:
+   Grid of 12 x 30 hexes: this is how it would print on each format (hex measured from flat side
+   to flat side)
+
+   Print format for both maps (the final choice is yours):
+
+       1  A4 portrait, small hexes 8 mm, letters 1.07 mm (too small)
+    ▶  2  A3 portrait, small hexes 12 mm, letters 1.53 mm (easy to read)  ← suggested
+       3  A2 portrait, large hexes 18 mm, letters 1.50 mm (easy to read)
    ```
 
    On big sheets, if there's room, the program uses bigger hexes, so the map keeps good proportions.
@@ -202,7 +204,7 @@ Every map has a **seed**: a code of 24 letters and digits in groups of four, lik
 
 The seed holds everything that shapes the land: the number of hexes, the cities, fortresses and dungeons, the terrain percentages, the rivers and all the random choices. So **the same seed always gives the same map**, on any computer, even if the map's files are gone. To share a map with someone, just give them its seed.
 
-To rebuild a map, start the program, choose the language, answer `2` to "What do you want to do?" and type the seed. Capitals, dashes and spaces don't matter, and if you mistype a character the program tells you, instead of quietly making a different map. The program then shows the map's current title and scale and asks whether you want to **rename the map** and whether you want to **change the scale** (miles per hex: the same choices as for a new map, plus keeping a custom one as it is). Just press Enter to keep them. It also asks whether you want to **give or change the names** of cities, fortresses and dungeons: if you answer `y`, once the map is ready it goes through the sites one by one, showing the name they already have. Then it asks again whether to use basic characters, black and white or colour and, at the end, the print format: so you can rebuild the same map under another name, at 24 miles per hex, or in A3 instead of A4, for example.
+To rebuild a map, start the program, choose the language, choose **rebuild a map you already made** at "What do you want to do?" and type the seed. Capitals, dashes and spaces don't matter, and if you mistype a character the program tells you, instead of quietly making a different map. The program then shows the map's current title and scale and asks whether you want to **rename the map** and whether you want to **change the scale** (miles per hex: the same choices as for a new map, plus keeping a custom one as it is). Just press Enter to keep them. It also asks whether you want to **give or change the names** of cities, fortresses and dungeons: if you answer `y`, once the map is ready it goes through the sites one by one, showing the name they already have. Then it asks again whether to use basic characters, black and white or colour and, at the end, the print format: so you can rebuild the same map under another name, at 24 miles per hex, or in A3 instead of A4, for example.
 
 The title, the scale, the site names and the paper size aren't part of the seed, because they don't change the land. If the map's PNG is still in its folder `maps_generated/<seed>`, the program takes them from there (the paper size becomes the ready-made answer); otherwise it uses the starting title and scale. From the command line you can choose them yourself, for example `--reproduce <seed> --title "Northern Lands"`.
 
@@ -216,7 +218,7 @@ The rebuilt map goes into the `maps_generated/<seed>` folder and replaces the fi
 
 ## 5. Editing a map
 
-You can change a map by hand, hex by hex, starting from its seed. If you've just made it, answer `y` when the program asks whether to edit it now (chapter 3). Otherwise start the program, choose the language, answer `3` to "What do you want to do?" and type the seed. As when rebuilding a map, it asks about the title, the scale and the look; then it builds the map and shows a table with one line per hex:
+You can change a map by hand, hex by hex, starting from its seed. If you've just made it, answer `y` when the program asks whether to edit it now (chapter 3). Otherwise start the program, choose the language, choose **edit a map** at "What do you want to do?" and type the seed. As when rebuilding a map, it asks about the title, the scale and the look; then it builds the map and shows a table with one line per hex:
 
 ```
   Hex    Terrain   Dungeon  City  River  Direction   Fortress
@@ -248,7 +250,7 @@ A few rules keep the map consistent:
 
 The edited map is saved in the same folder as the original, which stays as it is: `<seed>_edit_nonumber.png` and `<seed>_edit_number.png` (plus the .txt files), with "(edited)" after the seed under the title. The changes are saved in `<seed>_edit.json` after every single change, so you don't lose them if you quit or close the program halfway. The seed alone still gives the original map, but if you choose `3` again with the same seed, the program offers to pick up the saved changes: you can carry on editing, or just make the edited map again, for example on another paper size or in colour.
 
-The changes are also stored inside the edited PNG: if `<seed>_edit.json` gets lost, the program finds them there. And if you rebuild a map that has an edited version (choice `2`, or `--reproduce`), it reminds you that the edited version exists and how to get it.
+The changes are also stored inside the edited PNG: if `<seed>_edit.json` gets lost, the program finds them there. And if you rebuild a map that has an edited version (**rebuild a map you already made**, or `--reproduce`), it reminds you that the edited version exists and how to get it.
 
 `<seed>_edit.json` is plain text, so you can also change it by hand. When the program reads it, it skips anything that doesn't make sense (a hex off the map, a city on the sea, a river with a gap in it) and tells you how many entries it skipped. If the file can't be read at all, the program doesn't write over it: it renames it `<seed>_edit_broken.json`, so nothing is lost, and starts again from the edits in the edited PNG or, if there are none, from the original map.
 
@@ -338,6 +340,9 @@ To see the full list of options, add `--help` after the file name (with `--langu
 
 **"py" / "python3" is not recognized as a command.**
 Python isn't installed, or on Windows it wasn't added to the PATH. Reinstall it with "Add python.exe to PATH" ticked, then close and reopen the terminal.
+
+**Instead of the menus, I get questions with numbers.**
+The menus you move through with the arrow keys need **asciimatics** and a real terminal. If the library is missing, install it with `pip install -r requirements.txt` (chapter 2, step 5). Without a real terminal, for example in the Git Bash window on Windows or with the answers read from a file, the program asks for the number of the choice as it used to: it works all the same. You can also ask for this on purpose by setting the variable `WYRMHEX_NO_MENUS=1`.
 
 **"Pillow is missing".**
 The virtual environment isn't active: the line where you type doesn't start with `(.venv)`. Activate it (step 4 of the installation) and start the program again. If it still happens, the libraries aren't installed yet: do step 5.

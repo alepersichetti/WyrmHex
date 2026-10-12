@@ -1,7 +1,11 @@
-# WyrmHex v0.1.1 - libraries to install
+# WyrmHex v1.0.0 - libraries to install
 # Install with:  pip install -r requirements.txt
 # (with the virtual environment active: see step 4 and 5 in the README)
 #
 # Pillow creates and saves the map pictures.
 # 11.3 is the first version made for Python 3.14.
 Pillow>=11.3
+#
+# asciimatics draws the menus you move through with the arrow keys.
+# Without it the program still works: it asks for the option's number.
+asciimatics>=1.15
