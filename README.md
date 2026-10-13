@@ -153,7 +153,7 @@ You only need to activate it once each time you open a terminal: while the line 
 
 First the program asks for the **language**: choose **Italiano** or **English** (pressing Enter keeps Italian). From then on the questions, the messages and even the texts printed on the map (legend, scale, starting title) are in the language you chose.
 
-Then the welcome screen appears, with the title and a picture: press **ENTER** to begin. The program asks you a few questions. When there are choices, a **menu** appears: move with the **↑ ↓** arrow keys and confirm with **Enter** (you can also press the choice's number, or click it). The other questions, like numbers or the title, are answered by typing. **Every question has a ready-made answer, highlighted in the menu or in square brackets: if you're happy with it, just press Enter.**
+Then the welcome screen appears, with a dragon holding a sign with the program's name and, under it, a watchtower: press **ENTER** to begin. The program asks you a few questions. When there are choices, a **menu** appears: move with the **↑ ↓** arrow keys and confirm with **Enter** (you can also press the choice's number, or click it). The other questions, like numbers or the title, are answered by typing. **Every question has a ready-made answer, highlighted in the menu or in square brackets: if you're happy with it, just press Enter.**
 
 1. **What do you want to do?** Choose **make a new map**, **rebuild a map you already made** (see chapter 4) or **edit a map** by hand, hex by hex (see chapter 5).
 2. **Hexes across and down:** how many columns and rows of hexes you want. The ready-made answer is `auto`: the program works out by itself how many hexes fill an A4 sheet and stay easy to read (33 × 15).
@@ -414,7 +414,7 @@ In the print options choose "Actual size" or "100%", not "Fit to page".
 That bar updates on the same line, and it only shows up when the program runs in a terminal window. If you start it some other way (for example sending the messages to a file) it stays hidden, but the map is made all the same. The step bar (`4/12`, `5/12`…) always shows.
 
 **The welcome screen picture looks cut off on the right.**
-The terminal window is too narrow: the picture is 94 characters wide, and the program trims it so it doesn't get scrambled. Make the window wider and start the program again.
+The terminal window is too narrow: the picture is 79 characters wide, and the program trims it so it doesn't get scrambled. Make the window wider and start the program again.
 
 **I have an old map with a black background.**
 Versions before 0.0.2 could draw the black-and-white map as white on black; that's gone, and a black background is now only for colour maps. Rebuild the map from its seed (chapter 4): it comes back the same, black on white, or in colour on black if you choose colour and a black background.

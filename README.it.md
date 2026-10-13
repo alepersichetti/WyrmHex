@@ -153,7 +153,7 @@ Basta attivarlo una volta ogni volta che apri un terminale: finché la riga comi
 
 Per prima cosa il programma ti chiede la **lingua**: scegli **Italiano** o **English** (con Invio resta l'italiano). Da lì in poi domande, messaggi e anche i testi stampati sulla mappa (legenda, scala, titolo di partenza) sono nella lingua scelta.
 
-Poi compare la schermata di benvenuto, con il titolo e un disegno: premi **INVIO** per cominciare. Il programma ti fa alcune domande. Quando ci sono delle scelte, compare un **menu**: muoviti con le frecce **↑ ↓** e conferma con **Invio** (puoi anche premere il numero della scelta, o farci clic sopra). Le altre domande, come i numeri o il titolo, si rispondono scrivendo. **Ogni domanda ha una risposta già pronta, evidenziata nel menu oppure tra parentesi quadre: se ti va bene, premi solo Invio.**
+Poi compare la schermata di benvenuto, con un drago che regge il cartello con il nome del programma e, sotto, una torre di guardia: premi **INVIO** per cominciare. Il programma ti fa alcune domande. Quando ci sono delle scelte, compare un **menu**: muoviti con le frecce **↑ ↓** e conferma con **Invio** (puoi anche premere il numero della scelta, o farci clic sopra). Le altre domande, come i numeri o il titolo, si rispondono scrivendo. **Ogni domanda ha una risposta già pronta, evidenziata nel menu oppure tra parentesi quadre: se ti va bene, premi solo Invio.**
 
 1. **Cosa vuoi fare?** Scegli **creare una mappa nuova**, **riprodurre una mappa già fatta** (vedi il capitolo 4) oppure **modificare una mappa** a mano, esagono per esagono (vedi il capitolo 5).
 2. **Esagoni in base e in altezza:** quante colonne e quante righe di esagoni vuoi. La risposta pronta è `auto`: il programma sceglie da solo quanti esagoni riempiono un foglio A4 restando leggibili (33 × 15).
@@ -415,7 +415,7 @@ Nelle opzioni di stampa scegli "Dimensioni effettive" o "100%", non "Adatta alla
 Quella barra si aggiorna sulla stessa riga, e compare solo quando il programma gira in una finestra del terminale. Se lo avvii in altri modi (per esempio mandando i messaggi in un file) resta nascosta, ma la mappa viene creata lo stesso. La barra dei passaggi (`4/12`, `5/12`…) si vede sempre.
 
 **Il disegno della schermata di benvenuto appare tagliato a destra.**
-La finestra del terminale è troppo stretta: il disegno è largo 94 caratteri e il programma lo taglia per non scombinarlo. Allarga la finestra e riavvia il programma.
+La finestra del terminale è troppo stretta: il disegno è largo 79 caratteri e il programma lo taglia per non scombinarlo. Allarga la finestra e riavvia il programma.
 
 **Ho una mappa vecchia con lo sfondo nero.**
 Le versioni precedenti alla 0.0.2 potevano disegnare la mappa in bianco e nero come bianco su nero; ora non più, e lo sfondo nero è solo per le mappe a colori. Rifai la mappa dal suo seme (capitolo 4): torna uguale, nero su bianco, oppure a colori su nero se scegli i colori e lo sfondo nero.
