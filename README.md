@@ -153,7 +153,7 @@ You only need to activate it once each time you open a terminal: while the line 
 
 First the program asks for the **language**: choose **Italiano** or **English** (pressing Enter keeps Italian). From then on the questions, the messages and even the texts printed on the map (legend, scale, starting title) are in the language you chose.
 
-Then the welcome screen appears, with the title and a picture: press **ENTER** to begin. The program asks you a few questions. When there are choices, a **menu** appears: move with the **↑ ↓** arrow keys and confirm with **Enter** (you can also press the choice's number, or click it). The other questions, like numbers or the title, are answered by typing. **Every question has a ready-made answer, highlighted in the menu or in square brackets: if you're happy with it, just press Enter.**
+Then the welcome screen appears, with a dragon holding a sign with the program's name and, under it, a watchtower: press **ENTER** to begin. The program asks you a few questions. When there are choices, a **menu** appears: move with the **↑ ↓** arrow keys and confirm with **Enter** (you can also press the choice's number, or click it). The other questions, like numbers or the title, are answered by typing. **Every question has a ready-made answer, highlighted in the menu or in square brackets: if you're happy with it, just press Enter.**
 
 1. **What do you want to do?** Choose **make a new map**, **rebuild a map you already made** (see chapter 4) or **edit a map** by hand, hex by hex (see chapter 5).
 2. **Hexes across and down:** how many columns and rows of hexes you want. The ready-made answer is `auto`: the program works out by itself how many hexes fill an A4 sheet and stay easy to read (33 × 15).

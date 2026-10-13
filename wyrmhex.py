@@ -1368,6 +1368,10 @@ def draw_menu(screen, title, options, current, context):
 
 
 # --- welcome screen, wizard, questions ---
+# The dragon holding the sign (name and version, see show_welcome), and
+# under it the watchtower from the ASCII Art Archive
+# (https://www.asciiart.eu/art/32879afbc1d04775). The sign is centred over
+# the tower's picture, which sets the width: 79 letters.
 WELCOME_ART = r"""
         \ ___                     \       /   /)                 ___ /
          \    \_______________     \\ _ //   // _______________/    /
