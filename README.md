@@ -414,7 +414,7 @@ In the print options choose "Actual size" or "100%", not "Fit to page".
 That bar updates on the same line, and it only shows up when the program runs in a terminal window. If you start it some other way (for example sending the messages to a file) it stays hidden, but the map is made all the same. The step bar (`4/12`, `5/12`…) always shows.
 
 **The welcome screen picture looks cut off on the right.**
-The terminal window is too narrow: the picture is 94 characters wide, and the program trims it so it doesn't get scrambled. Make the window wider and start the program again.
+The terminal window is too narrow: the picture is 79 characters wide, and the program trims it so it doesn't get scrambled. Make the window wider and start the program again.
 
 **I have an old map with a black background.**
 Versions before 0.0.2 could draw the black-and-white map as white on black; that's gone, and a black background is now only for colour maps. Rebuild the map from its seed (chapter 4): it comes back the same, black on white, or in colour on black if you choose colour and a black background.

@@ -415,7 +415,7 @@ Nelle opzioni di stampa scegli "Dimensioni effettive" o "100%", non "Adatta alla
 Quella barra si aggiorna sulla stessa riga, e compare solo quando il programma gira in una finestra del terminale. Se lo avvii in altri modi (per esempio mandando i messaggi in un file) resta nascosta, ma la mappa viene creata lo stesso. La barra dei passaggi (`4/12`, `5/12`…) si vede sempre.
 
 **Il disegno della schermata di benvenuto appare tagliato a destra.**
-La finestra del terminale è troppo stretta: il disegno è largo 94 caratteri e il programma lo taglia per non scombinarlo. Allarga la finestra e riavvia il programma.
+La finestra del terminale è troppo stretta: il disegno è largo 79 caratteri e il programma lo taglia per non scombinarlo. Allarga la finestra e riavvia il programma.
 
 **Ho una mappa vecchia con lo sfondo nero.**
 Le versioni precedenti alla 0.0.2 potevano disegnare la mappa in bianco e nero come bianco su nero; ora non più, e lo sfondo nero è solo per le mappe a colori. Rifai la mappa dal suo seme (capitolo 4): torna uguale, nero su bianco, oppure a colori su nero se scegli i colori e lo sfondo nero.
