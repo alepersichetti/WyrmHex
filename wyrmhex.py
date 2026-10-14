@@ -76,9 +76,12 @@ Image.MAX_IMAGE_PIXELS = None
 
 
 # --- settings ---
+# Constants used all over the program: terrain and site names, paper sizes,
+# the symbols drawn for each terrain and the colour palettes.
 
 VERSION = "1.0.0"
 
+# terrain kinds, as stored in the terrain map {hex: kind} and in the edit files
 PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT = (
     "plains", "sea", "lake", "swamp", "hills", "mountains", "forest", "desert")
 FERTILE = "fertile"                  # not a terrain: plains whose soil isn't too salty to farm
@@ -104,14 +107,18 @@ TERRAIN_OPTIONS = [
 DEFAULT_PERCENTAGES = {PLAINS: 27, SEA: 15, LAKE: 3, SWAMP: 3, HILLS: 15,
                        MOUNTAINS: 10, FOREST: 20, DESERT: 5}
 
+# the three kinds of site placed on the map
 CITY, FORTRESS, DUNGEON = "city", "fortress", "dungeon"
 SITE_NAMES = {CITY: ("Città", "City"), FORTRESS: ("Fortezza", "Fortress"), DUNGEON: ("Dungeon", "Dungeon")}
 
+# what the user may type (Italian or English) -> the value used inside the program
 ORIENTATION_FROM_USER = {"auto": "auto", "verticale": "portrait", "orizzontale": "landscape",
                          "portrait": "portrait", "landscape": "landscape"}
 ORIENTATION_NAMES = {"portrait": ("verticale", "portrait"), "landscape": ("orizzontale", "landscape")}
 SIZE_FROM_USER = {"auto": "auto", "piccola": "small", "grande": "large", "small": "small", "large": "large"}
 
+# printing: resolution, white margin around the page, and how big a letter
+# may get (mm) before the map counts as too small to read
 DPI = 600
 MARGIN_MM = 10.0
 MAX_CHAR_MM = 3.2           # cap on A4; bigger sheets scale it up
@@ -153,7 +160,7 @@ RIVER_CHARS = {
     frozenset("l"): ("═", "="), frozenset("r"): ("═", "="),
     frozenset("u"): ("║", "|"), frozenset("d"): ("║", "|"),
 }
-OPPOSITE = {"l": "r", "r": "l", "u": "d", "d": "u"}
+OPPOSITE = {"l": "r", "r": "l", "u": "d", "d": "u"}     # the other end of a river arm
 SEA_GRAY = 205              # 0 black, 255 white
 
 # Colour maps. Keys are canvas tags: terrains, sites, and a few extras. Anything
@@ -201,6 +208,7 @@ BACKGROUND_FROM_USER = {"bianco": "white", "nero": "black", "white": "white", "b
 
 
 def palette_for(p):
+    """The palette chosen in the settings: black and white unless --colors."""
     return PALETTES[p.get("background", "white")] if p.get("colors") else MONO
 
 # monospace (regular, bold), first one found wins. (path, index) for .ttc
@@ -220,6 +228,7 @@ MONO_FONTS = [
 
 
 def mm(value):
+    """Millimetres -> pixels at the print resolution."""
     return value / 25.4 * DPI
 
 
@@ -229,6 +238,8 @@ def mm(value):
 LANGUAGES = ("it", "en")
 LANG = "it"
 
+# Every text shown to the user, as key: (Italian, English). Read them with
+# tr(key, **values), which picks the language and fills in the {fields}.
 TEXTS = {
     # console: general
     "done": ("Completato in {s:.1f} s.", "Done in {s:.1f} s."),
@@ -759,11 +770,13 @@ TEXTS = {
 
 
 def tr(key, **values):
+    """The text for key in the current language, with {fields} filled from values."""
     text = TEXTS[key][LANGUAGES.index(LANG)]
     return text.format(**values) if values else text
 
 
 def pick(pair):
+    """The current language's half of an (it, en) pair."""
     return pair[LANGUAGES.index(LANG)]
 
 
@@ -778,6 +791,8 @@ def normalize_language(value):
 
 
 def ask_language():
+    """First question of the interactive program: Italian or English.
+    A menu when there's a terminal, a numbered question otherwise."""
     global LANG
     if menus_available():
         print()
@@ -808,6 +823,7 @@ def language_from_options(argv):
 
 # --- console output ---
 def bar(fraction, cells):
+    """Text progress bar, e.g. [███░░░], with cells squares filled up to fraction."""
     full = round(max(0.0, min(1.0, fraction)) * cells)
     return "[" + "█" * full + "░" * (cells - full) + "]"
 
@@ -821,33 +837,41 @@ class LiveBar:
         self.shown = None
 
     def update(self, fraction, label):
+        # only redraw when the number or the label changes: printing is slow
         percent = int(fraction * 100)
         if self.live and (percent, label) != self.shown:
             self.shown = (percent, label)
             print(f"\r        {bar(fraction, 30)} {percent:>3}%  {label:<14}", end="", flush=True)
 
     def finish(self):
+        """Fill the bar and end its line."""
         if self.live:
             print(f"\r        {bar(1, 30)} 100%  {tr('pb_done'):<14}")
 
 
 class Log:
+    """The numbered steps shown while a map is made ([███░] 3/12 ...), with
+    info (·) and warning (!) lines under them and the total time at the end."""
 
     def __init__(self, total_steps):
         self.total_steps, self.step_number, self.start_time = total_steps, 0, time.perf_counter()
 
     def step(self, message):
+        """Start the next numbered step."""
         self.step_number += 1
         progress = bar(self.step_number / self.total_steps, self.total_steps)
         print(f"\n{progress} {self.step_number:>2}/{self.total_steps}  {message}")
 
     def info(self, message):
+        """A detail of the current step."""
         print(f"        · {message}")
 
     def warn(self, message):
+        """Something the user should know: a result short of what was asked."""
         print(f"        ! {message}")
 
     def done(self):
+        """The final line, with the time taken."""
         print("\n" + tr("done", s=time.perf_counter() - self.start_time))
 
 
@@ -855,6 +879,7 @@ class Log:
 # Flat-top hexes, odd-q layout (odd columns pushed down half a hex), numbered
 # CCRR like printed hexcrawls.
 class HexGrid:
+    """The map's hexes as (column, row), 0-based, and who neighbours whom."""
     # odd-q offsets: odd columns sit lower, so they get different neighbours
     DIRS_EVEN = ((1, 0), (1, -1), (0, -1), (-1, -1), (-1, 0), (0, 1))
     DIRS_ODD = ((1, 1), (1, 0), (0, -1), (-1, 0), (-1, 1), (0, 1))
@@ -866,6 +891,7 @@ class HexGrid:
                             for h in self.hexes}
 
     def inside(self, hex_):
+        """True if (column, row) is on the map."""
         return 0 <= hex_[0] < self.cols and 0 <= hex_[1] < self.rows
 
     def all_neighbours(self, hex_):
@@ -875,9 +901,11 @@ class HexGrid:
         return [(c + dc, r + dr) for dc, dr in dirs]
 
     def neighbours(self, hex_):
+        """The (up to 6) neighbours that are on the map, worked out once in __init__."""
         return self._neighbours[hex_]
 
     def on_edge(self, hex_):
+        """True for hexes on the map's border: they miss some neighbours."""
         return len(self._neighbours[hex_]) < 6
 
     @staticmethod
@@ -951,6 +979,7 @@ LAND_WITH_SALT = 5                   # from here on, salinity steers swamps, fer
 
 
 def new_seed():
+    """A fresh random number for a new map (the part of the seed that isn't settings)."""
     return secrets.randbelow(RANDOM_NUMBERS)
 
 
@@ -964,6 +993,7 @@ def seed_fields(p, number, version=SEED_VERSION):
 
 
 def to_symbols(value, length):
+    """value written in base 32 with SEED_SYMBOLS, padded to length symbols."""
     symbols = ""
     for _ in range(length):
         value, digit = divmod(value, 32)
@@ -984,6 +1014,7 @@ def seed_check(data, version=SEED_VERSION):
 def make_seed(p, number):
     """None if p doesn't fit in a seed (only old saved maps, e.g. sea 12.5%)."""
     version = p.get("version", SEED_VERSION)
+    # each field is one "digit" whose base is the number of values it can take
     packed = 0
     for value, choices in seed_fields(p, number, version):
         if value != int(value) or not 0 <= value < choices:
@@ -1001,6 +1032,7 @@ def read_seed(text):
     code = code.replace("O", "0").replace("I", "1").replace("L", "1")
     if len(code) != SEED_LENGTH or any(c not in SEED_SYMBOLS for c in code):
         return None
+    # newest version first: the check symbols tell which one it is
     for version in sorted(SEED_TERRAINS, reverse=True):
         unpacked = unpack_seed(code, version)
         if unpacked:
@@ -1009,6 +1041,8 @@ def read_seed(text):
 
 
 def unpack_seed(code, version):
+    """make_seed backwards, reading code as a seed of that version.
+    (land settings, random number), or None if it isn't one."""
     split = SEED_LENGTH - SEED_CHECK_SYMBOLS[version]
     data, check = code[:split], code[split:]
     if seed_check(data, version) != check:
@@ -1016,12 +1050,13 @@ def unpack_seed(code, version):
     packed = 0
     for c in data:
         packed = packed * 32 + SEED_SYMBOLS.index(c)
+    # peel the fields off in reverse order; only the number of choices matters here
     blank = {"columns": 2, "rows": 2, "dungeons": 0, "cities": 0, "fortresses": 0, "percentages": {}, "rivers": 0}
     values = []
     for _, choices in reversed(seed_fields(blank, 0, version)):
         packed, value = divmod(packed, choices)
         values.append(value)
-    if packed or values.pop() != version:
+    if packed or values.pop() != version:      # leftovers or another version: not this kind of seed
         return None
     terrains = SEED_TERRAINS[version]
     columns, rows, dungeons, cities, fortresses, *rest = [v for v in reversed(values)]
@@ -1039,6 +1074,7 @@ def unpack_seed(code, version):
 
 
 def example_seed():
+    """A valid seed to show in the questions, always the same one."""
     p = {"columns": 33, "rows": 15, "dungeons": 4, "cities": 3, "fortresses": 2,
          "percentages": dict(DEFAULT_PERCENTAGES), "rivers": -1}
     return make_seed(p, 482913)
@@ -1069,6 +1105,8 @@ def rebuild_settings(text, base):
     return settings
 
 
+# --- files and folders ---
+# Every map gets its own folder, maps_generated/<seed>/, next to this file.
 MAPS_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "maps_generated")
 
 
@@ -1081,10 +1119,12 @@ def make_maps_folder():
 
 
 def map_folder(base, seed):
+    """The folder of one map: <base>/<seed>."""
     return os.path.join(base, str(seed))
 
 
 def short_path(path):
+    """path relative to the current folder, to keep messages short (if it's inside it)."""
     try:
         short = os.path.relpath(path)
     except ValueError:                   # different drive on Windows
@@ -1119,6 +1159,7 @@ def upgrade_settings(data):
 
 
 def load_settings(folder, seed):
+    """The settings stored in a map's PNG in folder, or None."""
     for name in (f"{seed}_nonumber.png", f"{seed}_number.png"):
         path = os.path.join(folder, name)
         if not os.path.exists(path):
@@ -1170,6 +1211,7 @@ def complete_settings(p):
 
 
 def describe_settings(p):
+    """One readable paragraph with the grid, sites, rivers, terrain % and title."""
     perc = ", ".join(f"{pick(label).lower()} {p['percentages'][terrain]:g}%" for _, _, terrain, label in TERRAIN_OPTIONS)
     return tr("describe", cols=p["columns"], rows=p["rows"], cities=p["cities"], forts=p["fortresses"],
               dungeons=p["dungeons"], rivers=p["rivers"], perc=perc, title=p["title"])
@@ -1212,6 +1254,7 @@ def random_settings(p, number):
     p["rivers"] = -1
 
 
+# --- scale ---
 SCALE_PRESETS = (2, 6, 12, 24)               # miles per hex; 6 is the classic one
 MILES = re.compile(r"^(\d+(?:[.,]\d+)?)\s*(miglia|miglio|miles|mile|mi)?$", re.IGNORECASE)
 
@@ -1240,11 +1283,11 @@ def ask_scale(current=None):
         default = len(options) - 1
     print()
     choice = menu(tr("scale_how"), options, default)
-    if choice == len(presets) + 1:
+    if choice == len(presets) + 1:          # "keep the custom one"
         return current
     if choice < len(presets):
         return presets[choice]
-    while True:
+    while True:                             # "other": typed by the user
         answer = input(tr("ask_custom_scale")).strip()
         if answer:
             return scale_text(answer)
@@ -1274,6 +1317,7 @@ def ask(question, default, kind=int, lowest=None, highest=None):
 # the program keeps working either way. The choice is echoed afterwards, so
 # the scrolling log still says what was picked.
 def menus_available():
+    """True when the full-screen menus (and the editor on the map) can be used."""
     if os.environ.get("WYRMHEX_NO_MENUS") or not (sys.stdin.isatty() and sys.stdout.isatty()):
         return False
     try:
@@ -1305,6 +1349,8 @@ def menu(title, options, default=0, context=()):
 
 
 def draw_menu(screen, title, options, current, context):
+    """One full-screen menu, run inside Screen.wrapper. Redraws on every key
+    and returns the index of the chosen option."""
     from asciimatics.event import KeyboardEvent, MouseEvent
     from asciimatics.screen import Screen
     fancy = screen.unicode_aware
@@ -1312,6 +1358,7 @@ def draw_menu(screen, title, options, current, context):
     width, height = screen.width, screen.height
 
     def cut(text, room):
+        # shorten text to room letters, with an ellipsis, so it never wraps
         return text if len(text) <= room else text[:max(0, room - 1)] + ("…" if fancy else "~")
 
     while True:
@@ -1328,7 +1375,7 @@ def draw_menu(screen, title, options, current, context):
             screen.print_at(piece, 2, y, Screen.COLOUR_WHITE, Screen.A_BOLD)
             y += 1
         y += 1
-        rows = {}
+        rows = {}                              # screen row -> option, for mouse clicks
         for i, text in enumerate(options):
             label = cut(f" {i + 1}  {text} " if len(options) < 10 else f" {text} ", width - 8)
             if i == current:
@@ -1342,6 +1389,7 @@ def draw_menu(screen, title, options, current, context):
         screen.print_at(cut(keys, width - 4), 2, max(y + 1, height - 2), Screen.COLOUR_WHITE)
         screen.refresh()
 
+        # wait for a key or a click; a resized window is drawn again by menu()
         screen.wait_for_input(0.5)
         event = screen.get_event()
         if screen.has_resized():
@@ -1402,6 +1450,7 @@ WELCOME_ART = r"""
 
 
 def terminal_width():
+    """Columns of the terminal window, or None when there's no terminal."""
     try:
         return os.get_terminal_size(sys.stdout.fileno()).columns
     except (OSError, ValueError):
@@ -1409,6 +1458,7 @@ def terminal_width():
 
 
 def show_welcome():
+    """The title screen: dragon, sign and watchtower, then wait for Enter."""
     # the sign holds the name and the version, centred in its 34 letters
     art = WELCOME_ART.strip("\n").replace("@VERSION@", f"v{VERSION}".center(34)).split("\n")
     subtitle = tr("welcome_subtitle")
@@ -1452,6 +1502,7 @@ _/j  L l\_!  _//^---^\\_    @SPELL@
 
 
 def show_conjuring():
+    """The wizard casting the spell, shown when the questions are over."""
     print(WIZARD.replace("@SPELL@", tr("conjuring")).rstrip())
 
 
@@ -1504,6 +1555,9 @@ def ask_look(p):
 
 
 def ask_settings():
+    """The interactive questions, from the language to the look of the map.
+    Returns the settings dict that main() works with (the same keys that
+    settings_from_options builds from the command line)."""
     ask_language()
     show_welcome()
     print(tr("enter_accepts"))
@@ -1526,6 +1580,7 @@ def ask_settings():
             saved["ask_labels"] = input(tr("ask_labels_again")).strip().lower() in YES_WORDS
         ask_look(saved)
         return saved
+    # a new map (or an old number seed whose PNG is gone): ask everything
     print()
     p = {}
     p["columns"] = ask(tr("q_columns"), "auto", int, 2, 80)
@@ -1573,13 +1628,16 @@ def settings_from_options(argv):
     language_from_options(argv)
 
     def names(italian, english):
+        # both spellings of an option, the current language's first (for --help)
         if italian == english:
             return (f"--{italian}",)
         return (f"--{italian}", f"--{english}") if LANG == "it" else (f"--{english}", f"--{italian}")
 
     def shown(options):
+        # the choices of an option as --help shows them, in the current language
         return "{" + ",".join(options[LANG]) + "}"
 
+    # one argument per setting; dest is the key used in the settings dict
     ap = argparse.ArgumentParser(prog="wyrmhex.py", epilog=f"WyrmHex v{VERSION}", description=tr("cli_description"))
     ap.add_argument(*names("lingua", "language"), dest="language", default=LANG, metavar="{it,en}",
                     help=tr("h_language"))
@@ -1621,6 +1679,7 @@ def settings_from_options(argv):
     ap.add_argument("--version", action="version", version=f"WyrmHex v{VERSION}", help=tr("h_version"))
     ap.add_argument("--font", default=None, metavar="FILE", help=tr("h_font"))
     a = ap.parse_args(argv)
+    # from here on: check the options together, and turn them into settings
     if a.background and not a.colors:
         ap.error(tr("err_background"))
     background = BACKGROUND_FROM_USER[a.background or "white"]
@@ -1636,6 +1695,7 @@ def settings_from_options(argv):
     if a.edited and a.reproduce is None:
         ap.error(tr("err_edited_needs_seed"))
 
+    # rebuilding a map: the land comes from the seed, the rest from this command line
     if a.reproduce is not None:
         saved = rebuild_settings(a.reproduce, a.output)
         if not saved:
@@ -1658,6 +1718,7 @@ def settings_from_options(argv):
         saved["apply_edits"] = a.edited
         return saved
 
+    # a new map
     if a.grid.strip().lower() == "auto":
         columns = rows = "auto"
     else:
@@ -1696,6 +1757,7 @@ def validate(p, log):
             print(f"  - {e}")
         sys.exit(1)
 
+    # all good: say what is going to be made
     total_perc = sum(p["percentages"].values())
     log.info(tr("info_grid", c=p["columns"], r=p["rows"], n=p["columns"] * p["rows"]))
     log.info(tr("info_terrains", list=", ".join(f"{pick(label).lower()} {p['percentages'][terrain]:g}%"
@@ -1704,6 +1766,7 @@ def validate(p, log):
     if total_perc < 100:
         log.info(tr("info_pct_rest", r=100 - total_perc))
 
+    # percentages -> numbers of hexes; whatever isn't assigned becomes plains
     total = p["columns"] * p["rows"]
     perc = dict(p["percentages"])
     perc[PLAINS] += 100 - total_perc
@@ -1725,6 +1788,7 @@ def validate(p, log):
 # wet bits, forest where it rains / desert where it doesn't (plus some noise),
 # rivers downhill, sites last.
 def normalize(values):
+    """Rescale {key: number} so the lowest is 0 and the highest is 1."""
     low, high = min(values.values()), max(values.values())
     spread = (high - low) or 1.0
     return {k: (v - low) / spread for k, v in values.items()}
@@ -1740,6 +1804,8 @@ def noise_field(grid, rng, passes):
 
 
 def make_heights(grid, rng):
+    """Height of every hex, 0 (lowest) to 1: big blobs plus small details,
+    lower towards the edges. Used for maps that are mostly land."""
     big = noise_field(grid, rng, max(3, (grid.cols + grid.rows) // 5))   # big shapes
     small = noise_field(grid, rng, 2)                                    # small details
     edge_band = max(1.0, min(grid.cols, grid.rows) * 0.25)
@@ -1766,6 +1832,8 @@ def ridge_noise(grid, rng, passes, axis):
     """Noise smoothed mostly along `axis` (a unit vector in hex_xy units):
     long ridges and troughs that point that way."""
     pos = {h: hex_xy(h) for h in grid.hexes}
+    # a neighbour lying along the axis weighs a lot more in the smoothing than
+    # one beside it, so the blobs stretch out into ridges
     weights = {}
     for h in grid.hexes:
         for nb in grid.neighbours(h):
@@ -1797,6 +1865,8 @@ def make_island_heights(grid, rng, sea_percent):
     height = {}
     for h in grid.hexes:
         c, r = h
+        # distance to the open-sea edges (the mainland's side doesn't count):
+        # close to them the land sinks, so islands don't get cut by the edge
         edges = [r, grid.cols - 1 - c, grid.rows - 1 - r, c]
         if side is not None:
             edges.pop(side)
@@ -1816,6 +1886,8 @@ def flood_open_sea(grid, height, n, rng, terrain, side):
     """Like flood_sea, but the water comes in from every edge except the
     mainland's, so it surrounds the islands and fills the bays."""
     starts = [h for h in grid.hexes if grid.on_edge(h) and (side is None or side_distance(grid, h, side) > 0)]
+    # always flood the lowest hex next to the water first (a little noise
+    # keeps the coast from following the contour lines too closely)
     queue = [(height[h] + rng.uniform(0, 0.04), h) for h in starts]
     heapq.heapify(queue)
     seen, placed = set(starts), 0
@@ -1837,6 +1909,7 @@ def count_islands(grid, terrain, side):
     for h in grid.hexes:
         if terrain[h] == SEA or h in seen:
             continue
+        # walk over this piece of land (breadth first) to collect all its hexes
         piece, queue = [], deque([h])
         seen.add(h)
         while queue:
@@ -1874,6 +1947,7 @@ def dig_lakes(grid, height, n, rng, terrain):
     """Lakes of 1-4 hexes in low ground. Returns (hexes placed, number of lakes)."""
     if n <= 0:
         return 0, 0
+    # split the lake hexes into lakes of 1-4 hexes each
     sizes, left = [], n
     while left > 0:
         s = min(left, rng.randint(1, 4))
@@ -1899,6 +1973,8 @@ def dig_lakes(grid, height, n, rng, terrain):
                 break
         if not candidates:
             break
+        # start in the lowest third of the free hexes, then grow the lake
+        # into the lowest neighbours
         candidates.sort(key=lambda h: height[h])
         start = rng.choice(candidates[:max(1, len(candidates) // 3)])
         starts.append(start)
@@ -1916,6 +1992,7 @@ def dig_lakes(grid, height, n, rng, terrain):
 
 
 def place_mountains_and_hills(grid, height, n_mountains, n_hills, rng, terrain):
+    """The highest free hexes become mountains, the next ones down hills."""
     land = [h for h in grid.hexes if terrain[h] is None]
     # a bit of jitter, or the hill/mountain border looks like a contour line
     by_height = sorted(land, key=lambda h: height[h] + rng.uniform(-0.03, 0.03), reverse=True)
@@ -1949,6 +2026,7 @@ def rain_map(grid, height, terrain, wind):
     shadow). Over sea and lakes it fills up again. 0-1 for every land hex."""
     dx, dy = WIND_VECTORS[wind]
     pos = {h: hex_xy(h) for h in grid.hexes}
+    # how far downwind each hex is: the air reaches hexes in this order
     along = {h: pos[h][0] * dx + pos[h][1] * dy for h in grid.hexes}
     air, rain = {}, {}
     for h in sorted(grid.hexes, key=along.get):           # upwind hexes first
@@ -1964,6 +2042,8 @@ def rain_map(grid, height, terrain, wind):
             moist, rise = moist / weight, rise / weight
         else:
             moist, rise = 1.0, 0.0                        # fresh air from off the map
+        # over water the air picks up moisture; over land it drops some as
+        # rain, more where it has to climb
         if terrain[h] in WATER:
             air[h] = min(1.0, moist + WIND_SEA_PICKUP)
             continue
@@ -1990,11 +2070,15 @@ def salinity_map(grid, terrain, height, rain, rivers=()):
     for h in grid.hexes:
         if terrain[h] in WATER:
             continue
+        # sea salt: strong on the coast, fading over SALT_SEA_REACH hexes,
+        # and weaker on high ground
         d = to_sea[h]
         from_sea = 0.0 if d is None else max(0.0, 1.0 - (d - 1) / SALT_SEA_REACH) * (1.0 - 0.7 * height[h])
+        # salt left by evaporation: dry, low ground
         dry = (1.0 - rain[h]) * (1.0 - 0.6 * height[h])
         if all(height[nb] >= height[h] for nb in grid.neighbours(h)):
             dry *= 1.4                                   # a closed dip: the salt can't drain away
+        # lakes and rivers nearby wash some of it out
         washed = {0: 0.45, 1: 0.3, 2: 0.12}.get(to_fresh[h], 0.0)
         salt[h] = min(1.0, max(0.0, 0.6 * from_sea + 0.5 * dry - washed))
         sea_salt[h] = 0.6 * from_sea
@@ -2008,6 +2092,7 @@ def place_swamps(grid, height, n, rng, terrain, rain=None, salt=None):
         # don't touch rng here: maps without swamps must match pre-0.0.3 ones
         return
     to_water = grid.distances_from([h for h in grid.hexes if terrain[h] in WATER])
+    # lowest score wins: low ground, near water, where it rains
     score = {}
     for h in grid.hexes:
         if terrain[h] is None:
@@ -2038,6 +2123,7 @@ def place_forests_and_deserts(grid, n_forests, n_deserts, rng, terrain, rain=Non
             wetness[h] += 0.25
         elif d == 2:
             wetness[h] += 0.12
+    # what's left after forests and deserts is plains
     free = sorted((h for h in grid.hexes if terrain[h] is None), key=lambda h: wetness[h], reverse=True)
     for h in free[:n_forests]:
         terrain[h] = FOREST
@@ -2054,6 +2140,7 @@ def follow_river(grid, terrain, height, spring, river_hexes, rng, max_length):
     while len(path) <= max_length:
         current = path[-1]
         around = grid.neighbours(current)
+        # the river stops as soon as it reaches water, or another river
         water = [nb for nb in around if terrain[nb] in WATER]
         if water:
             end = ("water", min(water, key=lambda nb: height[nb]))
@@ -2067,6 +2154,7 @@ def follow_river(grid, terrain, height, spring, river_hexes, rng, max_length):
         for p in path[:-1]:
             forbidden.update(grid.neighbours(p))
         options = [nb for nb in around if nb not in forbidden and nb not in river_hexes]
+        # on the edge with nowhere lower to go: it flows off the map
         if grid.on_edge(current) and len(path) >= 3 and (
                 not options or min(height[nb] for nb in options) > height[current]):
             end = ("edge", None)
@@ -2082,6 +2170,7 @@ def trace_rivers(grid, terrain, height, n, rng):
     water, another river or the map edge. The ones that get stuck are dropped."""
     if n <= 0:
         return []
+    # springs: the highest 70% of the hills and mountains, in random order
     high = [h for h in grid.hexes if terrain[h] in (MOUNTAINS, HILLS)]
     if not high:
         high = [h for h in grid.hexes if terrain[h] not in WATER]
@@ -2094,6 +2183,7 @@ def trace_rivers(grid, terrain, height, n, rng):
     for spring in springs:
         if len(rivers) >= n:
             break
+        # springs not too close to each other, and not right next to water
         if spring in river_hexes or any(grid.distance(spring, r["path"][0]) < 4 for r in rivers):
             continue
         if any(terrain[nb] in WATER for nb in grid.neighbours(spring)):
@@ -2113,6 +2203,7 @@ def place_sites(grid, terrain, rivers, wanted, rng, log, fertile=()):
     river_hexes = {h for r in rivers for h in r["path"]}
 
     def near_water(h):
+        # on a river or next to the sea or a lake
         return h in river_hexes or any(terrain[nb] in WATER for nb in grid.neighbours(h))
 
     # higher = more likely
@@ -2134,6 +2225,8 @@ def place_sites(grid, terrain, rivers, wanted, rng, log, fertile=()):
         for _ in range(n):
             same_kind = [h for k, h in sites if k == kind]
             d_same, d_other = same_kind_dist, 2
+            # free hexes far enough from the other sites; if there are none,
+            # lower the distances one step at a time
             while True:
                 candidates = [h for h in land if h not in taken
                               and all(grid.distance(h, o) >= d_other for o in taken)
@@ -2149,6 +2242,7 @@ def place_sites(grid, terrain, rivers, wanted, rng, log, fertile=()):
                 relaxed = True
             if not candidates:
                 candidates = [h for h in land if h not in taken]
+            # each kind has its own idea of a good spot (see base_weights)
             cities = [h for k, h in sites if k == CITY]
             weights = []
             for h in candidates:
@@ -2157,9 +2251,9 @@ def place_sites(grid, terrain, rivers, wanted, rng, log, fertile=()):
                     w *= 3 if near_water(h) else 1
                     w *= 2 if h in fertile else 1             # farmland to feed it
                     w *= 0.5 if grid.on_edge(h) else 1       # ...and not the map edge
-                elif kind == FORTRESS:
+                elif kind == FORTRESS:                       # guarding the high ground
                     w *= 1 + 0.5 * sum(terrain[nb] in (MOUNTAINS, HILLS) for nb in grid.neighbours(h))
-                elif kind == DUNGEON and cities:
+                elif kind == DUNGEON and cities:             # away from the cities
                     w *= 1 + min(grid.distance(h, c) for c in cities) / 4
                 weights.append(w)
             chosen = rng.choices(candidates, weights=weights)[0]
@@ -2172,6 +2266,8 @@ def place_sites(grid, terrain, rivers, wanted, rng, log, fertile=()):
 
 def build_land(params, counts, grid, rng, log):
     """Steps 3-9. Returns (terrain of every hex, rivers, sites, heights, farmable plains)."""
+    # the steps run in a fixed order, all drawing from the same rng: changing
+    # the order (or adding a draw) would change every map made from a seed
     islands = (params.get("version", SEED_VERSION) >= LAND_WITH_ISLANDS
                and params["percentages"][SEA] > ISLAND_SEA)
     log.step(tr("step_heights"))
@@ -2181,7 +2277,7 @@ def build_land(params, counts, grid, rng, log):
         height = make_heights(grid, rng)
     log.info(tr("info_heights", n=len(grid.hexes)))
 
-    terrain = {h: None for h in grid.hexes}
+    terrain = {h: None for h in grid.hexes}          # None = not decided yet
     log.step(tr("step_sea"))
     if islands:
         flood_open_sea(grid, height, counts[SEA], rng, terrain, side)
@@ -2209,6 +2305,7 @@ def build_land(params, counts, grid, rng, log):
 
     log.step(tr("step_wetness"))
     rain = None
+    # seeds older than the wind (v2) make their land without it
     if params.get("version", SEED_VERSION) > LAND_BEFORE_WIND:
         wind = rng.randrange(len(WIND_NAMES))
         rain = rain_map(grid, height, terrain, wind)
@@ -2251,6 +2348,8 @@ def build_land(params, counts, grid, rng, log):
 
 
 def print_sites(grid, terrain, rivers, sites, labels=None):
+    """The closing list: every city, fortress and dungeon with its hex code,
+    terrain, whether it's on a river, and its name."""
     digits = max(2, len(str(max(grid.cols, grid.rows))))
     print(tr("sites_header"))
     for kind in (CITY, FORTRESS, DUNGEON):
@@ -2270,6 +2369,7 @@ MAX_LABEL = 24
 
 
 def label_key(h):
+    """Key of a site's name in the labels dict: its hex code, e.g. "0307"."""
     return hex_code(h, 2)            # grids are at most 80 x 80
 
 
@@ -2302,6 +2402,7 @@ def ask_labels(grid, terrain, sites, labels):
             typed = answer.lower() not in YES_WORDS
             name = answer if typed else " ".join(input(tr("q_label", n=MAX_LABEL)).split())
             if len(name) > MAX_LABEL:
+                # too long: cut at the last whole word that fits
                 cut = name[:MAX_LABEL + 1]
                 name = (cut.rsplit(" ", 1)[0] if " " in cut else cut[:MAX_LABEL]).rstrip()
                 print(tr("label_cut", name=name))
@@ -2320,7 +2421,10 @@ def ascii_label(name):
 
 
 # --- fonts ---
+# The PNG is drawn with a monospace font found on this computer; every letter
+# square of the map is one letter of that font.
 def open_font(spec, size):
+    """spec is a file name, or (file, index) for fonts inside a .ttc collection."""
     path, index = spec if isinstance(spec, tuple) else (spec, 0)
     return ImageFont.truetype(path, size, index=index)
 
@@ -2354,6 +2458,7 @@ def find_font(chosen=None):
 
 
 def font_name(spec):
+    """The font's file name, to show in the log."""
     return os.path.basename(spec[0] if isinstance(spec, tuple) else spec)
 
 
@@ -2368,6 +2473,7 @@ def font_has_glyph(font, ch):
     """A missing glyph renders as the .notdef box, so compare with a
     character that surely isn't in the font."""
     def fingerprint(c):
+        # the pixels of c drawn in this font
         img = Image.new("L", (80, 80), 0)
         ImageDraw.Draw(img).text((10, 10), c, font=font, fill=255)
         return img.tobytes()
@@ -2385,6 +2491,7 @@ class Glyphs:
         self.font = font
 
     def __call__(self, fancy, plain):
+        # every fancy symbol is checked against the font once, then remembered
         if self.ascii_only:
             return plain
         if fancy not in self._cache:
@@ -2395,6 +2502,7 @@ class Glyphs:
 
 
 def pick_symbol(rng, choices, G):
+    """One symbol from a TERRAIN_GLYPHS list, at random by weight."""
     total = sum(w for _, _, w in choices)
     v = rng.uniform(0, total)
     for fancy, plain, w in choices:
@@ -2419,14 +2527,17 @@ class Canvas:
         self.fills = []            # backgrounds drawn first: ([(x, y) corners, in letter squares], tag)
 
     def put(self, x, y, ch, style="n", tag=None):
+        """One letter at (x, y); anything off the canvas is ignored."""
         if 0 <= x < self.width and 0 <= y < self.height:
             self.chars[y][x], self.styles[y][x], self.tags[y][x] = ch, style, tag
 
     def write(self, x, y, text, style="n", tag=None):
+        """A text left to right from (x, y)."""
         for i, c in enumerate(text):
             self.put(x + i, y, c, style, tag)
 
     def paste(self, other, ox, oy):
+        """Copy another canvas (letters, boxes and fills) with its top-left at (ox, oy)."""
         for y in range(other.height):
             for x in range(other.width):
                 self.put(ox + x, oy + y, other.chars[y][x], other.styles[y][x], other.tags[y][x])
@@ -2434,6 +2545,7 @@ class Canvas:
         self.fills += [([(ox + x, oy + y) for x, y in points], t) for points, t in other.fills]
 
     def copy(self):
+        """An independent copy: changing it leaves this one as it is."""
         c = Canvas(self.width, self.height)
         c.chars = [row[:] for row in self.chars]
         c.styles = [row[:] for row in self.styles]
@@ -2443,6 +2555,7 @@ class Canvas:
         return c
 
     def lines(self):
+        """The canvas as plain text lines, for the .txt file."""
         return ["".join(row).rstrip() for row in self.chars]
 
 
@@ -2472,6 +2585,7 @@ def hex_template(k):
 
 
 def map_size(cols, rows, k):
+    """(width, height) in letters of a cols x rows map with hexes of size k."""
     return 3 * k * (cols - 1) + 4 * k + 1, 2 * k * rows + k + 1
 
 
@@ -2481,6 +2595,7 @@ def hex_origin(c, r, k):
 
 
 def hex_centre(c, r, k):
+    """The letter square in the middle of hex (c, r): where rivers pass."""
     x0, y0 = hex_origin(c, r, k)
     return x0 + 2 * k + 1, y0 + k + 1
 
@@ -2488,6 +2603,8 @@ def hex_centre(c, r, k):
 # --- rivers ---
 # Smooth curve through the hex centres -> staircase of squares -> box-drawing chars.
 def wiggle(points, scale, rng, amount=0.18):
+    """Add a point between each pair, pushed a little to one side at random,
+    so rivers don't run straight from hex centre to hex centre."""
     out = [points[0]]
     for p, q in zip(points, points[1:]):
         mx, my = (p[0] + q[0]) / 2, (p[1] + q[1]) / 2
@@ -2511,8 +2628,11 @@ def smooth(points, rounds=3):
 
 
 def river_line(grid, river, k, rng):
+    """The river as a smooth line of (x, y) points in letter squares, from just
+    past its spring to where it ends (coast, other river, map edge)."""
     path, (end_kind, target) = river["path"], river["end"]
     points = [hex_centre(*h, k) for h in path]
+    # start a bit past the spring's centre, so a site there stays visible
     points[0] = (points[0][0] * 0.7 + points[1][0] * 0.3, points[0][1] * 0.7 + points[1][1] * 0.3)
     last = path[-1]
     lx, ly = points[-1]
@@ -2525,6 +2645,8 @@ def river_line(grid, river, k, rng):
     elif end_kind == "stop":         # only from the editor: the river just ends here
         pass
     else:
+        # off the map edge: carry on towards the off-map neighbour that lies
+        # most straight ahead
         px, py = points[-2]
         outside = [n for n in grid.all_neighbours(last) if not grid.inside(n)]
         exit_hex = max(outside, key=lambda n: (hex_centre(*n, k)[0] - lx) * (lx - px)
@@ -2554,6 +2676,7 @@ def line_to_squares(points, aspect):
             x = p[0] + (q[0] - p[0]) * t / steps
             y = p[1] + (q[1] - p[1]) * t / steps
             target = (math.floor(x), math.floor(y))
+            # one square at a time, never diagonally, so the line stays joined
             while current != target:
                 dx, dy = target[0] - current[0], target[1] - current[1]
                 if dx and (not dy or abs(dx) > abs(dy) * aspect):
@@ -2576,10 +2699,12 @@ def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect, original=None, lab
     canvas = Canvas(width, height)
     border, inside = hex_template(k)
     u = 2 * k
+    # corners of the hexagon used for the background fills, in letter squares
     corners = ((k + 1, 1), (k + u + 1, 1), (2 * k + u + 1, k + 1), (k + u + 1, 2 * k + 1), (k + 1, 2 * k + 1), (1, k + 1))
     old_terrain, old_rivers = original or (terrain, rivers)
 
     def glyphs(kind, dice):
+        # one random symbol for every inside square of a hex of this kind
         if kind == SEA or not TERRAIN_GLYPHS[kind]:
             return None
         return [pick_symbol(dice, TERRAIN_GLYPHS[kind], G) for _ in inside]
@@ -2617,6 +2742,8 @@ def draw_map(grid, terrain, rivers, sites, k, G, rng, aspect, original=None, lab
     for (x, y), (ch, sea_only) in shared.items():
         canvas.put(x, y, ch, "H" if sea_only else "b", "sea_line" if sea_only else "border")
 
+    # rivers: every river becomes a chain of squares; then each square gets the
+    # box-drawing letter that joins all the directions passing through it
     lines = []
     for river in old_rivers:
         squares = line_to_squares(river_line(grid, river, k, rng), aspect)
@@ -2654,13 +2781,14 @@ def draw_labels(canvas, labels, sites, k, ascii_only):
     a box it slides sideways, then tries the row above the box (not when
     k = 2: the hex numbers go there), and as a last resort goes under the box
     anyway. Over sea the gray stays."""
-    taken = set()
+    taken = set()                    # squares already used by a site box or a name
     for x, y, w, h, _, _ in canvas.boxes:
         taken.update((x + i, y + j) for i in range(w) for j in range(h))
     centre = 2 * k + 1
     for h, name in labels:
         text = f" {ascii_label(name) if ascii_only else name} "
         x0, y0 = hex_origin(*h, k)
+        # the places to try, best first: under the box, centred, then shifted
         rows = [y0 + k + 2] + ([y0 + k - 1] if k > 2 else [])
         start = x0 + centre - len(text) // 2
         tries = [(row, start + shift) for row in rows for shift in (0, -2, 2, -4, 4, -6, 6)]
@@ -2684,6 +2812,8 @@ def draw_labels(canvas, labels, sites, k, ascii_only):
 
 
 def write_hex_numbers(page, grid, k, ox, oy):
+    """The hex codes (0101, 0102...) on the top inside row of every hex, for
+    the numbered map. ox, oy: where the map sits on the page."""
     digits = max(2, len(str(max(grid.cols, grid.rows))))
     _, inside = hex_template(k)
     top_row = [xx for (yy, xx) in inside if yy == 1]    # the squares of the top inside row
@@ -2704,6 +2834,7 @@ def write_hex_numbers(page, grid, k, ox, oy):
 
 # --- page: frame, title, legend ---
 def legend_entries(G, fertile=False, filled=False):
+    """The legend's terrain entries and site entries, in the order shown."""
     # (sample, name, style, colour tag). filled: the hexes have coloured
     # backgrounds, so plains get a swatch instead of "empty hex"
     plains = ("  ", tr("leg_barren_bg" if fertile else "leg_plains_bg"), "b", PLAINS) if filled else \
@@ -2729,6 +2860,8 @@ def has_farmland(params):
 
 
 def pack_legend(G, max_width, fertile=False, filled=False):
+    """The legend entries split into lines no wider than max_width letters.
+    Each entry is a list of (text, style, colour tag) pieces."""
     terrains, sites = legend_entries(G, fertile, filled)
     entries = [[(g, style, tag), (" " + name, "n", None)] if g else [(name, "n", None)]
                for g, name, style, tag in terrains]
@@ -2749,6 +2882,8 @@ def pack_legend(G, max_width, fertile=False, filled=False):
 def compose_page(map_canvas, n_cols, n_rows, legend_lines, title, subtitle, G):
     """Returns the page and where the map ended up on it."""
     page = Canvas(n_cols, n_rows)
+    # double frame around the page, with two cross lines: under the title and
+    # above the legend
     horizontal, vertical = G("═", "-"), G("║", "|")
     for x in range(n_cols):
         page.put(x, 0, horizontal)
@@ -2769,11 +2904,13 @@ def compose_page(map_canvas, n_cols, n_rows, legend_lines, title, subtitle, G):
     page.write((n_cols - len(heading)) // 2, 0, heading, "b")
     page.write((n_cols - len(subtitle)) // 2, 1, subtitle)
 
+    # the map in the middle of the space between the title and the legend
     area_top, area_height = 3, y_legend_line - 3
     ox = (n_cols - map_canvas.width) // 2
     oy = area_top + (area_height - map_canvas.height) // 2
     page.paste(map_canvas, ox, oy)
 
+    # the legend, each line centred
     for i, line in enumerate(legend_lines):
         length = sum(sum(len(text) for text, _, _ in entry) for entry in line) + 4 * (len(line) - 1)
         x = (n_cols - length) // 2
@@ -2793,12 +2930,14 @@ def compose_page(map_canvas, n_cols, n_rows, legend_lines, title, subtitle, G):
 
 # --- paper, rendering, saving ---
 def paper_pixels(paper, orientation):
+    """Size of the sheet in pixels at 600 dpi."""
     w_mm, h_mm = PAPERS[paper]
     if orientation == "landscape":
         w_mm, h_mm = h_mm, w_mm
     return round(mm(w_mm)), round(mm(h_mm))
 
 
+# every page size the program can make (a PNG of another size isn't ours)
 VALID_SIZES = {paper_pixels(p, o) for p in PAPERS for o in ("portrait", "landscape")}
 
 
@@ -2807,6 +2946,8 @@ def choose_sheet(map_width, map_height, legend_lines_guess, paper, orientation, 
     Returns (char_mm, fill, orientation, sheet_w_mm, sheet_h_mm)."""
     short, long_ = PAPERS[paper]
     max_char = MAX_CHAR_MM * short / PAPERS["A4"][0]      # bigger sheet, bigger letters allowed
+    # try both ways round: the letter size is the largest that fits the map,
+    # its frame and the legend on the sheet
     options = []
     for name, (w_mm, h_mm) in (("portrait", (short, long_)), ("landscape", (long_, short))):
         if orientation not in ("auto", name):
@@ -2827,6 +2968,8 @@ def fill_page(params, font_spec, aspect, log):
     orientation = "portrait" if params["orientation"] == "portrait" else "landscape"
     w_mm, h_mm = PAPERS["A4"] if orientation == "portrait" else PAPERS["A4"][::-1]
     k = 3 if params["size"] == "large" else 2
+    # letters that fit on the page, then hexes that fit in them (with frame,
+    # title and legend around the map)
     n_cols = int((w_mm - 2 * MARGIN_MM) / READABLE_CHAR_MM)
     n_rows = int((h_mm - 2 * MARGIN_MM) / (READABLE_CHAR_MM * aspect))
     legend_lines = len(pack_legend(Glyphs(open_font(font_spec, 40), params["ascii_only"]), n_cols - 4,
@@ -2853,6 +2996,7 @@ def hex_size(params, grid, paper, aspect):
 
 
 class QuietLog:
+    """A Log that says nothing: for trial layouts nobody needs to read about."""
 
     def info(self, message):
         pass
@@ -2871,6 +3015,7 @@ def suggest_paper(params, grid, fonts, G):
         k = hex_size(params, grid, paper, aspect)
         layout = page_layout(params, grid, k, paper, 0, font_spec, bold_spec, advance_em, aspect, G, QuietLog())[0]
         char_w, width, work_w = layout[2], layout[5], layout[7]
+        # how wide a letter really comes out on paper
         printed_char_mm = char_w * (width / work_w) / DPI * 25.4
         orientation = "landscape" if layout[5] > layout[6] else "portrait"
         options[paper] = (printed_char_mm, orientation, k)
@@ -2884,6 +3029,7 @@ def ask_paper(params, grid, fonts, G, ask_user, log):
     suggested, options = suggest_paper(params, grid, fonts, G)
     aspect = fonts[3]
     log.info(tr("info_paper_intro", c=grid.cols, r=grid.rows))
+    # one line per paper size: hex and letter size, and how readable it is
     rows = []
     for paper, (char_mm, orientation, k) in options.items():
         if char_mm < SMALL_CHAR_MM:
@@ -2907,7 +3053,7 @@ def ask_paper(params, grid, fonts, G, ask_user, log):
         papers = list(options)
         return papers[menu(tr("q_paper_menu"), rows, papers.index(default),
                            [tr("info_paper_intro", c=grid.cols, r=grid.rows)])]
-    if ask_user:
+    if ask_user:                                 # no menus: type A4, A3 or A2
         print()
         print(tr("paper_choice"))
         while True:
@@ -2924,6 +3070,7 @@ def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy, p
     """Rasterise the canvas. progress(fraction) is called after each row."""
     img = Image.new(palette["mode"], (width, height), palette["paper"])
     d = ImageDraw.Draw(img)
+    # 1. coloured hex backgrounds (only the palettes that have them)
     for points, tag in canvas.fills:
         if tag in palette:
             d.polygon([(ox + x * char_w, oy + y * char_h) for x, y in points], fill=palette[tag])
@@ -2931,6 +3078,7 @@ def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy, p
     sea_hexes = bg(SEA) in palette            # the sea is filled hex by hex, like the land
 
     def ink(tag):
+        # the colour of a letter: its own in colour palettes, otherwise ink
         return palette.get(tag, palette["ink"])
 
     thicken = max(1, size // 22)                 # shift used to fake a bold letter
@@ -2950,6 +3098,7 @@ def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy, p
         d.text((px, py), ch, font=regular, fill=fill, anchor="la")
         d.text((px + thicken, py), ch, font=regular, fill=fill, anchor="la")
 
+    # 2. every letter square, according to its style (see Canvas)
     for y in range(canvas.height):
         py = oy + y * char_h
         for x in range(canvas.width):
@@ -2976,6 +3125,7 @@ def render(canvas, regular, bold, char_w, char_h, size, width, height, ox, oy, p
                 d.text((px, py), ch, font=regular, fill=ink(tag), anchor="la")
         if progress:
             progress((y + 1) / canvas.height)
+    # 3. site boxes on top: a coloured block with one big symbol
     big = regular.font_variant(size=int(size * 1.7))
     for bx, by, bw, bh, g, tag in canvas.boxes:
         x1, y1 = ox + bx * char_w, oy + by * char_h
@@ -2999,6 +3149,7 @@ def save_png(img, path, settings=None):
 
 
 def save(canvas, layout, png_path, settings=None):
+    """Draw the page to a PNG (with a progress bar) and write the same page as .txt."""
     regular, bold, char_w, char_h, size, width, height, work_w, work_h, ox, oy = layout
     live = LiveBar()
     drawing = tr("pb_drawing")
@@ -3006,6 +3157,7 @@ def save(canvas, layout, png_path, settings=None):
     palette = palette_for(settings or {})
     img = render(canvas, regular, bold, char_w, char_h, size, work_w, work_h, ox, oy,
                  progress=lambda done: live.update(0.9 * done, drawing), palette=palette)
+    # drawn on a bigger sheet because it didn't fit (see page_layout): shrink it
     if (work_w, work_h) != (width, height):
         f = min(width / work_w, height / work_h)
         smaller = img.resize((round(work_w * f), round(work_h * f)), Image.LANCZOS)
@@ -3041,6 +3193,7 @@ def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, 
         if len(legend) <= legend_guess and n_rows >= map_h + len(legend) + 7:
             break
         legend_guess = max(len(legend), legend_guess + 1)
+    # the line under the title: the longest version that fits the page
     values = dict(scale=params["scale"], dot=G("·", "-"), c=grid.cols, x=G("×", "x"), r=grid.rows, seed=seed)
     versions = [tr(key, **values) for key in ("subtitle", "subtitle_tight", "subtitle_short", "subtitle_seed")]
     subtitle = next((v for v in versions if len(v) + 4 <= n_cols), versions[-1])
@@ -3056,6 +3209,7 @@ def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, 
         work_h = max(height, round(n_rows * char_h + 2 * mm(MARGIN_MM)))
         shrink = min(width / work_w, height / work_h)
         log.warn(tr("warn_shrink", p=shrink, paper=paper))
+    # the page of letters centred on the sheet
     ox = (work_w - n_cols * char_w) / 2
     oy = (work_h - n_rows * char_h) / 2
     printed_char_mm = char_w * shrink / DPI * 25.4
@@ -3073,13 +3227,15 @@ def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, 
 # Edits are kept as the final state (terrain overrides, all sites, all rivers)
 # in <seed>_edit.json next to the map, and in the edited PNGs. The seed alone
 # still gives the original map.
+# for each site kind, the texts "a city" / "the city" used in the editor's messages
 SITE_KEYS = {DUNGEON: ("ed_a_dungeon", "ed_the_dungeon"), CITY: ("ed_a_city", "ed_the_city"),
              FORTRESS: ("ed_a_fortress", "ed_the_fortress")}
-TERRAIN_ORDER = (PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)
+TERRAIN_ORDER = (PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)   # in the terrain menu
 
 
 def direction(a, b):
     """Index into ed_dirs (N, NE, SE, S, SW, NW) of neighbour b as seen from a."""
+    # compare the hex centres (odd columns sit half a hex lower)
     dx = b[0] - a[0]
     dy = (b[1] + 0.5 * (b[0] & 1)) - (a[1] + 0.5 * (a[0] & 1))
     if dx == 0:
@@ -3119,6 +3275,7 @@ def parse_hex(text, grid):
 
 
 def show_hex(h):
+    """(2, 6) -> "03.07", the way the editor shows and reads hexes."""
     return f"{h[0] + 1:02d}.{h[1] + 1:02d}"
 
 
@@ -3141,6 +3298,7 @@ def print_hex_table(grid, terrain, rivers, sites, only=None):
                          yes if river else "-",
                          dirs[d] if d is not None else "-",
                          yes if site_at.get(h) == FORTRESS else "-"))
+    # each column as wide as its longest cell
     widths = [max(len(x) for x in col) for col in zip(head, *rows)]
     line = lambda cells: "  " + "  ".join(f"{x:<{w}}" for x, w in zip(cells, widths)).rstrip()
     print()
@@ -3173,13 +3331,17 @@ def fix_river_end(grid, terrain, river, rivers):
     others = {h for rv in rivers if rv is not river for h in rv["path"]}
 
     def can_join(h):
+        # another river's hex, as long as joining it doesn't make a loop
         return h in others and not joins_back(rivers, h, river)
 
+    # the old ending still holds: leave it as it is
     kind, target = river["end"]
     if kind == "water" and target in around and terrain[target] in WATER:
         return
     if kind == "join" and target in around and can_join(target):
         return
+    # otherwise the best one available: water, then off the map, then
+    # another river, else it just stops
     water = [nb for nb in around if terrain[nb] in WATER]
     joins = [nb for nb in around if can_join(nb)]
     if water:
@@ -3259,6 +3421,7 @@ def choose(title, options, default=1, context=()):
 
 
 def edits_to_json(original, terrain, rivers, sites):
+    """The edits as plain JSON data: changed terrain only, all sites, all rivers."""
     code = lambda h: hex_code(h, 2)
     return {"terrain": {code(h): t for h, t in terrain.items() if t != original[h]},
             "sites": [[kind, code(h)] for kind, h in sites],
@@ -3280,6 +3443,7 @@ def edits_from_json(data, grid, terrain):
     skipped = 0
 
     def hx(code):
+        # "0307" -> (2, 6); ValueError if it isn't a hex of this map
         if not (isinstance(code, str) and len(code) == 4 and code.isdigit()):
             raise ValueError(code)
         h = (int(code[:2]) - 1, int(code[2:]) - 1)
@@ -3307,6 +3471,8 @@ def edits_from_json(data, grid, terrain):
         except (TypeError, ValueError):
             skipped += 1
 
+    # a river is kept only if it holds together: no gaps, no water, no hex
+    # shared with another river
     rivers, busy = [], set()
     for entry in river_list:
         try:
@@ -3339,6 +3505,7 @@ def load_edits(edit_base):
                 return json.load(f), "json"
         except (OSError, ValueError):
             bad = True
+    # no usable json: the edited PNGs carry the edits in their settings
     for name in (edit_base + "_nonumber.png", edit_base + "_number.png"):
         try:
             with Image.open(name) as img:
@@ -3351,6 +3518,7 @@ def load_edits(edit_base):
 
 
 def has_edits(edit_base):
+    """True if this map has saved edits (in the .json or in the edited PNG)."""
     return load_edits(edit_base)[1] is not None
 
 
@@ -3390,10 +3558,12 @@ def save_edit_labels(edit_base, labels):
 
 
 def snapshot(terrain, rivers, sites):
+    """A copy of the map's editable state, for undo."""
     return dict(terrain), [{"path": list(rv["path"]), "end": rv["end"]} for rv in rivers], list(sites)
 
 
 def restore(state, terrain, rivers, sites):
+    """Put a snapshot back, changing terrain, rivers and sites in place."""
     t, rv, st = snapshot(*state)
     terrain.clear()
     terrain.update(t)
@@ -3418,6 +3588,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, ferti
         new = set_aside(edit_base + ".json")
         print(tr("ed_moved_bad", path=short_path(edit_base + ".json"), new=os.path.basename(new)))
 
+    # edits saved last time? offer to pick them up again
     data, source = load_edits(edit_base)
     if source != "json" and os.path.exists(edit_base + ".json"):
         put_aside()
@@ -3441,6 +3612,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, ferti
         print(tr("ed_start_over"))
 
     def save_edits():
+        # the whole edited state (and the site names) to <seed>_edit.json
         data = edits_to_json(original, terrain, rivers, sites)
         data["labels"] = labels
         with open(edit_base + ".json", "w", encoding="utf-8") as f:
@@ -3458,6 +3630,8 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, ferti
         return True
 
     def show(focus=None, full=False):
+        # the hex table; on big maps only the interesting hexes (and those
+        # around focus, the hex just edited) unless full
         if full or len(grid.hexes) <= 80:
             print_hex_table(grid, terrain, rivers, sites)
             return
@@ -3471,6 +3645,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, ferti
         print_hex_table(grid, terrain, rivers, sites, only=shown)
 
     def quit_editor():
+        # leaving without making the map: say where the edits are kept
         if history or resumed:      # every change is already on disk
             print(tr("ed_quit", path=short_path(edit_base + ".json")))
         else:
@@ -3478,6 +3653,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, ferti
         return None
 
     history, focus = [], None       # history: (snapshot, labels) before each change
+    # the editor on the map, when the terminal allows it
     if menus_available():
         editor = VisualEditor(grid, terrain, rivers, sites, height, unedited, labels, fertile,
                               os.path.basename(edit_base)[:-len("_edit")], history, save_edits, undo)
@@ -3492,11 +3668,12 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, ferti
             save_edits()
             return terrain, rivers, sites, edits_to_json(original, terrain, rivers, sites), True
         print(tr("ve_too_small", w=VE_MIN_SIZE[0], h=VE_MIN_SIZE[1]))
+    # the editor with questions: the table, then "which hex?" over and over
     last = show_hex((grid.cols - 1, grid.rows - 1))
     show()
     ask_next = resumed           # picked up old edits: maybe they just want the map again
     while True:
-        if ask_next:
+        if ask_next:                # after each change: more, make the map, undo or quit?
             options = [tr("ed_next_more"), tr("ed_next_go"), tr("ed_next_undo"), tr("ed_next_quit")]
             print()
             answer = choose(tr("ed_next"), options)
@@ -3512,6 +3689,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, ferti
                     print(tr("ed_nothing_to_undo"))
                 continue
         ask_next = False
+        # a hex code, or one of the letters T (table), A/U (undo), E/Q (quit)
         answer = input(tr("ed_ask_hex")).strip().lower()
         if answer == "t":
             show(full=True)
@@ -3557,6 +3735,7 @@ def trace_by_hand(grid, terrain, rivers, spring):
                  None) if step else None
     example = " ".join(show_hex(x) for x in (step, after) if x) or show_hex(spring)
     prompt = tr("ed_ask_path", h=show_hex(spring), example=example)
+    # keep asking until the path is valid, or the answer is empty (give up)
     while True:
         answer = input(prompt).strip()
         prompt = tr("ed_ask_path_again", h=show_hex(spring))
@@ -3595,18 +3774,23 @@ class TextEditorUI:
     """edit_hex's questions as numbered menus and typed answers."""
 
     def intro(self, text):
+        """What's in the hex, before the questions."""
         print(text)
 
     def choose(self, title, options, default=1, context=()):
+        """A menu; never None here, the typed editor has no Esc."""
         return choose(title, options, default, context)
 
     def say(self, text):
+        """A message about the change, printed as it is."""
         print(text)
 
     def confirm(self, question):
+        """A (Y/n) question: anything but "n..." is yes."""
         return not input(question).strip().lower().startswith("n")
 
     def trace(self, grid, terrain, rivers, spring):
+        """A river traced by typing its hexes."""
         return trace_by_hand(grid, terrain, rivers, spring)
 
 
@@ -3616,6 +3800,7 @@ def edit_hex(grid, terrain, rivers, sites, height, h, ui=None, action=None):
     action: already chosen with a key ("terrain", "river" or a site kind)."""
     ui = ui or TextEditorUI()
     name = show_hex(h)
+    # what's in the hex now: terrain, site, and the river with its direction
     site = next((kind for kind, at in sites if at == h), None)
     river = next((rv for rv in rivers if h in rv["path"]), None)
     desc = pick(TERRAIN_NAMES[terrain[h]])
@@ -3628,6 +3813,7 @@ def edit_hex(grid, terrain, rivers, sites, height, h, ui=None, action=None):
             desc += " → " + pick(TEXTS["ed_dirs"])[d]
     ui.intro(tr("ed_hex_is", h=name, desc=desc))
     here = [tr("ed_hex_is", h=name, desc=desc)]     # the menu screen hides the log: say which hex
+    # the possible actions: each site is "add" or "remove", the river "add" or "change"
     actions = [("terrain", tr("ed_terrain"))]
     for kind in (DUNGEON, CITY, FORTRESS):
         a, the = SITE_KEYS[kind]
@@ -3639,7 +3825,7 @@ def edit_hex(grid, terrain, rivers, sites, height, h, ui=None, action=None):
         if answer is None:
             return
         action = actions[answer][0]
-    done = []
+    done = []                                    # what was changed, said at the end
 
     if action == "terrain":
         answer = ui.choose(tr("ed_which_terrain"), [pick(TERRAIN_NAMES[t]) for t in TERRAIN_ORDER],
@@ -3664,7 +3850,7 @@ def edit_hex(grid, terrain, rivers, sites, height, h, ui=None, action=None):
         for rv in rivers:
             fix_river_end(grid, terrain, rv, rivers)
 
-    elif action in SITE_KEYS:
+    elif action in SITE_KEYS:                     # add, replace or remove a site
         a, the = SITE_KEYS[action]
         if site == action:
             sites.remove((site, h))
@@ -3679,18 +3865,18 @@ def edit_hex(grid, terrain, rivers, sites, height, h, ui=None, action=None):
                 done.append(tr("ed_did_add", what=tr(a), h=name))
             sites.append((action, h))
 
-    elif action == "river" and river:
+    elif action == "river" and river:            # change the river that's already here
         how = ui.choose(tr("ed_river_how"), [tr("ed_river_all"), tr("ed_river_move"), tr("ed_river_cut_end"),
                                              tr("ed_river_cut_start")], 1, here)
         if how is None:
             return
-        i = river["path"].index(h)
-        if how == 0:
+        i = river["path"].index(h)               # where this hex is along the river
+        if how == 0:                             # remove it all
             rivers.remove(river)
             for rv in rivers:
                 fix_river_end(grid, terrain, rv, rivers)
             done.append(tr("ed_did_river_del", h=name))
-        elif how in (2, 3):
+        elif how in (2, 3):                      # cut it: ends here (2) or springs here (3)
             path = river["path"][:i + 1] if how == 2 else river["path"][i:]
             if len(path) < 2:
                 ui.say(tr("ed_too_short"))
@@ -3704,7 +3890,7 @@ def edit_hex(grid, terrain, rivers, sites, height, h, ui=None, action=None):
                     done.append(tr("ed_did_cut_end", h=name, how=how_end))
                 else:
                     done.append(tr("ed_did_cut_start", h=name))
-        else:
+        else:                                    # move this stretch to a neighbouring hex
             dirs = pick(TEXTS["ed_dirs"])
             # the hexes the river already comes from and goes to are not a move
             path = river["path"]
@@ -3727,7 +3913,7 @@ def edit_hex(grid, terrain, rivers, sites, height, h, ui=None, action=None):
                         fix_river_end(grid, terrain, rv, rivers)
                     done.append(tr("ed_did_river_move", h=show_hex(target), old=name))
 
-    elif action == "river":
+    elif action == "river":                      # a new river springing here
         if terrain[h] in WATER:
             ui.say(tr("ed_no_water_river"))
         else:
@@ -3774,6 +3960,11 @@ VE_PLAIN = str.maketrans({"×": "x", "–": "-", "—": "-", "·": "-", "→": "
 
 
 class VisualEditor:
+    """The editor on the map. It changes terrain, rivers, sites and labels in
+    place (the same objects edit_map holds), records each change in history
+    and saves it with save(). It's also the ui that edit_hex asks its
+    questions through: intro, say, choose, confirm and trace below."""
+
     def __init__(self, grid, terrain, rivers, sites, height, unedited, labels, fertile, seed, history, save, undo):
         self.grid, self.terrain, self.rivers, self.sites = grid, terrain, rivers, sites
         self.height, self.unedited, self.labels, self.fertile = height, unedited, labels, set(fertile)
@@ -3798,6 +3989,7 @@ class VisualEditor:
                 continue
 
     def main_loop(self, screen):
+        """Draw, wait for a key or a click, act on it; again until S or Q."""
         from asciimatics.event import KeyboardEvent, MouseEvent
         from asciimatics.screen import Screen
         self.screen, self.S = screen, Screen
@@ -3820,11 +4012,11 @@ class VisualEditor:
             if not isinstance(event, KeyboardEvent):
                 continue
             key = event.key_code
-            letter = chr(key).lower() if 0 < key < 0x110000 else ""
+            letter = chr(key).lower() if 0 < key < 0x110000 else ""   # special keys are negative
             if self.arrow(key):
                 continue
-            self.messages = []
-            if key in (10, 13):
+            self.messages = []                  # a new key: the old messages go
+            if key in (10, 13):                 # Enter: the menu with every action
                 self.act(None)
             elif letter == "t":
                 self.act("terrain")
@@ -3849,6 +4041,7 @@ class VisualEditor:
                 self.help_box()
 
     def next_event(self):
+        """The next key or click. A resized window restarts the screen (see run)."""
         from asciimatics.exceptions import ResizeScreenError
         while True:
             self.screen.wait_for_input(0.5)
@@ -3873,11 +4066,14 @@ class VisualEditor:
         return True
 
     def move_to(self, h):
+        """Put the cursor on hex h."""
         self.cursor = h
         self.messages = []
 
     # --- changes ---
     def act(self, action):
+        """One edit on the cursor's hex through edit_hex (action None = ask
+        which). If something changed: notes, undo history, save, redraw."""
         terrain, rivers, sites = self.terrain, self.rivers, self.sites
         before = snapshot(terrain, rivers, sites)
         edit_hex(self.grid, terrain, rivers, sites, edited_heights(self.height, self.unedited[0], terrain),
@@ -3890,6 +4086,7 @@ class VisualEditor:
             self.canvas = None
 
     def name_site(self):
+        """N: type a name for the site under the cursor, in a box."""
         h = self.cursor
         kind = next((k for k, at in self.sites if at == h), None)
         if not kind:
@@ -3920,14 +4117,17 @@ class VisualEditor:
         pass                                    # the panel already says what's in the hex
 
     def say(self, text):
+        """A message in the panel; also kept for the log printed at the end."""
         text = text.strip()
         self.messages.append(text)
         self.log.append(text)
 
     def choose(self, title, options, default=1, context=()):
+        """A menu in a box over the map; None for Esc."""
         return self.menu_box(title.strip(), options, default - 1)
 
     def confirm(self, question):
+        """A yes/no question in a box; Esc counts as no."""
         question = re.sub(r"\s*\(\w/\w\):?\s*$", "", question.strip())     # the "(Y/n):" of the typed editor
         return self.confirm_box(question, tr("ve_yes"), tr("ve_no"), True)
 
@@ -3935,7 +4135,7 @@ class VisualEditor:
         """The new river's hexes, picked one by one on the map."""
         from asciimatics.event import KeyboardEvent, MouseEvent
         busy = {h for rv in rivers for h in rv["path"]}
-        path, problem = [spring], ""
+        path, problem = [spring], ""             # problem: why the last hex was refused
         self.cursor = spring
         while True:
             self.draw(trace=(path, problem))
@@ -3989,17 +4189,22 @@ class VisualEditor:
 
     # --- drawing ---
     def plain(self, text):
+        """text, or its ASCII version when the terminal can't show the symbols."""
         return text if self.fancy else text.replace("←↑↓→", "<^v>").translate(VE_PLAIN)
 
     def put(self, text, x, y, colour=None, attr=None, bg=None):
+        """Print at (x, y): white on black unless told otherwise."""
         S = self.S
         self.screen.print_at(self.plain(text), x, y, S.COLOUR_WHITE if colour is None else colour,
                              S.A_NORMAL if attr is None else attr, S.COLOUR_BLACK if bg is None else bg)
 
     def view_size(self):
+        """Columns and rows of the map area (the screen minus panel and bars)."""
         return self.screen.width - VE_PANEL - 3, self.screen.height - 4
 
     def redraw_map(self):
+        """Draw the map again into a canvas, the same way as for the PNG
+        (hexes of size VE_K), with terminal symbols instead of the font's."""
         G = lambda fancy, plain: fancy if self.fancy else plain
         self.canvas = draw_map(self.grid, self.terrain, self.rivers, self.sites, VE_K, G,
                                random.Random(len(self.grid.hexes)), VE_ASPECT, self.unedited, self.labels,
@@ -4030,7 +4235,7 @@ class VisualEditor:
         view_w, view_h = self.view_size()
         if not (1 <= x < 1 + view_w and 2 <= y < 2 + view_h) or self.ox is None:
             return None
-        cx, cy = x - 1 + self.ox, y - 2 + self.oy
+        cx, cy = x - 1 + self.ox, y - 2 + self.oy      # screen square -> canvas square
         if cx >= self.canvas.width or cy >= self.canvas.height:
             return None
         # nearest centre; a row is sqrt(3) times as far as a column step in a real hexagon
@@ -4040,6 +4245,8 @@ class VisualEditor:
         return min(self.grid.hexes, key=distance)
 
     def draw(self, trace=None):
+        """The whole screen: title bar, map, panel and key bar. trace is
+        (path, problem) while a river is being traced by hand."""
         S, screen = self.S, self.screen
         if self.canvas is None:
             self.redraw_map()
@@ -4060,6 +4267,8 @@ class VisualEditor:
         self.put(self.plain(bar)[:w].ljust(w), 0, h - 1, S.COLOUR_BLACK, S.A_NORMAL, S.COLOUR_WHITE)
 
     def draw_map_view(self, marks):
+        """The part of the map in view, in terminal colours, with the cursor's
+        hex highlighted (and the hexes in marks, for a river being traced)."""
         S, canvas = self.S, self.canvas
         view_w, view_h = self.view_size()
         ox, oy = self.ox, self.oy
@@ -4114,9 +4323,12 @@ class VisualEditor:
                     self.put(ch, 1 + X, 2 + Y, colour, S.A_BOLD)
 
     def wrap(self, text, width):
+        """text split into lines of at most width letters."""
         return textwrap.wrap(self.plain(text), width) or [""]
 
     def draw_panel(self):
+        """Right side: what's in the cursor's hex, the action keys, the number
+        of changes and the latest messages."""
         S, h = self.S, self.cursor
         px, bottom = self.screen.width - VE_PANEL, self.screen.height - 2
         site = next((k for k, at in self.sites if at == h), None)
@@ -4161,6 +4373,8 @@ class VisualEditor:
         self.draw_view_line()
 
     def draw_trace_panel(self, path, problem):
+        """Right side while tracing a river: how it works, the path so far, and
+        why the last hex was refused, if it was."""
         S = self.S
         px, bottom = self.screen.width - VE_PANEL, self.screen.height - 2
         self.put(tr("ve_trace_title", h=show_hex(path[0])), px, 2, S.COLOUR_YELLOW, S.A_BOLD)
@@ -4247,6 +4461,7 @@ class VisualEditor:
                     return event.y - y - 1
 
     def confirm_box(self, question, yes, no, yes_first=False):
+        """A two-option menu box; True only if yes was chosen."""
         options = [yes, no] if yes_first else [no, yes]
         answer = self.menu_box(question, options)
         return answer is not None and options[answer] == yes
@@ -4279,6 +4494,7 @@ class VisualEditor:
                 text += chr(key)
 
     def help_box(self):
+        """? : every key, in a box, until any key is pressed."""
         room = self.view_size()[0] - 6
         lines = [""]
         for line in pick(TEXTS["ve_help"]) + ("", tr("ve_any_key")):
@@ -4324,6 +4540,9 @@ def save_maps(params, grid, land, look, seed, number, log, layout_log):
 
 
 def main():
+    """The whole program: settings (questions or command line), then the 12
+    steps of the log: settings, font, land (3-9), paper (10), the two maps
+    (11-12). An edited map goes through the editor between land and paper."""
     first_run = make_maps_folder()
     interactive = len(sys.argv) == 1
     params = ask_settings() if interactive else settings_from_options(sys.argv[1:])
@@ -4337,7 +4556,7 @@ def main():
     log.step(tr("step_validate"))
     font_spec, bold_spec = find_font(params["font"])
     advance_em, line_em = font_metrics(font_spec)
-    aspect = line_em / advance_em
+    aspect = line_em / advance_em                  # how much taller than wide a letter is
     if "auto" in (params["columns"], params["rows"]):
         fill_page(params, font_spec, aspect, log)
     number = params["seed"] if params["seed"] is not None else new_seed()
@@ -4346,7 +4565,7 @@ def main():
         random_settings(params, number)
         log.info(tr("info_random"))
     counts = validate(params, log)
-    rng = random.Random(number)
+    rng = random.Random(number)                    # the one source of randomness for the land
     seed = make_seed(params, number)
     if seed is None:
         seed = str(number)
@@ -4366,9 +4585,9 @@ def main():
 
     # 3-9: land
     terrain, rivers, sites, height, fertile = build_land(params, counts, grid, rng, log)
-    original = None
+    original = None                  # the unedited (terrain, rivers), for an edited map
     params.setdefault("labels", {})
-    if params.pop("edit", False):
+    if params.pop("edit", False):                  # choice 3: edit the map now
         original = (terrain, rivers)
         os.makedirs(map_folder(params["output"], seed), exist_ok=True)
         edited = edit_map(grid, terrain, rivers, sites, height, edit_base, params["labels"], fertile)
@@ -4380,7 +4599,7 @@ def main():
         elif params.get("ask_labels") == "later":
             params["ask_labels"] = input(tr("ask_labels_again")).strip().lower() in YES_WORDS
         log.info(tr("info_edits", path=short_path(edit_base + ".json")))
-    elif apply_edits:
+    elif apply_edits:                              # --edited: the saved edits, no editor
         data, source = load_edits(edit_base)
         where = edit_base + "_nonumber.png" if source == "png" else edit_base + ".json"
         if source == "png" and os.path.exists(edit_base + ".json"):
@@ -4402,6 +4621,7 @@ def main():
     elif has_edits(edit_base):
         log.info(tr("info_has_edits", s=seed))
 
+    # site names: asked now that the sites are known
     if params.pop("ask_labels", False) and sys.stdin.isatty() and sites:
         params["labels"] = ask_labels(grid, terrain, sites, params["labels"])
         if original and os.path.exists(edit_base + ".json"):
