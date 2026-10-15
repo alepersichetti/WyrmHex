@@ -3959,6 +3959,16 @@ VE_PLAIN = str.maketrans({"×": "x", "–": "-", "—": "-", "·": "-", "→": "
                           "←": "<", "è": "e", "à": "a", "ì": "i", "ò": "o", "ù": "u", "é": "e"})
 
 
+def hex_area(k):
+    """The letter squares that lie inside a hex on a terminal: its inside
+    squares plus its bottom side, whose _ sit at the bottom of the square.
+    The squares of its top side belong to the hex above, and the / \\ ones
+    are cut in two by the line, so they're coloured only when the hexes on
+    both sides share the colour."""
+    border, inside = hex_template(k)
+    return inside + [(yy, xx) for yy, xx, ch in border if ch == "_" and yy == 2 * k]
+
+
 class VisualEditor:
     """The editor on the map. It changes terrain, rivers, sites and labels in
     place (the same objects edit_map holds), records each change in history
@@ -4210,6 +4220,20 @@ class VisualEditor:
                                random.Random(len(self.grid.hexes)), VE_ASPECT, self.unedited, self.labels,
                                not self.fancy, self.fertile)
         self.heights = edited_heights(self.height, self.unedited[0], self.terrain)
+        # the squares painted blue: the sea hexes' own squares, and the / \
+        # squares between two sea hexes (the line has sea on both sides)
+        border, _ = hex_template(VE_K)
+        area = hex_area(VE_K)
+        self.sea_cells, sides = set(), {}
+        for h in self.grid.hexes:
+            x0, y0 = hex_origin(*h, VE_K)
+            sea = self.terrain[h] == SEA
+            if sea:
+                self.sea_cells.update((x0 + xx, y0 + yy) for yy, xx in area)
+            for yy, xx, ch in border:
+                if ch != "_":
+                    sides.setdefault((x0 + xx, y0 + yy), []).append(sea)
+        self.sea_cells.update(cell for cell, seas in sides.items() if len(seas) > 1 and all(seas))
 
     def scroll(self):
         """Move the view only when the cursor's hex would leave it."""
@@ -4282,12 +4306,19 @@ class VisualEditor:
             for x in range(cols):
                 X, Y = ox + x, oy + y
                 ch, style, tag = canvas.chars[Y][X], canvas.styles[Y][X], canvas.tags[Y][X]
-                if style in "gGH":              # the sea: one blue sheet with a few waves
+                if (X, Y) in self.sea_cells:    # the sea: one blue sheet with a few waves
                     if tag == "label":
                         self.put(ch, 1 + x, 2 + y, S.COLOUR_WHITE, S.A_BOLD, S.COLOUR_BLUE)
-                    else:
-                        ch = ch if style != "g" else ("~" if (X + Y) % 3 == 0 else " ")
-                        self.put(ch, 1 + x, 2 + y, S.COLOUR_CYAN, S.A_NORMAL, S.COLOUR_BLUE)
+                    elif style == "g":
+                        self.put("~" if (X + Y) % 3 == 0 else " ", 1 + x, 2 + y, S.COLOUR_CYAN, S.A_NORMAL,
+                                 S.COLOUR_BLUE)
+                    else:                       # the coast in white, lines inside the sea in cyan
+                        colour = S.COLOUR_WHITE if tag == "border" else S.COLOUR_CYAN
+                        self.put(ch, 1 + x, 2 + y, colour, S.A_NORMAL, S.COLOUR_BLUE)
+                elif style in "gGH":            # the sea's outline at the map edge: no blue outside it
+                    colour = S.COLOUR_WHITE if tag == "label" else S.COLOUR_CYAN
+                    self.put(ch if style != "g" else " ", 1 + x, 2 + y, colour,
+                             S.A_BOLD if tag == "label" else S.A_NORMAL)
                 elif ch != " " and style != "B":
                     colour = S.COLOUR_WHITE if tag == "border" else terrain_fg.get(tag, S.COLOUR_WHITE)
                     bold = style == "b" and tag != "border"
@@ -4298,25 +4329,30 @@ class VisualEditor:
                     X, Y = bx + xx - ox, by + yy - oy
                     if 0 <= X < cols and 0 <= Y < rows:
                         self.put(g if xx in (1, 2) else " ", 1 + X, 2 + Y, box_fg[tag], S.A_BOLD, box_bg[tag])
-        border, inside = hex_template(VE_K)
+        border, _ = hex_template(VE_K)
+        area = hex_area(VE_K)
         for h in marks:                         # the new river's hexes
-            self.highlight(h, inside, (), S.COLOUR_CYAN)
-        self.highlight(self.cursor, inside, border, S.COLOUR_YELLOW)
+            self.highlight(h, area, (), S.COLOUR_CYAN)
+        self.highlight(self.cursor, area, border, S.COLOUR_YELLOW)
 
-    def highlight(self, h, inside, border, colour):
-        """The hex's inside on colour (site boxes stay on top), its outline in colour."""
+    def highlight(self, h, area, border, colour):
+        """The hex's own squares on colour (site boxes stay on top), the
+        rest of its outline in colour."""
         S, canvas = self.S, self.canvas
         view_w, view_h = self.view_size()
         x0, y0 = hex_origin(*h, VE_K)
-        for yy, xx in inside:
+        for yy, xx in area:
             X, Y = x0 + xx - self.ox, y0 + yy - self.oy
-            if 0 <= X < view_w and 0 <= Y < view_h and canvas.styles[y0 + yy][x0 + xx] != "B":
+            # site boxes stay on top, and names stay white: they're often wider than the hex
+            if (0 <= X < view_w and 0 <= Y < view_h and canvas.styles[y0 + yy][x0 + xx] != "B"
+                    and canvas.tags[y0 + yy][x0 + xx] != "label"):
                 ch = canvas.chars[y0 + yy][x0 + xx]
                 ch = " " if canvas.styles[y0 + yy][x0 + xx] == "g" else ch
                 self.put(ch, 1 + X, 2 + Y, S.COLOUR_BLACK, S.A_BOLD, colour)
+        filled = set(area)
         for yy, xx, ch in border:
             X, Y = x0 + xx - self.ox, y0 + yy - self.oy
-            if 0 <= X < view_w and 0 <= Y < view_h:
+            if (yy, xx) not in filled and 0 <= X < view_w and 0 <= Y < view_h:
                 if canvas.tags[y0 + yy][x0 + xx] == "label":    # a name on the border stays as it is
                     self.put(canvas.chars[y0 + yy][x0 + xx], 1 + X, 2 + Y, S.COLOUR_WHITE, S.A_BOLD)
                 else:
