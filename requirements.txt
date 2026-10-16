@@ -1,4 +1,4 @@
-# WyrmHex v1.0.0 - libraries to install
+# WyrmHex v1.1.0 - libraries to install
 # Install with:  pip install -r requirements.txt
 # (with the virtual environment active: see step 4 and 5 in the README)
 #
@@ -11,3 +11,8 @@ Pillow>=11.3
 # program still works: it asks for the option's number, and the editor
 # asks questions.
 asciimatics>=1.15
+#
+# fpdf2 writes the PDF with the contents of the land (encounter tables,
+# history, hexes). Only needed if you ask for the contents: without it
+# the map is made anyway, and the contents are saved as JSON only.
+fpdf2>=2.7
