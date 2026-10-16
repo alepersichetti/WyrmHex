@@ -657,20 +657,28 @@ TEXTS = {
     # what to make: the map only, or also its contents (and the site names)
     "q_contents": ("\n  Cosa vuoi generare?", "\n  What do you want to make?"),
     "contents_map_only": ("solo la mappa", "the map only"),
-    "contents_all": ("la mappa e i suoi contenuti, a caso: incontri casuali, esagoni popolati, storia della "
-                     "landa (in un PDF)",
-                     "the map and its contents, at random: random encounters, stocked hexes, the history of "
-                     "the land (in a PDF)"),
+    "contents_stock": ("la mappa e il contenuto degli esagoni, a caso: incontri casuali ed esagoni popolati "
+                       "(in un PDF)",
+                       "the map and what's in its hexes, at random: random encounters and stocked hexes "
+                       "(in a PDF)"),
+    "contents_all": ("la mappa, il contenuto degli esagoni e la storia della landa, con le voci di taverna "
+                     "(in un PDF)",
+                     "the map, what's in its hexes and the history of the land, with tavern rumours "
+                     "(in a PDF)"),
     "q_names": ("\n  Nomi di città, fortezze e dungeon:", "\n  Names of cities, fortresses and dungeons:"),
     "names_typed": ("li scrivo io, quando la mappa è pronta", "I'll type them, once the map is ready"),
     "names_random": ("li sceglie il programma a caso", "the program picks them at random"),
     "names_none": ("nessun nome", "no names"),
     "names_keep": ("lasciarli come sono", "keep them as they are"),
-    "step_contents": ("Contenuti della landa: incontri casuali, esagoni, storia (PDF)",
-                      "Contents of the land: random encounters, hexes, history (PDF)"),
+    "step_contents": ("Contenuti della landa: incontri casuali, esagoni popolati (PDF)",
+                      "Contents of the land: random encounters, stocked hexes (PDF)"),
+    "step_contents_history": ("Contenuti della landa: incontri casuali, esagoni popolati, storia (PDF)",
+                              "Contents of the land: random encounters, stocked hexes, history (PDF)"),
     "info_stocked": ("{n} esagoni popolati su {t}; {e} lasciati vuoti per le tue tabelle",
                      "{n} hexes stocked out of {t}; {e} left empty for your own tables"),
     "info_contents_saved": ("Salvati: {a}, {b}", "Saved: {a}, {b}"),
+    "stock_tracks": ("tracce, orme o escrementi di: {monster}", "trace, tracks or spoor of: {monster}"),
+    "stock_place": ("{name} (vedi \"Luoghi\", più avanti)", "{name} (see \"Places\", further on)"),
     "warn_no_fpdf": ("Per il PDF dei contenuti serve la libreria fpdf2: pip install -r requirements.txt. "
                      "Ho salvato i contenuti solo in {path}",
                      "The contents PDF needs the fpdf2 library: pip install -r requirements.txt. "
@@ -810,10 +818,22 @@ TEXTS = {
     "pdf_roll_again": ("tira ancora", "roll again"),
     "pdf_enc_cols": (("1d100", "Incontro", "Pagina"), ("1d100", "Encounter", "Page")),
     "pdf_hexes": ("Gli esagoni", "The hexes"),
-    "pdf_hexes_intro": ("Ogni esagono della mappa, con il codice stampato sulla mappa numerata. Quelli senza "
-                        "contenuto sono lì per le tue tabelle, da riempire al tavolo.",
-                        "Every hex of the map, with the code printed on the numbered map. The ones with no "
-                        "contents are there for your own tables, to fill in at the table."),
+    "pdf_hexes_intro": ("Ogni esagono della mappa tranne il mare, con il codice stampato sulla mappa numerata. "
+                        "{empty} esagoni di terra su {land} sono lasciati vuoti (-), da riempire al tavolo con le "
+                        "tue tabelle. Gli altri sono popolati con la tabella d66 di Wilderness Stocking - Expanded "
+                        "di D4Caltrops: il tipo di risultato e un suggerimento per l'arbitro; gli occupanti delle "
+                        "tane, e le tracce, vengono dalla tabella degli incontri del terreno.",
+                        "Every hex of the map except the sea, with the code printed on the numbered map. "
+                        "{empty} land hexes out of {land} are left empty (-), to fill in at the table with your "
+                        "own tables. The others are stocked with the d66 table of D4Caltrops' Wilderness "
+                        "Stocking - Expanded: the kind of result and a hint for the referee; lair occupants, and "
+                        "tracks, come from the terrain's encounter table."),
+    "pdf_types": ("Tipi di risultato", "Kinds of result"),
+    "pdf_places": ("Luoghi", "Places"),
+    "pdf_places_intro": ("Luoghi dettagliati di D4Caltrops (Even More Forest Hexes, Even More Mountain Hexes), "
+                         "con i dettagli già tirati sulle loro tabelle.",
+                         "Detailed places by D4Caltrops (Even More Forest Hexes, Even More Mountain Hexes), with "
+                         "their details already rolled on their tables."),
     "pdf_hex_cols": (("Esagono", "Terreno", "Contenuto"), ("Hex", "Terrain", "Contents")),
     "pdf_sources": ("Fonti e licenze", "Sources and licences"),
     "pdf_source_hh": ("Tabelle degli incontri casuali: {title}, di {author} ({url}). Testo rilasciato sotto "
@@ -830,16 +850,25 @@ TEXTS = {
                          "Gonnerman and contributors, https://www.basicfantasy.org/) and its Field Guides: Open Game "
                          "Content released under the Open Game License 1.0a (the 4th edition of the core rules "
                          "under the Creative Commons Attribution-ShareAlike 4.0 licence)."),
+    "pdf_source_d4": ("Popolamento degli esagoni: Wilderness Stocking - Expanded, Even More Forest Hexes e Even "
+                      "More Mountain Hexes I, III e IV (bozze), di D4Caltrops (https://blog.d4caltrops.com/): "
+                      "risorse gratuite pubblicate sul suo blog, usate citando l'autore e tradotte in italiano "
+                      "per WyrmHex.",
+                      "Hex stocking: Wilderness Stocking - Expanded, Even More Forest Hexes and Even More "
+                      "Mountain Hexes I, III and IV (drafts), by D4Caltrops (https://blog.d4caltrops.com/): free "
+                      "resources published on the author's blog, used with credit."),
     "pdf_source_own": ("La storia della landa, le voci di taverna e i nomi casuali sono scritti per WyrmHex.",
                        "The history of the land, the tavern rumours and the random names are written for WyrmHex."),
     "pdf_source_font": ("I titoli sono scritti con il carattere Catholicon di Vladimir Arabadzhi "
                         "(vladar.bearblog.dev), rilasciato con la SIL Open Font License 1.1.",
                         "The headings are set in the Catholicon typeface by Vladimir Arabadzhi "
                         "(vladar.bearblog.dev), released under the SIL Open Font License 1.1."),
-    "h_contents": ("genera anche i contenuti della landa, a caso: incontri casuali, esagoni popolati e storia, "
+    "h_contents": ("genera anche il contenuto degli esagoni, a caso: incontri casuali ed esagoni popolati, "
                    "in un PDF accanto alla mappa",
-                   "also make the contents of the land, at random: random encounters, stocked hexes and its "
-                   "history, in a PDF next to the map"),
+                   "also make what's in the hexes, at random: random encounters and stocked hexes, in a PDF "
+                   "next to the map"),
+    "h_history": ("come --contenuti, e in più la storia della landa con le voci di taverna",
+                  "like --contents, plus the history of the land with tavern rumours"),
     "h_random_names": ("dà a città, fortezze e dungeon nomi scelti a caso",
                        "give cities, fortresses and dungeons names picked at random"),
     "h_random": ("città, fortezze, dungeon, percentuali di terreno e fiumi a caso "
@@ -1711,8 +1740,10 @@ def ask_settings():
 
 def ask_contents(p):
     """Map only, or also its contents (encounters, stocked hexes, history)."""
-    p["contents"] = menu(tr("q_contents"), [tr("contents_map_only"), tr("contents_all")],
-                         1 if p.get("contents") else 0) == 1
+    # 0 the map only, 1 also the stocked hexes, 2 also the history of the land
+    choice = menu(tr("q_contents"), [tr("contents_map_only"), tr("contents_stock"), tr("contents_all")],
+                  2 if p.get("history") else 1 if p.get("contents") else 0)
+    p["contents"], p["history"] = choice >= 1, choice == 2
 
 
 def ask_names(p, rebuild):
@@ -1788,6 +1819,7 @@ def settings_from_options(argv):
     ap.add_argument("--version", action="version", version=f"WyrmHex v{VERSION}", help=tr("h_version"))
     ap.add_argument("--font", default=None, metavar="FILE", help=tr("h_font"))
     ap.add_argument(*names("contenuti", "contents"), dest="contents", action="store_true", help=tr("h_contents"))
+    ap.add_argument(*names("storia", "history"), dest="history", action="store_true", help=tr("h_history"))
     ap.add_argument(*names("nomi-casuali", "random-names"), dest="random_names", action="store_true",
                     help=tr("h_random_names"))
     a = ap.parse_args(argv)
@@ -1828,7 +1860,8 @@ def settings_from_options(argv):
         saved["orientation"] = orientation
         saved["ask_paper"] = ask_for_paper
         saved["apply_edits"] = a.edited
-        saved["contents"] = a.contents
+        saved["contents"] = a.contents or a.history
+        saved["history"] = a.history
         saved["random_names"] = a.random_names
         return saved
 
@@ -1849,7 +1882,7 @@ def settings_from_options(argv):
         "orientation": orientation, "output": a.output, "paper": a.paper,
         "ascii_only": a.ascii_only, "colors": a.colors, "background": background, "size": size, "font": a.font,
         "ask_paper": ask_for_paper, "randomize": a.randomize,
-        "contents": a.contents, "random_names": a.random_names,
+        "contents": a.contents or a.history, "history": a.history, "random_names": a.random_names,
     }
 
 
@@ -4718,15 +4751,56 @@ def capitalised(text):
     return text[:1].upper() + text[1:]
 
 
+def made_up_name(rng, names, ending):
+    """A made-up name from syllables, like Valdora or Maelwen."""
+    middle = rng.choice(names["middle"]) if rng.random() < 0.35 else ""
+    return (rng.choice(names["start"]) + middle + rng.choice(names[ending])).capitalize()
+
+
+def history_cast(rng, H, names):
+    """The realm of old, its great ruler, the founders, today's two factions,
+    a forgotten god and a time: every form the sentences need, as
+    placeholder values. Italian gets its articled forms (il, di, a, da, in)
+    and the ending for agreement (_o); English uses the same words for all."""
+    forms = ("il", "di", "a", "da", "in")
+    italian = LANG == "it"
+
+    def declined(prefix, base, suffix="", ending=""):
+        out = {f"{prefix}_{f}": (base.get(f) or base["il"]) + suffix for f in forms}
+        out[f"{prefix}_o"] = ending if italian else ""
+        return out
+
+    values = {"land": H["land"], "years": rng.choice(H["years"]), "god": made_up_name(rng, names, "end_m")}
+    if rng.random() < 0.3:
+        realm = rng.choice(H["realm_named"])
+        values.update(declined("realm", realm, ending=realm.get("o", "")))
+    else:
+        kind = rng.choice(H["realm_kinds"])
+        place = made_up_name(rng, names, "end_place")
+        values.update(declined("realm", kind, (" di " if italian else " of ") + place, kind.get("o", "")))
+    title = rng.choice(H["titles"])
+    g = title["g"]
+    ruler = f" {made_up_name(rng, names, 'end_' + g)} {rng.choice(H['epithets'])[g]}"
+    values.update(declined("ruler", title, ruler, "o" if g == "m" else "a"))
+    people = rng.choice(H["peoples"])
+    values.update(declined("people", people, ending=people.get("o", "")))
+    kinds = rng.sample(H["faction_kinds"], 2)
+    emblems = rng.sample(H["faction_emblems"], 2)
+    for i, (kind, emblem) in enumerate(zip(kinds, emblems), 1):
+        values.update(declined(f"fac{i}", kind, " " + emblem, kind.get("o", "")))
+    return values
+
+
 def land_history(grid, terrain, rivers, sites, labels, number):
     """The history of the land: (paragraphs, rumours), from history.json and
-    the map itself (its sites, terrain, sea and rivers)."""
+    the map itself (its sites, terrain, sea and rivers). It takes one of
+    three forms (a chronicle, the present first and then the past, a told
+    legend), with optional parts and made-up names, so that maps hardly
+    ever get the same history."""
     rng = random.Random(f"history {number}")
-    H = load_data("history.json")[LANG]
-    realm = rng.choice(H["realm"])
-    values = {"land": H["land"], "realm_il": realm["il"], "realm_di": realm["di"],
-              "realm_a": realm["a"], "realm_da": realm["da"]}
-
+    data = load_data("history.json")
+    H = data[LANG]
+    values = history_cast(rng, H, data["names"])
     used = set()                      # no line twice, while there are others
 
     def line(key, **more):
@@ -4735,32 +4809,40 @@ def land_history(grid, terrain, rivers, sites, labels, number):
         used.add(text)
         return capitalised(text.format(**values, **more))
 
+    def faction(i):
+        return line("faction", **{k.replace(f"fac{i}_", "fac_"): v for k, v in values.items() if k.startswith(f"fac{i}_")})
+
     def about(kind, h):
         return dict(name=site_name(kind, h, labels, H), hex=hex_code(h, 2))
 
     river_hexes = {h for r in rivers for h in r["path"]}
     by_kind = {kind: [h for k, h in sites if k == kind] for kind in (CITY, FORTRESS, DUNGEON)}
-    paragraphs = [" ".join([line("realm_was"), line("fall"), line("after")])]
 
-    # cities: on a river or by the sea they get a line about that
-    cities = []
-    for h in by_kind[CITY][:4]:
-        if h in river_hexes and rng.random() < 0.6:
-            cities.append(line("city_river", **about(CITY, h)))
-        elif any(terrain[n] == SEA for n in grid.neighbours(h)) and rng.random() < 0.6:
-            cities.append(line("city_sea", **about(CITY, h)))
-        else:
-            cities.append(line("city", **about(CITY, h)))
-    paragraphs.append(" ".join([line("cities_intro")] + cities) if cities else line("no_city"))
-    for kind in (FORTRESS, DUNGEON):
-        if by_kind[kind]:
-            paragraphs.append(" ".join(line(kind, **about(kind, h)) for h in by_kind[kind][:4]))
+    # the sites: cities on a river or by the sea get a line about that
+    def site_paragraphs():
+        out = []
+        cities = []
+        for h in by_kind[CITY][:4]:
+            if h in river_hexes and rng.random() < 0.6:
+                cities.append(line("city_river", **about(CITY, h)))
+            elif any(terrain[n] == SEA for n in grid.neighbours(h)) and rng.random() < 0.6:
+                cities.append(line("city_sea", **about(CITY, h)))
+            else:
+                cities.append(line("city", **about(CITY, h)))
+        out.append(" ".join([line("cities_intro")] + cities) if cities else line("no_city"))
+        for kind, intro in ((FORTRESS, "fortress_intro"), (DUNGEON, "dungeon_intro")):
+            if by_kind[kind]:
+                lines = [line(kind, **about(kind, h)) for h in by_kind[kind][:4]]
+                out.append(" ".join(([line(intro)] if rng.random() < 0.5 else []) + lines))
+        return out
 
     # the lie of the land: its most common terrain, the sea, the rivers
-    land = [terrain[h] for h in grid.hexes if terrain[h] not in WATER]
-    if land:
+    def landscape():
+        land = [terrain[h] for h in grid.hexes if terrain[h] not in WATER]
+        if not land:
+            return []
         common = max(H["terrain"], key=land.count)
-        nature = [capitalised(H["terrain"][common].format(**values))]
+        nature = [line_of(H["terrain"][common])]
         if any(terrain[h] == SEA for h in grid.hexes):
             nature.append(line("sea"))
         if len(rivers) == 1:
@@ -4768,8 +4850,47 @@ def land_history(grid, terrain, rivers, sites, labels, number):
         elif rivers:
             n = len(rivers)
             nature.append(line("rivers", n=H["numbers"][n] if n < len(H["numbers"]) else n))
-        paragraphs.append(" ".join(nature))
-    paragraphs.append(" ".join([line("now_intro"), line("threat")]))
+        else:
+            nature.append(line("no_river"))
+        return nature
+
+    def line_of(options):
+        text = rng.choice(options)
+        used.add(text)
+        return capitalised(text.format(**values))
+
+    def factions():
+        return " ".join([line("factions_intro"), faction(1), faction(2), line("rivalry")])
+
+    def now():
+        return " ".join([line("now_intro"), line("threat")] + ([line("omen")] if rng.random() < 0.7 else []))
+
+    def maybe(key, chance):
+        return [line(key)] if rng.random() < chance else []
+
+    form = rng.choice(("chronicle", "present", "legend"))
+    paragraphs = []
+    if form == "chronicle":
+        paragraphs.append(" ".join([line("open_chronicle")] + maybe("origin", 0.6) + [line("golden")]))
+        paragraphs.append(" ".join([line("fall"), line("fall_after")] + maybe("after", 0.7)))
+        if rng.random() < 0.5:
+            paragraphs.append(line("legend"))
+        today = [site_paragraphs, lambda: [" ".join(landscape())], lambda: [factions()]]
+    elif form == "present":
+        paragraphs.append(" ".join([line("open_present")] + landscape()))
+        paragraphs.append(" ".join([line("back_then")] + maybe("origin", 0.4) + [line("golden"), line("fall")]
+                                   + maybe("fall_after", 0.6)))
+        if rng.random() < 0.4:
+            paragraphs.append(line("legend"))
+        today = [site_paragraphs, lambda: [factions()]]
+    else:
+        paragraphs.append(" ".join([line("open_legend")] + maybe("origin", 0.4) + [line("golden"), line("legend")]))
+        paragraphs.append(" ".join([line("fall")] + maybe("fall_after", 0.5) + [line("after")]))
+        today = [site_paragraphs, lambda: [" ".join(landscape())], lambda: [factions()]]
+    rng.shuffle(today)
+    for part in today:
+        paragraphs += [p for p in part() if p]
+    paragraphs.append(now())
 
     # rumours that need a site of some kind only come up if there is one
     rumours = []
@@ -4807,22 +4928,115 @@ def encounter_tables(terrain):
     return tables
 
 
+D4_PLACES = {FOREST: "forest", MOUNTAINS: "mountains"}    # terrains with detailed places
+EMPTY_SHARE = (0.20, 0.30)          # share of land hexes left empty for the referee
+
+
+def roll_monster(rng, t):
+    """A monster for a lair (or its tracks) from the terrain's encounter
+    table, weighted like a d100 roll: (name, page reference), or None."""
+    if t not in ENCOUNTER_TABLES:
+        return None
+    rows = [e for e in load_data("encounters_hexcrawl_horrors.json")["tables"][ENCOUNTER_TABLES[t]]
+            if e["ref"] != "Roll again" and e.get("note") != "dead"]
+    e = rng.choices(rows, weights=[e["roll"][1] - e["roll"][0] + 1 for e in rows])[0]
+    return e[LANG], e["ref"]
+
+
+def link_hexes(text, placed):
+    """{hex:32} in a place's text points to D4Caltrops' place 32: the map hex
+    where it was placed, or nothing if it isn't on this map."""
+    def swap(m):
+        return f" ({placed[int(m.group(1))]})" if m.group(1).isdigit() and int(m.group(1)) in placed else ""
+    return re.sub(r" ?\{hex:(\d+|\?)\}", swap, text)
+
+
+def roll_place(entry, rng, placed):
+    """A detailed place: its name, intro and one rolled line per table."""
+    lines = []
+    for table in entry["tables"]:
+        roll = rng.randint(1, table["die"])
+        row = next(r for r in table["rows"] if r["roll"][0] <= roll <= r["roll"][1])
+        lead, text = table["lead"][LANG], row[LANG]
+        sentence = lead.replace("{}", text) if "{}" in lead else f"{lead} {text}"
+        lines.append(capitalised(link_hexes(sentence, placed)))
+    return {"id": entry["id"], "name": entry[LANG]["name"], "intro": entry[LANG]["intro"], "lines": lines}
+
+
+def stock_hexes(grid, terrain, sites, number):
+    """What's in the land hexes that have no site: 20-30% stay empty, the
+    others get a D4Caltrops place (forests and mountains) or a roll on the
+    Wilderness Stocking d66 table. Returns ({hex: entry}, places, land count).
+    It has its own random numbers, so the land and the names don't change."""
+    rng = random.Random(f"stocking {number}")
+    stocking = load_data("stocking_d4caltrops.json")
+    types = stocking["types"]
+    site_hexes = {h for _, h in sites}
+    land = [h for h in grid.hexes if terrain[h] not in WATER and h not in site_hexes]
+    order = list(land)
+    rng.shuffle(order)
+    stocked = order[round(len(land) * rng.uniform(*EMPTY_SHARE)):]
+
+    # the detailed places first: each one once, in up to a third of the
+    # stocked hexes of its terrain
+    chosen = {}
+    for t, key in D4_PLACES.items():
+        hexes_t = [h for h in stocked if terrain[h] == t]
+        entries = [e for e in load_data("hexes_d4caltrops.json")["hexes"] if e["terrain"] == key]
+        rng.shuffle(entries)
+        for h, e in zip(hexes_t, entries[:(len(hexes_t) + 2) // 3]):
+            chosen[h] = e
+    placed = {e["id"]: hex_code(h, 2) for h, e in chosen.items()}
+    places = []
+    for h in sorted(chosen, key=lambda h: hex_code(h, 2)):
+        places.append({"hex": hex_code(h, 2), **roll_place(chosen[h], rng, placed)})
+
+    stock = {}
+    for h in stocked:
+        if h in chosen:
+            stock[h] = {"type": ["place"], "content": tr("stock_place", name=chosen[h][LANG]["name"])}
+            continue
+        result = rng.choice(stocking["results"])            # d66: every result once in 36
+        label = " / ".join(types[t][LANG] for t in result["type"])
+        monster = roll_monster(rng, terrain[h]) if result.get("monster") else None
+        if result["roll"] == 12:                             # the tracks of a local denizen
+            content = f"{label}: {tr('stock_tracks', monster=f'{monster[0]} ({monster[1]})')}." if monster \
+                else f"{label}: {result[LANG]}"
+        elif monster:
+            content = f"{label}: {monster[0]} ({monster[1]}). {result[LANG]}"
+        else:
+            content = f"{label}: {result[LANG]}"
+        stock[h] = {"type": result["type"], "roll": result["roll"], "content": content}
+    return stock, places, len(land)
+
+
 def make_contents(params, grid, terrain, rivers, sites, seed, number):
     """Everything that goes in the contents PDF, as plain data."""
     labels = params.get("labels") or {}
-    history, rumours = land_history(grid, terrain, rivers, sites, labels, number)
+    history, rumours = (land_history(grid, terrain, rivers, sites, labels, number) if params.get("history")
+                        else ([], []))
     H = load_data("history.json")[LANG]
     site_at = {h: kind for kind, h in sites}
+    stock, places, land = stock_hexes(grid, terrain, sites, number)
     hexes = []
     for c in range(grid.cols):
         for r in range(grid.rows):
             h = (c, r)
-            content = ""
+            if terrain[h] == SEA:
+                continue
+            entry = {"hex": hex_code(h, 2), "terrain": pick(TERRAIN_NAMES[terrain[h]]), "type": [], "content": ""}
             if h in site_at:
-                content = f"{pick(SITE_NAMES[site_at[h]])}: {site_name(site_at[h], h, labels, H)}"
-            hexes.append({"hex": hex_code(h, 2), "terrain": pick(TERRAIN_NAMES[terrain[h]]), "content": content})
+                entry["type"] = [site_at[h]]
+                entry["content"] = f"{pick(SITE_NAMES[site_at[h]])}: {site_name(site_at[h], h, labels, H)}"
+            elif h in stock:
+                entry.update(stock[h])
+            hexes.append(entry)
+    types = load_data("stocking_d4caltrops.json")["types"]
     return {"title": params["title"], "seed": seed, "version": VERSION, "language": LANG,
             "history": history, "rumours": rumours,
+            "stocking": {"land": land, "stocked": len(stock), "empty": land - len(stock),
+                         "types": [{"type": types[t][LANG], "about": types[t][f"about_{LANG}"]} for t in types]},
+            "places": places,
             "encounters": [{"terrain": pick(TERRAIN_NAMES[t]),
                             "rows": [{"roll": roll, "encounter": name, "ref": ref, "note": note}
                                      for roll, name, ref, note in rows]}
@@ -4892,20 +5106,21 @@ def write_contents_pdf(contents, path):
     write(width, 5, T("pdf_subtitle", seed=contents["seed"]))
     pdf.set_text_color(*ink)
     pdf.ln(6)
-    heading(tr("pdf_history"))
-    for p in contents["history"]:
-        para(p)
-    pdf.ln(2)
-    heading(tr("pdf_rumours", n=len(contents["rumours"])), 15)
-    for i, rumour in enumerate(contents["rumours"], 1):
-        pdf.set_font("Helvetica", "B", 10.5)
-        pdf.cell(8, 5.2, str(i))
-        pdf.set_font("Helvetica", "", 10.5)
-        write(width - 8, 5.2, rumour)
-        pdf.ln(1)
+    if contents["history"]:
+        heading(tr("pdf_history"))
+        for p in contents["history"]:
+            para(p)
+        pdf.ln(2)
+        heading(tr("pdf_rumours", n=len(contents["rumours"])), 15)
+        for i, rumour in enumerate(contents["rumours"], 1):
+            pdf.set_font("Helvetica", "B", 10.5)
+            pdf.cell(8, 5.2, str(i))
+            pdf.set_font("Helvetica", "", 10.5)
+            write(width - 8, 5.2, rumour)
+            pdf.ln(1)
+        pdf.add_page()
 
     # 2. random encounters: how to use them, then one d100 table per terrain
-    pdf.add_page()
     heading(tr("pdf_encounters"))
     para(tr("pdf_enc_intro"))
     for line in (tr("pdf_note_night"), tr("pdf_note_lycanthrope"), tr("pdf_note_dead")):
@@ -4952,7 +5167,15 @@ def write_contents_pdf(contents, path):
     # 3. the hexes, in code order
     pdf.add_page()
     heading(tr("pdf_hexes"))
-    para(tr("pdf_hexes_intro"), 9.5)
+    para(tr("pdf_hexes_intro", empty=contents["stocking"]["empty"], land=contents["stocking"]["land"]), 9.5)
+    heading(tr("pdf_types"), 13)
+    for t in contents["stocking"]["types"]:
+        pdf.set_font("Helvetica", "B", 9)
+        pdf.cell(28, 4.6, pdf_text(t["type"]))
+        pdf.set_font("Helvetica", "", 9)
+        write(width - 28, 4.6, t["about"])
+        pdf.ln(1)
+    pdf.ln(3)
     widths = (16, 30, width - 46)
 
     def hex_header():
@@ -4981,7 +5204,21 @@ def write_contents_pdf(contents, path):
         pdf.multi_cell(widths[2], 5, text, fill=True, new_x="LMARGIN", new_y="NEXT")
         pdf.set_y(y + 5 * lines)
 
-    # 4. sources and licences
+    # 4. the detailed places, rolled
+    if contents["places"]:
+        pdf.add_page()
+        heading(tr("pdf_places"))
+        para(tr("pdf_places_intro"), 9.5)
+        for place in contents["places"]:
+            if pdf.get_y() + 40 > pdf.h - pdf.b_margin:
+                pdf.add_page()
+            heading(f"{place['hex']}  {place['name']}", 14)
+            para(place["intro"], 10, "I")
+            for line in place["lines"]:
+                para(line, 10)
+            pdf.ln(2)
+
+    # 5. sources and licences
     pdf.add_page()
     heading(tr("pdf_sources"))
     for source in content_sources():
@@ -4995,6 +5232,7 @@ def content_sources():
     hh = load_data("encounters_hexcrawl_horrors.json")["_source"]
     return [tr("pdf_source_hh", title=hh["title"], author=hh["author"], url=hh["url"]),
             tr("pdf_source_bfrpg"),
+            tr("pdf_source_d4"),
             tr("pdf_source_own"),
             tr("pdf_source_font")]
 
@@ -5002,8 +5240,10 @@ def content_sources():
 def save_contents(params, grid, land, seed, number, edited, log):
     """Step 13: the contents of the land, as .json and .pdf next to the maps."""
     terrain, rivers, sites, fertile = land
-    log.step(tr("step_contents"))
+    log.step(tr("step_contents_history" if params.get("history") else "step_contents"))
     contents = make_contents(params, grid, terrain, rivers, sites, seed, number)
+    log.info(tr("info_stocked", n=contents["stocking"]["stocked"], t=contents["stocking"]["land"],
+                e=contents["stocking"]["empty"]))
     folder = map_folder(params["output"], seed)
     base = os.path.join(folder, f"{seed}{'_edit' if edited else ''}_contents")
     with open(base + ".json", "w", encoding="utf-8") as f:

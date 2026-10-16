@@ -161,7 +161,7 @@ Then the welcome screen appears, with a dragon holding a sign with the program's
 8. **Scale:** how many miles each hex covers: 2, 6 (the ready-made answer), 12 or 24 miles, or **other, I'll type it**: type a number of miles, or any text such as `5 km` or `1 day`. It's printed under the title, as "1 hex = 6 miles".
 9. Whether to use **only basic keyboard characters** (no symbols like ♣ ▲ ≈). You'll usually answer no: just press Enter.
 10. **Colours:** **black and white**, for printing (the ready-made answer), or **colour**: forests green, sea and lakes blue, deserts sandy, swamps purple, cities red and so on. Only for a colour map does the program then ask for the **background**: **white** or **black**. On the white background the hexes are coloured too, so the map reads at a glance: light green plains, darker green forests, pink swamps, yellow desert, darker yellow hills, beige mountains, light blue sea and lakes (lakes show their `≈` symbols).
-11. **What do you want to make?** **The map only** (the ready-made answer), or **the map and its contents, at random**: besides the two maps, the program writes a PDF with the history of the land, the rumours going round the taverns, the random encounter tables for the terrains on the map and a list of every hex with its contents (see chapter 6). The contents are based on the map and the seed: the same map always gives the same contents, and asking for them doesn't change the map.
+11. **What do you want to make?** Three choices: **the map only** (the ready-made answer); **the map and what's in its hexes, at random**, that is the random encounter tables for the terrains on the map and the list of every stocked hex; or **the map, what's in its hexes and the history of the land**, with the rumours going round the taverns. It all goes in a PDF next to the map (see chapter 6). The contents are based on the map and the seed: the same map always gives the same contents, and asking for them doesn't change the map.
 12. **Names of cities, fortresses and dungeons:** **I'll type them, once the map is ready**, **the program picks them at random** (names like "Thornfield" or "Storm Watch", in the chosen language) or **no names**. The ready-made answer is "I'll type them"; if you chose random values at question 3, it's "no names". Random names work even if you make the map only.
 
 Once the questions are done, a wizard appears with the words **"The conjuring spell begins!"**: from here the program gets to work.
@@ -310,12 +310,13 @@ Hex numbers have four digits: the first two are the column, the last two the row
 
 ### The contents PDF
 
-If you asked for the contents too at question 11 (or used `--contents`), next to the maps you'll find an A4 PDF, in the chosen language, with:
+If you asked for what's in the hexes too at question 11 (or used `--contents` or `--history`), next to the maps you'll find an A4 PDF, in the chosen language, with:
 
-- **the history of the land**: the realm that was once there and how it fell, the map's cities, fortresses and dungeons with their hex, the landscape, the sea and the rivers, and today's threat;
-- **the rumours going round the taverns**, to roll with 1d4 or 1d6: some of them talk about the sites on the map;
+- only if you asked for the history too (`--history`): **the history of the land**, different every time in form and contents: sometimes a chronicle, sometimes a tale that starts from today and goes back, sometimes a told legend. It speaks of the realm that was once there, its greatest ruler and how it fell, of the map's cities, fortresses and dungeons with their hex, of the landscape, the sea and the rivers, of today's factions and how they get along, of the looming threat and its omens. Realms, rulers, factions and gods get names made up on the spot, and there are billions of possible combinations;
+- only with the history: **the rumours going round the taverns**, to roll with 1d4 or 1d6: some of them talk about the sites on the map;
 - **the random encounters**: a 1d100 table for every terrain on the map (plains, forests, hills, swamps, mountains, deserts), from the most common to the least, with the rulebook page where you find the monster's stats, and the monster reaction table (2d6 + Charisma modifier);
-- **the hexes**: one line per hex, with its number, its terrain and its contents. Cities, fortresses and dungeons already have their name; the other hexes are left for the referee to fill;
+- **the hexes**: one line per hex except the sea, with its number, its terrain and its contents. Cities, fortresses and dungeons have their name. Of the other land hexes, **20 to 30% stay empty**, to fill in at the table with your own tables. The rest are stocked with the d66 table of D4Caltrops' *Wilderness Stocking – Expanded*: **landmark**, **lair**, **special**, **hazard** or **resource**, with a hint for the referee. Lair occupants (and tracks) are rolled on the terrain's encounter table. In forests and mountains some hexes become one of D4Caltrops' **detailed places**, like "The Burbling Ford" or "The Doomed Dwarfhold";
+- **the places**: the full description of the detailed places, with their details already rolled on their tables;
 - **the sources and licences** of the texts used (see chapter 10).
 
 The file `<seed>_contents.json` holds the same things in a format other programs can read. If fpdf2 isn't installed, the map is made anyway and the contents are saved in the JSON only: the program tells you so.
@@ -344,7 +345,7 @@ python wyrmhex.py --language en --sea 30 --plains 15 --title "Isle of Winds"
 python wyrmhex.py --language en --reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164
 python wyrmhex.py --language en --reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164 --edited --format A3
 python wyrmhex.py --language en --grid 40x25 --random
-python wyrmhex.py --language en --random --contents --random-names
+python wyrmhex.py --language en --random --history --random-names
 ```
 
 Without `--language en` the messages and the texts on the map are in Italian. Every option also has an Italian name (in the table after the slash `/`), and you can mix them as you like.
@@ -362,7 +363,8 @@ Without `--language en` the messages and the texts on the map are in Italian. Ev
 | `--seed` / `--seme` | With a full seed, rebuilds that map (like `--reproduce`). With a number from 0 to 1048575, makes a new map with your settings and that number for the random choices | `--seed 42` |
 | `--reproduce` / `--riproduci` | Rebuilds the map of that seed. Title, scale and paper size come from its PNG if it's in `maps_generated/<seed>` (or in the `--output` folder); an old number seed needs its PNG | `--reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164` |
 | `--edited` / `--modificata` | Together with `--reproduce` (or `--seed` with a full seed): makes the edited version of the map again, with the changes saved by the editor (chapter 5). If the map has no saved changes, the program says so and stops | `--reproduce <seed> --edited` |
-| `--contents` / `--contenuti` | Also makes the contents of the land, at random, in a PDF next to the map (chapter 6) | `--contents` |
+| `--contents` / `--contenuti` | Also makes what's in the hexes, at random (random encounters and stocked hexes), in a PDF next to the map (chapter 6) | `--contents` |
+| `--history` / `--storia` | Like `--contents`, plus the history of the land with tavern rumours | `--history` |
 | `--random-names` / `--nomi-casuali` | Gives cities, fortresses and dungeons names picked at random | `--random-names` |
 | `--format` / `--formato` | Print format: `A4`, `A3` or `A2`. If you leave it out, the program asks you at the end, offering the suggested one (or, with `--reproduce`, the one from last time) | `--format A3` |
 | `--orientation` / `--orientamento` | Usually not needed: the sheet direction follows the shape of the map. You can force it with `portrait` or `landscape` (`verticale` or `orizzontale`) | `--orientation portrait` |
@@ -443,6 +445,8 @@ The contents of the land come from data files in the `data` folder, next to `wyr
 |---|---|---|
 | `data/encounters_hexcrawl_horrors.json` | The random encounter tables per terrain (plains, forests, hills, swamps, mountains, deserts, jungles, wastelands, caves, tombs), with the rulebook references and the reaction table | *Hexcrawl Horrors: Random Wilderness Encounters for OSR Adventures* by Tom Brown, Lone Horizons (2024), LH001 v1.2, [lonehorizons.blogspot.com](https://lonehorizons.blogspot.com/). Text released under the [Creative Commons Attribution-ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/) licence (CC BY-SA 4.0). The monster names were translated into Italian for WyrmHex; the translated file is shared under the same licence |
 | (references in the tables) | The monsters and pages in the "Page" column: the *Basic Fantasy Role-Playing Game* (`58/66`: page in the 3rd edition / in the 4th), the *Field Guides* 1 and 2 (`FG1`, `FG2`), *Hexcrawl Horrors* (`HH`) | [Basic Fantasy Role-Playing Game](https://www.basicfantasy.org/) by Chris Gonnerman and contributors, open game content released under the Open Game License 1.0a (the 4th edition of the core rules under CC BY-SA 4.0). WyrmHex only gives the names and pages, not the stats |
+| `data/stocking_d4caltrops.json` | The d66 table to stock the hexes (landmark, lair, special, hazard, resource) and what each kind of result is for | *Wilderness Stocking – Expanded* (draft) by [D4Caltrops](https://blog.d4caltrops.com/2025/10/wilderness-stocking-expanded.html): a free resource published on the author's blog, with no licence stated; used with credit, and translated into Italian for WyrmHex |
+| `data/hexes_d4caltrops.json` | The 20 detailed forest and mountain places, with their tables | *Even More Forest Hexes* (draft 5) and *Even More Mountain Hexes* I, III and IV (drafts) by [D4Caltrops](https://blog.d4caltrops.com/): free resources published on the author's blog, with no licence stated; used with credit, and translated into Italian for WyrmHex |
 | `data/history.json`, `data/names.json` | The pieces of the history of the land, of the tavern rumours and of the site names | Original texts written for WyrmHex, under the same licence as the program (GPL-3.0) |
 | `data/fonts/Catholicon.ttf` | The headings typeface in the PDF | [Catholicon](https://vladar.bearblog.dev/) by Vladimir Arabadzhi, released under the [SIL Open Font License 1.1](data/fonts/OFL.txt) |
 
