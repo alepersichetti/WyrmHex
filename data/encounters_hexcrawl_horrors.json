@@ -1,0 +1,6865 @@
+{
+ "_source": {
+  "title": "Hexcrawl Horrors: Random Wilderness Encounters for OSR Adventures",
+  "author": "Tom Brown, Lone Horizons (2024), LH001 v1.2",
+  "url": "https://lonehorizons.blogspot.com/",
+  "licence": "Text: Creative Commons Attribution-ShareAlike 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Monster names: Basic Fantasy RPG and its Field Guides, Open Game Content under the OGL 1.0a.",
+  "changes": "Tables transcribed from the PDF; Italian names added. Fixed in the source: Jungles '45-55 Ant, Giant' is 54-55; 'Amorollo' is Armorollo.",
+  "refs": "ref: page in Basic Fantasy RPG core rules 3rd/4th edition (e.g. 58/66), FG1/FG2 = Basic Fantasy Field Guide vol. 1/2, HH = Hexcrawl Horrors, COR = Basic Fantasy core rules.",
+  "notes": {
+   "night": "only at night",
+   "lycanthrope": "at night, or met by day in human form",
+   "dead": "already dead: search the bodies for loot (lower chance), then roll again"
+  }
+ },
+ "reaction_2d6_cha": [
+  [
+   2,
+   "Immediate attack",
+   "Attacca subito"
+  ],
+  [
+   7,
+   "Unfavourable",
+   "Ostile"
+  ],
+  [
+   11,
+   "Favourable",
+   "Favorevole"
+  ],
+  [
+   12,
+   "Very favourable",
+   "Molto favorevole"
+  ]
+ ],
+ "tables": {
+  "plains": [
+   {
+    "roll": [
+     1,
+     2
+    ],
+    "en": "Armorollo",
+    "it": "Armorollo",
+    "ref": "FG1: 8"
+   },
+   {
+    "roll": [
+     3,
+     4
+    ],
+    "en": "Bandit",
+    "it": "Banditi",
+    "ref": "HH: 27"
+   },
+   {
+    "roll": [
+     5,
+     6
+    ],
+    "en": "Bat",
+    "it": "Pipistrelli",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     7,
+     7
+    ],
+    "en": "Bee, Giant",
+    "it": "Ape gigante",
+    "ref": "59/68"
+   },
+   {
+    "roll": [
+     8,
+     9
+    ],
+    "en": "Beetle, Giant Fire",
+    "it": "Scarabeo di fuoco gigante",
+    "ref": "60/68"
+   },
+   {
+    "roll": [
+     10,
+     12
+    ],
+    "en": "Bisren",
+    "it": "Bisren",
+    "ref": "FG1: 11"
+   },
+   {
+    "roll": [
+     13,
+     13
+    ],
+    "en": "Boglin",
+    "it": "Boglin",
+    "ref": "FG1: 13"
+   },
+   {
+    "roll": [
+     14,
+     14
+    ],
+    "en": "Canein",
+    "it": "Canein",
+    "ref": "FG1: 16"
+   },
+   {
+    "roll": [
+     15,
+     15
+    ],
+    "en": "Centipede, Giant",
+    "it": "Centopiedi gigante",
+    "ref": "64/73"
+   },
+   {
+    "roll": [
+     16,
+     16
+    ],
+    "en": "Chasenet",
+    "it": "Chasenet",
+    "ref": "FG1: 17"
+   },
+   {
+    "roll": [
+     17,
+     18
+    ],
+    "en": "Cockroach, Giant",
+    "it": "Scarafaggio gigante",
+    "ref": "FG1: 19"
+   },
+   {
+    "roll": [
+     19,
+     20
+    ],
+    "en": "Dog (Wild)",
+    "it": "Cani selvatici",
+    "ref": "69/78"
+   },
+   {
+    "roll": [
+     21,
+     23
+    ],
+    "en": "Goblin",
+    "it": "Goblin",
+    "ref": "89/104"
+   },
+   {
+    "roll": [
+     24,
+     25
+    ],
+    "en": "Hawk",
+    "it": "Falco",
+    "ref": "96/111"
+   },
+   {
+    "roll": [
+     26,
+     26
+    ],
+    "en": "Hiveling",
+    "it": "Hiveling",
+    "ref": "FG2: 51"
+   },
+   {
+    "roll": [
+     27,
+     29
+    ],
+    "en": "Hobgoblin",
+    "it": "Hobgoblin",
+    "ref": "97/113"
+   },
+   {
+    "roll": [
+     30,
+     31
+    ],
+    "en": "Mink",
+    "it": "Visoni",
+    "ref": "FG2: 61"
+   },
+   {
+    "roll": [
+     32,
+     34
+    ],
+    "en": "Orc",
+    "it": "Orchetti",
+    "ref": "108/131"
+   },
+   {
+    "roll": [
+     35,
+     36
+    ],
+    "en": "Rat",
+    "it": "Ratti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     37,
+     38
+    ],
+    "en": "Rat, Giant",
+    "it": "Ratti giganti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     39,
+     39
+    ],
+    "en": "Shrew, Giant",
+    "it": "Toporagno gigante",
+    "ref": "115/143"
+   },
+   {
+    "roll": [
+     40,
+     40
+    ],
+    "en": "Skeleton",
+    "it": "Scheletri",
+    "ref": "116/144"
+   },
+   {
+    "roll": [
+     41,
+     41
+    ],
+    "en": "Spider, Humming",
+    "it": "Ragno ronzante",
+    "ref": "FG2: 81"
+   },
+   {
+    "roll": [
+     42,
+     42
+    ],
+    "en": "Travelling Merchant",
+    "it": "Mercante itinerante",
+    "ref": "HH: 28"
+   },
+   {
+    "roll": [
+     43,
+     43
+    ],
+    "en": "Trobold",
+    "it": "Trobold",
+    "ref": "FG2: 87"
+   },
+   {
+    "roll": [
+     44,
+     44
+    ],
+    "en": "Ushac",
+    "it": "Ushac",
+    "ref": "FG2: 90"
+   },
+   {
+    "roll": [
+     45,
+     45
+    ],
+    "en": "Vermen",
+    "it": "Vermen",
+    "ref": "FG1: 76"
+   },
+   {
+    "roll": [
+     46,
+     46
+    ],
+    "en": "Vihm",
+    "it": "Vihm",
+    "ref": "FG2: 90"
+   },
+   {
+    "roll": [
+     47,
+     47
+    ],
+    "en": "Amarok",
+    "it": "Amarok",
+    "ref": "FG2: 4",
+    "note": "night"
+   },
+   {
+    "roll": [
+     48,
+     48
+    ],
+    "en": "Chupacabra",
+    "it": "Chupacabra",
+    "ref": "FG2: 18"
+   },
+   {
+    "roll": [
+     49,
+     50
+    ],
+    "en": "Donkey",
+    "it": "Asini",
+    "ref": "55/63"
+   },
+   {
+    "roll": [
+     51,
+     51
+    ],
+    "en": "Fly, Giant",
+    "it": "Mosca gigante",
+    "ref": "80/95"
+   },
+   {
+    "roll": [
+     52,
+     54
+    ],
+    "en": "Gnoll",
+    "it": "Gnoll",
+    "ref": "87/102"
+   },
+   {
+    "roll": [
+     55,
+     56
+    ],
+    "en": "Horse, Riding (Wild)",
+    "it": "Cavalli da sella selvatici",
+    "ref": "55/63"
+   },
+   {
+    "roll": [
+     57,
+     58
+    ],
+    "en": "Ram, Wild",
+    "it": "Montoni selvatici",
+    "ref": "FG1: 60"
+   },
+   {
+    "roll": [
+     59,
+     60
+    ],
+    "en": "Rousirl",
+    "it": "Rousirl",
+    "ref": "FG1: 63"
+   },
+   {
+    "roll": [
+     61,
+     61
+    ],
+    "en": "Urgoblin",
+    "it": "Urgoblin",
+    "ref": "124/154"
+   },
+   {
+    "roll": [
+     62,
+     63
+    ],
+    "en": "Wolf",
+    "it": "Lupi",
+    "ref": "127/158"
+   },
+   {
+    "roll": [
+     64,
+     64
+    ],
+    "en": "Wolpertinger",
+    "it": "Wolpertinger",
+    "ref": "FG2: 92"
+   },
+   {
+    "roll": [
+     65,
+     65
+    ],
+    "en": "Zombie",
+    "it": "Zombi",
+    "ref": "128/160"
+   },
+   {
+    "roll": [
+     66,
+     67
+    ],
+    "en": "Boar, Wild",
+    "it": "Cinghiale",
+    "ref": "62/70"
+   },
+   {
+    "roll": [
+     68,
+     68
+    ],
+    "en": "Hippogriff",
+    "it": "Ippogrifo",
+    "ref": "96/112"
+   },
+   {
+    "roll": [
+     69,
+     70
+    ],
+    "en": "Horse, Draft (Wild)",
+    "it": "Cavalli da tiro selvatici",
+    "ref": "55/63"
+   },
+   {
+    "roll": [
+     71,
+     71
+    ],
+    "en": "Leoporid, Great",
+    "it": "Grande leporide",
+    "ref": "FG2: 57"
+   },
+   {
+    "roll": [
+     72,
+     72
+    ],
+    "en": "Mithridatium Bush",
+    "it": "Cespuglio di mitridato",
+    "ref": "FG2: 61"
+   },
+   {
+    "roll": [
+     73,
+     73
+    ],
+    "en": "Owlwolf",
+    "it": "Lupogufo",
+    "ref": "FG2: 67"
+   },
+   {
+    "roll": [
+     74,
+     75
+    ],
+    "en": "Rat Dog",
+    "it": "Cane ratto",
+    "ref": "FG1: 60"
+   },
+   {
+    "roll": [
+     76,
+     77
+    ],
+    "en": "Wolverine",
+    "it": "Ghiottone",
+    "ref": "FG1: 78"
+   },
+   {
+    "roll": [
+     78,
+     78
+    ],
+    "en": "Ant, Giant",
+    "it": "Formica gigante",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     79,
+     79
+    ],
+    "en": "Antelope",
+    "it": "Antilope",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     80,
+     80
+    ],
+    "en": "Blink Dog",
+    "it": "Cane intermittente",
+    "ref": "61/69"
+   },
+   {
+    "roll": [
+     81,
+     81
+    ],
+    "en": "Blood Rose",
+    "it": "Rosa di sangue",
+    "ref": "61/70"
+   },
+   {
+    "roll": [
+     82,
+     82
+    ],
+    "en": "Centaur",
+    "it": "Centauri",
+    "ref": "64/73"
+   },
+   {
+    "roll": [
+     83,
+     83
+    ],
+    "en": "Doppleganger",
+    "it": "Doppelgänger",
+    "ref": "69/79"
+   },
+   {
+    "roll": [
+     84,
+     84
+    ],
+    "en": "Glyptodon",
+    "it": "Gliptodonte",
+    "ref": "FG1: 34"
+   },
+   {
+    "roll": [
+     85,
+     85
+    ],
+    "en": "Loup",
+    "it": "Loup",
+    "ref": "FG2: 60"
+   },
+   {
+    "roll": [
+     86,
+     86
+    ],
+    "en": "Mink, Giant",
+    "it": "Visone gigante",
+    "ref": "FG2: 61"
+   },
+   {
+    "roll": [
+     87,
+     87
+    ],
+    "en": "Wanstrow",
+    "it": "Wanstrow",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     88,
+     88
+    ],
+    "en": "Wasp, Giant",
+    "it": "Vespa gigante",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     89,
+     89
+    ],
+    "en": "Wolf, Worg",
+    "it": "Worg",
+    "ref": "FG1: 77"
+   },
+   {
+    "roll": [
+     90,
+     90
+    ],
+    "en": "Ankheg",
+    "it": "Ankheg",
+    "ref": "FG1: 3"
+   },
+   {
+    "roll": [
+     91,
+     91
+    ],
+    "en": "Bear, Grizzly",
+    "it": "Grizzly",
+    "ref": "59/67"
+   },
+   {
+    "roll": [
+     92,
+     92
+    ],
+    "en": "Cockatrice",
+    "it": "Coccatrice",
+    "ref": "65/74"
+   },
+   {
+    "roll": [
+     93,
+     93
+    ],
+    "en": "Owlbear",
+    "it": "Orsogufo",
+    "ref": "109/132"
+   },
+   {
+    "roll": [
+     94,
+     94
+    ],
+    "en": "Weasel, Giant",
+    "it": "Donnola gigante",
+    "ref": "125/156"
+   },
+   {
+    "roll": [
+     95,
+     95
+    ],
+    "en": "Basilisk",
+    "it": "Basilisco",
+    "ref": "57/65"
+   },
+   {
+    "roll": [
+     96,
+     96
+    ],
+    "en": "Troll",
+    "it": "Troll",
+    "ref": "122/151"
+   },
+   {
+    "roll": [
+     97,
+     97
+    ],
+    "en": "Beebear",
+    "it": "Orsape",
+    "ref": "FG2: 12"
+   },
+   {
+    "roll": [
+     98,
+     98
+    ],
+    "en": "Griffon",
+    "it": "Grifone",
+    "ref": "94/110"
+   },
+   {
+    "roll": [
+     99,
+     99
+    ],
+    "en": "Badger, Giant",
+    "it": "Tasso gigante",
+    "ref": "FG1: 9"
+   },
+   {
+    "roll": [
+     100,
+     100
+    ],
+    "en": "Dead creatures",
+    "it": "Creature morte",
+    "ref": "Roll again",
+    "note": "dead"
+   }
+  ],
+  "forests": [
+   {
+    "roll": [
+     1,
+     1
+    ],
+    "en": "Aeromi",
+    "it": "Aeromi",
+    "ref": "FG2: 3"
+   },
+   {
+    "roll": [
+     2,
+     2
+    ],
+    "en": "Armorollo",
+    "it": "Armorollo",
+    "ref": "FG1: 8"
+   },
+   {
+    "roll": [
+     3,
+     5
+    ],
+    "en": "Bandit",
+    "it": "Banditi",
+    "ref": "HH: 27"
+   },
+   {
+    "roll": [
+     6,
+     6
+    ],
+    "en": "Bat",
+    "it": "Pipistrelli",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     7,
+     7
+    ],
+    "en": "Bee, Giant",
+    "it": "Ape gigante",
+    "ref": "59/68"
+   },
+   {
+    "roll": [
+     8,
+     8
+    ],
+    "en": "Beetle, Giant Fire",
+    "it": "Scarabeo di fuoco gigante",
+    "ref": "60/68"
+   },
+   {
+    "roll": [
+     9,
+     9
+    ],
+    "en": "Brownie",
+    "it": "Brownie",
+    "ref": "FG1: 14"
+   },
+   {
+    "roll": [
+     10,
+     10
+    ],
+    "en": "Centipede, Giant",
+    "it": "Centopiedi gigante",
+    "ref": "64/73"
+   },
+   {
+    "roll": [
+     11,
+     11
+    ],
+    "en": "Cockroach, Giant",
+    "it": "Scarafaggio gigante",
+    "ref": "FG1: 19"
+   },
+   {
+    "roll": [
+     12,
+     12
+    ],
+    "en": "Cu-Sidhe",
+    "it": "Cù-Sìth",
+    "ref": "FG1: 21"
+   },
+   {
+    "roll": [
+     13,
+     14
+    ],
+    "en": "Dog (Wild)",
+    "it": "Cani selvatici",
+    "ref": "69/78"
+   },
+   {
+    "roll": [
+     15,
+     15
+    ],
+    "en": "Gnome",
+    "it": "Gnomi",
+    "ref": "88/103"
+   },
+   {
+    "roll": [
+     16,
+     18
+    ],
+    "en": "Goblin",
+    "it": "Goblin",
+    "ref": "89/104"
+   },
+   {
+    "roll": [
+     19,
+     20
+    ],
+    "en": "Hawk",
+    "it": "Falco",
+    "ref": "96/111"
+   },
+   {
+    "roll": [
+     21,
+     23
+    ],
+    "en": "Hobgoblin",
+    "it": "Hobgoblin",
+    "ref": "97/113"
+   },
+   {
+    "roll": [
+     24,
+     24
+    ],
+    "en": "Lerini",
+    "it": "Lerini",
+    "ref": "FG1: 45"
+   },
+   {
+    "roll": [
+     25,
+     25
+    ],
+    "en": "Nixie",
+    "it": "Nixie",
+    "ref": "107/130"
+   },
+   {
+    "roll": [
+     26,
+     28
+    ],
+    "en": "Orc",
+    "it": "Orchetti",
+    "ref": "108/131"
+   },
+   {
+    "roll": [
+     29,
+     29
+    ],
+    "en": "Phaerim",
+    "it": "Phaerim",
+    "ref": "FG1: 56"
+   },
+   {
+    "roll": [
+     30,
+     30
+    ],
+    "en": "Pixie",
+    "it": "Pixie",
+    "ref": "110/134"
+   },
+   {
+    "roll": [
+     31,
+     31
+    ],
+    "en": "Rakun",
+    "it": "Rakun",
+    "ref": "FG2: 71"
+   },
+   {
+    "roll": [
+     32,
+     34
+    ],
+    "en": "Rat",
+    "it": "Ratti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     35,
+     37
+    ],
+    "en": "Rat, Giant",
+    "it": "Ratti giganti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     38,
+     38
+    ],
+    "en": "Shrew, Giant",
+    "it": "Toporagno gigante",
+    "ref": "115/143"
+   },
+   {
+    "roll": [
+     39,
+     39
+    ],
+    "en": "Spider, Humming",
+    "it": "Ragno ronzante",
+    "ref": "FG2: 81"
+   },
+   {
+    "roll": [
+     40,
+     40
+    ],
+    "en": "Sprite",
+    "it": "Folletti",
+    "ref": "119/147"
+   },
+   {
+    "roll": [
+     41,
+     41
+    ],
+    "en": "Travelling Merchant",
+    "it": "Mercante itinerante",
+    "ref": "HH: 28"
+   },
+   {
+    "roll": [
+     42,
+     43
+    ],
+    "en": "Tree-Fox",
+    "it": "Volpe arborea",
+    "ref": "FG2: 87"
+   },
+   {
+    "roll": [
+     44,
+     44
+    ],
+    "en": "Trobold",
+    "it": "Trobold",
+    "ref": "FG2: 87"
+   },
+   {
+    "roll": [
+     45,
+     45
+    ],
+    "en": "Ushac",
+    "it": "Ushac",
+    "ref": "FG2: 90"
+   },
+   {
+    "roll": [
+     46,
+     46
+    ],
+    "en": "Vihm",
+    "it": "Vihm",
+    "ref": "FG2: 90"
+   },
+   {
+    "roll": [
+     47,
+     47
+    ],
+    "en": "Zoog",
+    "it": "Zoog",
+    "ref": "FG2: 95"
+   },
+   {
+    "roll": [
+     48,
+     48
+    ],
+    "en": "Bat, Giant",
+    "it": "Pipistrello gigante",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     49,
+     49
+    ],
+    "en": "Dryad",
+    "it": "Driade",
+    "ref": "75/86"
+   },
+   {
+    "roll": [
+     50,
+     50
+    ],
+    "en": "Flederkatze",
+    "it": "Flederkatze",
+    "ref": "FG1: 32"
+   },
+   {
+    "roll": [
+     51,
+     53
+    ],
+    "en": "Gnoll",
+    "it": "Gnoll",
+    "ref": "87/102"
+   },
+   {
+    "roll": [
+     54,
+     54
+    ],
+    "en": "Rock Baboon",
+    "it": "Babbuini delle rocce",
+    "ref": "112/137"
+   },
+   {
+    "roll": [
+     55,
+     55
+    ],
+    "en": "Rousirl",
+    "it": "Rousirl",
+    "ref": "FG1: 63"
+   },
+   {
+    "roll": [
+     56,
+     57
+    ],
+    "en": "Torok",
+    "it": "Torok",
+    "ref": "FG2: 86"
+   },
+   {
+    "roll": [
+     58,
+     59
+    ],
+    "en": "Urgoblin",
+    "it": "Urgoblin",
+    "ref": "124/154"
+   },
+   {
+    "roll": [
+     60,
+     61
+    ],
+    "en": "Wolf",
+    "it": "Lupi",
+    "ref": "127/158"
+   },
+   {
+    "roll": [
+     62,
+     62
+    ],
+    "en": "Wolpertinger",
+    "it": "Wolpertinger",
+    "ref": "FG2: 92"
+   },
+   {
+    "roll": [
+     63,
+     63
+    ],
+    "en": "Zombie",
+    "it": "Zombi",
+    "ref": "128/160"
+   },
+   {
+    "roll": [
+     64,
+     65
+    ],
+    "en": "Boar, Wild",
+    "it": "Cinghiale",
+    "ref": "62/70"
+   },
+   {
+    "roll": [
+     66,
+     66
+    ],
+    "en": "Boglin",
+    "it": "Boglin",
+    "ref": "FG1: 13"
+   },
+   {
+    "roll": [
+     67,
+     69
+    ],
+    "en": "Bugbear",
+    "it": "Bugbear",
+    "ref": "62/71"
+   },
+   {
+    "roll": [
+     70,
+     70
+    ],
+    "en": "Mithridatium Bush",
+    "it": "Cespuglio di mitridato",
+    "ref": "FG2: 61"
+   },
+   {
+    "roll": [
+     71,
+     71
+    ],
+    "en": "Owlwolf",
+    "it": "Lupogufo",
+    "ref": "FG2: 67"
+   },
+   {
+    "roll": [
+     72,
+     72
+    ],
+    "en": "Poludnitsa",
+    "it": "Poludnica",
+    "ref": "FG1: 58"
+   },
+   {
+    "roll": [
+     73,
+     73
+    ],
+    "en": "Spider, Giant Black Widow",
+    "it": "Vedova nera gigante",
+    "ref": "118/146"
+   },
+   {
+    "roll": [
+     74,
+     74
+    ],
+    "en": "Wolverine",
+    "it": "Ghiottone",
+    "ref": "FG1: 78"
+   },
+   {
+    "roll": [
+     75,
+     75
+    ],
+    "en": "Ant, Giant",
+    "it": "Formica gigante",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     76,
+     77
+    ],
+    "en": "Antelope",
+    "it": "Antilope",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     78,
+     79
+    ],
+    "en": "Bear, Black",
+    "it": "Orso nero",
+    "ref": "58/67"
+   },
+   {
+    "roll": [
+     80,
+     80
+    ],
+    "en": "Blink Dog",
+    "it": "Cane intermittente",
+    "ref": "61/69"
+   },
+   {
+    "roll": [
+     81,
+     81
+    ],
+    "en": "Blood Rose",
+    "it": "Rosa di sangue",
+    "ref": "61/70"
+   },
+   {
+    "roll": [
+     82,
+     82
+    ],
+    "en": "Doppleganger",
+    "it": "Doppelgänger",
+    "ref": "69/79"
+   },
+   {
+    "roll": [
+     83,
+     83
+    ],
+    "en": "Loup",
+    "it": "Loup",
+    "ref": "FG2: 60"
+   },
+   {
+    "roll": [
+     84,
+     84
+    ],
+    "en": "Lycanthrope, Wereboar",
+    "it": "Licantropo, cinghiale mannaro",
+    "ref": "103/124",
+    "note": "lycanthrope"
+   },
+   {
+    "roll": [
+     85,
+     85
+    ],
+    "en": "Unicorn",
+    "it": "Unicorno",
+    "ref": "123/153"
+   },
+   {
+    "roll": [
+     86,
+     86
+    ],
+    "en": "Wanstrow",
+    "it": "Wanstrow",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     87,
+     87
+    ],
+    "en": "Wasp, Giant",
+    "it": "Vespa gigante",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     88,
+     88
+    ],
+    "en": "Wolf, Worg",
+    "it": "Worg",
+    "ref": "FG1: 77"
+   },
+   {
+    "roll": [
+     89,
+     89
+    ],
+    "en": "Owlbear",
+    "it": "Orsogufo",
+    "ref": "109/132"
+   },
+   {
+    "roll": [
+     90,
+     90
+    ],
+    "en": "Satyr",
+    "it": "Satiri",
+    "ref": "FG1: 64"
+   },
+   {
+    "roll": [
+     91,
+     92
+    ],
+    "en": "Weasel, Giant",
+    "it": "Donnola gigante",
+    "ref": "125/156"
+   },
+   {
+    "roll": [
+     93,
+     93
+    ],
+    "en": "Assassin Vine",
+    "it": "Vite assassina",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     94,
+     94
+    ],
+    "en": "Snail, Giant",
+    "it": "Lumaca gigante",
+    "ref": "FG2: 79"
+   },
+   {
+    "roll": [
+     95,
+     95
+    ],
+    "en": "Beebear",
+    "it": "Orsape",
+    "ref": "FG2: 12"
+   },
+   {
+    "roll": [
+     96,
+     96
+    ],
+    "en": "Dragon, Black",
+    "it": "Drago nero",
+    "ref": "71/85"
+   },
+   {
+    "roll": [
+     97,
+     97
+    ],
+    "en": "Treant",
+    "it": "Treant",
+    "ref": "121/150"
+   },
+   {
+    "roll": [
+     98,
+     98
+    ],
+    "en": "Elchman",
+    "it": "Elchman",
+    "ref": "FG2: 33"
+   },
+   {
+    "roll": [
+     99,
+     99
+    ],
+    "en": "Cthaeh",
+    "it": "Cthaeh",
+    "ref": "FG2: 21"
+   },
+   {
+    "roll": [
+     100,
+     100
+    ],
+    "en": "Dead creatures",
+    "it": "Creature morte",
+    "ref": "Roll again",
+    "note": "dead"
+   }
+  ],
+  "hills": [
+   {
+    "roll": [
+     1,
+     1
+    ],
+    "en": "Antelope",
+    "it": "Antilope",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     2,
+     4
+    ],
+    "en": "Bandit",
+    "it": "Banditi",
+    "ref": "HH: 27"
+   },
+   {
+    "roll": [
+     5,
+     5
+    ],
+    "en": "Bat",
+    "it": "Pipistrelli",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     6,
+     6
+    ],
+    "en": "Bee, Giant",
+    "it": "Ape gigante",
+    "ref": "59/68"
+   },
+   {
+    "roll": [
+     7,
+     7
+    ],
+    "en": "Beetle, Giant Fire",
+    "it": "Scarabeo di fuoco gigante",
+    "ref": "60/68"
+   },
+   {
+    "roll": [
+     8,
+     9
+    ],
+    "en": "Bisren",
+    "it": "Bisren",
+    "ref": "FG1: 11"
+   },
+   {
+    "roll": [
+     10,
+     11
+    ],
+    "en": "Bruhl",
+    "it": "Bruhl",
+    "ref": "FG2: 16"
+   },
+   {
+    "roll": [
+     12,
+     12
+    ],
+    "en": "Centipede, Giant",
+    "it": "Centopiedi gigante",
+    "ref": "64/73"
+   },
+   {
+    "roll": [
+     13,
+     13
+    ],
+    "en": "Cockroach, Giant",
+    "it": "Scarafaggio gigante",
+    "ref": "FG1: 19"
+   },
+   {
+    "roll": [
+     14,
+     15
+    ],
+    "en": "Dog (Wild)",
+    "it": "Cani selvatici",
+    "ref": "69/78"
+   },
+   {
+    "roll": [
+     16,
+     18
+    ],
+    "en": "Goblin",
+    "it": "Goblin",
+    "ref": "89/104"
+   },
+   {
+    "roll": [
+     19,
+     19
+    ],
+    "en": "Hawk",
+    "it": "Falco",
+    "ref": "96/111"
+   },
+   {
+    "roll": [
+     20,
+     20
+    ],
+    "en": "Hiveling",
+    "it": "Hiveling",
+    "ref": "FG2: 51"
+   },
+   {
+    "roll": [
+     21,
+     23
+    ],
+    "en": "Hobgoblin",
+    "it": "Hobgoblin",
+    "ref": "97/113"
+   },
+   {
+    "roll": [
+     24,
+     24
+    ],
+    "en": "Mink",
+    "it": "Visoni",
+    "ref": "FG2: 61"
+   },
+   {
+    "roll": [
+     25,
+     27
+    ],
+    "en": "Orc",
+    "it": "Orchetti",
+    "ref": "108/131"
+   },
+   {
+    "roll": [
+     28,
+     29
+    ],
+    "en": "Rat",
+    "it": "Ratti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     30,
+     31
+    ],
+    "en": "Rat, Giant",
+    "it": "Ratti giganti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     32,
+     32
+    ],
+    "en": "Shrew, Giant",
+    "it": "Toporagno gigante",
+    "ref": "115/143"
+   },
+   {
+    "roll": [
+     33,
+     33
+    ],
+    "en": "Spider, Humming",
+    "it": "Ragno ronzante",
+    "ref": "FG2: 81"
+   },
+   {
+    "roll": [
+     34,
+     34
+    ],
+    "en": "Trobold",
+    "it": "Trobold",
+    "ref": "FG2: 87"
+   },
+   {
+    "roll": [
+     35,
+     35
+    ],
+    "en": "Ushac",
+    "it": "Ushac",
+    "ref": "FG2: 90"
+   },
+   {
+    "roll": [
+     36,
+     36
+    ],
+    "en": "Vermen",
+    "it": "Vermen",
+    "ref": "FG1: 76"
+   },
+   {
+    "roll": [
+     37,
+     38
+    ],
+    "en": "Vihm",
+    "it": "Vihm",
+    "ref": "FG2: 90"
+   },
+   {
+    "roll": [
+     39,
+     39
+    ],
+    "en": "Beetle, Giant Bombardier",
+    "it": "Scarabeo bombardiere gigante",
+    "ref": "59/68"
+   },
+   {
+    "roll": [
+     40,
+     41
+    ],
+    "en": "Caveman",
+    "it": "Uomini delle caverne",
+    "ref": "63/"
+   },
+   {
+    "roll": [
+     42,
+     42
+    ],
+    "en": "Chupacabra",
+    "it": "Chupacabra",
+    "ref": "FG2: 18"
+   },
+   {
+    "roll": [
+     43,
+     44
+    ],
+    "en": "Donkey",
+    "it": "Asini",
+    "ref": "55/63"
+   },
+   {
+    "roll": [
+     45,
+     45
+    ],
+    "en": "Dragonhawk",
+    "it": "Falcodrago",
+    "ref": "FG2: 28"
+   },
+   {
+    "roll": [
+     46,
+     48
+    ],
+    "en": "Gnoll",
+    "it": "Gnoll",
+    "ref": "87/102"
+   },
+   {
+    "roll": [
+     49,
+     50
+    ],
+    "en": "Harpy",
+    "it": "Arpie",
+    "ref": "95/111"
+   },
+   {
+    "roll": [
+     51,
+     52
+    ],
+    "en": "Horse, Riding (Wild)",
+    "it": "Cavalli da sella selvatici",
+    "ref": "55/63"
+   },
+   {
+    "roll": [
+     53,
+     54
+    ],
+    "en": "Ram, Wild",
+    "it": "Montoni selvatici",
+    "ref": "FG1: 60"
+   },
+   {
+    "roll": [
+     55,
+     55
+    ],
+    "en": "Rock Baboon",
+    "it": "Babbuini delle rocce",
+    "ref": "112/137"
+   },
+   {
+    "roll": [
+     56,
+     56
+    ],
+    "en": "Rousirl",
+    "it": "Rousirl",
+    "ref": "FG1: 63"
+   },
+   {
+    "roll": [
+     57,
+     57
+    ],
+    "en": "Urgoblin",
+    "it": "Urgoblin",
+    "ref": "124/154"
+   },
+   {
+    "roll": [
+     58,
+     59
+    ],
+    "en": "Wolf",
+    "it": "Lupi",
+    "ref": "127/158"
+   },
+   {
+    "roll": [
+     60,
+     60
+    ],
+    "en": "Wolpertinger",
+    "it": "Wolpertinger",
+    "ref": "FG2: 92"
+   },
+   {
+    "roll": [
+     61,
+     62
+    ],
+    "en": "Boar, Wild",
+    "it": "Cinghiale",
+    "ref": "62/70"
+   },
+   {
+    "roll": [
+     63,
+     63
+    ],
+    "en": "Boglin",
+    "it": "Boglin",
+    "ref": "FG1: 13"
+   },
+   {
+    "roll": [
+     64,
+     66
+    ],
+    "en": "Bugbear",
+    "it": "Bugbear",
+    "ref": "62/71"
+   },
+   {
+    "roll": [
+     67,
+     67
+    ],
+    "en": "Horse, Draft (Wild)",
+    "it": "Cavalli da tiro selvatici",
+    "ref": "55/63"
+   },
+   {
+    "roll": [
+     68,
+     68
+    ],
+    "en": "Mithridatium Bush",
+    "it": "Cespuglio di mitridato",
+    "ref": "FG2: 61"
+   },
+   {
+    "roll": [
+     69,
+     69
+    ],
+    "en": "Orog",
+    "it": "Orog",
+    "ref": "FG2: 66"
+   },
+   {
+    "roll": [
+     70,
+     70
+    ],
+    "en": "Owlwolf",
+    "it": "Lupogufo",
+    "ref": "FG2: 67"
+   },
+   {
+    "roll": [
+     71,
+     71
+    ],
+    "en": "Rat Dog",
+    "it": "Cane ratto",
+    "ref": "FG1: 60"
+   },
+   {
+    "roll": [
+     72,
+     72
+    ],
+    "en": "Terror Bird",
+    "it": "Uccello del terrore",
+    "ref": "FG1: 74"
+   },
+   {
+    "roll": [
+     73,
+     73
+    ],
+    "en": "Wolverine",
+    "it": "Ghiottone",
+    "ref": "FG1: 78"
+   },
+   {
+    "roll": [
+     74,
+     74
+    ],
+    "en": "Blink Dog",
+    "it": "Cane intermittente",
+    "ref": "61/69"
+   },
+   {
+    "roll": [
+     75,
+     75
+    ],
+    "en": "Doppleganger",
+    "it": "Doppelgänger",
+    "ref": "69/79"
+   },
+   {
+    "roll": [
+     76,
+     76
+    ],
+    "en": "Gump",
+    "it": "Gump",
+    "ref": "FG1: 37"
+   },
+   {
+    "roll": [
+     77,
+     77
+    ],
+    "en": "Glyptodon",
+    "it": "Gliptodonte",
+    "ref": "FG1: 34"
+   },
+   {
+    "roll": [
+     78,
+     78
+    ],
+    "en": "Mink, Giant",
+    "it": "Visone gigante",
+    "ref": "FG2: 61"
+   },
+   {
+    "roll": [
+     79,
+     80
+    ],
+    "en": "Ogre",
+    "it": "Orco",
+    "ref": "108/131"
+   },
+   {
+    "roll": [
+     81,
+     81
+    ],
+    "en": "Rock Roller",
+    "it": "Rotolasassi",
+    "ref": "FG2: 73"
+   },
+   {
+    "roll": [
+     82,
+     82
+    ],
+    "en": "Wanstrow",
+    "it": "Wanstrow",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     83,
+     83
+    ],
+    "en": "Wasp, Giant",
+    "it": "Vespa gigante",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     84,
+     84
+    ],
+    "en": "Wolf, Worg",
+    "it": "Worg",
+    "ref": "FG1: 77"
+   },
+   {
+    "roll": [
+     85,
+     85
+    ],
+    "en": "Ankheg",
+    "it": "Ankheg",
+    "ref": "FG1: 3"
+   },
+   {
+    "roll": [
+     86,
+     86
+    ],
+    "en": "Chimera",
+    "it": "Chimera",
+    "ref": "65/74"
+   },
+   {
+    "roll": [
+     87,
+     87
+    ],
+    "en": "Cockatrice",
+    "it": "Coccatrice",
+    "ref": "65/74"
+   },
+   {
+    "roll": [
+     88,
+     88
+    ],
+    "en": "Owlbear",
+    "it": "Orsogufo",
+    "ref": "109/132"
+   },
+   {
+    "roll": [
+     89,
+     89
+    ],
+    "en": "Weasel, Giant",
+    "it": "Donnola gigante",
+    "ref": "125/156"
+   },
+   {
+    "roll": [
+     90,
+     91
+    ],
+    "en": "Troll",
+    "it": "Troll",
+    "ref": "122/151"
+   },
+   {
+    "roll": [
+     92,
+     92
+    ],
+    "en": "Bear, Long",
+    "it": "Orso lungo",
+    "ref": "FG2: 10"
+   },
+   {
+    "roll": [
+     93,
+     93
+    ],
+    "en": "Beebear",
+    "it": "Orsape",
+    "ref": "FG2: 12"
+   },
+   {
+    "roll": [
+     94,
+     94
+    ],
+    "en": "Wyvern",
+    "it": "Viverna",
+    "ref": "127/159"
+   },
+   {
+    "roll": [
+     95,
+     95
+    ],
+    "en": "Elemental, Earth",
+    "it": "Elementale della terra",
+    "ref": "78/90"
+   },
+   {
+    "roll": [
+     96,
+     97
+    ],
+    "en": "Giant, Hill",
+    "it": "Gigante delle colline",
+    "ref": "86/100"
+   },
+   {
+    "roll": [
+     98,
+     99
+    ],
+    "en": "Ettin",
+    "it": "Ettin",
+    "ref": "FG1: 31"
+   },
+   {
+    "roll": [
+     100,
+     100
+    ],
+    "en": "Dead creatures",
+    "it": "Creature morte",
+    "ref": "Roll again",
+    "note": "dead"
+   }
+  ],
+  "swamps": [
+   {
+    "roll": [
+     1,
+     2
+    ],
+    "en": "Bat",
+    "it": "Pipistrelli",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     3,
+     3
+    ],
+    "en": "Bee, Giant",
+    "it": "Ape gigante",
+    "ref": "59/68"
+   },
+   {
+    "roll": [
+     4,
+     4
+    ],
+    "en": "Beetle, Giant Fire",
+    "it": "Scarabeo di fuoco gigante",
+    "ref": "60/68"
+   },
+   {
+    "roll": [
+     5,
+     5
+    ],
+    "en": "Centipede, Giant",
+    "it": "Centopiedi gigante",
+    "ref": "64/73"
+   },
+   {
+    "roll": [
+     6,
+     8
+    ],
+    "en": "Chelonian",
+    "it": "Cheloniano",
+    "ref": "FG1: 17"
+   },
+   {
+    "roll": [
+     9,
+     9
+    ],
+    "en": "Dog (Wild)",
+    "it": "Cani selvatici",
+    "ref": "69/78"
+   },
+   {
+    "roll": [
+     10,
+     10
+    ],
+    "en": "Eelbat",
+    "it": "Anguillapipistrello",
+    "ref": "FG1: 50"
+   },
+   {
+    "roll": [
+     11,
+     11
+    ],
+    "en": "Hawk",
+    "it": "Falco",
+    "ref": "96/111"
+   },
+   {
+    "roll": [
+     12,
+     13
+    ],
+    "en": "Kobold",
+    "it": "Coboldi",
+    "ref": "99/118"
+   },
+   {
+    "roll": [
+     14,
+     15
+    ],
+    "en": "Lerini",
+    "it": "Lerini",
+    "ref": "FG1: 45"
+   },
+   {
+    "roll": [
+     16,
+     17
+    ],
+    "en": "Mosquito, Giant",
+    "it": "Zanzara gigante",
+    "ref": "FG1: 49"
+   },
+   {
+    "roll": [
+     18,
+     18
+    ],
+    "en": "Otter",
+    "it": "Lontre",
+    "ref": "FG1: 55"
+   },
+   {
+    "roll": [
+     19,
+     20
+    ],
+    "en": "Rat",
+    "it": "Ratti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     21,
+     22
+    ],
+    "en": "Rat, Giant",
+    "it": "Ratti giganti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     23,
+     24
+    ],
+    "en": "Rot Grub",
+    "it": "Larva putrida",
+    "ref": "112/137"
+   },
+   {
+    "roll": [
+     25,
+     25
+    ],
+    "en": "Shrew, Giant",
+    "it": "Toporagno gigante",
+    "ref": "115/143"
+   },
+   {
+    "roll": [
+     26,
+     26
+    ],
+    "en": "Snake, Pit Viper",
+    "it": "Vipera",
+    "ref": "117/144"
+   },
+   {
+    "roll": [
+     27,
+     27
+    ],
+    "en": "Snake, Spitting Cobra",
+    "it": "Cobra sputatore",
+    "ref": "118/145"
+   },
+   {
+    "roll": [
+     28,
+     28
+    ],
+    "en": "Spider, Humming",
+    "it": "Ragno ronzante",
+    "ref": "FG2: 81"
+   },
+   {
+    "roll": [
+     29,
+     29
+    ],
+    "en": "Tick, Giant",
+    "it": "Zecca gigante",
+    "ref": "FG2: 84"
+   },
+   {
+    "roll": [
+     30,
+     31
+    ],
+    "en": "Wug",
+    "it": "Wug",
+    "ref": "FG1: 78"
+   },
+   {
+    "roll": [
+     32,
+     33
+    ],
+    "en": "Bat, Giant",
+    "it": "Pipistrello gigante",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     34,
+     35
+    ],
+    "en": "Crocodile",
+    "it": "Coccodrillo",
+    "ref": "66/75"
+   },
+   {
+    "roll": [
+     36,
+     36
+    ],
+    "en": "Eel, Giant",
+    "it": "Anguilla gigante",
+    "ref": "FG1: 28"
+   },
+   {
+    "roll": [
+     37,
+     38
+    ],
+    "en": "Fly, Giant",
+    "it": "Mosca gigante",
+    "ref": "80/95"
+   },
+   {
+    "roll": [
+     39,
+     39
+    ],
+    "en": "Flying Man-of-War",
+    "it": "Caravella volante",
+    "ref": "FG1: 32"
+   },
+   {
+    "roll": [
+     40,
+     41
+    ],
+    "en": "Frog, Giant",
+    "it": "Rana gigante",
+    "ref": "81/95"
+   },
+   {
+    "roll": [
+     42,
+     43
+    ],
+    "en": "Ghostcap Bloom",
+    "it": "Fungo spettrale",
+    "ref": "FG2: 42"
+   },
+   {
+    "roll": [
+     44,
+     44
+    ],
+    "en": "Ghoul",
+    "it": "Ghoul",
+    "ref": "83/97"
+   },
+   {
+    "roll": [
+     45,
+     45
+    ],
+    "en": "Insect Swarm",
+    "it": "Sciame d'insetti",
+    "ref": "98/114"
+   },
+   {
+    "roll": [
+     46,
+     48
+    ],
+    "en": "Lizardman",
+    "it": "Uomini lucertola",
+    "ref": "102/123"
+   },
+   {
+    "roll": [
+     49,
+     49
+    ],
+    "en": "Locathah",
+    "it": "Locathah",
+    "ref": "FG1: 47"
+   },
+   {
+    "roll": [
+     50,
+     50
+    ],
+    "en": "Phantom Fungus",
+    "it": "Fungo fantasma",
+    "ref": "FG1: 57"
+   },
+   {
+    "roll": [
+     51,
+     51
+    ],
+    "en": "Prince Frog",
+    "it": "Principe ranocchio",
+    "ref": "FG1: 58"
+   },
+   {
+    "roll": [
+     52,
+     53
+    ],
+    "en": "Sahuagin",
+    "it": "Sahuagin",
+    "ref": "FG1: 63"
+   },
+   {
+    "roll": [
+     54,
+     55
+    ],
+    "en": "Shocker Lizard",
+    "it": "Lucertola elettrica",
+    "ref": "FG1: 67"
+   },
+   {
+    "roll": [
+     56,
+     56
+    ],
+    "en": "Slug, Spitting",
+    "it": "Lumaca sputatrice",
+    "ref": "FG2: 78"
+   },
+   {
+    "roll": [
+     57,
+     57
+    ],
+    "en": "Snake, Giant Rattlesnake",
+    "it": "Serpente a sonagli gigante",
+    "ref": "117/144"
+   },
+   {
+    "roll": [
+     58,
+     58
+    ],
+    "en": "Spider, Giant Crab",
+    "it": "Ragno granchio gigante",
+    "ref": "119/146"
+   },
+   {
+    "roll": [
+     59,
+     61
+    ],
+    "en": "Troglodyte",
+    "it": "Troglodita",
+    "ref": "122/151"
+   },
+   {
+    "roll": [
+     62,
+     62
+    ],
+    "en": "Yellow Mold",
+    "it": "Muffa gialla",
+    "ref": "128/160"
+   },
+   {
+    "roll": [
+     63,
+     63
+    ],
+    "en": "Beetle, Giant Tiger",
+    "it": "Scarabeo tigre gigante",
+    "ref": "60/69"
+   },
+   {
+    "roll": [
+     64,
+     64
+    ],
+    "en": "Shambling Mound",
+    "it": "Cumulo strisciante",
+    "ref": "FG2: 77"
+   },
+   {
+    "roll": [
+     65,
+     65
+    ],
+    "en": "Spider, Giant Black Widow",
+    "it": "Vedova nera gigante",
+    "ref": "118/146"
+   },
+   {
+    "roll": [
+     66,
+     66
+    ],
+    "en": "Tentacle Worm",
+    "it": "Verme tentacolato",
+    "ref": "120/149"
+   },
+   {
+    "roll": [
+     67,
+     67
+    ],
+    "en": "Blink Dog",
+    "it": "Cane intermittente",
+    "ref": "61/69"
+   },
+   {
+    "roll": [
+     68,
+     69
+    ],
+    "en": "Blood Rose",
+    "it": "Rosa di sangue",
+    "ref": "61/70"
+   },
+   {
+    "roll": [
+     70,
+     70
+    ],
+    "en": "Doppleganger",
+    "it": "Doppelgänger",
+    "ref": "69/79"
+   },
+   {
+    "roll": [
+     71,
+     71
+    ],
+    "en": "Ogre, Bog",
+    "it": "Orco di palude",
+    "ref": "FG2: 66"
+   },
+   {
+    "roll": [
+     72,
+     72
+    ],
+    "en": "Skragg",
+    "it": "Skragg",
+    "ref": "FG1: 69"
+   },
+   {
+    "roll": [
+     73,
+     73
+    ],
+    "en": "Snail, Giant Barb",
+    "it": "Lumaca uncinata gigante",
+    "ref": "FG1: 69"
+   },
+   {
+    "roll": [
+     74,
+     74
+    ],
+    "en": "Wanstrow",
+    "it": "Wanstrow",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     75,
+     75
+    ],
+    "en": "Wasp, Giant",
+    "it": "Vespa gigante",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     76,
+     76
+    ],
+    "en": "Water Termite, Giant",
+    "it": "Termite d'acqua gigante",
+    "ref": "125/156"
+   },
+   {
+    "roll": [
+     77,
+     77
+    ],
+    "en": "Wolf, Worg",
+    "it": "Worg",
+    "ref": "FG1: 77"
+   },
+   {
+    "roll": [
+     78,
+     78
+    ],
+    "en": "Bog Crone",
+    "it": "Megera della palude",
+    "ref": "FG1: 12"
+   },
+   {
+    "roll": [
+     79,
+     79
+    ],
+    "en": "Crockle",
+    "it": "Crockle",
+    "ref": "FG2: 20"
+   },
+   {
+    "roll": [
+     80,
+     80
+    ],
+    "en": "Swamp Monster",
+    "it": "Mostro della palude",
+    "ref": "FG2: 82"
+   },
+   {
+    "roll": [
+     81,
+     81
+    ],
+    "en": "Water Leaper",
+    "it": "Saltatore d'acqua",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     82,
+     82
+    ],
+    "en": "Weasel, Giant",
+    "it": "Donnola gigante",
+    "ref": "125/156"
+   },
+   {
+    "roll": [
+     83,
+     84
+    ],
+    "en": "Assassin Vine",
+    "it": "Vite assassina",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     85,
+     85
+    ],
+    "en": "Bunyip",
+    "it": "Bunyip",
+    "ref": "FG1: 15"
+   },
+   {
+    "roll": [
+     86,
+     86
+    ],
+    "en": "Caecilia, Giant",
+    "it": "Cecilia gigante",
+    "ref": "62/71"
+   },
+   {
+    "roll": [
+     87,
+     88
+    ],
+    "en": "Crocodile, Large",
+    "it": "Coccodrillo grande",
+    "ref": "66/75"
+   },
+   {
+    "roll": [
+     89,
+     89
+    ],
+    "en": "Leech, Giant",
+    "it": "Sanguisuga gigante",
+    "ref": "100/119"
+   },
+   {
+    "roll": [
+     90,
+     90
+    ],
+    "en": "Snail, Giant",
+    "it": "Lumaca gigante",
+    "ref": "FG2: 79"
+   },
+   {
+    "roll": [
+     91,
+     91
+    ],
+    "en": "Troll",
+    "it": "Troll",
+    "ref": "122/151"
+   },
+   {
+    "roll": [
+     92,
+     93
+    ],
+    "en": "Boar, Sewer",
+    "it": "Cinghiale delle fogne",
+    "ref": "FG2: 15"
+   },
+   {
+    "roll": [
+     94,
+     94
+    ],
+    "en": "Dragon, Black",
+    "it": "Drago nero",
+    "ref": "71/85"
+   },
+   {
+    "roll": [
+     95,
+     95
+    ],
+    "en": "Aboleth",
+    "it": "Aboleth",
+    "ref": "FG1: 2"
+   },
+   {
+    "roll": [
+     96,
+     96
+    ],
+    "en": "Elemental, Water",
+    "it": "Elementale dell'acqua",
+    "ref": "79/92"
+   },
+   {
+    "roll": [
+     97,
+     97
+    ],
+    "en": "Will-o-Wisp",
+    "it": "Fuoco fatuo",
+    "ref": "FG1: 77"
+   },
+   {
+    "roll": [
+     98,
+     98
+    ],
+    "en": "Syrinx",
+    "it": "Syrinx",
+    "ref": "FG2: 83"
+   },
+   {
+    "roll": [
+     99,
+     99
+    ],
+    "en": "Shambler",
+    "it": "Shambler",
+    "ref": "FG1: 65"
+   },
+   {
+    "roll": [
+     100,
+     100
+    ],
+    "en": "Dead creatures",
+    "it": "Creature morte",
+    "ref": "Roll again",
+    "note": "dead"
+   }
+  ],
+  "mountains": [
+   {
+    "roll": [
+     1,
+     2
+    ],
+    "en": "Bandit",
+    "it": "Banditi",
+    "ref": "HH: 27"
+   },
+   {
+    "roll": [
+     3,
+     3
+    ],
+    "en": "Bat",
+    "it": "Pipistrelli",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     4,
+     5
+    ],
+    "en": "Bisren",
+    "it": "Bisren",
+    "ref": "FG1: 11"
+   },
+   {
+    "roll": [
+     6,
+     6
+    ],
+    "en": "Centipede, Giant",
+    "it": "Centopiedi gigante",
+    "ref": "64/73"
+   },
+   {
+    "roll": [
+     7,
+     8
+    ],
+    "en": "Hawk",
+    "it": "Falco",
+    "ref": "96/111"
+   },
+   {
+    "roll": [
+     9,
+     11
+    ],
+    "en": "Hobgoblin",
+    "it": "Hobgoblin",
+    "ref": "97/113"
+   },
+   {
+    "roll": [
+     12,
+     13
+    ],
+    "en": "Kobold",
+    "it": "Coboldi",
+    "ref": "99/118"
+   },
+   {
+    "roll": [
+     14,
+     16
+    ],
+    "en": "Orc, Snow",
+    "it": "Orchetti delle nevi",
+    "ref": "FG1: 54"
+   },
+   {
+    "roll": [
+     17,
+     17
+    ],
+    "en": "Spider, Humming",
+    "it": "Ragno ronzante",
+    "ref": "FG2: 81"
+   },
+   {
+    "roll": [
+     18,
+     18
+    ],
+    "en": "Trobold",
+    "it": "Trobold",
+    "ref": "FG2: 87"
+   },
+   {
+    "roll": [
+     19,
+     19
+    ],
+    "en": "Dragonhawk",
+    "it": "Falcodrago",
+    "ref": "FG2: 28"
+   },
+   {
+    "roll": [
+     20,
+     22
+    ],
+    "en": "Gnoll",
+    "it": "Gnoll",
+    "ref": "87/102"
+   },
+   {
+    "roll": [
+     23,
+     23
+    ],
+    "en": "Grimlock",
+    "it": "Grimlock",
+    "ref": "FG1: 36"
+   },
+   {
+    "roll": [
+     24,
+     25
+    ],
+    "en": "Harpy",
+    "it": "Arpie",
+    "ref": "95/111"
+   },
+   {
+    "roll": [
+     26,
+     28
+    ],
+    "en": "Moon Goblin",
+    "it": "Goblin lunari",
+    "ref": "FG2: 62"
+   },
+   {
+    "roll": [
+     29,
+     29
+    ],
+    "en": "Pseudodragon",
+    "it": "Pseudodrago",
+    "ref": "FG1: 59"
+   },
+   {
+    "roll": [
+     30,
+     31
+    ],
+    "en": "Ram, Wild",
+    "it": "Montoni selvatici",
+    "ref": "FG1: 60"
+   },
+   {
+    "roll": [
+     32,
+     32
+    ],
+    "en": "Rock Baboon",
+    "it": "Babbuini delle rocce",
+    "ref": "112/137"
+   },
+   {
+    "roll": [
+     33,
+     33
+    ],
+    "en": "Rock Bat",
+    "it": "Pipistrello delle rocce",
+    "ref": "FG2: 72"
+   },
+   {
+    "roll": [
+     34,
+     35
+    ],
+    "en": "Troglodyte",
+    "it": "Troglodita",
+    "ref": "122/151"
+   },
+   {
+    "roll": [
+     36,
+     36
+    ],
+    "en": "Urgoblin",
+    "it": "Urgoblin",
+    "ref": "124/154"
+   },
+   {
+    "roll": [
+     37,
+     37
+    ],
+    "en": "Wolpertinger",
+    "it": "Wolpertinger",
+    "ref": "FG2: 92"
+   },
+   {
+    "roll": [
+     38,
+     40
+    ],
+    "en": "Bugbear",
+    "it": "Bugbear",
+    "ref": "62/71"
+   },
+   {
+    "roll": [
+     41,
+     42
+    ],
+    "en": "Hippogriff",
+    "it": "Ippogrifo",
+    "ref": "96/112"
+   },
+   {
+    "roll": [
+     43,
+     43
+    ],
+    "en": "Infernal, Ice Devil",
+    "it": "Diavolo del ghiaccio",
+    "ref": "FG1: 40"
+   },
+   {
+    "roll": [
+     44,
+     45
+    ],
+    "en": "Jotenkin",
+    "it": "Jotenkin",
+    "ref": "FG2: 56"
+   },
+   {
+    "roll": [
+     46,
+     47
+    ],
+    "en": "Mountain Lion",
+    "it": "Puma",
+    "ref": "107/129"
+   },
+   {
+    "roll": [
+     48,
+     49
+    ],
+    "en": "Orog",
+    "it": "Orog",
+    "ref": "FG2: 66"
+   },
+   {
+    "roll": [
+     50,
+     50
+    ],
+    "en": "Owlwolf",
+    "it": "Lupogufo",
+    "ref": "FG2: 67"
+   },
+   {
+    "roll": [
+     51,
+     51
+    ],
+    "en": "Syrinx",
+    "it": "Syrinx",
+    "ref": "FG2: 83",
+    "note": "night"
+   },
+   {
+    "roll": [
+     52,
+     52
+    ],
+    "en": "Terror Bird",
+    "it": "Uccello del terrore",
+    "ref": "FG1: 74"
+   },
+   {
+    "roll": [
+     53,
+     53
+    ],
+    "en": "Doppleganger",
+    "it": "Doppelgänger",
+    "ref": "69/79"
+   },
+   {
+    "roll": [
+     54,
+     54
+    ],
+    "en": "Eagle, Giant",
+    "it": "Aquila gigante",
+    "ref": "76/87"
+   },
+   {
+    "roll": [
+     55,
+     55
+    ],
+    "en": "Mink, Giant",
+    "it": "Visone gigante",
+    "ref": "FG2: 61"
+   },
+   {
+    "roll": [
+     56,
+     56
+    ],
+    "en": "Ogre",
+    "it": "Orco",
+    "ref": "108/131"
+   },
+   {
+    "roll": [
+     57,
+     57
+    ],
+    "en": "Rock Roller",
+    "it": "Rotolasassi",
+    "ref": "FG2: 73"
+   },
+   {
+    "roll": [
+     58,
+     58
+    ],
+    "en": "Wanstrow",
+    "it": "Wanstrow",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     59,
+     59
+    ],
+    "en": "Wolf, Worg",
+    "it": "Worg",
+    "ref": "FG1: 77"
+   },
+   {
+    "roll": [
+     60,
+     61
+    ],
+    "en": "Bear, Grizzly",
+    "it": "Grizzly",
+    "ref": "59/67"
+   },
+   {
+    "roll": [
+     62,
+     62
+    ],
+    "en": "Bear, Quill",
+    "it": "Orso aculeato",
+    "ref": "FG2: 11"
+   },
+   {
+    "roll": [
+     63,
+     63
+    ],
+    "en": "Boar, Polar",
+    "it": "Cinghiale polare",
+    "ref": "FG2: 14"
+   },
+   {
+    "roll": [
+     64,
+     64
+    ],
+    "en": "Ogre Mage",
+    "it": "Orco mago",
+    "ref": "FG1: 54"
+   },
+   {
+    "roll": [
+     65,
+     65
+    ],
+    "en": "Owlbear",
+    "it": "Orsogufo",
+    "ref": "109/132"
+   },
+   {
+    "roll": [
+     66,
+     66
+    ],
+    "en": "Sasquatch",
+    "it": "Sasquatch",
+    "ref": "FG2: 74"
+   },
+   {
+    "roll": [
+     67,
+     67
+    ],
+    "en": "Ape, Carnivorous Snow",
+    "it": "Scimmia carnivora delle nevi",
+    "ref": "FG1: 5"
+   },
+   {
+    "roll": [
+     68,
+     68
+    ],
+    "en": "Basilisk",
+    "it": "Basilisco",
+    "ref": "57/65"
+   },
+   {
+    "roll": [
+     69,
+     69
+    ],
+    "en": "Dragon, White",
+    "it": "Drago bianco",
+    "ref": "74/83"
+   },
+   {
+    "roll": [
+     70,
+     70
+    ],
+    "en": "Lizard, Giant Tuatara",
+    "it": "Tuatara gigante",
+    "ref": "102/122"
+   },
+   {
+    "roll": [
+     71,
+     71
+    ],
+    "en": "Lycanthrope, Werebear",
+    "it": "Licantropo, orso mannaro",
+    "ref": "102/124",
+    "note": "lycanthrope"
+   },
+   {
+    "roll": [
+     72,
+     72
+    ],
+    "en": "Manticore",
+    "it": "Manticora",
+    "ref": "106/127"
+   },
+   {
+    "roll": [
+     73,
+     73
+    ],
+    "en": "Minotaur",
+    "it": "Minotauro",
+    "ref": "106/127"
+   },
+   {
+    "roll": [
+     74,
+     74
+    ],
+    "en": "Roc",
+    "it": "Roc",
+    "ref": "112/136"
+   },
+   {
+    "roll": [
+     75,
+     75
+    ],
+    "en": "Spider, Giant Ice",
+    "it": "Ragno dei ghiacci gigante",
+    "ref": "FG1: 71"
+   },
+   {
+    "roll": [
+     76,
+     76
+    ],
+    "en": "Troll",
+    "it": "Troll",
+    "ref": "122/151"
+   },
+   {
+    "roll": [
+     77,
+     78
+    ],
+    "en": "Wolf, Winter",
+    "it": "Lupo d'inverno",
+    "ref": "FG1: 77"
+   },
+   {
+    "roll": [
+     79,
+     79
+    ],
+    "en": "Djinni",
+    "it": "Djinn",
+    "ref": "68/78"
+   },
+   {
+    "roll": [
+     80,
+     80
+    ],
+    "en": "Griffon",
+    "it": "Grifone",
+    "ref": "94/110"
+   },
+   {
+    "roll": [
+     81,
+     81
+    ],
+    "en": "Wyvern",
+    "it": "Viverna",
+    "ref": "127/159"
+   },
+   {
+    "roll": [
+     82,
+     82
+    ],
+    "en": "Elemental, Air",
+    "it": "Elementale dell'aria",
+    "ref": "77/89"
+   },
+   {
+    "roll": [
+     83,
+     83
+    ],
+    "en": "Elemental, Cold",
+    "it": "Elementale del gelo",
+    "ref": "FG1: 29"
+   },
+   {
+    "roll": [
+     84,
+     84
+    ],
+    "en": "Owlbear, Northern",
+    "it": "Orsogufo del nord",
+    "ref": "FG2: 67"
+   },
+   {
+    "roll": [
+     85,
+     86
+    ],
+    "en": "Sabre-Tooth Cat",
+    "it": "Tigre dai denti a sciabola",
+    "ref": "113/138"
+   },
+   {
+    "roll": [
+     87,
+     87
+    ],
+    "en": "Chimera",
+    "it": "Chimera",
+    "ref": "65/74"
+   },
+   {
+    "roll": [
+     88,
+     88
+    ],
+    "en": "Giant, Stone",
+    "it": "Gigante delle pietre",
+    "ref": "86/101"
+   },
+   {
+    "roll": [
+     89,
+     89
+    ],
+    "en": "Griffon, Imperial",
+    "it": "Grifone imperiale",
+    "ref": "FG2: 50"
+   },
+   {
+    "roll": [
+     90,
+     90
+    ],
+    "en": "Phoenix",
+    "it": "Fenice",
+    "ref": "FG2: 69"
+   },
+   {
+    "roll": [
+     91,
+     91
+    ],
+    "en": "Dragon, Red",
+    "it": "Drago rosso",
+    "ref": "73/83"
+   },
+   {
+    "roll": [
+     92,
+     92
+    ],
+    "en": "Fairy, Mountain",
+    "it": "Fata della montagna",
+    "ref": "FG2: 35"
+   },
+   {
+    "roll": [
+     93,
+     93
+    ],
+    "en": "Giant, Frost",
+    "it": "Gigante del gelo",
+    "ref": "85/100"
+   },
+   {
+    "roll": [
+     94,
+     94
+    ],
+    "en": "Giant, Cloud",
+    "it": "Gigante delle nuvole",
+    "ref": "83/98"
+   },
+   {
+    "roll": [
+     95,
+     96
+    ],
+    "en": "Ettin",
+    "it": "Ettin",
+    "ref": "FG1: 31"
+   },
+   {
+    "roll": [
+     97,
+     97
+    ],
+    "en": "Giant, Cyclops",
+    "it": "Ciclope",
+    "ref": "84/99"
+   },
+   {
+    "roll": [
+     98,
+     98
+    ],
+    "en": "Giant, Storm",
+    "it": "Gigante delle tempeste",
+    "ref": "87/102"
+   },
+   {
+    "roll": [
+     99,
+     99
+    ],
+    "en": "Mastodon/Mammoth",
+    "it": "Mastodonte/mammut",
+    "ref": "104/126"
+   },
+   {
+    "roll": [
+     100,
+     100
+    ],
+    "en": "Dead creatures",
+    "it": "Creature morte",
+    "ref": "Roll again",
+    "note": "dead"
+   }
+  ],
+  "deserts": [
+   {
+    "roll": [
+     1,
+     3
+    ],
+    "en": "Anubian",
+    "it": "Anubiano",
+    "ref": "FG1: 4"
+   },
+   {
+    "roll": [
+     4,
+     5
+    ],
+    "en": "Bandit",
+    "it": "Banditi",
+    "ref": "HH: 27"
+   },
+   {
+    "roll": [
+     6,
+     7
+    ],
+    "en": "Bat",
+    "it": "Pipistrelli",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     8,
+     8
+    ],
+    "en": "Bronze Bird",
+    "it": "Uccello di bronzo",
+    "ref": "FG1: 14"
+   },
+   {
+    "roll": [
+     9,
+     10
+    ],
+    "en": "Centipede, Giant",
+    "it": "Centopiedi gigante",
+    "ref": "64/73"
+   },
+   {
+    "roll": [
+     11,
+     12
+    ],
+    "en": "Gila",
+    "it": "Gila",
+    "ref": "FG2: 43"
+   },
+   {
+    "roll": [
+     13,
+     15
+    ],
+    "en": "Kobold",
+    "it": "Coboldi",
+    "ref": "99/118"
+   },
+   {
+    "roll": [
+     16,
+     17
+    ],
+    "en": "Rat",
+    "it": "Ratti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     18,
+     19
+    ],
+    "en": "Rat, Giant",
+    "it": "Ratti giganti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     20,
+     21
+    ],
+    "en": "Snake, Pit Viper",
+    "it": "Vipera",
+    "ref": "117/144"
+   },
+   {
+    "roll": [
+     22,
+     23
+    ],
+    "en": "Snake, Spitting Cobra",
+    "it": "Cobra sputatore",
+    "ref": "118/145"
+   },
+   {
+    "roll": [
+     24,
+     24
+    ],
+    "en": "Spider, Humming",
+    "it": "Ragno ronzante",
+    "ref": "FG2: 81"
+   },
+   {
+    "roll": [
+     25,
+     25
+    ],
+    "en": "Travelling Merchant",
+    "it": "Mercante itinerante",
+    "ref": "HH: 28"
+   },
+   {
+    "roll": [
+     26,
+     27
+    ],
+    "en": "Trobold",
+    "it": "Trobold",
+    "ref": "FG2: 87"
+   },
+   {
+    "roll": [
+     28,
+     29
+    ],
+    "en": "Beetle, Giant Bombardier",
+    "it": "Scarabeo bombardiere gigante",
+    "ref": "59/68"
+   },
+   {
+    "roll": [
+     30,
+     31
+    ],
+    "en": "Camel",
+    "it": "Cammello",
+    "ref": "55/63"
+   },
+   {
+    "roll": [
+     32,
+     33
+    ],
+    "en": "Donkey",
+    "it": "Asini",
+    "ref": "55/63"
+   },
+   {
+    "roll": [
+     34,
+     34
+    ],
+    "en": "Dragonhawk",
+    "it": "Falcodrago",
+    "ref": "FG2: 28"
+   },
+   {
+    "roll": [
+     35,
+     37
+    ],
+    "en": "Fly, Giant",
+    "it": "Mosca gigante",
+    "ref": "80/95"
+   },
+   {
+    "roll": [
+     38,
+     39
+    ],
+    "en": "Fyrenewt",
+    "it": "Tritone di fuoco",
+    "ref": "FG2: 37"
+   },
+   {
+    "roll": [
+     40,
+     40
+    ],
+    "en": "Ghast",
+    "it": "Ghast",
+    "ref": "82/97"
+   },
+   {
+    "roll": [
+     41,
+     41
+    ],
+    "en": "Ghoul",
+    "it": "Ghoul",
+    "ref": "83/97"
+   },
+   {
+    "roll": [
+     42,
+     44
+    ],
+    "en": "Gnoll",
+    "it": "Gnoll",
+    "ref": "87/102"
+   },
+   {
+    "roll": [
+     45,
+     45
+    ],
+    "en": "Grick",
+    "it": "Grick",
+    "ref": "FG1: 35"
+   },
+   {
+    "roll": [
+     46,
+     47
+    ],
+    "en": "Harpy",
+    "it": "Arpie",
+    "ref": "95/111"
+   },
+   {
+    "roll": [
+     48,
+     50
+    ],
+    "en": "Hyena",
+    "it": "Iene",
+    "ref": "98/114"
+   },
+   {
+    "roll": [
+     51,
+     52
+    ],
+    "en": "Insect Swarm",
+    "it": "Sciame d'insetti",
+    "ref": "98/114"
+   },
+   {
+    "roll": [
+     53,
+     54
+    ],
+    "en": "Komodo Dragon",
+    "it": "Drago di Komodo",
+    "ref": "FG1: 44"
+   },
+   {
+    "roll": [
+     55,
+     56
+    ],
+    "en": "Rot Vulture",
+    "it": "Avvoltoio putrido",
+    "ref": "FG1: 63"
+   },
+   {
+    "roll": [
+     57,
+     57
+    ],
+    "en": "Rousirl",
+    "it": "Rousirl",
+    "ref": "FG1: 63"
+   },
+   {
+    "roll": [
+     58,
+     59
+    ],
+    "en": "Snake, Giant Rattlesnake",
+    "it": "Serpente a sonagli gigante",
+    "ref": "117/144"
+   },
+   {
+    "roll": [
+     60,
+     60
+    ],
+    "en": "Urgoblin",
+    "it": "Urgoblin",
+    "ref": "124/154"
+   },
+   {
+    "roll": [
+     61,
+     62
+    ],
+    "en": "Beetle, Giant Tiger",
+    "it": "Scarabeo tigre gigante",
+    "ref": "60/69"
+   },
+   {
+    "roll": [
+     63,
+     65
+    ],
+    "en": "Janni",
+    "it": "Janni",
+    "ref": "FG2: 56"
+   },
+   {
+    "roll": [
+     66,
+     67
+    ],
+    "en": "Lizard, Giant Gecko",
+    "it": "Geco gigante",
+    "ref": "101/121"
+   },
+   {
+    "roll": [
+     68,
+     68
+    ],
+    "en": "Rat Dog",
+    "it": "Cane ratto",
+    "ref": "FG1: 60"
+   },
+   {
+    "roll": [
+     69,
+     69
+    ],
+    "en": "Serpentine Pseudodragon",
+    "it": "Pseudodrago serpentino",
+    "ref": "FG2: 76"
+   },
+   {
+    "roll": [
+     70,
+     70
+    ],
+    "en": "Spider, Giant Black Widow",
+    "it": "Vedova nera gigante",
+    "ref": "118/146"
+   },
+   {
+    "roll": [
+     71,
+     72
+    ],
+    "en": "Syrinx",
+    "it": "Syrinx",
+    "ref": "FG2: 83",
+    "note": "lycanthrope"
+   },
+   {
+    "roll": [
+     73,
+     74
+    ],
+    "en": "Ant, Giant",
+    "it": "Formica gigante",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     75,
+     75
+    ],
+    "en": "Antlion, Giant",
+    "it": "Formicaleone gigante",
+    "ref": "FG1: 4"
+   },
+   {
+    "roll": [
+     76,
+     76
+    ],
+    "en": "Aranea",
+    "it": "Aranea",
+    "ref": "FG1: 8"
+   },
+   {
+    "roll": [
+     77,
+     77
+    ],
+    "en": "Desert Worm",
+    "it": "Verme del deserto",
+    "ref": "FG1: 25"
+   },
+   {
+    "roll": [
+     78,
+     78
+    ],
+    "en": "Doppleganger",
+    "it": "Doppelgänger",
+    "ref": "69/79"
+   },
+   {
+    "roll": [
+     79,
+     79
+    ],
+    "en": "Rhagodessa, Giant",
+    "it": "Rhagodessa gigante",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     80,
+     81
+    ],
+    "en": "Scorpion, Giant",
+    "it": "Scorpione gigante",
+    "ref": "114/141"
+   },
+   {
+    "roll": [
+     82,
+     82
+    ],
+    "en": "Spider, Giant Tarantula",
+    "it": "Tarantola gigante",
+    "ref": "119/147"
+   },
+   {
+    "roll": [
+     83,
+     83
+    ],
+    "en": "Wanstrow",
+    "it": "Wanstrow",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     84,
+     84
+    ],
+    "en": "Wasp, Giant",
+    "it": "Vespa gigante",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     85,
+     85
+    ],
+    "en": "Hydra",
+    "it": "Idra",
+    "ref": "97/113"
+   },
+   {
+    "roll": [
+     86,
+     86
+    ],
+    "en": "Giant Horned Chameleon",
+    "it": "Camaleonte cornuto gigante",
+    "ref": "101/122"
+   },
+   {
+    "roll": [
+     87,
+     87
+    ],
+    "en": "Praying Mantis, Giant",
+    "it": "Mantide religiosa gigante",
+    "ref": "FG1: 58"
+   },
+   {
+    "roll": [
+     88,
+     88
+    ],
+    "en": "Basilisk",
+    "it": "Basilisco",
+    "ref": "57/65"
+   },
+   {
+    "roll": [
+     89,
+     89
+    ],
+    "en": "Manticore",
+    "it": "Manticora",
+    "ref": "106/127"
+   },
+   {
+    "roll": [
+     90,
+     90
+    ],
+    "en": "Troll",
+    "it": "Troll",
+    "ref": "122/151"
+   },
+   {
+    "roll": [
+     91,
+     91
+    ],
+    "en": "Vermin Queen",
+    "it": "Regina dei parassiti",
+    "ref": "FG1: 76"
+   },
+   {
+    "roll": [
+     92,
+     93
+    ],
+    "en": "Salamander, Sand",
+    "it": "Salamandra delle sabbie",
+    "ref": "COR: 113"
+   },
+   {
+    "roll": [
+     94,
+     94
+    ],
+    "en": "Elemental, Fire",
+    "it": "Elementale del fuoco",
+    "ref": "78/90"
+   },
+   {
+    "roll": [
+     95,
+     95
+    ],
+    "en": "Chimera",
+    "it": "Chimera",
+    "ref": "65/74"
+   },
+   {
+    "roll": [
+     96,
+     96
+    ],
+    "en": "Dragon, Blue",
+    "it": "Drago blu",
+    "ref": "72/82"
+   },
+   {
+    "roll": [
+     97,
+     97
+    ],
+    "en": "Sphinx",
+    "it": "Sfinge",
+    "ref": "FG1: 70"
+   },
+   {
+    "roll": [
+     98,
+     98
+    ],
+    "en": "Giant, Cyclops",
+    "it": "Ciclope",
+    "ref": "83/98"
+   },
+   {
+    "roll": [
+     99,
+     99
+    ],
+    "en": "Giant, Sand",
+    "it": "Gigante delle sabbie",
+    "ref": "FG2: 43"
+   },
+   {
+    "roll": [
+     100,
+     100
+    ],
+    "en": "Dead creatures",
+    "it": "Creature morte",
+    "ref": "Roll again",
+    "note": "dead"
+   }
+  ],
+  "jungles": [
+   {
+    "roll": [
+     1,
+     1
+    ],
+    "en": "Aeromi",
+    "it": "Aeromi",
+    "ref": "FG2: 3"
+   },
+   {
+    "roll": [
+     2,
+     3
+    ],
+    "en": "Ape, Bonobo",
+    "it": "Bonobo",
+    "ref": "FG1: 5"
+   },
+   {
+    "roll": [
+     4,
+     4
+    ],
+    "en": "Ape, Chimpanzee",
+    "it": "Scimpanzé",
+    "ref": "FG1: 5"
+   },
+   {
+    "roll": [
+     5,
+     6
+    ],
+    "en": "Bat",
+    "it": "Pipistrelli",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     7,
+     8
+    ],
+    "en": "Bee, Giant",
+    "it": "Ape gigante",
+    "ref": "59/68"
+   },
+   {
+    "roll": [
+     9,
+     10
+    ],
+    "en": "Centipede, Giant",
+    "it": "Centopiedi gigante",
+    "ref": "64/73"
+   },
+   {
+    "roll": [
+     11,
+     14
+    ],
+    "en": "Chelonian",
+    "it": "Cheloniano",
+    "ref": "FG1: 17"
+   },
+   {
+    "roll": [
+     15,
+     15
+    ],
+    "en": "Dinosaur, Compsognathus",
+    "it": "Compsognato",
+    "ref": "FG1: 25"
+   },
+   {
+    "roll": [
+     16,
+     16
+    ],
+    "en": "Dinosaur, Pterodactyl",
+    "it": "Pterodattilo",
+    "ref": "66/76"
+   },
+   {
+    "roll": [
+     17,
+     17
+    ],
+    "en": "Dinosaur, Raptor",
+    "it": "Raptor",
+    "ref": "FG1: 26"
+   },
+   {
+    "roll": [
+     18,
+     19
+    ],
+    "en": "Rat",
+    "it": "Ratti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     20,
+     21
+    ],
+    "en": "Rat, Giant",
+    "it": "Ratti giganti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     22,
+     23
+    ],
+    "en": "Snake, Pit Viper",
+    "it": "Vipera",
+    "ref": "117/144"
+   },
+   {
+    "roll": [
+     24,
+     24
+    ],
+    "en": "Snake, Vort",
+    "it": "Serpente vort",
+    "ref": "FG1: 70"
+   },
+   {
+    "roll": [
+     25,
+     25
+    ],
+    "en": "Trobold",
+    "it": "Trobold",
+    "ref": "FG2: 87"
+   },
+   {
+    "roll": [
+     26,
+     26
+    ],
+    "en": "Ape, Orangutang",
+    "it": "Orango",
+    "ref": "FG1: 7"
+   },
+   {
+    "roll": [
+     27,
+     28
+    ],
+    "en": "Beetle, Giant Bombardier",
+    "it": "Scarabeo bombardiere gigante",
+    "ref": "59/68"
+   },
+   {
+    "roll": [
+     29,
+     30
+    ],
+    "en": "Blood Rose",
+    "it": "Rosa di sangue",
+    "ref": "61/70"
+   },
+   {
+    "roll": [
+     31,
+     32
+    ],
+    "en": "Crocodile",
+    "it": "Coccodrillo",
+    "ref": "66/75"
+   },
+   {
+    "roll": [
+     33,
+     34
+    ],
+    "en": "Fly, Giant",
+    "it": "Mosca gigante",
+    "ref": "80/95"
+   },
+   {
+    "roll": [
+     35,
+     36
+    ],
+    "en": "Frog, Giant",
+    "it": "Rana gigante",
+    "ref": "81/95"
+   },
+   {
+    "roll": [
+     37,
+     38
+    ],
+    "en": "Insect Swarm",
+    "it": "Sciame d'insetti",
+    "ref": "98/114"
+   },
+   {
+    "roll": [
+     39,
+     42
+    ],
+    "en": "Lizardman",
+    "it": "Uomini lucertola",
+    "ref": "102/123"
+   },
+   {
+    "roll": [
+     43,
+     43
+    ],
+    "en": "Rock Baboon",
+    "it": "Babbuini delle rocce",
+    "ref": "112/137"
+   },
+   {
+    "roll": [
+     44,
+     45
+    ],
+    "en": "Snake, Giant Rattlesnake",
+    "it": "Serpente a sonagli gigante",
+    "ref": "117/144"
+   },
+   {
+    "roll": [
+     46,
+     46
+    ],
+    "en": "Spider, Giant Crab",
+    "it": "Ragno granchio gigante",
+    "ref": "119/146"
+   },
+   {
+    "roll": [
+     47,
+     50
+    ],
+    "en": "Troglodyte",
+    "it": "Troglodita",
+    "ref": "122/151"
+   },
+   {
+    "roll": [
+     51,
+     51
+    ],
+    "en": "Ape, Winged",
+    "it": "Scimmia alata",
+    "ref": "FG1: 7"
+   },
+   {
+    "roll": [
+     52,
+     52
+    ],
+    "en": "Dinosaur, Deinonychus",
+    "it": "Deinonico",
+    "ref": "66/76"
+   },
+   {
+    "roll": [
+     53,
+     53
+    ],
+    "en": "Spider, Giant Black Widow",
+    "it": "Vedova nera gigante",
+    "ref": "118/146"
+   },
+   {
+    "roll": [
+     54,
+     55
+    ],
+    "en": "Ant, Giant",
+    "it": "Formica gigante",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     56,
+     57
+    ],
+    "en": "Ape, Carnivorous",
+    "it": "Scimmia carnivora",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     58,
+     58
+    ],
+    "en": "Ape, Gorilla",
+    "it": "Gorilla",
+    "ref": "FG1: 7"
+   },
+   {
+    "roll": [
+     59,
+     59
+    ],
+    "en": "Doppleganger",
+    "it": "Doppelgänger",
+    "ref": "69/79"
+   },
+   {
+    "roll": [
+     60,
+     60
+    ],
+    "en": "Fish, Giant Piranha",
+    "it": "Piranha gigante",
+    "ref": "80/94"
+   },
+   {
+    "roll": [
+     61,
+     62
+    ],
+    "en": "Jaguar",
+    "it": "Giaguaro",
+    "ref": "99/116"
+   },
+   {
+    "roll": [
+     63,
+     63
+    ],
+    "en": "Ogre",
+    "it": "Orco",
+    "ref": "108/131"
+   },
+   {
+    "roll": [
+     64,
+     64
+    ],
+    "en": "Scorpion, Giant",
+    "it": "Scorpione gigante",
+    "ref": "114/141"
+   },
+   {
+    "roll": [
+     65,
+     65
+    ],
+    "en": "Spider, Giant Bola",
+    "it": "Ragno bola gigante",
+    "ref": "FG1: 71"
+   },
+   {
+    "roll": [
+     66,
+     66
+    ],
+    "en": "Spider, Giant Tarantula",
+    "it": "Tarantola gigante",
+    "ref": "119/147"
+   },
+   {
+    "roll": [
+     67,
+     67
+    ],
+    "en": "Wanstrow",
+    "it": "Wanstrow",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     68,
+     69
+    ],
+    "en": "Wasp, Giant",
+    "it": "Vespa gigante",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     70,
+     70
+    ],
+    "en": "Bog Crone",
+    "it": "Megera della palude",
+    "ref": "FG1: 12"
+   },
+   {
+    "roll": [
+     71,
+     71
+    ],
+    "en": "Dinosaur, Pteranodon",
+    "it": "Pteranodonte",
+    "ref": "COR: 66"
+   },
+   {
+    "roll": [
+     72,
+     72
+    ],
+    "en": "Giant Horned Chameleon",
+    "it": "Camaleonte cornuto gigante",
+    "ref": "101/122"
+   },
+   {
+    "roll": [
+     73,
+     73
+    ],
+    "en": "Praying Mantis, Giant",
+    "it": "Mantide religiosa gigante",
+    "ref": "FG1: 58"
+   },
+   {
+    "roll": [
+     74,
+     74
+    ],
+    "en": "Snake, Giant Two-Headed",
+    "it": "Serpente bicefalo gigante",
+    "ref": "FG1: 70"
+   },
+   {
+    "roll": [
+     75,
+     76
+    ],
+    "en": "Snake, Python",
+    "it": "Pitone",
+    "ref": "117/145"
+   },
+   {
+    "roll": [
+     77,
+     78
+    ],
+    "en": "Assassin Vine",
+    "it": "Vite assassina",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     79,
+     80
+    ],
+    "en": "Crocodile, Large",
+    "it": "Coccodrillo grande",
+    "ref": "66/75"
+   },
+   {
+    "roll": [
+     81,
+     81
+    ],
+    "en": "Displacer",
+    "it": "Displacer",
+    "ref": "68/"
+   },
+   {
+    "roll": [
+     82,
+     83
+    ],
+    "en": "Leech, Giant",
+    "it": "Sanguisuga gigante",
+    "ref": "100/119"
+   },
+   {
+    "roll": [
+     84,
+     84
+    ],
+    "en": "Manticore",
+    "it": "Manticora",
+    "ref": "106/127"
+   },
+   {
+    "roll": [
+     85,
+     85
+    ],
+    "en": "Troll",
+    "it": "Troll",
+    "ref": "122/151"
+   },
+   {
+    "roll": [
+     86,
+     86
+    ],
+    "en": "Ape, Gigantopithecus",
+    "it": "Gigantopiteco",
+    "ref": "FG1: 6"
+   },
+   {
+    "roll": [
+     87,
+     87
+    ],
+    "en": "Ape, Girallon",
+    "it": "Girallon",
+    "ref": "FG1: 6"
+   },
+   {
+    "roll": [
+     88,
+     88
+    ],
+    "en": "Dragon, Black",
+    "it": "Drago nero",
+    "ref": "71/85"
+   },
+   {
+    "roll": [
+     89,
+     89
+    ],
+    "en": "Treant",
+    "it": "Treant",
+    "ref": "121/150"
+   },
+   {
+    "roll": [
+     90,
+     90
+    ],
+    "en": "Chimera",
+    "it": "Chimera",
+    "ref": "65/74"
+   },
+   {
+    "roll": [
+     91,
+     92
+    ],
+    "en": "Elephant",
+    "it": "Elefante",
+    "ref": "79/93"
+   },
+   {
+    "roll": [
+     93,
+     93
+    ],
+    "en": "Gorophont",
+    "it": "Gorophont",
+    "ref": "FG2: 47"
+   },
+   {
+    "roll": [
+     94,
+     94
+    ],
+    "en": "Megatherium",
+    "it": "Megaterio",
+    "ref": "FG1: 48"
+   },
+   {
+    "roll": [
+     95,
+     95
+    ],
+    "en": "Tendriculos",
+    "it": "Tendriculos",
+    "ref": "FG1: 73"
+   },
+   {
+    "roll": [
+     96,
+     96
+    ],
+    "en": "Dinosaur, Stegosaurus",
+    "it": "Stegosauro",
+    "ref": "67/76"
+   },
+   {
+    "roll": [
+     97,
+     97
+    ],
+    "en": "Dinosaur, Triceratops",
+    "it": "Triceratopo",
+    "ref": "67/77"
+   },
+   {
+    "roll": [
+     98,
+     98
+    ],
+    "en": "Giant, Cyclops",
+    "it": "Ciclope",
+    "ref": "83/98"
+   },
+   {
+    "roll": [
+     99,
+     99
+    ],
+    "en": "Dinosaur, T-Rex",
+    "it": "Tirannosauro",
+    "ref": "67/77"
+   },
+   {
+    "roll": [
+     100,
+     100
+    ],
+    "en": "Dead creatures",
+    "it": "Creature morte",
+    "ref": "Roll again",
+    "note": "dead"
+   }
+  ],
+  "wastelands": [
+   {
+    "roll": [
+     1,
+     1
+    ],
+    "en": "Bat",
+    "it": "Pipistrelli",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     2,
+     2
+    ],
+    "en": "Centipede, Giant",
+    "it": "Centopiedi gigante",
+    "ref": "64/73"
+   },
+   {
+    "roll": [
+     3,
+     3
+    ],
+    "en": "Cockroach, Giant",
+    "it": "Scarafaggio gigante",
+    "ref": "FG1: 19"
+   },
+   {
+    "roll": [
+     4,
+     5
+    ],
+    "en": "Dog (Wild)",
+    "it": "Cani selvatici",
+    "ref": "69/78"
+   },
+   {
+    "roll": [
+     6,
+     6
+    ],
+    "en": "Eelbat",
+    "it": "Anguillapipistrello",
+    "ref": "FG1: 50"
+   },
+   {
+    "roll": [
+     7,
+     8
+    ],
+    "en": "Rat",
+    "it": "Ratti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     9,
+     10
+    ],
+    "en": "Rat, Giant",
+    "it": "Ratti giganti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     11,
+     11
+    ],
+    "en": "Rot Grub",
+    "it": "Larva putrida",
+    "ref": "112/137"
+   },
+   {
+    "roll": [
+     12,
+     12
+    ],
+    "en": "Skeletal Flayer",
+    "it": "Scuoiatore scheletrico",
+    "ref": "FG2: 77"
+   },
+   {
+    "roll": [
+     13,
+     13
+    ],
+    "en": "Skeleton",
+    "it": "Scheletri",
+    "ref": "116/144"
+   },
+   {
+    "roll": [
+     14,
+     14
+    ],
+    "en": "Skeleton, Leaded",
+    "it": "Scheletro piombato",
+    "ref": "FG1: 68"
+   },
+   {
+    "roll": [
+     15,
+     15
+    ],
+    "en": "Spider, Humming",
+    "it": "Ragno ronzante",
+    "ref": "FG2: 81"
+   },
+   {
+    "roll": [
+     16,
+     16
+    ],
+    "en": "Trobold",
+    "it": "Trobold",
+    "ref": "FG2: 87"
+   },
+   {
+    "roll": [
+     17,
+     17
+    ],
+    "en": "Vermen",
+    "it": "Vermen",
+    "ref": "FG1: 76"
+   },
+   {
+    "roll": [
+     18,
+     18
+    ],
+    "en": "Zombie Leper",
+    "it": "Zombi lebbroso",
+    "ref": "FG1: 78"
+   },
+   {
+    "roll": [
+     19,
+     19
+    ],
+    "en": "Amarok",
+    "it": "Amarok",
+    "ref": "FG2: 4",
+    "note": "night"
+   },
+   {
+    "roll": [
+     20,
+     21
+    ],
+    "en": "Bat, Giant",
+    "it": "Pipistrello gigante",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     22,
+     22
+    ],
+    "en": "Beetle, Giant Bombardier",
+    "it": "Scarabeo bombardiere gigante",
+    "ref": "59/68"
+   },
+   {
+    "roll": [
+     23,
+     23
+    ],
+    "en": "Cockroach, Giant Ghoul",
+    "it": "Scarafaggio ghoul gigante",
+    "ref": "FG1: 20"
+   },
+   {
+    "roll": [
+     24,
+     25
+    ],
+    "en": "Fly, Giant",
+    "it": "Mosca gigante",
+    "ref": "80/95"
+   },
+   {
+    "roll": [
+     26,
+     26
+    ],
+    "en": "Ghast",
+    "it": "Ghast",
+    "ref": "82/97"
+   },
+   {
+    "roll": [
+     27,
+     27
+    ],
+    "en": "Ghostcap Bloom",
+    "it": "Fungo spettrale",
+    "ref": "FG2: 42"
+   },
+   {
+    "roll": [
+     28,
+     28
+    ],
+    "en": "Ghoul",
+    "it": "Ghoul",
+    "ref": "83/97"
+   },
+   {
+    "roll": [
+     29,
+     29
+    ],
+    "en": "Green Slime",
+    "it": "Melma verde",
+    "ref": "94/109"
+   },
+   {
+    "roll": [
+     30,
+     30
+    ],
+    "en": "Grick",
+    "it": "Grick",
+    "ref": "FG1: 35"
+   },
+   {
+    "roll": [
+     31,
+     31
+    ],
+    "en": "Heucova",
+    "it": "Heucova",
+    "ref": "FG1: 38"
+   },
+   {
+    "roll": [
+     32,
+     32
+    ],
+    "en": "Imp",
+    "it": "Imp",
+    "ref": "FG1: 40"
+   },
+   {
+    "roll": [
+     33,
+     33
+    ],
+    "en": "Infernal, Quasit",
+    "it": "Quasit",
+    "ref": "FG1: 42"
+   },
+   {
+    "roll": [
+     34,
+     35
+    ],
+    "en": "Insect Swarm",
+    "it": "Sciame d'insetti",
+    "ref": "98/114"
+   },
+   {
+    "roll": [
+     36,
+     36
+    ],
+    "en": "Phantom Fungus",
+    "it": "Fungo fantasma",
+    "ref": "FG1: 57"
+   },
+   {
+    "roll": [
+     37,
+     37
+    ],
+    "en": "Rot Vulture",
+    "it": "Avvoltoio putrido",
+    "ref": "FG1: 63"
+   },
+   {
+    "roll": [
+     38,
+     38
+    ],
+    "en": "Scarecrow, Living (Small)",
+    "it": "Spaventapasseri vivente (piccolo)",
+    "ref": "FG2: 75"
+   },
+   {
+    "roll": [
+     39,
+     39
+    ],
+    "en": "Skeleton, Crimson Bones",
+    "it": "Scheletro dalle ossa cremisi",
+    "ref": "FG1: 67"
+   },
+   {
+    "roll": [
+     40,
+     40
+    ],
+    "en": "Yellow Mold",
+    "it": "Muffa gialla",
+    "ref": "128/160"
+   },
+   {
+    "roll": [
+     41,
+     41
+    ],
+    "en": "Zombie",
+    "it": "Zombi",
+    "ref": "128/160"
+   },
+   {
+    "roll": [
+     42,
+     42
+    ],
+    "en": "Zombie Flesh Eater",
+    "it": "Zombi divoratore",
+    "ref": "FG1: 78"
+   },
+   {
+    "roll": [
+     43,
+     43
+    ],
+    "en": "Beetle, Giant Tiger",
+    "it": "Scarabeo tigre gigante",
+    "ref": "60/69"
+   },
+   {
+    "roll": [
+     44,
+     44
+    ],
+    "en": "Grave Sentinel",
+    "it": "Sentinella delle tombe",
+    "ref": "FG2: 48"
+   },
+   {
+    "roll": [
+     45,
+     45
+    ],
+    "en": "Gray Ooze",
+    "it": "Melma grigia",
+    "ref": "94/109"
+   },
+   {
+    "roll": [
+     46,
+     46
+    ],
+    "en": "Infernal, Lemure",
+    "it": "Lemure",
+    "ref": "FG1: 41"
+   },
+   {
+    "roll": [
+     47,
+     47
+    ],
+    "en": "Lemure",
+    "it": "Lemure",
+    "ref": "FG1: 41"
+   },
+   {
+    "roll": [
+     48,
+     48
+    ],
+    "en": "Lobizon",
+    "it": "Lobizon",
+    "ref": "FG2: 59"
+   },
+   {
+    "roll": [
+     49,
+     49
+    ],
+    "en": "Lycanthrope, Wererat",
+    "it": "Licantropo, ratto mannaro",
+    "ref": "103/124",
+    "note": "lycanthrope"
+   },
+   {
+    "roll": [
+     50,
+     50
+    ],
+    "en": "Necrotic Ooze",
+    "it": "Melma necrotica",
+    "ref": "FG1: 52"
+   },
+   {
+    "roll": [
+     51,
+     51
+    ],
+    "en": "Shambling Mound",
+    "it": "Cumulo strisciante",
+    "ref": "FG2: 77"
+   },
+   {
+    "roll": [
+     52,
+     52
+    ],
+    "en": "Skeleton, Haunted Bones",
+    "it": "Scheletro dalle ossa infestate",
+    "ref": "FG1: 68"
+   },
+   {
+    "roll": [
+     53,
+     53
+    ],
+    "en": "Spider, Giant Black Widow",
+    "it": "Vedova nera gigante",
+    "ref": "118/146"
+   },
+   {
+    "roll": [
+     54,
+     54
+    ],
+    "en": "Wight",
+    "it": "Wight",
+    "ref": "126/157"
+   },
+   {
+    "roll": [
+     55,
+     55
+    ],
+    "en": "Blink Dog",
+    "it": "Cane intermittente",
+    "ref": "61/69"
+   },
+   {
+    "roll": [
+     56,
+     56
+    ],
+    "en": "Bloodshroud",
+    "it": "Sudario di sangue",
+    "ref": "FG2: 14"
+   },
+   {
+    "roll": [
+     57,
+     57
+    ],
+    "en": "Doppleganger",
+    "it": "Doppelgänger",
+    "ref": "69/79"
+   },
+   {
+    "roll": [
+     58,
+     58
+    ],
+    "en": "Lycanthrope, Werewolf",
+    "it": "Licantropo, lupo mannaro",
+    "ref": "103/125",
+    "note": "lycanthrope"
+   },
+   {
+    "roll": [
+     59,
+     59
+    ],
+    "en": "Maggot Man",
+    "it": "Uomo larva",
+    "ref": "FG2: 60"
+   },
+   {
+    "roll": [
+     60,
+     60
+    ],
+    "en": "Odeum",
+    "it": "Odeum",
+    "ref": "FG1: 53"
+   },
+   {
+    "roll": [
+     61,
+     61
+    ],
+    "en": "Plague Hound",
+    "it": "Segugio della pestilenza",
+    "ref": "FG1: 57"
+   },
+   {
+    "roll": [
+     62,
+     62
+    ],
+    "en": "Scorpion, Giant",
+    "it": "Scorpione gigante",
+    "ref": "114/141"
+   },
+   {
+    "roll": [
+     63,
+     63
+    ],
+    "en": "Vampire Spawn",
+    "it": "Progenie vampirica",
+    "ref": "FG1: 76",
+    "note": "night"
+   },
+   {
+    "roll": [
+     64,
+     64
+    ],
+    "en": "Wanstrow",
+    "it": "Wanstrow",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     65,
+     65
+    ],
+    "en": "Wolf, Worg",
+    "it": "Worg",
+    "ref": "FG1: 77"
+   },
+   {
+    "roll": [
+     66,
+     66
+    ],
+    "en": "Balroach",
+    "it": "Balroach",
+    "ref": "FG1: 19"
+   },
+   {
+    "roll": [
+     67,
+     67
+    ],
+    "en": "Cockatrice",
+    "it": "Coccatrice",
+    "ref": "65/74"
+   },
+   {
+    "roll": [
+     68,
+     68
+    ],
+    "en": "Giant Flying Brain",
+    "it": "Cervello volante gigante",
+    "ref": "FG2: 42"
+   },
+   {
+    "roll": [
+     69,
+     69
+    ],
+    "en": "Hangman Tree",
+    "it": "Albero dell'impiccato",
+    "ref": "95/110"
+   },
+   {
+    "roll": [
+     70,
+     70
+    ],
+    "en": "Hydra",
+    "it": "Idra",
+    "ref": "97/113"
+   },
+   {
+    "roll": [
+     71,
+     72
+    ],
+    "en": "Hyena",
+    "it": "Iene",
+    "ref": "98/114"
+   },
+   {
+    "roll": [
+     73,
+     73
+    ],
+    "en": "Giant Horned Chameleon",
+    "it": "Camaleonte cornuto gigante",
+    "ref": "101/122"
+   },
+   {
+    "roll": [
+     74,
+     74
+    ],
+    "en": "Ochre Jelly",
+    "it": "Gelatina ocra",
+    "ref": "107/118"
+   },
+   {
+    "roll": [
+     75,
+     75
+    ],
+    "en": "Praying Mantis, Giant",
+    "it": "Mantide religiosa gigante",
+    "ref": "FG1: 58"
+   },
+   {
+    "roll": [
+     76,
+     76
+    ],
+    "en": "Red Slime",
+    "it": "Melma rossa",
+    "ref": "FG1: 61"
+   },
+   {
+    "roll": [
+     77,
+     77
+    ],
+    "en": "Basilisk",
+    "it": "Basilisco",
+    "ref": "57/65"
+   },
+   {
+    "roll": [
+     78,
+     78
+    ],
+    "en": "Boggart",
+    "it": "Boggart",
+    "ref": "FG1: 12"
+   },
+   {
+    "roll": [
+     79,
+     79
+    ],
+    "en": "Corpse Abomination",
+    "it": "Abominio di cadaveri",
+    "ref": "FG2: 19"
+   },
+   {
+    "roll": [
+     80,
+     80
+    ],
+    "en": "Displacer",
+    "it": "Displacer",
+    "ref": "68/"
+   },
+   {
+    "roll": [
+     81,
+     81
+    ],
+    "en": "Ettercap",
+    "it": "Ettercap",
+    "ref": "FG1: 30"
+   },
+   {
+    "roll": [
+     82,
+     82
+    ],
+    "en": "Fell Manticore",
+    "it": "Manticora crudele",
+    "ref": "FG2: 36"
+   },
+   {
+    "roll": [
+     83,
+     83
+    ],
+    "en": "Leech, Giant",
+    "it": "Sanguisuga gigante",
+    "ref": "100/119"
+   },
+   {
+    "roll": [
+     84,
+     84
+    ],
+    "en": "Manticore",
+    "it": "Manticora",
+    "ref": "106/127"
+   },
+   {
+    "roll": [
+     85,
+     85
+    ],
+    "en": "Minotaur",
+    "it": "Minotauro",
+    "ref": "106/129"
+   },
+   {
+    "roll": [
+     86,
+     86
+    ],
+    "en": "Troll",
+    "it": "Troll",
+    "ref": "122/151"
+   },
+   {
+    "roll": [
+     87,
+     87
+    ],
+    "en": "Vermin Queen",
+    "it": "Regina dei parassiti",
+    "ref": "FG1: 76"
+   },
+   {
+    "roll": [
+     88,
+     88
+    ],
+    "en": "Banshee",
+    "it": "Banshee",
+    "ref": "FG1: 9"
+   },
+   {
+    "roll": [
+     89,
+     89
+    ],
+    "en": "Dragon, Green",
+    "it": "Drago verde",
+    "ref": "73/82"
+   },
+   {
+    "roll": [
+     90,
+     90
+    ],
+    "en": "Gorgon",
+    "it": "Gorgone",
+    "ref": "93/109"
+   },
+   {
+    "roll": [
+     91,
+     91
+    ],
+    "en": "Troll, Night",
+    "it": "Troll notturno",
+    "ref": "FG2: 88"
+   },
+   {
+    "roll": [
+     92,
+     92
+    ],
+    "en": "Chimera",
+    "it": "Chimera",
+    "ref": "65/74"
+   },
+   {
+    "roll": [
+     93,
+     93
+    ],
+    "en": "Gibbering Mouther",
+    "it": "Bocca farfugliante",
+    "ref": "FG1: 34"
+   },
+   {
+    "roll": [
+     94,
+     94
+    ],
+    "en": "Vampire",
+    "it": "Vampiro",
+    "ref": "124/154",
+    "note": "night"
+   },
+   {
+    "roll": [
+     95,
+     95
+    ],
+    "en": "Black Pudding",
+    "it": "Budino nero",
+    "ref": "60/116"
+   },
+   {
+    "roll": [
+     96,
+     96
+    ],
+    "en": "Dragon, Red",
+    "it": "Drago rosso",
+    "ref": "73/83"
+   },
+   {
+    "roll": [
+     97,
+     97
+    ],
+    "en": "Ghost",
+    "it": "Fantasma",
+    "ref": "82/96"
+   },
+   {
+    "roll": [
+     98,
+     98
+    ],
+    "en": "Great Orb of Eyes",
+    "it": "Grande globo d'occhi",
+    "ref": "FG1: 34"
+   },
+   {
+    "roll": [
+     99,
+     99
+    ],
+    "en": "Giant, Cyclops",
+    "it": "Ciclope",
+    "ref": "83/98"
+   },
+   {
+    "roll": [
+     100,
+     100
+    ],
+    "en": "Dead creatures",
+    "it": "Creature morte",
+    "ref": "Roll again",
+    "note": "dead"
+   }
+  ],
+  "caves": [
+   {
+    "roll": [
+     1,
+     1
+    ],
+    "en": "Bat",
+    "it": "Pipistrelli",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     2,
+     3
+    ],
+    "en": "Bandit",
+    "it": "Banditi",
+    "ref": "HH: 27"
+   },
+   {
+    "roll": [
+     4,
+     4
+    ],
+    "en": "Bee, Giant",
+    "it": "Ape gigante",
+    "ref": "59/68"
+   },
+   {
+    "roll": [
+     5,
+     5
+    ],
+    "en": "Beetle, Giant Fire",
+    "it": "Scarabeo di fuoco gigante",
+    "ref": "60/68"
+   },
+   {
+    "roll": [
+     6,
+     7
+    ],
+    "en": "Centipede, Giant",
+    "it": "Centopiedi gigante",
+    "ref": "64/73"
+   },
+   {
+    "roll": [
+     8,
+     8
+    ],
+    "en": "Cockroach, Giant",
+    "it": "Scarafaggio gigante",
+    "ref": "FG1: 19"
+   },
+   {
+    "roll": [
+     9,
+     9
+    ],
+    "en": "Darkmantle",
+    "it": "Mantoscuro",
+    "ref": "FG1: 22"
+   },
+   {
+    "roll": [
+     10,
+     10
+    ],
+    "en": "Dog (Wild)",
+    "it": "Cani selvatici",
+    "ref": "69/78"
+   },
+   {
+    "roll": [
+     11,
+     11
+    ],
+    "en": "Eelbat",
+    "it": "Anguillapipistrello",
+    "ref": "FG1: 50"
+   },
+   {
+    "roll": [
+     12,
+     13
+    ],
+    "en": "Goblin",
+    "it": "Goblin",
+    "ref": "89/104"
+   },
+   {
+    "roll": [
+     14,
+     14
+    ],
+    "en": "Hiveling",
+    "it": "Hiveling",
+    "ref": "FG2: 51"
+   },
+   {
+    "roll": [
+     15,
+     15
+    ],
+    "en": "Hobgoblin",
+    "it": "Hobgoblin",
+    "ref": "97/113"
+   },
+   {
+    "roll": [
+     16,
+     16
+    ],
+    "en": "Kobold",
+    "it": "Coboldi",
+    "ref": "99/118"
+   },
+   {
+    "roll": [
+     17,
+     17
+    ],
+    "en": "Orc",
+    "it": "Orchetti",
+    "ref": "108/131"
+   },
+   {
+    "roll": [
+     18,
+     18
+    ],
+    "en": "Rakun",
+    "it": "Rakun",
+    "ref": "FG2: 71"
+   },
+   {
+    "roll": [
+     19,
+     20
+    ],
+    "en": "Rat",
+    "it": "Ratti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     21,
+     22
+    ],
+    "en": "Rat, Giant",
+    "it": "Ratti giganti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     23,
+     23
+    ],
+    "en": "Rot Grub",
+    "it": "Larva putrida",
+    "ref": "112/137"
+   },
+   {
+    "roll": [
+     24,
+     24
+    ],
+    "en": "Shrew, Giant",
+    "it": "Toporagno gigante",
+    "ref": "115/143"
+   },
+   {
+    "roll": [
+     25,
+     26
+    ],
+    "en": "Skeleton",
+    "it": "Scheletri",
+    "ref": "116/144"
+   },
+   {
+    "roll": [
+     27,
+     27
+    ],
+    "en": "Snake, Pit Viper",
+    "it": "Vipera",
+    "ref": "117/144"
+   },
+   {
+    "roll": [
+     28,
+     28
+    ],
+    "en": "Snake, Spitting Cobra",
+    "it": "Cobra sputatore",
+    "ref": "118/145"
+   },
+   {
+    "roll": [
+     29,
+     29
+    ],
+    "en": "Stalag",
+    "it": "Stalag",
+    "ref": "FG1: 72"
+   },
+   {
+    "roll": [
+     30,
+     30
+    ],
+    "en": "Bat, Giant",
+    "it": "Pipistrello gigante",
+    "ref": "58/66"
+   },
+   {
+    "roll": [
+     31,
+     32
+    ],
+    "en": "Cave Locust, Giant",
+    "it": "Locusta delle caverne gigante",
+    "ref": "63/72"
+   },
+   {
+    "roll": [
+     33,
+     34
+    ],
+    "en": "Caveman",
+    "it": "Uomini delle caverne",
+    "ref": "63/"
+   },
+   {
+    "roll": [
+     35,
+     35
+    ],
+    "en": "Crocodile",
+    "it": "Coccodrillo",
+    "ref": "66/75"
+   },
+   {
+    "roll": [
+     36,
+     36
+    ],
+    "en": "Fly, Giant",
+    "it": "Mosca gigante",
+    "ref": "80/95"
+   },
+   {
+    "roll": [
+     37,
+     37
+    ],
+    "en": "Ghoul",
+    "it": "Ghoul",
+    "ref": "83/97"
+   },
+   {
+    "roll": [
+     38,
+     38
+    ],
+    "en": "Gump",
+    "it": "Gump",
+    "ref": "FG1: 37"
+   },
+   {
+    "roll": [
+     39,
+     39
+    ],
+    "en": "Gnoll",
+    "it": "Gnoll",
+    "ref": "87/102"
+   },
+   {
+    "roll": [
+     40,
+     40
+    ],
+    "en": "Grawl",
+    "it": "Grawl",
+    "ref": "FG2: 49"
+   },
+   {
+    "roll": [
+     41,
+     41
+    ],
+    "en": "Green Slime",
+    "it": "Melma verde",
+    "ref": "94/109"
+   },
+   {
+    "roll": [
+     42,
+     42
+    ],
+    "en": "Harpy",
+    "it": "Arpie",
+    "ref": "95/111"
+   },
+   {
+    "roll": [
+     43,
+     43
+    ],
+    "en": "Phantom Fungus",
+    "it": "Fungo fantasma",
+    "ref": "FG1: 57"
+   },
+   {
+    "roll": [
+     44,
+     44
+    ],
+    "en": "Snake, Giant Rattlesnake",
+    "it": "Serpente a sonagli gigante",
+    "ref": "117/144"
+   },
+   {
+    "roll": [
+     45,
+     45
+    ],
+    "en": "Spider, Giant Crab",
+    "it": "Ragno granchio gigante",
+    "ref": "119/146"
+   },
+   {
+    "roll": [
+     46,
+     46
+    ],
+    "en": "Troglodyte",
+    "it": "Troglodita",
+    "ref": "122/151"
+   },
+   {
+    "roll": [
+     47,
+     47
+    ],
+    "en": "Wolf",
+    "it": "Lupi",
+    "ref": "127/158"
+   },
+   {
+    "roll": [
+     48,
+     48
+    ],
+    "en": "Yellow Mold",
+    "it": "Muffa gialla",
+    "ref": "128/160"
+   },
+   {
+    "roll": [
+     49,
+     49
+    ],
+    "en": "Zombie",
+    "it": "Zombi",
+    "ref": "128/160"
+   },
+   {
+    "roll": [
+     50,
+     50
+    ],
+    "en": "Beetle, Giant Tiger",
+    "it": "Scarabeo tigre gigante",
+    "ref": "60/69"
+   },
+   {
+    "roll": [
+     51,
+     51
+    ],
+    "en": "Boar, Wild",
+    "it": "Cinghiale",
+    "ref": "62/70"
+   },
+   {
+    "roll": [
+     52,
+     52
+    ],
+    "en": "Choker",
+    "it": "Strangolatore",
+    "ref": "FG1: 18"
+   },
+   {
+    "roll": [
+     53,
+     53
+    ],
+    "en": "Crab, Giant",
+    "it": "Granchio gigante",
+    "ref": "66/75"
+   },
+   {
+    "roll": [
+     54,
+     54
+    ],
+    "en": "Gray Ooze",
+    "it": "Melma grigia",
+    "ref": "94/109"
+   },
+   {
+    "roll": [
+     55,
+     55
+    ],
+    "en": "Lycanthrope, Wererat",
+    "it": "Licantropo, ratto mannaro",
+    "ref": "103/124",
+    "note": "lycanthrope"
+   },
+   {
+    "roll": [
+     56,
+     56
+    ],
+    "en": "Orog",
+    "it": "Orog",
+    "ref": "FG2: 66"
+   },
+   {
+    "roll": [
+     57,
+     57
+    ],
+    "en": "Shrieker",
+    "it": "Fungo urlante",
+    "ref": "116/143"
+   },
+   {
+    "roll": [
+     58,
+     58
+    ],
+    "en": "Spider, Giant Black Widow",
+    "it": "Vedova nera gigante",
+    "ref": "118/146"
+   },
+   {
+    "roll": [
+     59,
+     59
+    ],
+    "en": "Syrinx",
+    "it": "Syrinx",
+    "ref": "FG2: 83"
+   },
+   {
+    "roll": [
+     60,
+     60
+    ],
+    "en": "Tapper",
+    "it": "Tapper",
+    "ref": "FG1: 73"
+   },
+   {
+    "roll": [
+     61,
+     61
+    ],
+    "en": "Tentacle Worm",
+    "it": "Verme tentacolato",
+    "ref": "120/149"
+   },
+   {
+    "roll": [
+     62,
+     62
+    ],
+    "en": "Worm Man",
+    "it": "Uomo verme",
+    "ref": "FG2: 93"
+   },
+   {
+    "roll": [
+     63,
+     64
+    ],
+    "en": "Ant, Giant",
+    "it": "Formica gigante",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     65,
+     66
+    ],
+    "en": "Ape, Carnivorous",
+    "it": "Scimmia carnivora",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     67,
+     67
+    ],
+    "en": "Aranea",
+    "it": "Aranea",
+    "ref": "FG1: 8"
+   },
+   {
+    "roll": [
+     68,
+     68
+    ],
+    "en": "Gelatinous Cube",
+    "it": "Cubo gelatinoso",
+    "ref": "81/117"
+   },
+   {
+    "roll": [
+     69,
+     69
+    ],
+    "en": "Lycanthrope, Werewolf",
+    "it": "Licantropo, lupo mannaro",
+    "ref": "103/125",
+    "note": "lycanthrope"
+   },
+   {
+    "roll": [
+     70,
+     70
+    ],
+    "en": "Medusa",
+    "it": "Medusa",
+    "ref": "105/127"
+   },
+   {
+    "roll": [
+     71,
+     71
+    ],
+    "en": "Ogre",
+    "it": "Orco",
+    "ref": "108/131"
+   },
+   {
+    "roll": [
+     72,
+     72
+    ],
+    "en": "Scorpion, Giant",
+    "it": "Scorpione gigante",
+    "ref": "114/141"
+   },
+   {
+    "roll": [
+     73,
+     73
+    ],
+    "en": "Wanstrow",
+    "it": "Wanstrow",
+    "ref": "FG2: 91"
+   },
+   {
+    "roll": [
+     74,
+     74
+    ],
+    "en": "Cockatrice",
+    "it": "Coccatrice",
+    "ref": "65/74"
+   },
+   {
+    "roll": [
+     75,
+     75
+    ],
+    "en": "Hydra",
+    "it": "Idra",
+    "ref": "97/113"
+   },
+   {
+    "roll": [
+     76,
+     76
+    ],
+    "en": "Ochre Jelly",
+    "it": "Gelatina ocra",
+    "ref": "107/118"
+   },
+   {
+    "roll": [
+     77,
+     77
+    ],
+    "en": "Sasquatch",
+    "it": "Sasquatch",
+    "ref": "FG2: 74"
+   },
+   {
+    "roll": [
+     78,
+     78
+    ],
+    "en": "Wretchling",
+    "it": "Wretchling",
+    "ref": "FG2: 93"
+   },
+   {
+    "roll": [
+     79,
+     79
+    ],
+    "en": "Basilisk",
+    "it": "Basilisco",
+    "ref": "57/65"
+   },
+   {
+    "roll": [
+     80,
+     80
+    ],
+    "en": "Bunyip",
+    "it": "Bunyip",
+    "ref": "FG1: 15"
+   },
+   {
+    "roll": [
+     81,
+     81
+    ],
+    "en": "Caecilia, Giant",
+    "it": "Cecilia gigante",
+    "ref": "62/71"
+   },
+   {
+    "roll": [
+     82,
+     82
+    ],
+    "en": "Crocodile, Large",
+    "it": "Coccodrillo grande",
+    "ref": "66/75"
+   },
+   {
+    "roll": [
+     83,
+     83
+    ],
+    "en": "Displacer",
+    "it": "Displacer",
+    "ref": "68/"
+   },
+   {
+    "roll": [
+     84,
+     84
+    ],
+    "en": "Ettercap",
+    "it": "Ettercap",
+    "ref": "FG1: 30"
+   },
+   {
+    "roll": [
+     85,
+     85
+    ],
+    "en": "Leech, Giant",
+    "it": "Sanguisuga gigante",
+    "ref": "100/119"
+   },
+   {
+    "roll": [
+     86,
+     86
+    ],
+    "en": "Manticore",
+    "it": "Manticora",
+    "ref": "106/127"
+   },
+   {
+    "roll": [
+     87,
+     87
+    ],
+    "en": "Minotaur",
+    "it": "Minotauro",
+    "ref": "106/129"
+   },
+   {
+    "roll": [
+     88,
+     88
+    ],
+    "en": "Troll",
+    "it": "Troll",
+    "ref": "122/151"
+   },
+   {
+    "roll": [
+     89,
+     90
+    ],
+    "en": "Bear, Cave",
+    "it": "Orso delle caverne",
+    "ref": "58/67"
+   },
+   {
+    "roll": [
+     91,
+     91
+    ],
+    "en": "Aboleth",
+    "it": "Aboleth",
+    "ref": "FG1: 2"
+   },
+   {
+    "roll": [
+     92,
+     92
+    ],
+    "en": "Dragon, Green",
+    "it": "Drago verde",
+    "ref": "73/82"
+   },
+   {
+    "roll": [
+     93,
+     93
+    ],
+    "en": "Gorgon",
+    "it": "Gorgone",
+    "ref": "93/109"
+   },
+   {
+    "roll": [
+     94,
+     94
+    ],
+    "en": "Chimera",
+    "it": "Chimera",
+    "ref": "65/74"
+   },
+   {
+    "roll": [
+     95,
+     95
+    ],
+    "en": "Black Pudding",
+    "it": "Budino nero",
+    "ref": "60/116"
+   },
+   {
+    "roll": [
+     96,
+     96
+    ],
+    "en": "Dragon, Red",
+    "it": "Drago rosso",
+    "ref": "73/83"
+   },
+   {
+    "roll": [
+     97,
+     97
+    ],
+    "en": "Efreeti",
+    "it": "Efreet",
+    "ref": "76/87"
+   },
+   {
+    "roll": [
+     98,
+     98
+    ],
+    "en": "Purple Worm",
+    "it": "Verme purpureo",
+    "ref": "110/134"
+   },
+   {
+    "roll": [
+     99,
+     99
+    ],
+    "en": "Giant, Cyclops",
+    "it": "Ciclope",
+    "ref": "83/98"
+   },
+   {
+    "roll": [
+     100,
+     100
+    ],
+    "en": "Dead creatures",
+    "it": "Creature morte",
+    "ref": "Roll again",
+    "note": "dead"
+   }
+  ],
+  "tombs": [
+   {
+    "roll": [
+     1,
+     2
+    ],
+    "en": "Bat",
+    "it": "Pipistrelli",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     3,
+     4
+    ],
+    "en": "Bat, Giant",
+    "it": "Pipistrello gigante",
+    "ref": "58/66",
+    "note": "night"
+   },
+   {
+    "roll": [
+     5,
+     6
+    ],
+    "en": "Rat",
+    "it": "Ratti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     7,
+     9
+    ],
+    "en": "Rat, Giant",
+    "it": "Ratti giganti",
+    "ref": "111/135"
+   },
+   {
+    "roll": [
+     10,
+     10
+    ],
+    "en": "Beetle, Giant Fire",
+    "it": "Scarabeo di fuoco gigante",
+    "ref": "60/68"
+   },
+   {
+    "roll": [
+     11,
+     11
+    ],
+    "en": "Bone Viper",
+    "it": "Vipera d'ossa",
+    "ref": "FG2: 16"
+   },
+   {
+    "roll": [
+     12,
+     13
+    ],
+    "en": "Centipede, Giant",
+    "it": "Centopiedi gigante",
+    "ref": "64/73"
+   },
+   {
+    "roll": [
+     14,
+     15
+    ],
+    "en": "Cockroach, Giant",
+    "it": "Scarafaggio gigante",
+    "ref": "FG1: 19"
+   },
+   {
+    "roll": [
+     16,
+     16
+    ],
+    "en": "Darkmantle",
+    "it": "Mantoscuro",
+    "ref": "FG1: 22"
+   },
+   {
+    "roll": [
+     17,
+     18
+    ],
+    "en": "Rot Grub",
+    "it": "Larva putrida",
+    "ref": "112/137"
+   },
+   {
+    "roll": [
+     19,
+     20
+    ],
+    "en": "Shrew, Giant",
+    "it": "Toporagno gigante",
+    "ref": "115/143"
+   },
+   {
+    "roll": [
+     21,
+     21
+    ],
+    "en": "Skeletal Flayer",
+    "it": "Scuoiatore scheletrico",
+    "ref": "FG2: 77"
+   },
+   {
+    "roll": [
+     22,
+     25
+    ],
+    "en": "Skeleton",
+    "it": "Scheletri",
+    "ref": "116/144"
+   },
+   {
+    "roll": [
+     26,
+     26
+    ],
+    "en": "Skeleton, Leaded",
+    "it": "Scheletro piombato",
+    "ref": "FG1: 68"
+   },
+   {
+    "roll": [
+     27,
+     28
+    ],
+    "en": "Snake, Pit Viper",
+    "it": "Vipera",
+    "ref": "117/144"
+   },
+   {
+    "roll": [
+     29,
+     29
+    ],
+    "en": "Snake, Spitting Cobra",
+    "it": "Cobra sputatore",
+    "ref": "118/145"
+   },
+   {
+    "roll": [
+     30,
+     30
+    ],
+    "en": "Zombie Leper",
+    "it": "Zombi lebbroso",
+    "ref": "FG1: 78"
+   },
+   {
+    "roll": [
+     31,
+     31
+    ],
+    "en": "Beetle, Giant Bombardier",
+    "it": "Scarabeo bombardiere gigante",
+    "ref": "59/68"
+   },
+   {
+    "roll": [
+     32,
+     32
+    ],
+    "en": "Cockroach, Giant Ghoul",
+    "it": "Scarafaggio ghoul gigante",
+    "ref": "FG1: 20"
+   },
+   {
+    "roll": [
+     33,
+     33
+    ],
+    "en": "Crypt Dweller",
+    "it": "Abitante delle cripte",
+    "ref": "FG1: 21"
+   },
+   {
+    "roll": [
+     34,
+     35
+    ],
+    "en": "Fly, Giant",
+    "it": "Mosca gigante",
+    "ref": "80/95"
+   },
+   {
+    "roll": [
+     36,
+     36
+    ],
+    "en": "Fool’s Idol",
+    "it": "Idolo dello stolto",
+    "ref": "FG2: 37"
+   },
+   {
+    "roll": [
+     37,
+     37
+    ],
+    "en": "Ghast",
+    "it": "Ghast",
+    "ref": "82/97"
+   },
+   {
+    "roll": [
+     38,
+     39
+    ],
+    "en": "Ghoul",
+    "it": "Ghoul",
+    "ref": "83/97"
+   },
+   {
+    "roll": [
+     40,
+     40
+    ],
+    "en": "Green Slime",
+    "it": "Melma verde",
+    "ref": "94/109"
+   },
+   {
+    "roll": [
+     41,
+     41
+    ],
+    "en": "Heucova",
+    "it": "Heucova",
+    "ref": "FG1: 38"
+   },
+   {
+    "roll": [
+     42,
+     42
+    ],
+    "en": "Imp",
+    "it": "Imp",
+    "ref": "FG1: 40"
+   },
+   {
+    "roll": [
+     43,
+     43
+    ],
+    "en": "Phantom Fungus",
+    "it": "Fungo fantasma",
+    "ref": "FG1: 57"
+   },
+   {
+    "roll": [
+     44,
+     44
+    ],
+    "en": "Shadow",
+    "it": "Ombra",
+    "ref": "114/141"
+   },
+   {
+    "roll": [
+     45,
+     45
+    ],
+    "en": "Skeleton, Crimson Bones",
+    "it": "Scheletro dalle ossa cremisi",
+    "ref": "FG1: 67"
+   },
+   {
+    "roll": [
+     46,
+     46
+    ],
+    "en": "Snake, Giant Rattlesnake",
+    "it": "Serpente a sonagli gigante",
+    "ref": "117/144"
+   },
+   {
+    "roll": [
+     47,
+     48
+    ],
+    "en": "Spider, Giant Crab",
+    "it": "Ragno granchio gigante",
+    "ref": "119/146"
+   },
+   {
+    "roll": [
+     49,
+     51
+    ],
+    "en": "Zombie",
+    "it": "Zombi",
+    "ref": "128/160"
+   },
+   {
+    "roll": [
+     52,
+     52
+    ],
+    "en": "Zombie Flesh Eater",
+    "it": "Zombi divoratore",
+    "ref": "FG1: 78"
+   },
+   {
+    "roll": [
+     53,
+     54
+    ],
+    "en": "Beetle, Giant Tiger",
+    "it": "Scarabeo tigre gigante",
+    "ref": "60/69"
+   },
+   {
+    "roll": [
+     55,
+     55
+    ],
+    "en": "Gray Ooze",
+    "it": "Melma grigia",
+    "ref": "94/109"
+   },
+   {
+    "roll": [
+     56,
+     56
+    ],
+    "en": "Lemure",
+    "it": "Lemure",
+    "ref": "FG1: 41"
+   },
+   {
+    "roll": [
+     57,
+     58
+    ],
+    "en": "Zombie",
+    "it": "Zombi",
+    "ref": "128/160"
+   },
+   {
+    "roll": [
+     59,
+     60
+    ],
+    "en": "Necrotic Ooze",
+    "it": "Melma necrotica",
+    "ref": "FG1: 52"
+   },
+   {
+    "roll": [
+     61,
+     61
+    ],
+    "en": "Shrieker",
+    "it": "Fungo urlante",
+    "ref": "116/143"
+   },
+   {
+    "roll": [
+     62,
+     62
+    ],
+    "en": "Skeleton, Haunted Bones",
+    "it": "Scheletro dalle ossa infestate",
+    "ref": "FG1: 68"
+   },
+   {
+    "roll": [
+     63,
+     63
+    ],
+    "en": "Spider, Giant Black Widow",
+    "it": "Vedova nera gigante",
+    "ref": "118/146"
+   },
+   {
+    "roll": [
+     64,
+     65
+    ],
+    "en": "Wight",
+    "it": "Wight",
+    "ref": "126/157"
+   },
+   {
+    "roll": [
+     66,
+     66
+    ],
+    "en": "Worm Man",
+    "it": "Uomo verme",
+    "ref": "FG2: 93"
+   },
+   {
+    "roll": [
+     67,
+     67
+    ],
+    "en": "Ant, Giant",
+    "it": "Formica gigante",
+    "ref": "56/64"
+   },
+   {
+    "roll": [
+     68,
+     68
+    ],
+    "en": "Bloodshroud",
+    "it": "Sudario di sangue",
+    "ref": "FG2: 14"
+   },
+   {
+    "roll": [
+     69,
+     69
+    ],
+    "en": "Bone Horror, Common",
+    "it": "Orrore d'ossa comune",
+    "ref": "FG1: 13"
+   },
+   {
+    "roll": [
+     70,
+     70
+    ],
+    "en": "Doppleganger",
+    "it": "Doppelgänger",
+    "ref": "69/79"
+   },
+   {
+    "roll": [
+     71,
+     72
+    ],
+    "en": "Gargoyle",
+    "it": "Gargolla",
+    "ref": "81/96"
+   },
+   {
+    "roll": [
+     73,
+     73
+    ],
+    "en": "Gelatinous Cube",
+    "it": "Cubo gelatinoso",
+    "ref": "81/117"
+   },
+   {
+    "roll": [
+     74,
+     74
+    ],
+    "en": "Maggot Man",
+    "it": "Uomo larva",
+    "ref": "FG2: 60"
+   },
+   {
+    "roll": [
+     75,
+     75
+    ],
+    "en": "Odeum",
+    "it": "Odeum",
+    "ref": "FG1: 53"
+   },
+   {
+    "roll": [
+     76,
+     77
+    ],
+    "en": "Plague Hound",
+    "it": "Segugio della pestilenza",
+    "ref": "FG1: 57"
+   },
+   {
+    "roll": [
+     78,
+     78
+    ],
+    "en": "Red Slime",
+    "it": "Melma rossa",
+    "ref": "FG1: 61"
+   },
+   {
+    "roll": [
+     79,
+     80
+    ],
+    "en": "Vampire Spawn",
+    "it": "Progenie vampirica",
+    "ref": "FG1: 76",
+    "note": "night"
+   },
+   {
+    "roll": [
+     81,
+     81
+    ],
+    "en": "Wraith",
+    "it": "Spettro",
+    "ref": "127/158"
+   },
+   {
+    "roll": [
+     82,
+     82
+    ],
+    "en": "Deadringer",
+    "it": "Deadringer",
+    "ref": "FG2: 23"
+   },
+   {
+    "roll": [
+     83,
+     84
+    ],
+    "en": "Mummy",
+    "it": "Mummia",
+    "ref": "107/129"
+   },
+   {
+    "roll": [
+     85,
+     85
+    ],
+    "en": "Ochre Jelly",
+    "it": "Gelatina ocra",
+    "ref": "107/118"
+   },
+   {
+    "roll": [
+     86,
+     86
+    ],
+    "en": "Wretchling",
+    "it": "Wretchling",
+    "ref": "FG2: 93"
+   },
+   {
+    "roll": [
+     87,
+     87
+    ],
+    "en": "Allip",
+    "it": "Allip",
+    "ref": "FG1: 3"
+   },
+   {
+    "roll": [
+     88,
+     88
+    ],
+    "en": "Cadaver",
+    "it": "Cadavere",
+    "ref": "FG1: 16"
+   },
+   {
+    "roll": [
+     89,
+     89
+    ],
+    "en": "Caecilia, Giant",
+    "it": "Cecilia gigante",
+    "ref": "62/71"
+   },
+   {
+    "roll": [
+     90,
+     90
+    ],
+    "en": "Corpse Abomination",
+    "it": "Abominio di cadaveri",
+    "ref": "FG2: 19"
+   },
+   {
+    "roll": [
+     91,
+     91
+    ],
+    "en": "Golem, Bone",
+    "it": "Golem d'ossa",
+    "ref": "90/106"
+   },
+   {
+    "roll": [
+     92,
+     92
+    ],
+    "en": "Vampire",
+    "it": "Vampiro",
+    "ref": "124/154",
+    "note": "night"
+   },
+   {
+    "roll": [
+     93,
+     94
+    ],
+    "en": "Draugr",
+    "it": "Draugr",
+    "ref": "FG1: 28"
+   },
+   {
+    "roll": [
+     95,
+     95
+    ],
+    "en": "Golem, Flesh",
+    "it": "Golem di carne",
+    "ref": "92/107"
+   },
+   {
+    "roll": [
+     96,
+     96
+    ],
+    "en": "Grave Dancer",
+    "it": "Danzatore delle tombe",
+    "ref": "FG2: 48"
+   },
+   {
+    "roll": [
+     97,
+     97
+    ],
+    "en": "Black Pudding",
+    "it": "Budino nero",
+    "ref": "60/116"
+   },
+   {
+    "roll": [
+     98,
+     99
+    ],
+    "en": "Ghost",
+    "it": "Fantasma",
+    "ref": "82/96"
+   },
+   {
+    "roll": [
+     100,
+     100
+    ],
+    "en": "Dead creatures",
+    "it": "Creature morte",
+    "ref": "Roll again",
+    "note": "dead"
+   }
+  ]
+ }
+}
