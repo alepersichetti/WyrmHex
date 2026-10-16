@@ -1,0 +1,419 @@
+{
+ "_about": "Pieces of the history of the land, written for WyrmHex. The program picks one line from each list, at random but always the same for the same seed, and fills in {land}, {realm_*}, {name}, {hex}, {n} from the map. Italian realms carry their articulated prepositions (del, al, dal).",
+ "it": {
+  "realm": [
+   {
+    "il": "il Regno di Valdora",
+    "di": "del Regno di Valdora",
+    "a": "al Regno di Valdora",
+    "da": "dal Regno di Valdora"
+   },
+   {
+    "il": "l'Impero Ascendente",
+    "di": "dell'Impero Ascendente",
+    "a": "all'Impero Ascendente",
+    "da": "dall'Impero Ascendente"
+   },
+   {
+    "il": "la Lega delle Sette Torri",
+    "di": "della Lega delle Sette Torri",
+    "a": "alla Lega delle Sette Torri",
+    "da": "dalla Lega delle Sette Torri"
+   },
+   {
+    "il": "il Principato di Nerovalle",
+    "di": "del Principato di Nerovalle",
+    "a": "al Principato di Nerovalle",
+    "da": "dal Principato di Nerovalle"
+   },
+   {
+    "il": "la Teocrazia del Sole Spento",
+    "di": "della Teocrazia del Sole Spento",
+    "a": "alla Teocrazia del Sole Spento",
+    "da": "dalla Teocrazia del Sole Spento"
+   },
+   {
+    "il": "il Dominio degli Stregoni",
+    "di": "del Dominio degli Stregoni",
+    "a": "al Dominio degli Stregoni",
+    "da": "dal Dominio degli Stregoni"
+   },
+   {
+    "il": "il Regno dei Re Pastori",
+    "di": "del Regno dei Re Pastori",
+    "a": "al Regno dei Re Pastori",
+    "da": "dal Regno dei Re Pastori"
+   },
+   {
+    "il": "l'Alleanza delle Corone di Ferro",
+    "di": "dell'Alleanza delle Corone di Ferro",
+    "a": "all'Alleanza delle Corone di Ferro",
+    "da": "dall'Alleanza delle Corone di Ferro"
+   }
+  ],
+  "realm_was": [
+   "Un tempo {land} apparteneva {realm_a}, le cui strade lastricate attraversano ancora le pianure, interrotte e coperte d'erba.",
+   "Secoli fa {land} era una provincia {realm_di}: ne restano pietre miliari senza nome e torri di guardia vuote.",
+   "Prima delle cronache che oggi si leggono, {land} era il cuore {realm_di}, e ogni collina ne custodisce qualche rovina.",
+   "{land} fu conquistata {realm_da}, che vi costruì fortezze, acquedotti e templi a dei oggi dimenticati."
+  ],
+  "fall": [
+   "Il regno cadde quando una pestilenza svuotò le sue città in una sola estate.",
+   "Il regno cadde quando i suoi maghi aprirono una porta che nessuno seppe più richiudere.",
+   "Il regno si spezzò in una guerra fra fratelli, e i feudi rivali si divorarono a vicenda.",
+   "Il regno finì quando i fiumi cambiarono corso e i raccolti marcirono per sette anni.",
+   "Il regno cadde quando un drago reclamò per sé il tesoro della corona, e nessun cavaliere tornò a reclamarlo.",
+   "Il regno cadde quando i morti smisero di restare nelle loro tombe."
+  ],
+  "after": [
+   "Da allora {land} è terra di nessuno: chi ci vive obbedisce alla spada più vicina.",
+   "Da allora {land} è una frontiera, dove i coloni arrivano a ondate e spariscono a ondate.",
+   "Da allora le genti di {land} diffidano dei forestieri, dei maghi e delle strade antiche.",
+   "Da allora {land} è tornata selvaggia, e le mappe dei vecchi cartografi non servono più."
+  ],
+  "cities_intro": [
+   "Oggi le città sono poche e lontane fra loro.",
+   "Oggi la vita si raccoglie in poche città murate.",
+   "Oggi il potere è diviso fra città che si guardano con sospetto."
+  ],
+  "no_city": [
+   "Nessuna città è sopravvissuta: chi attraversa {land} dorme all'aperto o fra le rovine."
+  ],
+  "city": [
+   "{name} ({hex}) è governata da un consiglio di mercanti più interessati all'oro che alla giustizia.",
+   "{name} ({hex}) è stata fondata dai sopravvissuti {realm_di}, e ne conserva con orgoglio gli stendardi.",
+   "{name} ({hex}) paga ogni anno un tributo ai predoni, pur di essere lasciata in pace.",
+   "{name} ({hex}) è retta da una vecchia regina che non esce dal suo palazzo da vent'anni.",
+   "{name} ({hex}) accoglie chiunque porti notizie dal mondo esterno, e le paga bene.",
+   "{name} ({hex}) è divisa fra due famiglie nobili che si fanno la guerra per le vie.",
+   "{name} ({hex}) vive all'ombra di un tempio potente, i cui sacerdoti decidono più del sindaco.",
+   "{name} ({hex}) è una città di minatori e fabbri, rude e ospitale."
+  ],
+  "city_river": [
+   "{name} ({hex}) vive del commercio lungo il fiume: chi controlla i suoi moli controlla la città.",
+   "{name} ({hex}) sorge su un guado conteso, e i suoi ponti sono sorvegliati giorno e notte.",
+   "{name} ({hex}) è costruita sulle due rive, e le due metà non si sono mai fidate l'una dell'altra."
+  ],
+  "city_sea": [
+   "{name} ({hex}) è un porto di pescatori e contrabbandieri, dove le navi arrivano più spesso di notte che di giorno.",
+   "{name} ({hex}) è un porto fortificato: le sue catene chiudono la baia ogni sera al tramonto.",
+   "{name} ({hex}) vive di sale e di pesce, e i suoi marinai giurano di aver visto cose che nessuno crede."
+  ],
+  "fortress": [
+   "{name} ({hex}) sorveglia le vie che portano verso le terre selvagge, con una guarnigione sempre troppo piccola.",
+   "{name} ({hex}) è in mano a un signore della guerra che si fa chiamare barone, anche se nessun re l'ha mai nominato.",
+   "{name} ({hex}) restò senza guarnigione durante la caduta {realm_di}; da poco qualcuno vi ha riacceso i fuochi.",
+   "{name} ({hex}) ospita un ordine di cavalieri che giura di difendere {land} da un male che nessuno ricorda più.",
+   "{name} ({hex}) fa da prigione: le sue mura tengono dentro qualcuno, non fuori.",
+   "A {name} ({hex}) comandano due capitani rivali, e i soldati non sanno più a chi obbedire."
+  ],
+  "dungeon": [
+   "{name} ({hex}): un tempo tesoreria {realm_di}, fu sigillata quando il regno cadde.",
+   "{name} ({hex}): si aprì dove la terra tremò in una notte senza luna, e da allora ne esce un vento caldo.",
+   "{name} ({hex}): qui aveva la sua tana uno stregone che cercava l'immortalità; nessuno sa se l'abbia trovata.",
+   "{name} ({hex}): qui fu sepolto vivo un re, insieme a tutto il suo seguito.",
+   "{name} ({hex}): i minatori fuggirono in fretta, e gli attrezzi sono ancora dove li lasciarono.",
+   "{name} ({hex}): un tempio scavato a rovescio nella roccia, sacro a un dio che non vuole essere nominato.",
+   "{name} ({hex}): si dice che vi portino i viandanti rapiti sulle strade vicine."
+  ],
+  "terrain": {
+   "forest": "Le foreste coprono gran parte di {land}: sono antiche, fitte e piene di sentieri che non portano da nessuna parte.",
+   "hills": "Le colline di {land} sono punteggiate di tumuli e di torri crollate, e i pastori evitano di salire sulle cime.",
+   "mountains": "Le montagne di {land} sono alte e fredde, e i loro passi restano chiusi per metà dell'anno.",
+   "plains": "Le pianure di {land} sono vaste e ventose, e da lontano si vede chi arriva molto prima che arrivi.",
+   "desert": "Il deserto si mangia ogni anno un po' di più di {land}, e sotto la sabbia affiorano tetti e campanili.",
+   "swamp": "Le paludi di {land} sono nebbiose e piene di insidie, e le loro acque restituiscono a volte ciò che hanno inghiottito."
+  },
+  "sea": [
+   "Il mare bagna {land}, e i suoi pescatori raccontano di isole che compaiono e scompaiono con la nebbia."
+  ],
+  "rivers": [
+   "{n} fiumi scendono dai rilievi verso valle, e lungo le loro rive si concentrano villaggi, mulini e guai."
+  ],
+  "one_river": [
+   "Un solo fiume attraversa {land}, ed è la sua via più sicura: chi se ne allontana se ne pente."
+  ],
+  "now_intro": [
+   "Oggi, però, qualcosa sta cambiando."
+  ],
+  "threat": [
+   "Un esercito di orchi si raduna ai confini, e le sue staffette sono già state viste nelle colline.",
+   "Una malattia che rende grigi gli occhi si diffonde di villaggio in villaggio.",
+   "I raccolti non crescono più vicino alle antiche rovine, e gli animali fuggono senza motivo.",
+   "Un drago è stato visto volare basso sopra {land}, e le greggi scompaiono una dopo l'altra.",
+   "L'erede {realm_di} è tornato e reclama {land} per sé, con un sigillo che pochi possono contestare.",
+   "Le campane di un tempio sepolto suonano di notte, e chi le sente sogna sempre lo stesso sogno."
+  ],
+  "rumours": [
+   [
+    "Sotto {name} ({hex}) c'è ancora il tesoro {realm_di}, e nessuno è mai arrivato in fondo.",
+    "dungeon"
+   ],
+   [
+    "Un mercante itinerante vende mappe di {land}: metà sono false, ma una è vera.",
+    null
+   ],
+   [
+    "Le guardie di {name} ({hex}) si lasciano corrompere, ma solo con argento, mai con oro.",
+    "city"
+   ],
+   [
+    "Nelle notti di luna piena un cavaliere senza testa percorre la vecchia strada {realm_di}.",
+    null
+   ],
+   [
+    "Chi beve dal fiume vicino a {name} ({hex}) dimentica il proprio nome per un giorno.",
+    "river_site"
+   ],
+   [
+    "Un eremita delle colline sa dove è sepolto l'ultimo re {realm_di}, ma chiede un prezzo strano.",
+    null
+   ],
+   [
+    "I lupi di {land} non attaccano chi porta al collo un dente di drago.",
+    null
+   ],
+   [
+    "C'è una taglia sulla testa di chi ha bruciato il ponte vicino a {name} ({hex}).",
+    "city"
+   ],
+   [
+    "A {name} ({hex}) cercano mercenari, e pagano in anticipo: troppo in anticipo.",
+    "fortress"
+   ],
+   [
+    "Da {name} ({hex}) è uscito qualcosa, l'ultima notte di luna nuova.",
+    "dungeon"
+   ]
+  ],
+  "site_unnamed": {
+   "city": "la città in {hex}",
+   "fortress": "la fortezza in {hex}",
+   "dungeon": "il dungeon in {hex}"
+  },
+  "land": "questa landa",
+  "numbers": [
+   "zero",
+   "uno",
+   "due",
+   "tre",
+   "quattro",
+   "cinque",
+   "sei",
+   "sette",
+   "otto",
+   "nove",
+   "dieci",
+   "undici",
+   "dodici"
+  ]
+ },
+ "en": {
+  "realm": [
+   {
+    "il": "the Kingdom of Valdora",
+    "di": "the Kingdom of Valdora",
+    "a": "the Kingdom of Valdora",
+    "da": "the Kingdom of Valdora"
+   },
+   {
+    "il": "the Ascendant Empire",
+    "di": "the Ascendant Empire",
+    "a": "the Ascendant Empire",
+    "da": "the Ascendant Empire"
+   },
+   {
+    "il": "the League of Seven Towers",
+    "di": "the League of Seven Towers",
+    "a": "the League of Seven Towers",
+    "da": "the League of Seven Towers"
+   },
+   {
+    "il": "the Principality of Nerovale",
+    "di": "the Principality of Nerovale",
+    "a": "the Principality of Nerovale",
+    "da": "the Principality of Nerovale"
+   },
+   {
+    "il": "the Theocracy of the Dead Sun",
+    "di": "the Theocracy of the Dead Sun",
+    "a": "the Theocracy of the Dead Sun",
+    "da": "the Theocracy of the Dead Sun"
+   },
+   {
+    "il": "the Dominion of the Sorcerers",
+    "di": "the Dominion of the Sorcerers",
+    "a": "the Dominion of the Sorcerers",
+    "da": "the Dominion of the Sorcerers"
+   },
+   {
+    "il": "the Kingdom of the Shepherd Kings",
+    "di": "the Kingdom of the Shepherd Kings",
+    "a": "the Kingdom of the Shepherd Kings",
+    "da": "the Kingdom of the Shepherd Kings"
+   },
+   {
+    "il": "the Alliance of the Iron Crowns",
+    "di": "the Alliance of the Iron Crowns",
+    "a": "the Alliance of the Iron Crowns",
+    "da": "the Alliance of the Iron Crowns"
+   }
+  ],
+  "realm_was": [
+   "Once {land} belonged to {realm_il}, whose paved roads still cross the plains, broken and overgrown.",
+   "Centuries ago {land} was a province of {realm_il}: nameless milestones and empty watchtowers are all that is left.",
+   "Before the chronicles anyone reads today, {land} was the heart of {realm_il}, and every hill hides some of its ruins.",
+   "{land} was conquered by {realm_il}, which built fortresses, aqueducts and temples to gods now forgotten."
+  ],
+  "fall": [
+   "The realm fell when a plague emptied its cities in a single summer.",
+   "The realm fell when its wizards opened a door nobody could ever close again.",
+   "The realm broke apart in a war between brothers, and the rival fiefs devoured each other.",
+   "The realm ended when the rivers changed course and the harvests rotted for seven years.",
+   "The realm fell when a dragon claimed the crown's treasure for itself, and no knight came back to claim it.",
+   "The realm fell when the dead stopped staying in their graves."
+  ],
+  "after": [
+   "Since then {land} has been no-man's-land: whoever lives here obeys the nearest sword.",
+   "Since then {land} has been a frontier, where settlers come in waves and vanish in waves.",
+   "Since then the people of {land} have mistrusted strangers, wizards and old roads.",
+   "Since then {land} has gone wild again, and the old cartographers' maps are no use any more."
+  ],
+  "cities_intro": [
+   "Today the cities are few and far between.",
+   "Today life huddles in a few walled cities.",
+   "Today power is split between cities that eye each other with suspicion."
+  ],
+  "no_city": [
+   "No city survived: whoever crosses {land} sleeps in the open or among the ruins."
+  ],
+  "city": [
+   "{name} ({hex}) is ruled by a council of merchants who care more for gold than for justice.",
+   "{name} ({hex}) was founded by the survivors of {realm_il}, and proudly keeps its banners.",
+   "{name} ({hex}) pays a yearly tribute to the raiders, just to be left alone.",
+   "{name} ({hex}) is ruled by an old queen who has not left her palace in twenty years.",
+   "{name} ({hex}) welcomes anyone who brings news from the outside world, and pays well for it.",
+   "{name} ({hex}) is split between two noble families who wage war in its streets.",
+   "{name} ({hex}) lives in the shadow of a powerful temple, whose priests have more say than the mayor.",
+   "{name} ({hex}) is a town of miners and smiths, rough and welcoming."
+  ],
+  "city_river": [
+   "{name} ({hex}) lives on the river trade: whoever controls its docks controls the city.",
+   "{name} ({hex}) stands on a disputed ford, and its bridges are watched day and night.",
+   "{name} ({hex}) is built on both banks, and its two halves have never trusted each other."
+  ],
+  "city_sea": [
+   "{name} ({hex}) is a harbour of fishers and smugglers, where ships come in more often by night than by day.",
+   "{name} ({hex}) is a walled harbour: its chains close the bay every evening at sunset.",
+   "{name} ({hex}) lives on salt and fish, and its sailors swear they have seen things nobody believes."
+  ],
+  "fortress": [
+   "{name} ({hex}) guards the roads into the wilds, with a garrison that is always too small.",
+   "{name} ({hex}) is held by a warlord who calls himself a baron, though no king ever made him one.",
+   "{name} ({hex}) was abandoned when {realm_il} fell; someone has lit its fires again only lately.",
+   "{name} ({hex}) is home to an order of knights sworn to defend {land} from an evil nobody remembers any more.",
+   "{name} ({hex}) is a prison: its walls keep someone in, not out.",
+   "{name} ({hex}) is disputed between two captains, and the soldiers no longer know whom to obey."
+  ],
+  "dungeon": [
+   "{name} ({hex}): once a treasury of {realm_il}, sealed when the realm fell.",
+   "{name} ({hex}): it opened where the earth shook on a moonless night, and a warm wind has blown out of it ever since.",
+   "{name} ({hex}): the lair of a sorcerer who sought immortality; nobody knows whether he found it.",
+   "{name} ({hex}): here a king was buried alive, together with all his retinue.",
+   "{name} ({hex}): the miners fled in a hurry, and the tools are still where they dropped them.",
+   "{name} ({hex}): a temple dug upside down into the rock, sacred to a god who will not be named.",
+   "{name} ({hex}): they say the travellers snatched on the nearby roads are taken here."
+  ],
+  "terrain": {
+   "forest": "Forests cover much of {land}: old, thick, and full of paths that lead nowhere.",
+   "hills": "The hills of {land} are dotted with barrows and fallen towers, and shepherds avoid the hilltops.",
+   "mountains": "The mountains of {land} are high and cold, and their passes stay closed half of the year.",
+   "plains": "The plains of {land} are wide and windy, and you can see whoever is coming long before they arrive.",
+   "desert": "Every year the desert eats a little more of {land}, and roofs and bell towers peek out of the sand.",
+   "swamp": "The swamps of {land} are misty and treacherous, and now and then their waters give back what they swallowed."
+  },
+  "sea": [
+   "The sea washes the shores of {land}, and its fishers tell of islands that come and go with the fog."
+  ],
+  "rivers": [
+   "{n} rivers run down from the high ground, and villages, mills and trouble gather along their banks."
+  ],
+  "one_river": [
+   "A single river crosses {land}, and it is the safest way through: whoever strays from it regrets it."
+  ],
+  "now_intro": [
+   "Now, though, something is changing."
+  ],
+  "threat": [
+   "An orc army gathers at the borders, and its scouts have already been seen in the hills.",
+   "A sickness that turns the eyes grey spreads from village to village.",
+   "Crops no longer grow near the old ruins, and animals flee for no reason.",
+   "A dragon has been seen flying low over {land}, and the flocks vanish one after another.",
+   "The heir of {realm_il} has come back and claims {land}, with a seal few can dispute.",
+   "The bells of a buried temple ring at night, and whoever hears them always dreams the same dream."
+  ],
+  "rumours": [
+   [
+    "Under {name} ({hex}) lies the treasure of {realm_il}, and nobody has ever reached the bottom.",
+    "dungeon"
+   ],
+   [
+    "A travelling merchant sells maps of {land}: half are fake, but one is real.",
+    null
+   ],
+   [
+    "The guards of {name} ({hex}) take bribes, but only in silver, never in gold.",
+    "city"
+   ],
+   [
+    "On full-moon nights a headless rider travels the old road of {realm_il}.",
+    null
+   ],
+   [
+    "Whoever drinks from the river near {name} ({hex}) forgets their own name for a day.",
+    "river_site"
+   ],
+   [
+    "A hermit in the hills knows where the last king of {realm_il} is buried, but asks a strange price.",
+    null
+   ],
+   [
+    "The wolves of {land} won't attack anyone wearing a dragon's tooth around the neck.",
+    null
+   ],
+   [
+    "There's a bounty on whoever burned the bridge near {name} ({hex}).",
+    "city"
+   ],
+   [
+    "{name} ({hex}) is hiring sellswords, and pays in advance: too far in advance.",
+    "fortress"
+   ],
+   [
+    "Something came out of {name} ({hex}) on the last new-moon night.",
+    "dungeon"
+   ]
+  ],
+  "site_unnamed": {
+   "city": "the city at {hex}",
+   "fortress": "the fortress at {hex}",
+   "dungeon": "the dungeon at {hex}"
+  },
+  "land": "this land",
+  "numbers": [
+   "zero",
+   "one",
+   "two",
+   "three",
+   "four",
+   "five",
+   "six",
+   "seven",
+   "eight",
+   "nine",
+   "ten",
+   "eleven",
+   "twelve"
+  ]
+ }
+}
