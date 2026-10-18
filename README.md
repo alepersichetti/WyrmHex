@@ -13,7 +13,7 @@
            \    //   ****************) (*****************   \\    /
             \  //   /****************,_,*****************\   \\  /
              \// __/ *             WyrmHex              * \__ \\/
-             /       *              v1.0.0              *       \
+             /       *              v1.1.0              *       \
                      *************M********M*************
 &nbsp;
                                                 |&gt;&gt;&gt;
@@ -119,7 +119,7 @@ From now on, the line where you type starts with `(.venv)`: that's how you know 
 
 ### Step 5 — Install the libraries
 
-With the virtual environment active, download **Pillow**, the library that creates the pictures, and **asciimatics**, the one that draws the menus you move through with the arrow keys. The command is the same on every system (on Windows it also installs `pywin32`, which asciimatics needs):
+With the virtual environment active, download **Pillow**, the library that creates the pictures, **asciimatics**, the one that draws the menus you move through with the arrow keys, and **fpdf2**, the one that writes the PDF with the contents of the land (chapter 6). The command is the same on every system (on Windows it also installs `pywin32`, which asciimatics needs):
 
 ```
 pip install -r requirements.txt
@@ -161,6 +161,8 @@ Then the welcome screen appears, with a dragon holding a sign with the program's
 8. **Scale:** how many miles each hex covers: 2, 6 (the ready-made answer), 12 or 24 miles, or **other, I'll type it**: type a number of miles, or any text such as `5 km` or `1 day`. It's printed under the title, as "1 hex = 6 miles".
 9. Whether to use **only basic keyboard characters** (no symbols like ♣ ▲ ≈). You'll usually answer no: just press Enter.
 10. **Colours:** **black and white**, for printing (the ready-made answer), or **colour**: forests green, sea and lakes blue, deserts sandy, swamps purple, cities red and so on. Only for a colour map does the program then ask for the **background**: **white** or **black**. On the white background the hexes are coloured too, so the map reads at a glance: light green plains, darker green forests, pink swamps, yellow desert, darker yellow hills, beige mountains, light blue sea and lakes (lakes show their `≈` symbols).
+11. **What do you want to make?** Three choices: **the map only** (the ready-made answer); **the map and what's in its hexes, at random**, that is the random encounter tables for the terrains on the map and the list of every stocked hex; or **the map, what's in its hexes and the history of the land**, with the rumours going round the taverns. It all goes in a PDF next to the map (see chapter 6). The contents are based on the map and the seed: the same map always gives the same contents, and asking for them doesn't change the map.
+12. **Names of cities, fortresses and dungeons:** **I'll type them, once the map is ready**, **the program picks them at random** (names like "Thornfield" or "Storm Watch", in the chosen language) or **no names**. The ready-made answer is "I'll type them"; if you chose random values at question 3, it's "no names". Random names work even if you make the map only.
 
 Once the questions are done, a wizard appears with the words **"The conjuring spell begins!"**: from here the program gets to work.
 
@@ -172,8 +174,8 @@ While it works, it shows each step it's taking, each with a **progress bar** tha
 
 While it draws the two pictures, which is the longest part, a second bar shows the percentage and updates in place until it reaches `100%  done`. When the map is ready, it asks you the last few things:
 
-11. **Site names:** for every city, fortress and dungeon the program tells you which hex it's in and on what terrain, and asks whether you want to give it a name, for example `City 1, hex 2712 (hills). Give it a name? (y/N)`. If you answer `y`, type the name (up to 24 characters): it shows in bold on the map, under the site's symbol. Press Enter to leave the site without a name. If you chose random values at question 3, the program doesn't ask and the sites stay without names.
-12. **Print format** for the two maps: `A4`, `A3` or `A2`. The program weighs up the format based on the number of hexes: before the question you'll see, for each format, how big the hexes and the letters will be and whether they'll be easy to read. The ready-made answer, already highlighted in the menu, is the **suggested format**: the smallest one where the map reads well; the more hexes you chose, the bigger it gets. **The final choice is yours:** press Enter for the suggested format, or move to another one. For example:
+13. **Site names** (only if you chose "I'll type them" at question 12): for every city, fortress and dungeon the program tells you which hex it's in and on what terrain, and asks whether you want to give it a name, for example `City 1, hex 2712 (hills). Give it a name? (y/N)`. If you answer `y`, type the name (up to 24 characters): it shows in bold on the map, under the site's symbol. Press Enter to leave the site without a name.
+14. **Print format** for the two maps: `A4`, `A3` or `A2`. The program weighs up the format based on the number of hexes: before the question you'll see, for each format, how big the hexes and the letters will be and whether they'll be easy to read. The ready-made answer, already highlighted in the menu, is the **suggested format**: the smallest one where the map reads well; the more hexes you chose, the bigger it gets. **The final choice is yours:** press Enter for the suggested format, or move to another one. For example:
 
    ```
    Grid of 12 x 30 hexes: this is how it would print on each format (hex measured from flat side
@@ -200,7 +202,7 @@ Every map has a **seed**: a code of 24 letters and digits in groups of four, lik
 
 The seed holds everything that shapes the land: the number of hexes, the cities, fortresses and dungeons, the terrain percentages, the rivers and all the random choices. So **the same seed always gives the same map**, on any computer, even if the map's files are gone. To share a map with someone, just give them its seed.
 
-To rebuild a map, start the program, choose the language, choose **rebuild a map you already made** at "What do you want to do?" and type the seed. Capitals, dashes and spaces don't matter, and if you mistype a character the program tells you, instead of quietly making a different map. The program then shows the map's current title and scale and asks whether you want to **rename the map** and whether you want to **change the scale** (miles per hex: the same choices as for a new map, plus keeping a custom one as it is). Just press Enter to keep them. It also asks whether you want to **give or change the names** of cities, fortresses and dungeons: if you answer `y`, once the map is ready it goes through the sites one by one, showing the name they already have. Then it asks again whether to use basic characters, black and white or colour and, at the end, the print format: so you can rebuild the same map under another name, at 24 miles per hex, or in A3 instead of A4, for example.
+To rebuild a map, start the program, choose the language, choose **rebuild a map you already made** at "What do you want to do?" and type the seed. Capitals, dashes and spaces don't matter, and if you mistype a character the program tells you, instead of quietly making a different map. The program then shows the map's current title and scale and asks whether you want to **rename the map** and whether you want to **change the scale** (miles per hex: the same choices as for a new map, plus keeping a custom one as it is). Just press Enter to keep them. It also asks what to do with the **names** of cities, fortresses and dungeons: **keep them as they are**, **type them yourself** (once the map is ready it goes through the sites one by one, showing the name they already have) or **let the program pick them at random**. Then it asks again whether to use basic characters, black and white or colour, whether to make **the map only or its contents too** and, at the end, the print format: so you can rebuild the same map under another name, at 24 miles per hex, or in A3 instead of A4, for example.
 
 The title, the scale, the site names and the paper size aren't part of the seed, because they don't change the land. If the map's PNG is still in its folder `maps_generated/<seed>`, the program takes them from there (the paper size becomes the ready-made answer); otherwise it uses the starting title and scale. From the command line you can choose them yourself, for example `--reproduce <seed> --title "Northern Lands"`.
 
@@ -302,8 +304,22 @@ At the end, the program tells you which folder it saved the files in.
 | `<seed>_number.png` | The same map with a number in every hex, for the game master |
 | `<seed>_nonumber.txt`, `<seed>_number.txt` | The map as text, which you can open with Notepad or TextEdit |
 | `<seed>_edit_…`, `<seed>_edit.json` | Only if you edited the map (chapter 5): the edited map, and the list of changes |
+| `<seed>_contents.pdf`, `<seed>_contents.json` | Only if you asked for the contents too: the PDF to print for the referee, and the same contents as a text file (for an edited map, `<seed>_edit_contents…`) |
 
 Hex numbers have four digits: the first two are the column, the last two the row. `0101` is the top-left hex; `0305` is in the third column, fifth row.
+
+### The contents PDF
+
+If you asked for what's in the hexes too at question 11 (or used `--contents` or `--history`), next to the maps you'll find an A4 PDF, in the chosen language, with:
+
+- only if you asked for the history too (`--history`): **the history of the land**, different every time in form and contents: sometimes a chronicle, sometimes a tale that starts from today and goes back, sometimes a told legend. It speaks of the realm that was once there, its greatest ruler and how it fell, of the map's cities, fortresses and dungeons with their hex, of the landscape, the sea and the rivers, of today's factions and how they get along, of the looming threat and its omens. Realms, rulers, factions and gods get names made up on the spot, and there are billions of possible combinations;
+- only with the history: **the rumours going round the taverns**, to roll with 1d4 or 1d6: some of them talk about the sites on the map;
+- **the random encounters**: a 1d100 table for every terrain on the map (plains, forests, hills, swamps, mountains, deserts), from the most common to the least, with the rulebook page where you find the monster's stats, and the monster reaction table (2d6 + Charisma modifier);
+- **the hexes**: one line per hex except the sea, with its number, its terrain and its contents. Cities, fortresses and dungeons have their name. Of the other land hexes, **20 to 30% stay empty**, to fill in at the table with your own tables. The rest are stocked with the d66 table of D4Caltrops' *Wilderness Stocking – Expanded*: **landmark**, **lair**, **special**, **hazard** or **resource**, with a hint for the referee. Lair occupants (and tracks) are rolled on the terrain's encounter table. In forests and mountains some hexes become one of D4Caltrops' **detailed places**, like "The Burbling Ford" or "The Doomed Dwarfhold";
+- **the places**: the full description of the detailed places, with their details already rolled on their tables;
+- **the sources and licences** of the texts used (see chapter 10).
+
+The file `<seed>_contents.json` holds the same things in a format other programs can read. If fpdf2 isn't installed, the map is made anyway and the contents are saved in the JSON only: the program tells you so.
 
 ---
 
@@ -329,6 +345,7 @@ python wyrmhex.py --language en --sea 30 --plains 15 --title "Isle of Winds"
 python wyrmhex.py --language en --reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164
 python wyrmhex.py --language en --reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164 --edited --format A3
 python wyrmhex.py --language en --grid 40x25 --random
+python wyrmhex.py --language en --random --history --random-names
 ```
 
 Without `--language en` the messages and the texts on the map are in Italian. Every option also has an Italian name (in the table after the slash `/`), and you can mix them as you like.
@@ -346,6 +363,9 @@ Without `--language en` the messages and the texts on the map are in Italian. Ev
 | `--seed` / `--seme` | With a full seed, rebuilds that map (like `--reproduce`). With a number from 0 to 1048575, makes a new map with your settings and that number for the random choices | `--seed 42` |
 | `--reproduce` / `--riproduci` | Rebuilds the map of that seed. Title, scale and paper size come from its PNG if it's in `maps_generated/<seed>` (or in the `--output` folder); an old number seed needs its PNG | `--reproduce 475T-4KM4-MY0B-JNDJ-ZYEQ-K164` |
 | `--edited` / `--modificata` | Together with `--reproduce` (or `--seed` with a full seed): makes the edited version of the map again, with the changes saved by the editor (chapter 5). If the map has no saved changes, the program says so and stops | `--reproduce <seed> --edited` |
+| `--contents` / `--contenuti` | Also makes what's in the hexes, at random (random encounters and stocked hexes), in a PDF next to the map (chapter 6) | `--contents` |
+| `--history` / `--storia` | Like `--contents`, plus the history of the land with tavern rumours | `--history` |
+| `--random-names` / `--nomi-casuali` | Gives cities, fortresses and dungeons names picked at random | `--random-names` |
 | `--format` / `--formato` | Print format: `A4`, `A3` or `A2`. If you leave it out, the program asks you at the end, offering the suggested one (or, with `--reproduce`, the one from last time) | `--format A3` |
 | `--orientation` / `--orientamento` | Usually not needed: the sheet direction follows the shape of the map. You can force it with `portrait` or `landscape` (`verticale` or `orizzontale`) | `--orientation portrait` |
 | `--output` | Folder to save the maps in instead of `maps_generated`; there too, every map gets its own folder named after its seed | `--output maps` |
@@ -417,7 +437,24 @@ Versions before 0.0.2 could draw the black-and-white map as white on black; that
 
 ---
 
-## 10. Map Gallery
+## 10. Sources and licences
+
+The contents of the land come from data files in the `data` folder, next to `wyrmhex.py`:
+
+| File | What it holds | Source and licence |
+|---|---|---|
+| `data/encounters_hexcrawl_horrors.json` | The random encounter tables per terrain (plains, forests, hills, swamps, mountains, deserts, jungles, wastelands, caves, tombs), with the rulebook references and the reaction table | *Hexcrawl Horrors: Random Wilderness Encounters for OSR Adventures* by Tom Brown, Lone Horizons (2024), LH001 v1.2, [lonehorizons.blogspot.com](https://lonehorizons.blogspot.com/). Text released under the [Creative Commons Attribution-ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/) licence (CC BY-SA 4.0). The monster names were translated into Italian for WyrmHex; the translated file is shared under the same licence |
+| (references in the tables) | The monsters and pages in the "Page" column: the *Basic Fantasy Role-Playing Game* (`58/66`: page in the 3rd edition / in the 4th), the *Field Guides* 1 and 2 (`FG1`, `FG2`), *Hexcrawl Horrors* (`HH`) | [Basic Fantasy Role-Playing Game](https://www.basicfantasy.org/) by Chris Gonnerman and contributors, open game content released under the Open Game License 1.0a (the 4th edition of the core rules under CC BY-SA 4.0). WyrmHex only gives the names and pages, not the stats |
+| `data/stocking_d4caltrops.json` | The d66 table to stock the hexes (landmark, lair, special, hazard, resource) and what each kind of result is for | *Wilderness Stocking – Expanded* (draft) by [D4Caltrops](https://blog.d4caltrops.com/2025/10/wilderness-stocking-expanded.html): a free resource published on the author's blog, with no licence stated; used with credit, and translated into Italian for WyrmHex |
+| `data/hexes_d4caltrops.json` | The 20 detailed forest and mountain places, with their tables | *Even More Forest Hexes* (draft 5) and *Even More Mountain Hexes* I, III and IV (drafts) by [D4Caltrops](https://blog.d4caltrops.com/): free resources published on the author's blog, with no licence stated; used with credit, and translated into Italian for WyrmHex |
+| `data/history.json`, `data/names.json` | The pieces of the history of the land, of the tavern rumours and of the site names | Original texts written for WyrmHex, under the same licence as the program (GPL-3.0) |
+| `data/fonts/Catholicon.ttf` | The headings typeface in the PDF | [Catholicon](https://vladar.bearblog.dev/) by Vladimir Arabadzhi, released under the [SIL Open Font License 1.1](data/fonts/OFL.txt) |
+
+The encounter tables are meant for *Old-School Essentials* and the other OSR games compatible with Basic/Expert: the monsters' stats are in the rulebooks listed or in the [Old-School Essentials SRD](https://oldschoolessentials.necroticgnome.com/rules/doku.php?id=start).
+
+---
+
+## 11. Map Gallery
 
 Click a map to open it full size.
 
