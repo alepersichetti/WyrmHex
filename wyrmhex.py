@@ -189,25 +189,27 @@ def has_backgrounds(p):
 
 # Swamps are a magenta-leaning purple: olive got lost among the forests, and a
 # bluer purple would clash with the fortresses, also for colour-blind eyes.
+# Giant mushrooms are a plum and earthy mauve: a purple leaning to brown, apart
+# from the swamps' pink and the fortresses' bright violet.
 PALETTES = {
     "white": {"mode": "RGB", "paper": (255, 255, 255), "ink": (25, 25, 25),
               "border": (100, 100, 100), "sea": (180, 211, 236), "sea_line": (115, 155, 195),
               LAKE: (30, 100, 200), "river": (25, 95, 205), SWAMP: (118, 30, 95),
               FOREST: (25, 125, 45), HILLS: (130, 85, 25), MOUNTAINS: (105, 90, 80),
               DESERT: (180, 125, 25), CITY: (190, 35, 35), FORTRESS: (105, 60, 160),
-              DUNGEON: (25, 25, 25), FUNGUS: (15, 115, 110),
+              DUNGEON: (25, 25, 25), FUNGUS: (100, 60, 80),
               # hex backgrounds, light enough for the symbols on top (hills brown and
               # desert ochre above are darker than on black for the yellows); lakes get
               # the sea's blue, their ≈ tells them apart
               bg(PLAINS): (222, 239, 200), bg(SEA): (180, 211, 236), bg(LAKE): (180, 211, 236), bg(FOREST): (168, 208, 150), bg(SWAMP): (250, 208, 226),
               bg(DESERT): (252, 238, 160), bg(HILLS): (232, 200, 100), bg(MOUNTAINS): (228, 210, 180),
-              bg(FUNGUS): (176, 226, 214)},
+              bg(FUNGUS): (208, 186, 196)},
     "black": {"mode": "RGB", "paper": (12, 12, 16), "ink": (230, 230, 225),
               "border": (110, 110, 115), "sea": (18, 42, 82), "sea_line": (60, 100, 150),
               LAKE: (80, 150, 255), "river": (90, 160, 255), SWAMP: (195, 105, 165),
               FOREST: (60, 190, 80), HILLS: (215, 165, 80), MOUNTAINS: (195, 180, 165),
               DESERT: (235, 195, 95), CITY: (235, 75, 65), FORTRESS: (170, 120, 230),
-              DUNGEON: (230, 230, 225), FUNGUS: (70, 205, 190),
+              DUNGEON: (230, 230, 225), FUNGUS: (176, 140, 168),
               # sea hexes as hexagons; hex codes go straight on them, no box
               bg(SEA): (18, 42, 82)},
 }
@@ -4526,7 +4528,7 @@ class VisualEditor:
         view_w, view_h = self.view_size()
         ox, oy = self.ox, self.oy
         terrain_fg = {FOREST: S.COLOUR_GREEN, HILLS: S.COLOUR_YELLOW, MOUNTAINS: S.COLOUR_WHITE,
-                      DESERT: S.COLOUR_YELLOW, LAKE: S.COLOUR_CYAN, SWAMP: S.COLOUR_MAGENTA, FUNGUS: S.COLOUR_CYAN,
+                      DESERT: S.COLOUR_YELLOW, LAKE: S.COLOUR_CYAN, SWAMP: S.COLOUR_MAGENTA, FUNGUS: S.COLOUR_RED,
                       FERTILE: S.COLOUR_GREEN, "river": S.COLOUR_BLUE, "label": S.COLOUR_WHITE}
         box_bg = {CITY: S.COLOUR_RED, FORTRESS: S.COLOUR_MAGENTA, DUNGEON: S.COLOUR_WHITE}
         box_fg = {CITY: S.COLOUR_WHITE, FORTRESS: S.COLOUR_WHITE, DUNGEON: S.COLOUR_BLACK}
