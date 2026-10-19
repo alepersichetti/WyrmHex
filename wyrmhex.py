@@ -2330,24 +2330,37 @@ def place_forests_and_deserts(grid, n_forests, n_deserts, rng, terrain, rain=Non
         terrain[h] = PLAINS
 
 
-def grow_mushrooms(grid, terrain, rain, n, rng):
-    """Turn n forest hexes into giant mushroom forests, in groves. As on a
-    certain volcanic island, they like it damp: the coasts, the shores and
-    the swamps, and the slopes the rain falls on."""
+MUSHROOM_POOL = 1.6                  # mushrooms only in the wettest forests: 1.6 times as many as they need
+
+
+def grow_mushrooms(grid, terrain, height, rain, rivers, n, rng):
+    """Turn n forest hexes into giant mushroom forests, in groves, only where
+    it's very damp. Wetness is the rain the wind brings, being near water
+    (sea, lakes, swamps and rivers: the closer the wetter) and lying low,
+    where the water stays. Only the wettest forests can take them; chance
+    just breaks the ties."""
     forests = [h for h in grid.hexes if terrain[h] == FOREST]
     n = min(n, len(forests))
-    damp = grid.distances_from([h for h in grid.hexes if terrain[h] in (SEA, LAKE, SWAMP)])
-    score = {}
+    if not n:
+        return
+    wet_hexes = [h for h in grid.hexes if terrain[h] in (SEA, LAKE, SWAMP)]
+    wet_hexes += [h for r in rivers for h in r["path"]]
+    damp = grid.distances_from(wet_hexes) if wet_hexes else {h: 99 for h in grid.hexes}
+    top_rain = max((rain[h] for h in forests if rain and h in rain), default=1.0) or 1.0
+    wetness = {}
     for h in forests:
-        near = 0.6 if damp[h] <= 1 else 0.3 if damp[h] == 2 else 0.0
-        score[h] = (rain[h] if rain and h in rain else 0.5) + near + 0.35 * rng.random()
+        wet_air = rain[h] / top_rain if rain and h in rain else 0.5
+        near = {0: 1.0, 1: 0.8, 2: 0.45, 3: 0.2}.get(damp[h], 0.0)
+        wetness[h] = 0.4 * wet_air + 0.4 * near + 0.2 * (1 - height[h]) + 0.03 * rng.random()
+    # the pool: the wettest forests, a little more than the mushrooms need
+    pool = set(sorted(forests, key=wetness.get, reverse=True)[:max(n, round(n * MUSHROOM_POOL))])
     grown = set()
     while len(grown) < n:
-        edge = {nb for h in grown for nb in grid.neighbours(h) if terrain[nb] == FOREST and nb not in grown}
-        if edge and rng.random() < 0.85:          # the grove spreads...
-            h = max(edge, key=score.get)
-        else:                                    # ...or a new one starts
-            h = max((f for f in forests if f not in grown), key=score.get)
+        edge = {nb for h in grown for nb in grid.neighbours(h) if nb in pool and nb not in grown}
+        if edge and rng.random() < 0.85:          # the grove spreads into the damp around it...
+            h = max(edge, key=wetness.get)
+        else:                                    # ...or starts in the wettest spot left
+            h = max(pool - grown, key=wetness.get)
         grown.add(h)
     for h in grown:
         terrain[h] = FUNGUS
@@ -2533,13 +2546,14 @@ def build_land(params, counts, grid, rng, log):
     place_swamps(grid, height, counts[SWAMP], rng, terrain, rain,
                  salinity_map(grid, terrain, height, rain) if salty else None)
     # the mushrooms grow where the forests would: the land is made as if they
-    # were forest, then some of it turns, with its own random numbers
+    # were forest, and once the rivers are there the wettest of it turns
     n_fungus = counts.get(FUNGUS, 0)
     place_forests_and_deserts(grid, counts[FOREST] + n_fungus, counts[DESERT], rng, terrain, rain)
-    if n_fungus:
-        grow_mushrooms(grid, terrain, rain, n_fungus, random.Random(repr(rng.getstate())))
     actual = {t: sum(1 for h in grid.hexes if terrain[h] == t)
-              for t in (PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT) + ((FUNGUS,) if n_fungus else ())}
+              for t in (PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)}
+    if n_fungus:
+        actual[FOREST] -= n_fungus
+        actual[FUNGUS] = n_fungus
     log.info(tr("info_result", list=", ".join(f"{pick(TERRAIN_NAMES[t])} {n}" for t, n in actual.items())))
 
     log.step(tr("step_rivers"))
@@ -2552,6 +2566,8 @@ def build_land(params, counts, grid, rng, log):
         log.info(tr("info_river", i=i, h=hex_code(r["path"][0], 2), n=len(r["path"]), where=where))
     if len(rivers) < n_rivers:
         log.warn(tr("warn_rivers", d=len(rivers), n=n_rivers))
+    if n_fungus:                     # their own random numbers: the rest of the land stays put
+        grow_mushrooms(grid, terrain, height, rain, rivers, n_fungus, random.Random(repr(rng.getstate())))
 
     # rivers wash the salt out too, so the farmland is worked out once they're there
     fertile = set()
