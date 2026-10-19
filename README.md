@@ -45,7 +45,7 @@ Maps in different sizes are in the [Map Gallery](#10-map-gallery).
 
 **WyrmHex** is a small program that draws a random hex map for old-school (OSR) role-playing campaigns. The map is made only of letters and symbols, like the video games Dwarf Fortress, ADOM, NetHack or Caves of Qud:
 
-- **forests** `♣♠`, **mountains** `▲^`, **hills** `∩n`, **deserts** `░·`, **lakes** `≈`, **swamps** `⌠"` (reeds and tufts of marsh grass, as in Dwarf Fortress);
+- **forests** `♣♠`, **mountains** `▲^`, **hills** `∩n`, **deserts** `░·`, **lakes** `≈`, **swamps** `⌠"` (reeds and tufts of marsh grass, as in Dwarf Fortress) and, if you ask for them, **giant mushroom forests** `⊤°` (giant caps and spores);
 - **plains** stay empty, except **farmland**, marked with a few sprouts `τ`, and the **sea** is a flat gray area;
 - **rivers** are double lines `═║╔╗`;
 - **cities**, **fortresses** and **dungeons** are black boxes with a white symbol.
@@ -151,7 +151,7 @@ First the program asks for the **language**: choose **Italiano** or **English** 
 
 Then the welcome screen appears, with a dragon holding a sign with the program's name and, under it, a watchtower: press **ENTER** to begin. The program asks you a few questions. When there are choices, a **menu** appears: move with the **↑ ↓** arrow keys and confirm with **Enter** (you can also press the choice's number, or click it). The other questions, like numbers or the title, are answered by typing. **Every question has a ready-made answer, highlighted in the menu or in square brackets: if you're happy with it, just press Enter.**
 
-1. **What do you want to do?** Choose **make a new map**, **rebuild a map you already made** (see chapter 4) or **edit a map** by hand, hex by hex (see chapter 5).
+1. **What do you want to do?** Choose **make a new map**, **rebuild a map you already made** (see chapter 4) or **edit a map** by hand, hex by hex (see chapter 5). If you make a new map, the program then asks whether you also want **giant mushroom forests**, inspired by Morrowind: they grow in groves on the coasts, the shores and near the swamps, in place of part of the forests. The ready-made answer is **no**: then the map is made exactly as always, with the same seed. If you answer yes, question 5 also asks for their percentage (6% ready, taken from the forests), and with random values you get between 3 and 12%. In the contents PDF the mushroom forests get their own encounter table (from the caves table of *Hexcrawl Horrors*: molds, fungi and creatures of the dark) and a line in the history of the land.
 2. **Hexes across and down:** how many columns and rows of hexes you want. The ready-made answer is `auto`: the program works out by itself how many hexes fill an A4 sheet and stay easy to read (33 × 15).
 3. **Choose yourself or at random?** Choose **I'll choose them** to answer the next three questions yourself, or **random** to let the program pick the number of sites, the terrain percentages and the rivers at random, sized to the map. With **random** it skips straight to the title. The values it picks are shown while it works, and they end up in the seed like any other.
 4. **Number of dungeons, cities and fortresses** to put on the map (up to 99 of each).
@@ -354,6 +354,7 @@ Without `--language en` the messages and the texts on the map are in Italian. Ev
 | `--grid` / `--griglia` | Columns x rows of hexes (`auto` = fills an A4) | `--grid 20x15` |
 | `--cities`, `--fortresses`, `--dungeons` / `--citta`, `--fortezze`, `--dungeon` | How many sites of each kind (0 to 99) | `--cities 4` |
 | `--plains`, `--sea`, `--lakes`, `--swamps`, `--hills`, `--mountains`, `--forests`, `--deserts` / `--pianura`, `--mare`, `--laghi`, `--paludi`, `--colline`, `--montagne`, `--foreste`, `--deserti` | Percentage of each terrain, as a whole number | `--sea 25` |
+| `--mushrooms` / `--funghi` | Percentage of giant mushroom forests (normally 0: none). With `--random`, any value above 0 turns them on and the program picks the percentage | `--mushrooms 6` |
 | `--rivers` / `--fiumi` | Number of rivers, up to 100 (`-1` = automatic) | `--rivers 3` |
 | `--random` / `--casuale` | Picks the number of sites, the terrain percentages and the rivers at random, sized to the map. The options above for sites, terrains and rivers are then ignored. With the same `--seed` number you always get the same values | `--random` |
 | `--title` / `--titolo` | Title at the top of the map | `--title "Northern Lands"` |

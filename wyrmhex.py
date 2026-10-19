@@ -84,6 +84,7 @@ VERSION = "1.1.0"
 # terrain kinds, as stored in the terrain map {hex: kind} and in the edit files
 PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT = (
     "plains", "sea", "lake", "swamp", "hills", "mountains", "forest", "desert")
+FUNGUS = "fungus"                    # giant mushroom forests: only on the maps that ask for them
 FERTILE = "fertile"                  # not a terrain: plains whose soil isn't too salty to farm
 WATER = (SEA, LAKE)
 
@@ -91,7 +92,8 @@ WATER = (SEA, LAKE)
 TERRAIN_NAMES = {PLAINS: ("pianura", "plains"), SEA: ("mare", "sea"), LAKE: ("lago", "lake"),
                  SWAMP: ("palude", "swamp"),
                  HILLS: ("colline", "hills"), MOUNTAINS: ("montagne", "mountains"),
-                 FOREST: ("foresta", "forest"), DESERT: ("deserto", "desert")}
+                 FOREST: ("foresta", "forest"), DESERT: ("deserto", "desert"),
+                 FUNGUS: ("funghi giganti", "giant mushrooms")}
 
 # (it option, en option, terrain, label)
 TERRAIN_OPTIONS = [
@@ -103,9 +105,11 @@ TERRAIN_OPTIONS = [
     ("montagne", "mountains", MOUNTAINS, ("Montagne", "Mountains")),
     ("foreste", "forests", FOREST, ("Foreste", "Forests")),
     ("deserti", "deserts", DESERT, ("Deserti", "Deserts")),
+    ("funghi", "mushrooms", FUNGUS, ("Funghi giganti", "Giant mushrooms")),
 ]
 DEFAULT_PERCENTAGES = {PLAINS: 27, SEA: 15, LAKE: 3, SWAMP: 3, HILLS: 15,
-                       MOUNTAINS: 10, FOREST: 20, DESERT: 5}
+                       MOUNTAINS: 10, FOREST: 20, DESERT: 5, FUNGUS: 0}
+FUNGUS_DEFAULT = 6                   # ready answer when the map has mushrooms (taken from the forests)
 
 # the three kinds of site placed on the map
 CITY, FORTRESS, DUNGEON = "city", "fortress", "dungeon"
@@ -140,6 +144,8 @@ TERRAIN_GLYPHS = {
     HILLS:     [("∩", "n", 5), ("n", "m", 2), (" ", " ", 3), ("'", "'", 1)],
     MOUNTAINS: [("▲", "^", 5), ("^", "A", 3), (" ", " ", 1)],
     FOREST:    [("♣", "T", 5), ("♠", "Y", 3), (" ", " ", 1)],
+    # giant mushrooms: wide caps on tall stems, and spores in the air
+    FUNGUS:    [("⊤", "f", 5), ("°", "o", 2), (" ", " ", 2)],
     DESERT:    [("░", ".", 3), ("·", ":", 3), (":", ".", 1), (" ", " ", 2)],
     LAKE:      [("≈", "~", 6), (" ", " ", 1)],        # ~ is too faint on paper
     # DF swamp: reeds and grass tufts
@@ -189,18 +195,19 @@ PALETTES = {
               LAKE: (30, 100, 200), "river": (25, 95, 205), SWAMP: (118, 30, 95),
               FOREST: (25, 125, 45), HILLS: (130, 85, 25), MOUNTAINS: (105, 90, 80),
               DESERT: (180, 125, 25), CITY: (190, 35, 35), FORTRESS: (105, 60, 160),
-              DUNGEON: (25, 25, 25),
+              DUNGEON: (25, 25, 25), FUNGUS: (15, 115, 110),
               # hex backgrounds, light enough for the symbols on top (hills brown and
               # desert ochre above are darker than on black for the yellows); lakes get
               # the sea's blue, their ≈ tells them apart
               bg(PLAINS): (222, 239, 200), bg(SEA): (180, 211, 236), bg(LAKE): (180, 211, 236), bg(FOREST): (168, 208, 150), bg(SWAMP): (250, 208, 226),
-              bg(DESERT): (252, 238, 160), bg(HILLS): (232, 200, 100), bg(MOUNTAINS): (228, 210, 180)},
+              bg(DESERT): (252, 238, 160), bg(HILLS): (232, 200, 100), bg(MOUNTAINS): (228, 210, 180),
+              bg(FUNGUS): (176, 226, 214)},
     "black": {"mode": "RGB", "paper": (12, 12, 16), "ink": (230, 230, 225),
               "border": (110, 110, 115), "sea": (18, 42, 82), "sea_line": (60, 100, 150),
               LAKE: (80, 150, 255), "river": (90, 160, 255), SWAMP: (195, 105, 165),
               FOREST: (60, 190, 80), HILLS: (215, 165, 80), MOUNTAINS: (195, 180, 165),
               DESERT: (235, 195, 95), CITY: (235, 75, 65), FORTRESS: (170, 120, 230),
-              DUNGEON: (230, 230, 225),
+              DUNGEON: (230, 230, 225), FUNGUS: (70, 205, 190),
               # sea hexes as hexagons; hex codes go straight on them, no box
               bg(SEA): (18, 42, 82)},
 }
@@ -656,6 +663,10 @@ TEXTS = {
     "on_river": (", sul fiume", ", on a river"),
     # what to make: the map only, or also its contents (and the site names)
     "q_contents": ("\n  Cosa vuoi generare?", "\n  What do you want to make?"),
+    "q_fungus": ("\n  Vuoi anche le foreste di funghi giganti, sulle coste e nelle terre umide?",
+                 "\n  Do you also want giant mushroom forests, on the coasts and in the damp lands?"),
+    "fungus_no": ("no, i terreni di sempre", "no, the usual terrains"),
+    "fungus_yes": ("sì, con le foreste di funghi giganti", "yes, with giant mushroom forests"),
     "q_empty": ("Quanti esagoni di terra lasciare vuoti, da riempire tu al tavolo? Percentuale da 0 a 100, "
                 "oppure auto (a caso fra 20 e 30)",
                 "How many land hexes to leave empty, for you to fill in at the table? A percentage from 0 to "
@@ -737,6 +748,7 @@ TEXTS = {
     "leg_mountains": ("Montagne", "Mountains"),
     "leg_hills": ("Colline", "Hills"),
     "leg_forest": ("Foresta", "Forest"),
+    "leg_fungus": ("Funghi giganti", "Giant mushrooms"),
     "leg_plains": ("Pianura = esagono vuoto", "Plains = empty hex"),
     "leg_fertile": ("Pianura coltivabile", "Farmland"),
     "leg_barren": ("Pianura incolta = esagono vuoto", "Barren plains = empty hex"),
@@ -1004,11 +1016,12 @@ def hex_code(hex_, digits):
 def check_percentages(perc):
     """Error message, or None if the percentages are ok."""
     for _, _, terrain, label in TERRAIN_OPTIONS:
+        perc.setdefault(terrain, 0)
         if perc[terrain] < 0 or perc[terrain] > 100:
             return tr("pct_out_of_range", label=pick(label).lower(), value=perc[terrain])
     total = sum(perc.values())
     if total > 100 + 1e-9:
-        detail = " + ".join(f"{pick(label).lower()} {perc[terrain]:g}" for _, _, terrain, label in TERRAIN_OPTIONS)
+        detail = " + ".join(f"{pick(label).lower()} {perc[terrain]:g}" for _, _, terrain, label in shown_terrains(perc))
         return tr("pct_over_100", total=total) + f"\n         ({detail})"
     return None
 
@@ -1023,7 +1036,8 @@ def check_percentages(perc):
 # seeds (no salinity) still decode and give the same map as before: the
 # version also picks how the land is made. Before that the seed was a plain number
 # that only worked together with the settings stored in the PNG.
-SEED_VERSION = 5                     # 2 = swamps, 3 = wind, 4 = islands, 5 = salinity (3-5: same fields as 2)
+SEED_VERSION = 6                     # 2 = swamps, 3 = wind, 4 = islands, 5 = salinity (3-5: same fields as 2), 6 = mushrooms
+SEED_MUSHROOMS = 6                   # from here on the terrain % are packed together, mushrooms included
 SEED_SYMBOLS = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"   # no I, L, O, U: too easy to misread
 SEED_LENGTH = 24
 MAX_SITES = 99                       # per kind
@@ -1034,8 +1048,9 @@ SEED_TERRAINS = {1: (SEA, LAKE, HILLS, MOUNTAINS, FOREST, DESERT),
                  2: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT),
                  3: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT),
                  4: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT),
-                 5: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)}
-SEED_CHECK_SYMBOLS = {1: 3, 2: 2, 3: 2, 4: 2, 5: 2}
+                 5: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT),
+                 6: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT, FUNGUS)}
+SEED_CHECK_SYMBOLS = {1: 3, 2: 2, 3: 2, 4: 2, 5: 2, 6: 2}
 # the land of v1 and v2 seeds (and of old number seeds) is made the same way
 LAND_BEFORE_WIND = 2
 LAND_WITH_ISLANDS = 4                # from here on, a mostly-sea map gets peninsulas and archipelagos
@@ -1051,9 +1066,44 @@ def seed_fields(p, number, version=SEED_VERSION):
     """(value, how many values it can take) for every field packed in the seed."""
     fields = [(version, 16), (p["columns"] - 2, 79), (p["rows"] - 2, 79),
               (p["dungeons"], MAX_SITES + 1), (p["cities"], MAX_SITES + 1), (p["fortresses"], MAX_SITES + 1)]
-    fields += [(p["percentages"].get(terrain, 0), 101) for terrain in SEED_TERRAINS[version]]
+    terrains = SEED_TERRAINS[version]
+    if version >= SEED_MUSHROOMS:
+        # one more terrain wouldn't fit as one field each: all the % together
+        # are one number, their place among every set that adds up to 100 at most
+        values = [p["percentages"].get(terrain, 0) for terrain in terrains]
+        fields.append((rank_percentages(values), math.comb(100 + len(terrains), len(terrains))))
+    else:
+        fields += [(p["percentages"].get(terrain, 0), 101) for terrain in terrains]
     fields += [(p["rivers"] + 1, MAX_RIVERS + 2), (number, RANDOM_NUMBERS)]
     return fields
+
+
+def rank_percentages(values, total=100):
+    """The position of a list of whole numbers adding up to `total` at most,
+    among all such lists (counted in order); -1 if it isn't one."""
+    if any(v != int(v) or v < 0 for v in values) or sum(values) > total:
+        return -1
+    rank, left = 0, total
+    for i, value in enumerate(values):
+        after = len(values) - i - 1
+        # every list with a smaller value here comes first
+        rank += sum(math.comb(left - v + after, after) for v in range(int(value)))
+        left -= int(value)
+    return rank
+
+
+def unrank_percentages(rank, count, total=100):
+    """rank_percentages backwards: the list of `count` numbers at that place."""
+    values, left = [], total
+    for i in range(count):
+        after = count - i - 1
+        value = 0
+        while rank >= math.comb(left - value + after, after):
+            rank -= math.comb(left - value + after, after)
+            value += 1
+        values.append(value)
+        left -= value
+    return values
 
 
 def to_symbols(value, length):
@@ -1078,6 +1128,8 @@ def seed_check(data, version=SEED_VERSION):
 def make_seed(p, number):
     """None if p doesn't fit in a seed (only old saved maps, e.g. sea 12.5%)."""
     version = p.get("version", SEED_VERSION)
+    if version >= SEED_MUSHROOMS and not p["percentages"].get(FUNGUS):
+        version = SEED_MUSHROOMS - 1      # no mushrooms: the seed is the same as before them
     # each field is one "digit" whose base is the number of values it can take
     packed = 0
     for value, choices in seed_fields(p, number, version):
@@ -1124,9 +1176,12 @@ def unpack_seed(code, version):
         return None
     terrains = SEED_TERRAINS[version]
     columns, rows, dungeons, cities, fortresses, *rest = [v for v in reversed(values)]
+    if version >= SEED_MUSHROOMS:
+        rest = unrank_percentages(rest[0], len(terrains)) + rest[1:]
     percentages = dict(zip(terrains, rest[:len(terrains)]))
     rivers, number = rest[len(terrains)] - 1, rest[-1]
     percentages.setdefault(SWAMP, 0)
+    percentages.setdefault(FUNGUS, 0)
     percentages[PLAINS] = 100 - sum(percentages.values())
     # a v1 seed comes back as v2: same land, and it always has been rewritten so
     land = {"columns": columns + 2, "rows": rows + 2, "dungeons": dungeons, "cities": cities,
@@ -1263,6 +1318,7 @@ def complete_settings(p):
         p.setdefault(key, value)
     p.setdefault("labels", {})
     p["percentages"].setdefault(SWAMP, 0)
+    p["percentages"].setdefault(FUNGUS, 0)
     # white-on-black was dropped in 0.0.2
     p.pop("inverted", None)
     p["orientation"] = "auto"
@@ -1274,9 +1330,15 @@ def complete_settings(p):
     return p
 
 
+def shown_terrains(percentages):
+    """The terrain options to show: the mushrooms only on a map that has them."""
+    return [option for option in TERRAIN_OPTIONS if option[2] != FUNGUS or percentages.get(FUNGUS)]
+
+
 def describe_settings(p):
     """One readable paragraph with the grid, sites, rivers, terrain % and title."""
-    perc = ", ".join(f"{pick(label).lower()} {p['percentages'][terrain]:g}%" for _, _, terrain, label in TERRAIN_OPTIONS)
+    perc = ", ".join(f"{pick(label).lower()} {p['percentages'][terrain]:g}%"
+                     for _, _, terrain, label in shown_terrains(p["percentages"]))
     return tr("describe", cols=p["columns"], rows=p["rows"], cities=p["cities"], forts=p["fortresses"],
               dungeons=p["dungeons"], rivers=p["rivers"], perc=perc, title=p["title"])
 
@@ -1294,16 +1356,18 @@ def split_hexes(total, perc):
 # range of each terrain before scaling everything to 100%
 RANDOM_TERRAIN = {PLAINS: (10, 40), SEA: (0, 35), LAKE: (0, 8), SWAMP: (0, 8),
                   HILLS: (5, 25), MOUNTAINS: (3, 18), FOREST: (5, 35), DESERT: (0, 15)}
+RANDOM_FUNGUS = (3, 12)              # only when the map has mushrooms
 
 
 def random_settings(p, number):
     """Random sites, terrain % and rivers, for an already known grid size.
     Seeded from the map number, so --seed N --random is repeatable."""
     rng = random.Random(number * 31 + 7)     # not the land's rng
-    raw = {t: rng.uniform(lo, hi) for t, (lo, hi) in RANDOM_TERRAIN.items()}
+    ranges = dict(RANDOM_TERRAIN, **({FUNGUS: RANDOM_FUNGUS} if p.get("fungus") else {}))
+    raw = {t: rng.uniform(lo, hi) for t, (lo, hi) in ranges.items()}
     total = sum(raw.values())
     counts = split_hexes(100, {t: v * 100 / total for t, v in raw.items()})
-    p["percentages"] = {t: counts[t] for _, _, t, _ in TERRAIN_OPTIONS}
+    p["percentages"] = {t: counts.get(t, 0) for _, _, t, _ in TERRAIN_OPTIONS}
 
     hexes = p["columns"] * p["rows"]
     land = hexes - sum(n for t, n in split_hexes(hexes, p["percentages"]).items() if t in WATER)
@@ -1648,6 +1712,9 @@ def ask_settings():
     # a new map (or an old number seed whose PNG is gone): ask everything
     print()
     p = {}
+    # the giant mushroom forests are optional: without them the maps are made as always
+    p["fungus"] = menu(tr("q_fungus"), [tr("fungus_no"), tr("fungus_yes")]) == 1
+    print()
     p["columns"] = ask(tr("q_columns"), "auto", int, 2, 80)
     p["rows"] = ask(tr("q_rows"), "auto", int, 2, 80)
     # random values need the grid size, which may still be "auto": main() fills them in
@@ -1660,8 +1727,12 @@ def ask_settings():
         p["fortresses"] = ask(tr("q_fortresses"), 2, int, 0, MAX_SITES)
         print(tr("pct_intro"))
         while True:
-            perc = {terrain: ask(f"% {pick(label).lower()}", DEFAULT_PERCENTAGES[terrain], int, 0, 100)
-                    for _, _, terrain, label in TERRAIN_OPTIONS}
+            ready = dict(DEFAULT_PERCENTAGES)
+            if p["fungus"]:                  # the mushrooms take their share from the forests
+                ready[FUNGUS], ready[FOREST] = FUNGUS_DEFAULT, ready[FOREST] - FUNGUS_DEFAULT
+            perc = {terrain: ask(f"% {pick(label).lower()}", ready[terrain], int, 0, 100)
+                    for _, _, terrain, label in TERRAIN_OPTIONS if terrain != FUNGUS or p["fungus"]}
+            perc.setdefault(FUNGUS, 0)
             error = check_percentages(perc)
             if not error:
                 break
@@ -1857,7 +1928,7 @@ def settings_from_options(argv):
         "ascii_only": a.ascii_only, "colors": a.colors, "background": background, "size": size, "font": a.font,
         "ask_paper": ask_for_paper, "randomize": a.randomize,
         "contents": a.contents or a.history, "history": a.history, "empty": a.empty,
-        "random_names": a.random_names,
+        "random_names": a.random_names, "fungus": a.fungus > 0,
     }
 
 
@@ -1884,7 +1955,7 @@ def validate(p, log):
     total_perc = sum(p["percentages"].values())
     log.info(tr("info_grid", c=p["columns"], r=p["rows"], n=p["columns"] * p["rows"]))
     log.info(tr("info_terrains", list=", ".join(f"{pick(label).lower()} {p['percentages'][terrain]:g}%"
-                                                for _, _, terrain, label in TERRAIN_OPTIONS)))
+                                                for _, _, terrain, label in shown_terrains(p["percentages"]))))
     log.info(tr("info_pct_sum", t=total_perc))
     if total_perc < 100:
         log.info(tr("info_pct_rest", r=100 - total_perc))
@@ -2257,6 +2328,29 @@ def place_forests_and_deserts(grid, n_forests, n_deserts, rng, terrain, rain=Non
         terrain[h] = PLAINS
 
 
+def grow_mushrooms(grid, terrain, rain, n, rng):
+    """Turn n forest hexes into giant mushroom forests, in groves. As on a
+    certain volcanic island, they like it damp: the coasts, the shores and
+    the swamps, and the slopes the rain falls on."""
+    forests = [h for h in grid.hexes if terrain[h] == FOREST]
+    n = min(n, len(forests))
+    damp = grid.distances_from([h for h in grid.hexes if terrain[h] in (SEA, LAKE, SWAMP)])
+    score = {}
+    for h in forests:
+        near = 0.6 if damp[h] <= 1 else 0.3 if damp[h] == 2 else 0.0
+        score[h] = (rain[h] if rain and h in rain else 0.5) + near + 0.35 * rng.random()
+    grown = set()
+    while len(grown) < n:
+        edge = {nb for h in grown for nb in grid.neighbours(h) if terrain[nb] == FOREST and nb not in grown}
+        if edge and rng.random() < 0.85:          # the grove spreads...
+            h = max(edge, key=score.get)
+        else:                                    # ...or a new one starts
+            h = max((f for f in forests if f not in grown), key=score.get)
+        grown.add(h)
+    for h in grown:
+        terrain[h] = FUNGUS
+
+
 def follow_river(grid, terrain, height, spring, river_hexes, rng, max_length):
     """Walk downhill from spring. Returns (path, end); end is None if it got stuck."""
     path, end = [spring], None
@@ -2331,9 +2425,9 @@ def place_sites(grid, terrain, rivers, wanted, rng, log, fertile=()):
 
     # higher = more likely
     base_weights = {
-        CITY: {PLAINS: 4, HILLS: 2, FOREST: 1.2, DESERT: 0.6, SWAMP: 0.3, MOUNTAINS: 0.2},
-        FORTRESS: {HILLS: 4, MOUNTAINS: 3, PLAINS: 1.5, FOREST: 1, DESERT: 0.8, SWAMP: 0.5},
-        DUNGEON: {MOUNTAINS: 4, HILLS: 3.5, FOREST: 3, SWAMP: 3, DESERT: 2.5, PLAINS: 1},
+        CITY: {PLAINS: 4, HILLS: 2, FOREST: 1.2, DESERT: 0.6, SWAMP: 0.3, MOUNTAINS: 0.2, FUNGUS: 1},
+        FORTRESS: {HILLS: 4, MOUNTAINS: 3, PLAINS: 1.5, FOREST: 1, DESERT: 0.8, SWAMP: 0.5, FUNGUS: 1.2},
+        DUNGEON: {MOUNTAINS: 4, HILLS: 3.5, FOREST: 3, SWAMP: 3, DESERT: 2.5, PLAINS: 1, FUNGUS: 3},
     }
     sites, taken = [], set()
     for kind, n in ((CITY, wanted[CITY]), (FORTRESS, wanted[FORTRESS]), (DUNGEON, wanted[DUNGEON])):
@@ -2436,9 +2530,14 @@ def build_land(params, counts, grid, rng, log):
     salty = params.get("version", SEED_VERSION) >= LAND_WITH_SALT
     place_swamps(grid, height, counts[SWAMP], rng, terrain, rain,
                  salinity_map(grid, terrain, height, rain) if salty else None)
-    place_forests_and_deserts(grid, counts[FOREST], counts[DESERT], rng, terrain, rain)
+    # the mushrooms grow where the forests would: the land is made as if they
+    # were forest, then some of it turns, with its own random numbers
+    n_fungus = counts.get(FUNGUS, 0)
+    place_forests_and_deserts(grid, counts[FOREST] + n_fungus, counts[DESERT], rng, terrain, rain)
+    if n_fungus:
+        grow_mushrooms(grid, terrain, rain, n_fungus, random.Random(repr(rng.getstate())))
     actual = {t: sum(1 for h in grid.hexes if terrain[h] == t)
-              for t in (PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)}
+              for t in (PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT) + ((FUNGUS,) if n_fungus else ())}
     log.info(tr("info_result", list=", ".join(f"{pick(TERRAIN_NAMES[t])} {n}" for t, n in actual.items())))
 
     log.step(tr("step_rivers"))
@@ -2956,7 +3055,7 @@ def write_hex_numbers(page, grid, k, ox, oy):
 
 
 # --- page: frame, title, legend ---
-def legend_entries(G, fertile=False, filled=False):
+def legend_entries(G, fertile=False, filled=False, fungus=False):
     """The legend's terrain entries and site entries, in the order shown."""
     # (sample, name, style, colour tag). filled: the hexes have coloured
     # backgrounds, so plains get a swatch instead of "empty hex"
@@ -2964,7 +3063,8 @@ def legend_entries(G, fertile=False, filled=False):
         ("", tr("leg_barren" if fertile else "leg_plains"), "b", None)
     terrains = [
         (G("▲^", "^A"), tr("leg_mountains"), "b", MOUNTAINS), (G("∩n", "nm"), tr("leg_hills"), "b", HILLS),
-        (G("♣♠", "TY"), tr("leg_forest"), "b", FOREST), plains,
+        (G("♣♠", "TY"), tr("leg_forest"), "b", FOREST),
+        *([(G("⊤°", "fo"), tr("leg_fungus"), "b", FUNGUS)] if fungus else []), plains,
         *([(G("τ", "v"), tr("leg_fertile"), "b", FERTILE)] if fertile else []),
         (G("░·", ".:"), tr("leg_desert"), "b", DESERT),
         (G("≈≈", "~~"), tr("leg_sea"), "g", SEA),   # "g": this sample is drawn as a gray patch
@@ -2977,15 +3077,21 @@ def legend_entries(G, fertile=False, filled=False):
     return terrains, sites
 
 
+def has_mushrooms(params):
+    """A map with giant mushrooms (asked for, or painted in the editor) has
+    their line in the legend."""
+    return bool(params.get("percentages", {}).get(FUNGUS) or params.get("mushrooms_on_map"))
+
+
 def has_farmland(params):
     """Maps made with salinity have farmland, and its line in the legend."""
     return params.get("version", SEED_VERSION) >= LAND_WITH_SALT
 
 
-def pack_legend(G, max_width, fertile=False, filled=False):
+def pack_legend(G, max_width, fertile=False, filled=False, fungus=False):
     """The legend entries split into lines no wider than max_width letters.
     Each entry is a list of (text, style, colour tag) pieces."""
-    terrains, sites = legend_entries(G, fertile, filled)
+    terrains, sites = legend_entries(G, fertile, filled, fungus)
     entries = [[(g, style, tag), (" " + name, "n", None)] if g else [(name, "n", None)]
                for g, name, style, tag in terrains]
     entries += [[("[" + g + "]", "i", kind), (" " + name, "n", None)] for g, name, kind in sites]
@@ -3043,7 +3149,7 @@ def compose_page(map_canvas, n_cols, n_rows, legend_lines, title, subtitle, G):
             for text, style, tag in entry:
                 y = y_legend_line + 1 + i
                 page.write(x, y, text, style, tag)
-                if tag in (PLAINS, FERTILE, FOREST, SEA, LAKE, SWAMP, DESERT, HILLS, MOUNTAINS):
+                if tag in (PLAINS, FERTILE, FOREST, SEA, LAKE, SWAMP, DESERT, HILLS, MOUNTAINS, FUNGUS):
                     # the same background as on the map (if the palette has one)
                     swatch = [(x, y), (x + len(text), y), (x + len(text), y + 1), (x, y + 1)]
                     page.fills.append((swatch, bg(PLAINS if tag == FERTILE else tag)))
@@ -3096,7 +3202,7 @@ def fill_page(params, font_spec, aspect, log):
     n_cols = int((w_mm - 2 * MARGIN_MM) / READABLE_CHAR_MM)
     n_rows = int((h_mm - 2 * MARGIN_MM) / (READABLE_CHAR_MM * aspect))
     legend_lines = len(pack_legend(Glyphs(open_font(font_spec, 40), params["ascii_only"]), n_cols - 4,
-                                   has_farmland(params), has_backgrounds(params)))
+                                   has_farmland(params), has_backgrounds(params), has_mushrooms(params)))
     columns = max(2, (n_cols - 4 - (4 * k + 1)) // (3 * k) + 1)
     rows = max(2, (n_rows - legend_lines - 7 - (k + 1)) // (2 * k))
     if params["columns"] == "auto":
@@ -3312,7 +3418,7 @@ def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, 
         area_w = width - 2 * mm(MARGIN_MM)
         area_h = height - 2 * mm(MARGIN_MM)
         n_cols, n_rows = int(area_w // char_w), int(area_h // char_h)
-        legend = pack_legend(G, n_cols - 4, has_farmland(params), has_backgrounds(params))
+        legend = pack_legend(G, n_cols - 4, has_farmland(params), has_backgrounds(params), has_mushrooms(params))
         if len(legend) <= legend_guess and n_rows >= map_h + len(legend) + 7:
             break
         legend_guess = max(len(legend), legend_guess + 1)
@@ -3320,7 +3426,7 @@ def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, 
     values = dict(scale=params["scale"], dot=G("·", "-"), c=grid.cols, x=G("×", "x"), r=grid.rows, seed=seed)
     versions = [tr(key, **values) for key in ("subtitle", "subtitle_tight", "subtitle_short", "subtitle_seed")]
     subtitle = next((v for v in versions if len(v) + 4 <= n_cols), versions[-1])
-    legend = pack_legend(G, n_cols - 4, has_farmland(params), has_backgrounds(params))
+    legend = pack_legend(G, n_cols - 4, has_farmland(params), has_backgrounds(params), has_mushrooms(params))
     # still doesn't fit (very long title?): grow the page, save() shrinks it back
     legend_width = max(sum(len(t) for entry in line for t, _, _ in entry) + 4 * (len(line) - 1) for line in legend)
     need_cols = max(n_cols, map_w + 4, len(params["title"]) + 8, len(subtitle) + 4, legend_width + 4)
@@ -3353,7 +3459,7 @@ def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, 
 # for each site kind, the texts "a city" / "the city" used in the editor's messages
 SITE_KEYS = {DUNGEON: ("ed_a_dungeon", "ed_the_dungeon"), CITY: ("ed_a_city", "ed_the_city"),
              FORTRESS: ("ed_a_fortress", "ed_the_fortress")}
-TERRAIN_ORDER = (PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT)   # in the terrain menu
+TERRAIN_ORDER = (PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT, FUNGUS)   # in the terrain menu
 
 
 def direction(a, b):
@@ -4420,7 +4526,7 @@ class VisualEditor:
         view_w, view_h = self.view_size()
         ox, oy = self.ox, self.oy
         terrain_fg = {FOREST: S.COLOUR_GREEN, HILLS: S.COLOUR_YELLOW, MOUNTAINS: S.COLOUR_WHITE,
-                      DESERT: S.COLOUR_YELLOW, LAKE: S.COLOUR_CYAN, SWAMP: S.COLOUR_MAGENTA,
+                      DESERT: S.COLOUR_YELLOW, LAKE: S.COLOUR_CYAN, SWAMP: S.COLOUR_MAGENTA, FUNGUS: S.COLOUR_CYAN,
                       FERTILE: S.COLOUR_GREEN, "river": S.COLOUR_BLUE, "label": S.COLOUR_WHITE}
         box_bg = {CITY: S.COLOUR_RED, FORTRESS: S.COLOUR_MAGENTA, DUNGEON: S.COLOUR_WHITE}
         box_fg = {CITY: S.COLOUR_WHITE, FORTRESS: S.COLOUR_WHITE, DUNGEON: S.COLOUR_BLACK}
@@ -4679,7 +4785,8 @@ _DATA_CACHE = {}
 
 # the Hexcrawl Horrors table for each terrain of the map (the water has none)
 ENCOUNTER_TABLES = {PLAINS: "plains", FOREST: "forests", HILLS: "hills", SWAMP: "swamps",
-                    MOUNTAINS: "mountains", DESERT: "deserts"}
+                    MOUNTAINS: "mountains", DESERT: "deserts",
+                    FUNGUS: "caves"}         # spores, molds and things that like the dark
 
 
 def load_data(name):
@@ -4822,6 +4929,8 @@ def land_history(grid, terrain, rivers, sites, labels, number):
             return []
         common = max(H["terrain"], key=land.count)
         nature = [line_of(H["terrain"][common])]
+        if FUNGUS in land and common != FUNGUS:     # the mushrooms are always worth a line
+            nature.append(line_of(H["terrain"][FUNGUS]))
         if any(terrain[h] == SEA for h in grid.hexes):
             nature.append(line("sea"))
         if len(rivers) == 1:
@@ -5285,6 +5394,7 @@ def save_maps(params, grid, land, look, seed, number, log, layout_log):
     unedited (terrain, rivers) for an edited map, None otherwise; fertile the
     farmable plains (only drawn where the hex is still plains)."""
     terrain, rivers, sites, original, fertile = land
+    params["mushrooms_on_map"] = FUNGUS in terrain.values()      # their line in the legend
     font_spec, bold_spec, advance_em, aspect, G, paper, k = look
     label = f"{seed} {tr('ed_edited')}" if original else seed
     layout, n_cols, n_rows, legend, subtitle = page_layout(

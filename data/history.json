@@ -1431,6 +1431,12 @@
     "Fra le paludi di {land} sorgono villaggi su palafitte, i cui abitanti conoscono sentieri sommersi che nessuno straniero saprebbe trovare.",
     "Nelle paludi di {land} brillano di notte luci fredde e verdastre, e chi le segue non torna mai sulla terraferma.",
     "Le paludi di {land} hanno inghiottito un'intera città, e nelle giornate senza vento se ne vedono ancora le torri sotto il pelo dell'acqua."
+   ],
+   "fungus": [
+    "Sulle coste umide di {land} crescono foreste di funghi giganti: cappelli larghi come piazze fanno ombra a interi villaggi, e i maghi più potenti scavano le loro torri dentro i gambi.",
+    "Sotto i funghi giganti di {land} l'aria è calda e pesante di spore, e chi si perde fra quei gambi altissimi sente voci che non appartengono a nessuno.",
+    "Nessuno sa chi abbia piantato i primi funghi giganti di {land}: le loro spore viaggiano col vento, e dove si posano la foresta cambia in pochi anni.",
+    "I funghi giganti di {land} danno legna, cibo e riparo, ma i raccoglitori sanno che certi cappelli, quando si aprono, liberano spore che fanno sognare i morti."
    ]
   },
   "rumours": [
@@ -2841,6 +2847,12 @@
     "Stilt villages rise among the swamps of {land}, and their people know sunken paths no stranger could ever find.",
     "Cold greenish lights glimmer at night in the swamps of {land}, and whoever follows them never returns to solid ground.",
     "The swamps of {land} swallowed an entire city, and on windless days its towers can still be seen beneath the surface."
+   ],
+   "fungus": [
+    "Giant mushroom forests grow on the damp coasts of {land}: caps as wide as town squares shade whole villages, and the mightiest wizards hollow their towers out of the stems.",
+    "Under the giant mushrooms of {land} the air is warm and heavy with spores, and whoever gets lost among those towering stems hears voices that belong to no one.",
+    "Nobody knows who planted the first giant mushrooms of {land}: their spores travel on the wind, and where they settle the forest changes within a few years.",
+    "The giant mushrooms of {land} give timber, food and shelter, but the gatherers know that some caps, when they open, release spores that make the dead dream."
    ]
   },
   "rumours": [
