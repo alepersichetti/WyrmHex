@@ -45,7 +45,7 @@ Mappe di varie dimensioni nella [Galleria Mappe](#10-galleria-mappe).
 
 **WyrmHex** è un piccolo programma che disegna a caso una mappa a esagoni per campagne di gioco di ruolo old school (OSR). La mappa è fatta solo di lettere e simboli, come nei videogiochi Dwarf Fortress, ADOM, NetHack o Caves of Qud:
 
-- **foreste** `♣♠`, **montagne** `▲^`, **colline** `∩n`, **deserti** `░·`, **laghi** `≈`, **paludi** `⌠"` (canne e ciuffi d'erba palustre, come in Dwarf Fortress);
+- **foreste** `♣♠`, **montagne** `▲^`, **colline** `∩n`, **deserti** `░·`, **laghi** `≈`, **paludi** `⌠"` (canne e ciuffi d'erba palustre, come in Dwarf Fortress) e, se le chiedi, **foreste di funghi giganti** `⊤°` (cappelli giganti e spore);
 - la **pianura** resta vuota, tranne quella **coltivabile**, segnata da qualche germoglio `τ`, e il **mare** è una campitura grigia;
 - i **fiumi** sono doppie linee `═║╔╗`;
 - **città**, **fortezze** e **dungeon** sono riquadri neri con un simbolo bianco.
@@ -151,7 +151,7 @@ Per prima cosa il programma ti chiede la **lingua**: scegli **Italiano** o **Eng
 
 Poi compare la schermata di benvenuto, con un drago che regge il cartello con il nome del programma e, sotto, una torre di guardia: premi **INVIO** per cominciare. Il programma ti fa alcune domande. Quando ci sono delle scelte, compare un **menu**: muoviti con le frecce **↑ ↓** e conferma con **Invio** (puoi anche premere il numero della scelta, o farci clic sopra). Le altre domande, come i numeri o il titolo, si rispondono scrivendo. **Ogni domanda ha una risposta già pronta, evidenziata nel menu oppure tra parentesi quadre: se ti va bene, premi solo Invio.**
 
-1. **Cosa vuoi fare?** Scegli **creare una mappa nuova**, **riprodurre una mappa già fatta** (vedi il capitolo 4) oppure **modificare una mappa** a mano, esagono per esagono (vedi il capitolo 5).
+1. **Cosa vuoi fare?** Scegli **creare una mappa nuova**, **riprodurre una mappa già fatta** (vedi il capitolo 4) oppure **modificare una mappa** a mano, esagono per esagono (vedi il capitolo 5). Se crei una mappa nuova, il programma ti chiede subito se vuoi anche le **foreste di funghi giganti**, ispirate a Morrowind: crescono a boschetti, al posto di una parte delle foreste, solo nei luoghi più umidi: dove il vento porta più pioggia, accanto a mare, laghi, paludi e fiumi, e nelle terre basse dove l'acqua ristagna. La risposta pronta è **no**: in quel caso la mappa viene generata esattamente come sempre, con lo stesso seme. Se rispondi sì, alla domanda 5 trovi anche la loro percentuale (6% già pronto, preso dalle foreste) e con i valori a caso ne ricevi fra il 3 e il 12%. Nel PDF dei contenuti le foreste di funghi hanno la loro tabella degli incontri (dalla tabella delle caverne di *Hexcrawl Horrors*: muffe, funghi e creature del buio) e una riga nella storia della landa.
 2. **Esagoni in base e in altezza:** quante colonne e quante righe di esagoni vuoi. La risposta pronta è `auto`: il programma sceglie da solo quanti esagoni riempiono un foglio A4 restando leggibili (33 × 15).
 3. **Scegli tu o a caso?** Scegli **li scelgo io** per rispondere tu alle tre domande successive, oppure **a caso** per far scegliere al programma a caso il numero di siti, le percentuali di terreno e i fiumi, in proporzione alla mappa. Con **a caso** passa direttamente al titolo. I valori scelti vengono mostrati mentre lavora e finiscono nel seme come tutti gli altri.
 4. **Numero di dungeon, città e fortezze** da mettere sulla mappa (fino a 99 per tipo).
@@ -355,6 +355,7 @@ Ogni opzione ha anche un nome inglese (nella tabella dopo la barra `/`), e puoi 
 | `--griglia` / `--grid` | Colonne x righe di esagoni (`auto` = riempie un A4) | `--griglia 20x15` |
 | `--citta`, `--fortezze`, `--dungeon` / `--cities`, `--fortresses`, `--dungeons` | Quanti siti di ogni tipo (da 0 a 99) | `--citta 4` |
 | `--pianura`, `--mare`, `--laghi`, `--paludi`, `--colline`, `--montagne`, `--foreste`, `--deserti` / `--plains`, `--sea`, `--lakes`, `--swamps`, `--hills`, `--mountains`, `--forests`, `--deserts` | Percentuale di ogni terreno, in numero intero | `--mare 25` |
+| `--funghi` / `--mushrooms` | Percentuale di foreste di funghi giganti (di solito 0: nessuna). Con `--casuale`, un valore qualsiasi sopra 0 le accende e la percentuale la sceglie il programma | `--funghi 6` |
 | `--fiumi` / `--rivers` | Numero di fiumi, fino a 100 (`-1` = automatico) | `--fiumi 3` |
 | `--casuale` / `--random` | Sceglie a caso il numero di siti, le percentuali di terreno e i fiumi, in proporzione alla mappa. Le opzioni qui sopra per siti, terreni e fiumi vengono ignorate. Con lo stesso numero di `--seme` escono sempre gli stessi valori | `--casuale` |
 | `--titolo` / `--title` | Titolo in cima alla mappa | `--titolo "Terre del Nord"` |
