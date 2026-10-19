@@ -179,9 +179,9 @@
    "dodici"
   ],
   "site_unnamed": {
-   "city": "la città in {hex}",
-   "fortress": "la fortezza in {hex}",
-   "dungeon": "il dungeon in {hex}"
+   "city": "Città senza nome",
+   "fortress": "Fortezza senza nome",
+   "dungeon": "Dungeon senza nome"
   },
   "realm_kinds": [
    {
@@ -1601,6 +1601,336 @@
    [
     "Qualcuno sta comprando a peso d'oro le pietre miliari {realm_di}, e i contadini le stanno scavando di notte per venderle.",
     null
+   ],
+   [
+    "{fac1_il} paga in oro chiunque porti notizie sui movimenti {fac2_di}, e non fa domande su come le abbia ottenute.",
+    null
+   ],
+   [
+    "Si dice che il capo {fac2_di} sia morto da mesi, e che qualcuno ne indossi la maschera per non far crollare tutto.",
+    null
+   ],
+   [
+    "Un vecchio mendicante giura di aver servito alla corte {ruler_di}, e conosce passaggi segreti che nessun altro ricorda.",
+    null
+   ],
+   [
+    "Un sigillo con lo stemma {realm_di} è stato venduto al mercato per tre monete di rame, e il giorno dopo il mercante è sparito.",
+    null
+   ],
+   [
+    "I sacerdoti di {god} sono tornati a predicare nei villaggi, e chi li ascolta smette di dormire la notte.",
+    null
+   ],
+   [
+    "Chi pronuncia tre volte il nome di {god} davanti a uno specchio rotto vede il volto della persona che lo tradirà.",
+    null
+   ],
+   [
+    "{fac1_il} sta reclutando avventurieri per una spedizione di cui nessuno conosce la meta, e paga metà in anticipo.",
+    null
+   ],
+   [
+    "Una spia {fac2_di} si nasconde in ogni locanda di questa landa, e la si riconosce perché beve solo acqua.",
+    null
+   ],
+   [
+    "La corona {ruler_di} non fu mai sepolta con il suo padrone: qualcuno la tiene nascosta in un pozzo asciutto.",
+    null
+   ],
+   [
+    "Il bardo cieco che gira per le fiere conosce l'ultima strofa della ballata {realm_di}, quella che nessuno osa cantare.",
+    null
+   ],
+   [
+    "Un cavallo senza cavaliere, con la sella insanguinata, torna ogni sera nello stesso villaggio e nessuno sa di chi sia.",
+    null
+   ],
+   [
+    "Il fabbro di un villaggio di confine sta forgiando cento punte di lancia per un cliente che paga in monete antiche.",
+    null
+   ],
+   [
+    "Un pastore ha trovato un uovo grande come una botte, caldo al tatto, e lo tiene nascosto nel fienile.",
+    null
+   ],
+   [
+    "Le api di questa landa hanno smesso di fare miele, e le streghe dicono che è un brutto segno per il raccolto.",
+    null
+   ],
+   [
+    "Un mercante di spezie vende una mappa del cielo che, a sentire lui, indica la via per una città sepolta.",
+    null
+   ],
+   [
+    "Nelle notti senza luna, sulle colline si accendono fuochi che si spengono appena qualcuno si avvicina.",
+    null
+   ],
+   [
+    "Un cacciatore di taglie forestiero sta chiedendo di un uomo con una cicatrice a forma di stella, e offre una ricompensa.",
+    null
+   ],
+   [
+    "Le monete coniate {realm_da} portano fortuna in battaglia, e i mercenari le pagano dieci volte il loro peso.",
+    null
+   ],
+   [
+    "Un gruppo di pellegrini è partito verso le montagne cantando, e da allora si sentono ancora i loro canti, ma nessuno è tornato.",
+    null
+   ],
+   [
+    "Una nobile in fuga si nasconde fra i contadini, e chi la consegnerà {fac1_a} riceverà un titolo e una terra.",
+    null
+   ],
+   [
+    "A {name} ({hex}) cercano una guida che conosca le strade del nord, e la pagano più di un cavaliere.",
+    "city"
+   ],
+   [
+    "Il tesoriere di {name} ({hex}) è sparito con le chiavi della zecca, e la città ha chiuso le porte per cercarlo.",
+    "city"
+   ],
+   [
+    "A {name} ({hex}) si tiene ogni mese un torneo, e il premio di quest'anno è una spada che nessuno è riuscito a sguainare.",
+    "city"
+   ],
+   [
+    "A {name} ({hex}) si parla di una peste che colpisce solo chi ha i capelli rossi, e i barbieri non hanno mai lavorato tanto.",
+    "city"
+   ],
+   [
+    "Dalle mura di {name} ({hex}) è stato visto volare un uomo con ali di tela, verso est.",
+    "fortress"
+   ],
+   [
+    "Il comandante di {name} ({hex}) cerca un prete che benedica le mura: dice che di notte qualcosa le scala.",
+    "fortress"
+   ],
+   [
+    "Nelle segrete di {name} ({hex}) c'è un prigioniero che dice di essere il legittimo erede {realm_di}.",
+    "fortress"
+   ],
+   [
+    "Da {name} ({hex}) è uscito un uomo coperto d'oro, che è morto prima di poter dire cosa avesse visto.",
+    "dungeon"
+   ],
+   [
+    "Chi dorme una notte all'ingresso di {name} ({hex}) sogna la strada per il tesoro, ma si sveglia con un anno in meno di vita.",
+    "dungeon"
+   ],
+   [
+    "{fac2_il} ha mandato una squadra dentro {name} ({hex}) una settimana fa, e nessuno è ancora tornato.",
+    "dungeon"
+   ],
+   [
+    "Da {name} ({hex}) si sente salire un canto in una lingua morta, sempre la stessa melodia, ogni notte un po' più forte.",
+    "dungeon"
+   ],
+   [
+    "I sacerdoti di {god} dicono che in fondo a {name} ({hex}) dorme qualcosa che non deve svegliarsi.",
+    "dungeon"
+   ],
+   [
+    "Un pescatore ha tirato su vicino a {name} ({hex}) uno scrigno chiuso da un lucchetto che nessuna chiave apre.",
+    "river_site"
+   ],
+   [
+    "Il traghettatore che porta a {name} ({hex}) non chiede soldi, ma un ricordo: e chi glielo dà non lo ritrova più.",
+    "river_site"
+   ],
+   [
+    "Il mulino vicino a {name} ({hex}) gira anche quando il fiume è in secca, e il mugnaio non vuole dire perché.",
+    "river_site"
+   ],
+   [
+    "{fac1_il} ha comprato in segreto metà delle case di {name} ({hex}), e nessuno sa che cosa voglia farne.",
+    "city"
+   ],
+   [
+    "A {name} ({hex}) un indovino legge il futuro nelle ossa di drago, e finora non ha mai sbagliato una previsione.",
+    "city"
+   ],
+   [
+    "La guarnigione di {name} ({hex}) è stata sostituita in una notte da soldati che nessuno conosce, con stemmi senza colore.",
+    "fortress"
+   ],
+   [
+    "Le guardie di {name} ({hex}) lasciano passare chiunque conosca la parola d'ordine dei tempi {ruler_di}.",
+    "fortress"
+   ],
+   [
+    "Chi entra in {name} ({hex}) con una candela accesa trova sempre la via del ritorno: chi la lascia spegnere, no.",
+    "dungeon"
+   ]
+  ],
+  "encounters": [
+   [
+    "Una pattuglia {fac1_di}: chiede a tutti dove sono diretti, e perquisisce chi non risponde.",
+    null
+   ],
+   [
+    "Un drappello {fac2_di} scorta un carro coperto da un telo, e non lascia avvicinare nessuno.",
+    null
+   ],
+   [
+    "Uno scontro fra {fac1_il} e {fac2_il}: i feriti chiedono aiuto, e ognuna delle due parti promette una ricompensa a chi si schiera con lei.",
+    null
+   ],
+   [
+    "Un reclutatore {fac1_di} offre una paga doppia a chi sa combattere, ma il contratto dura sette anni.",
+    null
+   ],
+   [
+    "Un disertore {fac2_di}, affamato e ferito, offre informazioni in cambio di cibo e di una scorta.",
+    null
+   ],
+   [
+    "Un emissario {fac1_di} diretto {fac2_a}, con una lettera sigillata che nessuno deve leggere.",
+    null
+   ],
+   [
+    "Un esattore {fac2_di} pretende un pedaggio per attraversare queste terre, e ha con sé sei uomini armati.",
+    null
+   ],
+   [
+    "Una spia {fac1_di} travestita da mercante: vuole sapere tutto {fac2_di}, e paga bene.",
+    null
+   ],
+   [
+    "Un banditore {fac2_di} legge un proclama: chiunque aiuti {fac1_il} sarà considerato un nemico.",
+    null
+   ],
+   [
+    "Una carovana nuziale fra {fac1_il} e {fac2_il}: la sposa chiede in segreto di essere aiutata a fuggire.",
+    null
+   ],
+   [
+    "Pellegrini diretti alla tomba {ruler_di}: portano offerte, cantano inni, e sono una preda facile.",
+    null
+   ],
+   [
+    "Un cantastorie narra le gesta {ruler_di}, e chiede una moneta per ogni strofa.",
+    null
+   ],
+   [
+    "Un vecchio sostiene di essere l'ultimo erede {ruler_di}, e cerca chi lo aiuti a riprendersi il trono.",
+    null
+   ],
+   [
+    "Una statua {ruler_di} rovesciata nel fango: chi la rimette in piedi riceve una visione.",
+    null
+   ],
+   [
+    "Un cercatore di tesori con una mappa che, giura, porta all'armeria perduta {realm_di}.",
+    null
+   ],
+   [
+    "Il fantasma di un soldato {realm_di} chiede chi governa ora, e si infuria se la risposta non gli piace.",
+    null
+   ],
+   [
+    "Una colonna spezzata con lo stemma {realm_di}: ai suoi piedi qualcuno ha lasciato offerte fresche.",
+    null
+   ],
+   [
+    "Bambini che giocano alla guerra {realm_di} con spade di legno: uno di loro porta al collo un vero sigillo reale.",
+    null
+   ],
+   [
+    "Fedeli di {god} in processione, incappucciati: invitano i viandanti a unirsi a loro per la notte.",
+    null
+   ],
+   [
+    "Un predicatore di {god} su un carro annuncia la fine dei tempi, e vende amuleti per salvarsi.",
+    null
+   ],
+   [
+    "Un altare a {god} appena costruito sul ciglio della strada, con il sangue ancora fresco.",
+    null
+   ],
+   [
+    "Un villaggio di discendenti {people_di}: vivono come i loro antenati e guardano i forestieri con sospetto.",
+    null
+   ],
+   [
+    "Mercanti diretti a {name} ({hex}) con un carico prezioso: cercano una scorta, e pagano bene.",
+    "city"
+   ],
+   [
+    "Profughi in fuga da {name} ({hex}): raccontano di una notte di fuoco e di porte aperte dall'interno.",
+    "city"
+   ],
+   [
+    "Soldati di {name} ({hex}) danno la caccia a un prigioniero evaso: chiedono aiuto, e sospettano di tutti.",
+    "fortress"
+   ],
+   [
+    "Un messaggero ferito di {name} ({hex}) porta una richiesta di rinforzi che senza aiuto non arriverà mai.",
+    "fortress"
+   ],
+   [
+    "L'unico sopravvissuto di una compagnia entrata in {name} ({hex}), solo e sconvolto, che non vuole tornarci da solo.",
+    "dungeon"
+   ],
+   [
+    "Una banda di predoni con oggetti antichi presi da {name} ({hex}): li vende a poco, ma qualcosa la sta seguendo.",
+    "dungeon"
+   ],
+   [
+    "Un ufficiale {fac1_di} cerca volontari per ripulire {name} ({hex}), in cambio di metà del bottino.",
+    "dungeon"
+   ],
+   [
+    "Un araldo di {name} ({hex}) annuncia una taglia sui briganti della zona, e cerca chi voglia riscuoterla.",
+    "city"
+   ],
+   [
+    "Un incendio divampa in lontananza: è un accampamento {fac2_di}, e qualcuno ha appiccato il fuoco di proposito.",
+    null
+   ],
+   [
+    "Un corriere {fac1_di} giace morto sulla strada, con la borsa dei messaggi ancora chiusa e una freccia senza piume nella schiena.",
+    null
+   ],
+   [
+    "Un'eclissi improvvisa: i contadini si inginocchiano e invocano {god}, e qualcuno indica il gruppo come colpevole.",
+    null
+   ],
+   [
+    "Una fiera di villaggio in onore {ruler_di}: giochi, vino, una gara di tiro con l'arco con un premio misterioso.",
+    null
+   ],
+   [
+    "Un tesoriere {realm_di} morto da secoli appare al tramonto e chiede che gli venga restituito un debito.",
+    null
+   ],
+   [
+    "Una nevicata fuori stagione blocca la strada; in un rifugio vicino si trovano già uomini {fac1_di} e {fac2_di}.",
+    null
+   ],
+   [
+    "Un giovane cavaliere cerca la spada {ruler_di} per dimostrare di esserne il discendente, e chiede compagni di viaggio.",
+    null
+   ],
+   [
+    "Un'erborista che fu nutrice nei palazzi {fac1_di} conosce segreti che vale la pena pagare.",
+    null
+   ],
+   [
+    "Una processione funebre porta verso {name} ({hex}) la salma di un notabile, e la vedova cerca chi indaghi sulla sua morte.",
+    "city"
+   ],
+   [
+    "Un mastro costruttore cerca operai per restaurare {name} ({hex}), e paga in anticipo: troppo in anticipo.",
+    "fortress"
+   ],
+   [
+    "Un sacerdote di {god} si dirige verso {name} ({hex}) da solo, deciso a compiere un rito che non vuole spiegare.",
+    "dungeon"
+   ],
+   [
+    "Una terra smossa di fresco: qualcuno ha sepolto qui di notte un forziere con il sigillo {realm_di}.",
+    null
    ]
   ]
  },
@@ -1622,9 +1952,9 @@
    "twelve"
   ],
   "site_unnamed": {
-   "city": "the city at {hex}",
-   "fortress": "the fortress at {hex}",
-   "dungeon": "the dungeon at {hex}"
+   "city": "Nameless City",
+   "fortress": "Nameless Fortress",
+   "dungeon": "Nameless Dungeon"
   },
   "realm_kinds": [
    {
@@ -2680,6 +3010,336 @@
    ],
    [
     "Someone is paying their weight in gold for the milestones of {realm_il}, and the peasants are digging them up at night to sell.",
+    null
+   ],
+   [
+    "{fac1_il} pays in gold for any news of the movements of {fac2_il}, and asks no questions about how it was obtained.",
+    null
+   ],
+   [
+    "They say the leader of {fac2_il} died months ago, and that someone wears their mask so that it all doesn't fall apart.",
+    null
+   ],
+   [
+    "An old beggar swears he served at the court of {ruler_il}, and knows secret passages nobody else remembers.",
+    null
+   ],
+   [
+    "A seal bearing the arms of {realm_il} was sold at the market for three copper coins, and the next day the merchant was gone.",
+    null
+   ],
+   [
+    "The priests of {god} have come back to preach in the villages, and those who listen stop sleeping at night.",
+    null
+   ],
+   [
+    "Whoever says the name of {god} three times before a broken mirror sees the face of the one who will betray them.",
+    null
+   ],
+   [
+    "{fac1_il} is hiring adventurers for an expedition whose destination nobody knows, and pays half in advance.",
+    null
+   ],
+   [
+    "A spy of {fac2_il} hides in every inn of this land, and you can tell them because they only drink water.",
+    null
+   ],
+   [
+    "The crown of {ruler_il} was never buried with its owner: someone keeps it hidden in a dry well.",
+    null
+   ],
+   [
+    "The blind bard who wanders the fairs knows the last verse of the ballad of {realm_il}, the one nobody dares to sing.",
+    null
+   ],
+   [
+    "A riderless horse with a bloodied saddle comes back to the same village every evening, and nobody knows whose it is.",
+    null
+   ],
+   [
+    "The smith of a border village is forging a hundred spearheads for a customer who pays in ancient coins.",
+    null
+   ],
+   [
+    "A shepherd found an egg as big as a barrel, warm to the touch, and keeps it hidden in his hayloft.",
+    null
+   ],
+   [
+    "The bees of this land have stopped making honey, and the witches say it's a bad sign for the harvest.",
+    null
+   ],
+   [
+    "A spice merchant sells a map of the sky that, to hear him tell it, shows the way to a buried city.",
+    null
+   ],
+   [
+    "On moonless nights fires are lit on the hills, and they go out as soon as anyone comes near.",
+    null
+   ],
+   [
+    "A foreign bounty hunter is asking after a man with a star-shaped scar, and offers a reward.",
+    null
+   ],
+   [
+    "Coins struck by {realm_il} bring luck in battle, and mercenaries pay ten times their weight for them.",
+    null
+   ],
+   [
+    "A group of pilgrims set out for the mountains singing; their songs can still be heard, but none of them came back.",
+    null
+   ],
+   [
+    "A noblewoman on the run hides among the peasants, and whoever hands her over to {fac1_il} will get a title and land.",
+    null
+   ],
+   [
+    "In {name} ({hex}) they are looking for a guide who knows the northern roads, and pay more than for a knight.",
+    "city"
+   ],
+   [
+    "The treasurer of {name} ({hex}) vanished with the keys of the mint, and the town has shut its gates to find him.",
+    "city"
+   ],
+   [
+    "{name} ({hex}) holds a tournament every month, and this year's prize is a sword nobody has managed to draw.",
+    "city"
+   ],
+   [
+    "In {name} ({hex}) there is talk of a plague that strikes only redheads, and the barbers have never been so busy.",
+    "city"
+   ],
+   [
+    "A man with canvas wings was seen flying east from the walls of {name} ({hex}).",
+    "fortress"
+   ],
+   [
+    "The commander of {name} ({hex}) is looking for a priest to bless the walls: he says something climbs them at night.",
+    "fortress"
+   ],
+   [
+    "In the dungeons of {name} ({hex}) there is a prisoner who claims to be the rightful heir of {realm_il}.",
+    "fortress"
+   ],
+   [
+    "A man covered in gold came out of {name} ({hex}), and died before he could say what he had seen.",
+    "dungeon"
+   ],
+   [
+    "Whoever sleeps one night at the entrance of {name} ({hex}) dreams the way to the treasure, but wakes up a year older.",
+    "dungeon"
+   ],
+   [
+    "{fac2_il} sent a team into {name} ({hex}) a week ago, and nobody has come back yet.",
+    "dungeon"
+   ],
+   [
+    "From {name} ({hex}) comes a song in a dead tongue, always the same tune, a little louder every night.",
+    "dungeon"
+   ],
+   [
+    "The priests of {god} say that something which must not wake sleeps at the bottom of {name} ({hex}).",
+    "dungeon"
+   ],
+   [
+    "A fisherman hauled up near {name} ({hex}) a chest closed with a padlock no key will open.",
+    "river_site"
+   ],
+   [
+    "The ferryman who takes you to {name} ({hex}) asks no money, but a memory: and whoever gives it never finds it again.",
+    "river_site"
+   ],
+   [
+    "The mill near {name} ({hex}) keeps turning even when the river is dry, and the miller won't say why.",
+    "river_site"
+   ],
+   [
+    "{fac1_il} has secretly bought half the houses in {name} ({hex}), and nobody knows what it wants them for.",
+    "city"
+   ],
+   [
+    "In {name} ({hex}) a soothsayer reads the future in dragon bones, and so far has never got a prediction wrong.",
+    "city"
+   ],
+   [
+    "The garrison of {name} ({hex}) was replaced overnight by soldiers nobody knows, bearing colourless arms.",
+    "fortress"
+   ],
+   [
+    "The guards of {name} ({hex}) let through anyone who knows the watchword from the days of {ruler_il}.",
+    "fortress"
+   ],
+   [
+    "Whoever enters {name} ({hex}) with a lit candle always finds the way back: those who let it go out do not.",
+    "dungeon"
+   ]
+  ],
+  "encounters": [
+   [
+    "A patrol of {fac1_il}: they ask everyone where they are headed, and search anyone who won't answer.",
+    null
+   ],
+   [
+    "A squad of {fac2_il} escorts a covered wagon, and lets nobody come close.",
+    null
+   ],
+   [
+    "A skirmish between {fac1_il} and {fac2_il}: the wounded beg for help, and each side promises a reward to whoever joins it.",
+    null
+   ],
+   [
+    "A recruiter for {fac1_il} offers double pay to anyone who can fight, but the contract runs for seven years.",
+    null
+   ],
+   [
+    "A deserter from {fac2_il}, hungry and wounded, offers information in exchange for food and an escort.",
+    null
+   ],
+   [
+    "An envoy of {fac1_il} on the way to {fac2_il}, carrying a sealed letter nobody must read.",
+    null
+   ],
+   [
+    "A tax collector of {fac2_il} demands a toll to cross these lands, and has six armed men with him.",
+    null
+   ],
+   [
+    "A spy of {fac1_il} disguised as a merchant: they want to know everything about {fac2_il}, and pay well.",
+    null
+   ],
+   [
+    "A herald of {fac2_il} reads a proclamation: anyone who helps {fac1_il} will be counted an enemy.",
+    null
+   ],
+   [
+    "A wedding caravan between {fac1_il} and {fac2_il}: the bride secretly asks for help to escape.",
+    null
+   ],
+   [
+    "Pilgrims heading for the tomb of {ruler_il}: they carry offerings and sing hymns, and they are easy prey.",
+    null
+   ],
+   [
+    "A storyteller recounts the deeds of {ruler_il}, asking a coin for every verse.",
+    null
+   ],
+   [
+    "An old man claims to be the last heir of {ruler_il}, and seeks help to reclaim the throne.",
+    null
+   ],
+   [
+    "A statue of {ruler_il} toppled in the mud: whoever sets it upright receives a vision.",
+    null
+   ],
+   [
+    "A treasure hunter with a map that, he swears, leads to the lost armoury of {realm_il}.",
+    null
+   ],
+   [
+    "The ghost of a soldier of {realm_il} asks who rules now, and grows angry if he dislikes the answer.",
+    null
+   ],
+   [
+    "A broken column bearing the arms of {realm_il}: at its foot someone has left fresh offerings.",
+    null
+   ],
+   [
+    "Children playing at the war of {realm_il} with wooden swords: one of them wears a real royal seal around the neck.",
+    null
+   ],
+   [
+    "Hooded followers of {god} in procession: they invite travellers to join them for the night.",
+    null
+   ],
+   [
+    "A preacher of {god} on a cart announces the end of days, and sells amulets to be saved.",
+    null
+   ],
+   [
+    "A freshly built altar to {god} by the roadside, with the blood still fresh.",
+    null
+   ],
+   [
+    "A village of descendants of {people_il}: they live as their ancestors did and eye strangers with suspicion.",
+    null
+   ],
+   [
+    "Merchants heading for {name} ({hex}) with a precious cargo: they want an escort, and pay well.",
+    "city"
+   ],
+   [
+    "Refugees fleeing {name} ({hex}): they tell of a night of fire and of gates opened from the inside.",
+    "city"
+   ],
+   [
+    "Soldiers from {name} ({hex}) are hunting an escaped prisoner: they ask for help, and suspect everyone.",
+    "fortress"
+   ],
+   [
+    "A wounded messenger from {name} ({hex}) carries a plea for reinforcements that will never arrive without help.",
+    "fortress"
+   ],
+   [
+    "The only survivor of a company that went into {name} ({hex}), alone and shaken, who won't go back alone.",
+    "dungeon"
+   ],
+   [
+    "A band of raiders carrying old relics from {name} ({hex}): they sell them cheap, but something is following them.",
+    "dungeon"
+   ],
+   [
+    "An officer of {fac1_il} seeks volunteers to clear {name} ({hex}), in exchange for half the loot.",
+    "dungeon"
+   ],
+   [
+    "A herald from {name} ({hex}) announces a bounty on the local brigands, and looks for anyone willing to collect it.",
+    "city"
+   ],
+   [
+    "A fire blazes in the distance: it's a camp of {fac2_il}, and someone set it on purpose.",
+    null
+   ],
+   [
+    "A courier of {fac1_il} lies dead on the road, the message bag still shut and a featherless arrow in the back.",
+    null
+   ],
+   [
+    "A sudden eclipse: the peasants kneel and call on {god}, and someone points at the party as the culprits.",
+    null
+   ],
+   [
+    "A village fair in honour of {ruler_il}: games, wine, and an archery contest with a mysterious prize.",
+    null
+   ],
+   [
+    "A treasurer of {realm_il}, dead for centuries, appears at sunset and asks for a debt to be repaid.",
+    null
+   ],
+   [
+    "An out-of-season snowfall blocks the road; in a nearby shelter, men of {fac1_il} and of {fac2_il} are already waiting.",
+    null
+   ],
+   [
+    "A young knight seeks the sword of {ruler_il} to prove descent from the old ruler, and asks for travelling companions.",
+    null
+   ],
+   [
+    "A herbalist who was once a nurse in the halls of {fac1_il} knows secrets worth paying for.",
+    null
+   ],
+   [
+    "A funeral procession carries a notable's body towards {name} ({hex}), and the widow wants someone to look into the death.",
+    "city"
+   ],
+   [
+    "A master builder is hiring workers to restore {name} ({hex}), and pays in advance: too far in advance.",
+    "fortress"
+   ],
+   [
+    "A priest of {god} is heading alone towards {name} ({hex}), set on performing a rite he won't explain.",
+    "dungeon"
+   ],
+   [
+    "Freshly turned earth: someone buried a chest bearing the seal of {realm_il} here at night.",
     null
    ]
   ]
