@@ -656,6 +656,10 @@ TEXTS = {
     "on_river": (", sul fiume", ", on a river"),
     # what to make: the map only, or also its contents (and the site names)
     "q_contents": ("\n  Cosa vuoi generare?", "\n  What do you want to make?"),
+    "q_empty": ("Quanti esagoni di terra lasciare vuoti, da riempire tu al tavolo? Percentuale da 0 a 100, "
+                "oppure auto (a caso fra 20 e 30)",
+                "How many land hexes to leave empty, for you to fill in at the table? A percentage from 0 to "
+                "100, or auto (at random between 20 and 30)"),
     "contents_map_only": ("solo la mappa", "the map only"),
     "contents_stock": ("la mappa e il contenuto degli esagoni, a caso: incontri casuali ed esagoni popolati "
                        "(in un PDF)",
@@ -678,7 +682,6 @@ TEXTS = {
                      "{n} hexes stocked out of {t}; {e} left empty for your own tables"),
     "info_contents_saved": ("Salvati: {a}, {b}", "Saved: {a}, {b}"),
     "stock_tracks": ("tracce, orme o escrementi di: {monster}", "trace, tracks or spoor of: {monster}"),
-    "stock_place": ("{name} (vedi \"Luoghi\", più avanti)", "{name} (see \"Places\", further on)"),
     "warn_no_fpdf": ("Per il PDF dei contenuti serve la libreria fpdf2: pip install -r requirements.txt. "
                      "Ho salvato i contenuti solo in {path}",
                      "The contents PDF needs the fpdf2 library: pip install -r requirements.txt. "
@@ -791,49 +794,20 @@ TEXTS = {
     "pdf_history": ("Storia della landa", "History of the land"),
     "pdf_rumours": ("Voci che girano nelle taverne (tira 1d{n})", "Rumours heard in the taverns (roll 1d{n})"),
     "pdf_encounters": ("Incontri casuali", "Random encounters"),
-    "pdf_enc_intro": ("Quando il gruppo viaggia, tira 1d100 sulla tabella del terreno in cui si trova. Le tabelle "
-                      "vengono da Hexcrawl Horrors: accanto a ogni incontro c'è dove trovarlo nei manuali di Basic "
-                      "Fantasy (pagina della 3a/4a edizione del regolamento; FG1 e FG2 sono i due Field Guide, HH è "
-                      "Hexcrawl Horrors, COR il regolamento). I mostri si usano anche con Old-School Essentials e "
-                      "gli altri giochi OSR, con pochi aggiustamenti.",
-                      "When the party travels, roll 1d100 on the table of the terrain they're in. The tables come "
-                      "from Hexcrawl Horrors: next to each encounter is where to find it in the Basic Fantasy books "
-                      "(page in the 3rd/4th edition core rules; FG1 and FG2 are the two Field Guides, HH is Hexcrawl "
-                      "Horrors, COR the core rules). The monsters work with Old-School Essentials and the other OSR "
-                      "games too, with a little tweaking."),
     "pdf_note_night": ("*  Solo di notte: se esce di giorno, quel giorno niente incontro, ma lo si usa la notte.",
                        "*  Only at night: rolled by day, there's no encounter that day, but use it that night."),
     "pdf_note_lycanthrope": ("**  Licantropi: di notte, oppure incontrati di giorno nella loro forma umana.",
                              "**  Lycanthropes: at night, or met by day in their human form."),
-    "pdf_note_dead": ("***  Creature morte: qualcosa le ha già uccise. Si possono frugare, con meno probabilità "
-                      "del solito di trovare qualcosa; poi tira di nuovo.",
-                      "***  Dead creatures: something has already killed them. They can be searched for loot, "
-                      "with a lower chance than usual; then roll again."),
-    "pdf_reaction": ("Reazione dei mostri (2d6 + modificatore di Carisma)", "Monster reaction (2d6 + Charisma modifier)"),
-    "pdf_reaction_rows": ((("2 o meno", "attacca subito"), ("3-7", "ostile"), ("8-11", "favorevole"),
-                           ("12 o più", "molto favorevole")),
-                          (("2 or less", "immediate attack"), ("3-7", "unfavourable"), ("8-11", "favourable"),
-                           ("12 or more", "very favourable"))),
-    "pdf_enc_table": ("{terrain}: 1d100", "{terrain}: 1d100"),
+    "pdf_enc_table": ("{terrain}: 1d20", "{terrain}: 1d20"),
     "pdf_roll_again": ("tira ancora", "roll again"),
-    "pdf_enc_cols": (("1d100", "Incontro", "Pagina"), ("1d100", "Encounter", "Page")),
+    "pdf_enc_cols": (("1d20", "Incontro", "Pagina"), ("1d20", "Encounter", "Page")),
     "pdf_hexes": ("Gli esagoni", "The hexes"),
     "pdf_hexes_intro": ("Ogni esagono della mappa tranne il mare, con il codice stampato sulla mappa numerata. "
                         "{empty} esagoni di terra su {land} sono lasciati vuoti (-), da riempire al tavolo con le "
-                        "tue tabelle. Gli altri sono popolati con la tabella d66 di Wilderness Stocking - Expanded "
-                        "di D4Caltrops: il tipo di risultato e un suggerimento per l'arbitro; gli occupanti delle "
-                        "tane, e le tracce, vengono dalla tabella degli incontri del terreno.",
+                        "tue tabelle.",
                         "Every hex of the map except the sea, with the code printed on the numbered map. "
                         "{empty} land hexes out of {land} are left empty (-), to fill in at the table with your "
-                        "own tables. The others are stocked with the d66 table of D4Caltrops' Wilderness "
-                        "Stocking - Expanded: the kind of result and a hint for the referee; lair occupants, and "
-                        "tracks, come from the terrain's encounter table."),
-    "pdf_types": ("Tipi di risultato", "Kinds of result"),
-    "pdf_places": ("Luoghi", "Places"),
-    "pdf_places_intro": ("Luoghi dettagliati di D4Caltrops (Even More Forest Hexes, Even More Mountain Hexes), "
-                         "con i dettagli già tirati sulle loro tabelle.",
-                         "Detailed places by D4Caltrops (Even More Forest Hexes, Even More Mountain Hexes), with "
-                         "their details already rolled on their tables."),
+                        "own tables."),
     "pdf_hex_cols": (("Esagono", "Terreno", "Contenuto"), ("Hex", "Terrain", "Contents")),
     "pdf_sources": ("Fonti e licenze", "Sources and licences"),
     "pdf_source_hh": ("Tabelle degli incontri casuali: {title}, di {author} ({url}). Testo rilasciato sotto "
@@ -860,13 +834,21 @@ TEXTS = {
     "pdf_source_own": ("La storia della landa, le voci di taverna e i nomi casuali sono scritti per WyrmHex.",
                        "The history of the land, the tavern rumours and the random names are written for WyrmHex."),
     "pdf_source_font": ("I titoli sono scritti con il carattere Catholicon di Vladimir Arabadzhi "
-                        "(vladar.bearblog.dev), rilasciato con la SIL Open Font License 1.1.",
+                        "(vladar.bearblog.dev), il testo e le tabelle con Crimson Text di The Crimson Text "
+                        "Project Authors (github.com/googlefonts/Crimson): entrambi rilasciati con la SIL Open "
+                        "Font License 1.1.",
                         "The headings are set in the Catholicon typeface by Vladimir Arabadzhi "
-                        "(vladar.bearblog.dev), released under the SIL Open Font License 1.1."),
+                        "(vladar.bearblog.dev), the text and the tables in Crimson Text by The Crimson Text "
+                        "Project Authors (github.com/googlefonts/Crimson): both released under the SIL Open Font "
+                        "License 1.1."),
     "h_contents": ("genera anche il contenuto degli esagoni, a caso: incontri casuali ed esagoni popolati, "
                    "in un PDF accanto alla mappa",
                    "also make what's in the hexes, at random: random encounters and stocked hexes, in a PDF "
                    "next to the map"),
+    "h_empty": ("percentuale di esagoni di terra da lasciare vuoti per le tue tabelle (0-100; senza, a caso "
+                "fra 20 e 30)",
+                "percentage of land hexes left empty for your own tables (0-100; without it, at random "
+                "between 20 and 30)"),
     "h_history": ("come --contenuti, e in più la storia della landa con le voci di taverna",
                   "like --contents, plus the history of the land with tavern rumours"),
     "h_random_names": ("dà a città, fortezze e dungeon nomi scelti a caso",
@@ -1744,6 +1726,28 @@ def ask_contents(p):
     choice = menu(tr("q_contents"), [tr("contents_map_only"), tr("contents_stock"), tr("contents_all")],
                   2 if p.get("history") else 1 if p.get("contents") else 0)
     p["contents"], p["history"] = choice >= 1, choice == 2
+    if p["contents"]:
+        p["empty"] = ask_empty(p.get("empty"))
+
+
+def ask_empty(current):
+    """The share of land hexes left empty for the referee: a percentage, or
+    None for "auto" (at random between 20 and 30)."""
+    default = "auto" if current is None else current
+    while True:
+        answer = input(f"  {tr('q_empty')} [{default}]: ").strip().lower().rstrip("%")
+        if not answer:
+            return current
+        if answer == "auto":
+            return None
+        try:
+            value = int(answer)
+        except ValueError:
+            print(tr("invalid_value"))
+            continue
+        if 0 <= value <= 100:
+            return value
+        print(tr("value_range", lo=0, hi=100))
 
 
 def ask_names(p, rebuild):
@@ -1820,6 +1824,7 @@ def settings_from_options(argv):
     ap.add_argument("--font", default=None, metavar="FILE", help=tr("h_font"))
     ap.add_argument(*names("contenuti", "contents"), dest="contents", action="store_true", help=tr("h_contents"))
     ap.add_argument(*names("storia", "history"), dest="history", action="store_true", help=tr("h_history"))
+    ap.add_argument(*names("vuoti", "empty"), dest="empty", type=int, metavar="0-100", help=tr("h_empty"))
     ap.add_argument(*names("nomi-casuali", "random-names"), dest="random_names", action="store_true",
                     help=tr("h_random_names"))
     a = ap.parse_args(argv)
@@ -1862,6 +1867,7 @@ def settings_from_options(argv):
         saved["apply_edits"] = a.edited
         saved["contents"] = a.contents or a.history
         saved["history"] = a.history
+        saved["empty"] = a.empty
         saved["random_names"] = a.random_names
         return saved
 
@@ -1882,7 +1888,8 @@ def settings_from_options(argv):
         "orientation": orientation, "output": a.output, "paper": a.paper,
         "ascii_only": a.ascii_only, "colors": a.colors, "background": background, "size": size, "font": a.font,
         "ask_paper": ask_for_paper, "randomize": a.randomize,
-        "contents": a.contents or a.history, "history": a.history, "random_names": a.random_names,
+        "contents": a.contents or a.history, "history": a.history, "empty": a.empty,
+        "random_names": a.random_names,
     }
 
 
@@ -4911,36 +4918,41 @@ def land_history(grid, terrain, rivers, sites, labels, number):
     return paragraphs, rumours
 
 
-def encounter_tables(terrain):
-    """[(terrain, rows)] for every land terrain on the map, most common first;
-    rows are (roll, encounter, page reference, note)."""
-    data = load_data("encounters_hexcrawl_horrors.json")
+ENCOUNTER_DIE = 20                  # the encounter tables in the PDF are 1d20
+
+
+def encounter_d20(t, number):
+    """The 1d20 encounter table of a terrain for this map: 20 different
+    encounters drawn from its Hexcrawl Horrors 1d100 table, the more common
+    ones more likely (by their share of the d100), kept in the book's order.
+    "Roll again" and the dead creatures are left out. Rows are (roll,
+    encounter, page reference, note)."""
+    rows = [e for e in load_data("encounters_hexcrawl_horrors.json")["tables"][ENCOUNTER_TABLES[t]]
+            if e["ref"] != "Roll again" and e.get("note") != "dead"]
+    rng = random.Random(f"encounters {number} {ENCOUNTER_TABLES[t]}")
+    # weighted draw without repeats: each row gets a random key, weight-biased
+    keyed = sorted(rows, key=lambda e: rng.random() ** (1 / (e["roll"][1] - e["roll"][0] + 1)), reverse=True)
+    chosen = sorted(keyed[:ENCOUNTER_DIE], key=lambda e: e["roll"][0])
+    return [(str(i), e[LANG], e["ref"], e.get("note")) for i, e in enumerate(chosen, 1)]
+
+
+def encounter_tables(terrain, number):
+    """[(terrain, rows)] for every land terrain on the map, most common first."""
     counts = {t: list(terrain.values()).count(t) for t in ENCOUNTER_TABLES}
-    tables = []
-    for t in sorted((t for t in counts if counts[t]), key=lambda t: -counts[t]):
-        rows = []
-        for e in data["tables"][ENCOUNTER_TABLES[t]]:
-            lo, hi = e["roll"]
-            roll = f"{lo:02d}" if lo == hi else f"{lo:02d}-{hi:02d}"
-            ref = tr("pdf_roll_again") if e["ref"] == "Roll again" else e["ref"]
-            rows.append((roll.replace("100", "00") if lo == 100 else roll, e[LANG], ref, e.get("note")))
-        tables.append((t, rows))
-    return tables
+    return [(t, encounter_d20(t, number)) for t in sorted((t for t in counts if counts[t]), key=lambda t: -counts[t])]
 
 
 D4_PLACES = {FOREST: "forest", MOUNTAINS: "mountains"}    # terrains with detailed places
 EMPTY_SHARE = (0.20, 0.30)          # share of land hexes left empty for the referee
 
 
-def roll_monster(rng, t):
-    """A monster for a lair (or its tracks) from the terrain's encounter
-    table, weighted like a d100 roll: (name, page reference), or None."""
+def roll_monster(rng, t, number):
+    """A monster for a lair (or its tracks): a roll on the terrain's 1d20
+    encounter table in the PDF, so they match: (name, page reference), or None."""
     if t not in ENCOUNTER_TABLES:
         return None
-    rows = [e for e in load_data("encounters_hexcrawl_horrors.json")["tables"][ENCOUNTER_TABLES[t]]
-            if e["ref"] != "Roll again" and e.get("note") != "dead"]
-    e = rng.choices(rows, weights=[e["roll"][1] - e["roll"][0] + 1 for e in rows])[0]
-    return e[LANG], e["ref"]
+    _, name, ref, _ = rng.choice(encounter_d20(t, number))
+    return name, ref
 
 
 def link_hexes(text, placed):
@@ -4963,10 +4975,10 @@ def roll_place(entry, rng, placed):
     return {"id": entry["id"], "name": entry[LANG]["name"], "intro": entry[LANG]["intro"], "lines": lines}
 
 
-def stock_hexes(grid, terrain, sites, number):
-    """What's in the land hexes that have no site: 20-30% stay empty, the
-    others get a D4Caltrops place (forests and mountains) or a roll on the
-    Wilderness Stocking d66 table. Returns ({hex: entry}, places, land count).
+def stock_hexes(grid, terrain, sites, number, empty=None):
+    """What's in the land hexes that have no site: some stay empty (the
+    referee's percentage, or 20-30%), the others get a D4Caltrops place
+    (forests and mountains) or a roll on the Wilderness Stocking d66 table. Returns ({hex: entry}, land count).
     It has its own random numbers, so the land and the names don't change."""
     rng = random.Random(f"stocking {number}")
     stocking = load_data("stocking_d4caltrops.json")
@@ -4975,7 +4987,10 @@ def stock_hexes(grid, terrain, sites, number):
     land = [h for h in grid.hexes if terrain[h] not in WATER and h not in site_hexes]
     order = list(land)
     rng.shuffle(order)
-    stocked = order[round(len(land) * rng.uniform(*EMPTY_SHARE)):]
+    share = rng.uniform(*EMPTY_SHARE)
+    if empty is not None:                # the referee's own choice
+        share = empty / 100
+    stocked = order[round(len(land) * share):]
 
     # the detailed places first: each one once, in up to a third of the
     # stocked hexes of its terrain
@@ -4987,18 +5002,20 @@ def stock_hexes(grid, terrain, sites, number):
         for h, e in zip(hexes_t, entries[:(len(hexes_t) + 2) // 3]):
             chosen[h] = e
     placed = {e["id"]: hex_code(h, 2) for h, e in chosen.items()}
-    places = []
+    places = {}
     for h in sorted(chosen, key=lambda h: hex_code(h, 2)):
-        places.append({"hex": hex_code(h, 2), **roll_place(chosen[h], rng, placed)})
+        places[h] = {"hex": hex_code(h, 2), **roll_place(chosen[h], rng, placed)}
 
     stock = {}
     for h in stocked:
         if h in chosen:
-            stock[h] = {"type": ["place"], "content": tr("stock_place", name=chosen[h][LANG]["name"])}
+            place = places[h]       # the whole place, with its details rolled, in its row
+            stock[h] = {"type": ["place"], "id": place["id"],
+                        "content": f"{place['name']}. {place['intro']} {' '.join(place['lines'])}"}
             continue
         result = rng.choice(stocking["results"])            # d66: every result once in 36
         label = " / ".join(types[t][LANG] for t in result["type"])
-        monster = roll_monster(rng, terrain[h]) if result.get("monster") else None
+        monster = roll_monster(rng, terrain[h], number) if result.get("monster") else None
         if result["roll"] == 12:                             # the tracks of a local denizen
             content = f"{label}: {tr('stock_tracks', monster=f'{monster[0]} ({monster[1]})')}." if monster \
                 else f"{label}: {result[LANG]}"
@@ -5007,7 +5024,7 @@ def stock_hexes(grid, terrain, sites, number):
         else:
             content = f"{label}: {result[LANG]}"
         stock[h] = {"type": result["type"], "roll": result["roll"], "content": content}
-    return stock, places, len(land)
+    return stock, len(land)
 
 
 def make_contents(params, grid, terrain, rivers, sites, seed, number):
@@ -5017,7 +5034,7 @@ def make_contents(params, grid, terrain, rivers, sites, seed, number):
                         else ([], []))
     H = load_data("history.json")[LANG]
     site_at = {h: kind for kind, h in sites}
-    stock, places, land = stock_hexes(grid, terrain, sites, number)
+    stock, land = stock_hexes(grid, terrain, sites, number, params.get("empty"))
     hexes = []
     for c in range(grid.cols):
         for r in range(grid.rows):
@@ -5036,11 +5053,10 @@ def make_contents(params, grid, terrain, rivers, sites, seed, number):
             "history": history, "rumours": rumours,
             "stocking": {"land": land, "stocked": len(stock), "empty": land - len(stock),
                          "types": [{"type": types[t][LANG], "about": types[t][f"about_{LANG}"]} for t in types]},
-            "places": places,
             "encounters": [{"terrain": pick(TERRAIN_NAMES[t]),
                             "rows": [{"roll": roll, "encounter": name, "ref": ref, "note": note}
                                      for roll, name, ref, note in rows]}
-                           for t, rows in encounter_tables(terrain)],
+                           for t, rows in encounter_tables(terrain, number)],
             "hexes": hexes}
 
 
@@ -5065,20 +5081,25 @@ def write_contents_pdf(contents, path):
     class Pages(FPDF):
         def footer(self):
             self.set_y(-12)
-            self.set_font("Helvetica", "", 8)
+            self.set_font(body, "", 9)
             self.set_text_color(*dim)
             self.cell(0, 6, pdf_text(f"{contents['title']}  ·  {contents['seed']}  ·  WyrmHex v{VERSION}"), align="L")
             self.cell(0, 6, str(self.page_no()), align="R")
             self.set_text_color(*ink)
 
     pdf = Pages(format="A4")
-    # the headers in Catholicon (SIL Open Font License, data/fonts/OFL.txt),
-    # or in bold Helvetica if the font file is missing
-    head = ("Helvetica", "B")
-    font_file = os.path.join(DATA_FOLDER, "fonts", "Catholicon.ttf")
-    if os.path.isfile(font_file):
-        pdf.add_font("Catholicon", "", font_file)
+    # the headings in Catholicon, the text and the tables in Crimson Text
+    # (both SIL Open Font License, data/fonts); Helvetica if a file is missing
+    fonts = os.path.join(DATA_FOLDER, "fonts")
+    head, body = ("Helvetica", "B"), "Helvetica"
+    if os.path.isfile(os.path.join(fonts, "Catholicon.ttf")):
+        pdf.add_font("Catholicon", "", os.path.join(fonts, "Catholicon.ttf"))
         head = ("Catholicon", "")
+    crimson = {"": "Regular", "B": "Bold", "I": "Italic", "BI": "BoldItalic"}
+    if all(os.path.isfile(os.path.join(fonts, f"CrimsonText-{f}.ttf")) for f in crimson.values()):
+        for style, f in crimson.items():
+            pdf.add_font("Crimson", style, os.path.join(fonts, f"CrimsonText-{f}.ttf"))
+        body = "Crimson"
     pdf.set_auto_page_break(True, margin=16)
     pdf.set_margins(18, 16, 18)
     width = pdf.w - pdf.l_margin - pdf.r_margin
@@ -5092,8 +5113,8 @@ def write_contents_pdf(contents, path):
         write(width, size * 0.5, text)
         pdf.ln(2)
 
-    def para(text, size=10.5, style=""):
-        pdf.set_font("Helvetica", style, size)
+    def para(text, size=11.5, style=""):
+        pdf.set_font(body, style, size)
         write(width, 5.2, text)
         pdf.ln(2)
 
@@ -5101,7 +5122,7 @@ def write_contents_pdf(contents, path):
     pdf.add_page()
     pdf.set_font(*head, 28)
     write(width, 13, contents["title"])
-    pdf.set_font("Helvetica", "", 10)
+    pdf.set_font(body, "", 11)
     pdf.set_text_color(*dim)
     write(width, 5, T("pdf_subtitle", seed=contents["seed"]))
     pdf.set_text_color(*ink)
@@ -5113,26 +5134,21 @@ def write_contents_pdf(contents, path):
         pdf.ln(2)
         heading(tr("pdf_rumours", n=len(contents["rumours"])), 15)
         for i, rumour in enumerate(contents["rumours"], 1):
-            pdf.set_font("Helvetica", "B", 10.5)
+            pdf.set_font(body, "B", 11.5)
             pdf.cell(8, 5.2, str(i))
-            pdf.set_font("Helvetica", "", 10.5)
+            pdf.set_font(body, "", 11.5)
             write(width - 8, 5.2, rumour)
             pdf.ln(1)
         pdf.add_page()
 
-    # 2. random encounters: how to use them, then one d100 table per terrain
+    # 2. random encounters: one 1d20 table per terrain, and what * and ** mean
     heading(tr("pdf_encounters"))
-    para(tr("pdf_enc_intro"))
-    for line in (tr("pdf_note_night"), tr("pdf_note_lycanthrope"), tr("pdf_note_dead")):
-        para(line, 9.5)
-    heading(tr("pdf_reaction"), 13)
-    for roll, result in pick(TEXTS["pdf_reaction_rows"]):
-        pdf.set_font("Helvetica", "B", 9.5)
-        pdf.cell(22, 5, pdf_text(roll))
-        pdf.set_font("Helvetica", "", 9.5)
-        pdf.cell(0, 5, pdf_text(result), new_x="LMARGIN", new_y="NEXT")
-    pdf.ln(4)
-    marks = {"night": " *", "lycanthrope": " **", "dead": " ***"}
+    notes = {row["note"] for table in contents["encounters"] for row in table["rows"]}
+    for note, key in (("night", "pdf_note_night"), ("lycanthrope", "pdf_note_lycanthrope")):
+        if note in notes:
+            para(tr(key), 10.5)
+    pdf.ln(2)
+    marks = {"night": " *", "lycanthrope": " **"}
     for table in contents["encounters"]:
         # each table in two columns, all on one page: placed by hand, so the
         # automatic page break stays off while it's drawn
@@ -5143,18 +5159,18 @@ def write_contents_pdf(contents, path):
         pdf.set_auto_page_break(False)
         heading(tr("pdf_enc_table", terrain=capitalised(table["terrain"])), 15)
         col = (width - 6) / 2
-        widths = (12, col - 12 - 18, 18)
+        widths = (10, col - 10 - 18, 18)
         top = pdf.get_y()
         for side, part in enumerate((rows[:half], rows[half:])):
             x0 = pdf.l_margin + side * (col + 6)
             pdf.set_xy(x0, top)
-            pdf.set_font("Helvetica", "B", 8.5)
+            pdf.set_font(body, "B", 9.5)
             pdf.set_fill_color(*ink)
             pdf.set_text_color(255, 255, 255)
             for w, label in zip(widths, pick(TEXTS["pdf_enc_cols"])):
                 pdf.cell(w, 5.2, pdf_text(label), fill=True)
             pdf.set_text_color(*ink)
-            pdf.set_font("Helvetica", "", 8.5)
+            pdf.set_font(body, "", 9.5)
             for i, row in enumerate(part):
                 pdf.set_xy(x0, top + 5.2 + i * 4.6)
                 pdf.set_fill_color(*(shade if i % 2 else (255, 255, 255)))
@@ -5167,19 +5183,12 @@ def write_contents_pdf(contents, path):
     # 3. the hexes, in code order
     pdf.add_page()
     heading(tr("pdf_hexes"))
-    para(tr("pdf_hexes_intro", empty=contents["stocking"]["empty"], land=contents["stocking"]["land"]), 9.5)
-    heading(tr("pdf_types"), 13)
-    for t in contents["stocking"]["types"]:
-        pdf.set_font("Helvetica", "B", 9)
-        pdf.cell(28, 4.6, pdf_text(t["type"]))
-        pdf.set_font("Helvetica", "", 9)
-        write(width - 28, 4.6, t["about"])
-        pdf.ln(1)
-    pdf.ln(3)
+    para(tr("pdf_hexes_intro", empty=contents["stocking"]["empty"], land=contents["stocking"]["land"]), 10.5)
+
     widths = (16, 30, width - 46)
 
     def hex_header():
-        pdf.set_font("Helvetica", "B", 9)
+        pdf.set_font(body, "B", 10)
         pdf.set_fill_color(*ink)
         pdf.set_text_color(255, 255, 255)
         for w, label in zip(widths, pick(TEXTS["pdf_hex_cols"])):
@@ -5189,7 +5198,7 @@ def write_contents_pdf(contents, path):
 
     hex_header()
     for i, row in enumerate(contents["hexes"]):
-        pdf.set_font("Helvetica", "", 9)
+        pdf.set_font(body, "", 10)
         text = pdf_text(row["content"] or "-")
         lines = max(1, len(pdf.multi_cell(widths[2], 5, text, dry_run=True, output="LINES")))
         if pdf.get_y() + 5 * lines > pdf.h - pdf.b_margin:
@@ -5197,32 +5206,18 @@ def write_contents_pdf(contents, path):
             hex_header()
         pdf.set_fill_color(*(shade if i % 2 else (255, 255, 255)))
         y = pdf.get_y()
-        pdf.set_font("Helvetica", "B", 9)
+        pdf.set_font(body, "B", 10)
         pdf.cell(widths[0], 5 * lines, row["hex"], fill=True)
-        pdf.set_font("Helvetica", "", 9)
+        pdf.set_font(body, "", 10)
         pdf.cell(widths[1], 5 * lines, pdf_text(row["terrain"]), fill=True)
         pdf.multi_cell(widths[2], 5, text, fill=True, new_x="LMARGIN", new_y="NEXT")
         pdf.set_y(y + 5 * lines)
 
-    # 4. the detailed places, rolled
-    if contents["places"]:
-        pdf.add_page()
-        heading(tr("pdf_places"))
-        para(tr("pdf_places_intro"), 9.5)
-        for place in contents["places"]:
-            if pdf.get_y() + 40 > pdf.h - pdf.b_margin:
-                pdf.add_page()
-            heading(f"{place['hex']}  {place['name']}", 14)
-            para(place["intro"], 10, "I")
-            for line in place["lines"]:
-                para(line, 10)
-            pdf.ln(2)
-
-    # 5. sources and licences
+    # 4. sources and licences
     pdf.add_page()
     heading(tr("pdf_sources"))
     for source in content_sources():
-        para(source, 9)
+        para(source, 10)
     pdf.output(path)
     return True
 
