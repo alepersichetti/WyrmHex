@@ -4991,7 +4991,7 @@ def stock_hexes(grid, terrain, sites, number, empty=None, history=False):
     (forests and mountains) or a roll on the Wilderness Stocking d66 table. Returns ({hex: entry}, land count).
     It has its own random numbers, so the land and the names don't change."""
     rng = random.Random(f"stocking {number}")
-    stocking = load_data("stocking_d4caltrops.json")
+    stocking = load_data("stocking.json")
     types = stocking["types"]
     site_hexes = {h for _, h in sites}
     land = [h for h in grid.hexes if terrain[h] not in WATER and h not in site_hexes]
@@ -5007,7 +5007,7 @@ def stock_hexes(grid, terrain, sites, number, empty=None, history=False):
     chosen = {}
     for t, key in D4_PLACES.items():
         hexes_t = [h for h in stocked if terrain[h] == t]
-        entries = [e for e in load_data("hexes_d4caltrops.json")["hexes"] if e["terrain"] == key]
+        entries = [e for e in load_data("places.json")["hexes"] if e["terrain"] == key]
         rng.shuffle(entries)
         for h, e in zip(hexes_t, entries[:(len(hexes_t) + 2) // 3]):
             chosen[h] = e
@@ -5059,7 +5059,7 @@ def make_contents(params, grid, terrain, rivers, sites, seed, number):
             elif h in stock:
                 entry.update(stock[h])
             hexes.append(entry)
-    types = load_data("stocking_d4caltrops.json")["types"]
+    types = load_data("stocking.json")["types"]
     return {"title": params["title"], "seed": seed, "version": VERSION, "language": LANG,
             "history": history, "rumours": rumours,
             "stocking": {"land": land, "stocked": len(stock), "empty": land - len(stock),
