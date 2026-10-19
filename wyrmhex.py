@@ -4717,8 +4717,9 @@ def random_site_labels(sites, number):
 
 
 def site_name(kind, h, labels, history):
-    """The site's name, or "the city at 0304" for a site without one."""
-    return (labels or {}).get(label_key(h)) or history["site_unnamed"][kind].format(hex=hex_code(h, 2))
+    """The site's name, or "Nameless City" for a site without one (the
+    sentences give its hex next to it)."""
+    return (labels or {}).get(label_key(h)) or history["site_unnamed"][kind]
 
 
 def capitalised(text):
@@ -4884,43 +4885,83 @@ def land_history(grid, terrain, rivers, sites, labels, number):
             rumours.append(capitalised(text.format(**values, **(about(*site) if site else {}))))
         if len(rumours) == RUMOUR_DIE:     # a 1d20 table (20 of them need no site)
             break
-    return paragraphs, rumours
+    return paragraphs, rumours, values
 
 
 ENCOUNTER_DIE = 20                  # the encounter tables in the PDF are 1d20
+STORY_ENCOUNTERS = 6                # of them, tied to the history (when there is one)
 
 
-def encounter_d20(t, number):
-    """The 1d20 encounter table of a terrain for this map: 20 different
+def encounter_monsters(t, number, count):
+    """The monsters of a terrain's 1d20 table for this map: `count` different
     encounters drawn from its Hexcrawl Horrors 1d100 table, the more common
     ones more likely (by their share of the d100), kept in the book's order.
-    "Roll again" and the dead creatures are left out. Rows are (roll,
-    encounter, page reference, note)."""
+    "Roll again" and the dead creatures are left out. Rows are (encounter,
+    page reference, note)."""
     rows = [e for e in load_data("encounters_hexcrawl_horrors.json")["tables"][ENCOUNTER_TABLES[t]]
             if e["ref"] != "Roll again" and e.get("note") != "dead"]
     rng = random.Random(f"encounters {number} {ENCOUNTER_TABLES[t]}")
     # weighted draw without repeats: each row gets a random key, weight-biased
     keyed = sorted(rows, key=lambda e: rng.random() ** (1 / (e["roll"][1] - e["roll"][0] + 1)), reverse=True)
-    chosen = sorted(keyed[:ENCOUNTER_DIE], key=lambda e: e["roll"][0])
-    return [(str(i), e[LANG], e["ref"], e.get("note")) for i, e in enumerate(chosen, 1)]
+    return [(e[LANG], e["ref"], e.get("note")) for e in sorted(keyed[:count], key=lambda e: e["roll"][0])]
 
 
-def encounter_tables(terrain, number):
-    """[(terrain, rows)] for every land terrain on the map, most common first."""
+def monster_count(history):
+    """How many of the 20 rows are monsters: all, or all but the story ones."""
+    return ENCOUNTER_DIE - (STORY_ENCOUNTERS if history else 0)
+
+
+def encounter_tables(terrain, number, story=None):
+    """[(terrain, rows)] for every land terrain on the map, most common first.
+    With the history (story = (cast, sites, labels)), 6 of the 20 rows are
+    events and people of that history, spread among the monsters; rows are
+    (roll, encounter, page reference, note, kind)."""
     counts = {t: list(terrain.values()).count(t) for t in ENCOUNTER_TABLES}
-    return [(t, encounter_d20(t, number)) for t in sorted((t for t in counts if counts[t]), key=lambda t: -counts[t])]
+    used = set()                      # no story encounter twice, while there are others
+    tables = []
+    for t in sorted((t for t in counts if counts[t]), key=lambda t: -counts[t]):
+        rows = [(name, ref, note, "monster") for name, ref, note in encounter_monsters(t, number, monster_count(story))]
+        if story:
+            rng = random.Random(f"story encounters {number} {ENCOUNTER_TABLES[t]}")
+            for text in story_encounters(rng, *story, used):
+                rows.insert(rng.randint(0, len(rows)), (text, "", None, "story"))
+        tables.append((t, [(str(i), *row) for i, row in enumerate(rows, 1)]))
+    return tables
+
+
+def story_encounters(rng, values, sites, labels, used):
+    """6 encounters with the people and events of the land's history: its
+    factions, the ruler and realm of old, the god, the founders and the
+    map's sites. Those that need a site only come up if there is one."""
+    H = load_data("history.json")[LANG]
+    options = [(text, needs) for text, needs in H["encounters"]
+               if not needs or any(k == needs for k, _ in sites)]
+    fresh = [o for o in options if o[0] not in used]
+    picked = rng.sample(fresh, min(STORY_ENCOUNTERS, len(fresh)))
+    if len(picked) < STORY_ENCOUNTERS:
+        picked += rng.sample([o for o in options if o not in picked], STORY_ENCOUNTERS - len(picked))
+    used.update(text for text, _ in picked)
+    out = []
+    for text, needs in picked:
+        site = {}
+        if needs:
+            h = rng.choice([h for k, h in sites if k == needs])
+            site = dict(name=site_name(needs, h, labels, H), hex=hex_code(h, 2))
+        out.append(capitalised(text.format(**values, **site)))
+    return out
 
 
 D4_PLACES = {FOREST: "forest", MOUNTAINS: "mountains"}    # terrains with detailed places
 EMPTY_SHARE = (0.20, 0.30)          # share of land hexes left empty for the referee
 
 
-def roll_monster(rng, t, number):
-    """A monster for a lair (or its tracks): a roll on the terrain's 1d20
-    encounter table in the PDF, so they match: (name, page reference), or None."""
+def roll_monster(rng, t, number, history):
+    """A monster for a lair (or its tracks): one of the monsters of the
+    terrain's 1d20 encounter table in the PDF, so they match: (name, page
+    reference), or None."""
     if t not in ENCOUNTER_TABLES:
         return None
-    _, name, ref, _ = rng.choice(encounter_d20(t, number))
+    name, ref, _ = rng.choice(encounter_monsters(t, number, monster_count(history)))
     return name, ref
 
 
@@ -4944,7 +4985,7 @@ def roll_place(entry, rng, placed):
     return {"id": entry["id"], "name": entry[LANG]["name"], "intro": entry[LANG]["intro"], "lines": lines}
 
 
-def stock_hexes(grid, terrain, sites, number, empty=None):
+def stock_hexes(grid, terrain, sites, number, empty=None, history=False):
     """What's in the land hexes that have no site: some stay empty (the
     referee's percentage, or 20-30%), the others get a D4Caltrops place
     (forests and mountains) or a roll on the Wilderness Stocking d66 table. Returns ({hex: entry}, land count).
@@ -4984,7 +5025,7 @@ def stock_hexes(grid, terrain, sites, number, empty=None):
             continue
         result = rng.choice(stocking["results"])            # d66: every result once in 36
         label = " / ".join(types[t][LANG] for t in result["type"])
-        monster = roll_monster(rng, terrain[h], number) if result.get("monster") else None
+        monster = roll_monster(rng, terrain[h], number, history) if result.get("monster") else None
         if result["roll"] == 12:                             # the tracks of a local denizen
             content = f"{label}: {tr('stock_tracks', monster=f'{monster[0]} ({monster[1]})')}." if monster \
                 else f"{label}: {result[LANG]}"
@@ -4999,11 +5040,11 @@ def stock_hexes(grid, terrain, sites, number, empty=None):
 def make_contents(params, grid, terrain, rivers, sites, seed, number):
     """Everything that goes in the contents PDF, as plain data."""
     labels = params.get("labels") or {}
-    history, rumours = (land_history(grid, terrain, rivers, sites, labels, number) if params.get("history")
-                        else ([], []))
+    history, rumours, cast = (land_history(grid, terrain, rivers, sites, labels, number) if params.get("history")
+                              else ([], [], None))
     H = load_data("history.json")[LANG]
     site_at = {h: kind for kind, h in sites}
-    stock, land = stock_hexes(grid, terrain, sites, number, params.get("empty"))
+    stock, land = stock_hexes(grid, terrain, sites, number, params.get("empty"), bool(cast))
     hexes = []
     for c in range(grid.cols):
         for r in range(grid.rows):
@@ -5013,7 +5054,8 @@ def make_contents(params, grid, terrain, rivers, sites, seed, number):
             entry = {"hex": hex_code(h, 2), "terrain": pick(TERRAIN_NAMES[terrain[h]]), "type": [], "content": ""}
             if h in site_at:
                 entry["type"] = [site_at[h]]
-                entry["content"] = f"{pick(SITE_NAMES[site_at[h]])}: {site_name(site_at[h], h, labels, H)}"
+                label = (labels or {}).get(label_key(h))
+                entry["content"] = pick(SITE_NAMES[site_at[h]]) + (f": {label}" if label else "")
             elif h in stock:
                 entry.update(stock[h])
             hexes.append(entry)
@@ -5023,9 +5065,10 @@ def make_contents(params, grid, terrain, rivers, sites, seed, number):
             "stocking": {"land": land, "stocked": len(stock), "empty": land - len(stock),
                          "types": [{"type": types[t][LANG], "about": types[t][f"about_{LANG}"]} for t in types]},
             "encounters": [{"terrain": pick(TERRAIN_NAMES[t]),
-                            "rows": [{"roll": roll, "encounter": name, "ref": ref, "note": note}
-                                     for roll, name, ref, note in rows]}
-                           for t, rows in encounter_tables(terrain, number)],
+                            "rows": [{"roll": roll, "encounter": name, "ref": ref, "note": note, "kind": kind}
+                                     for roll, name, ref, note, kind in rows]}
+                           for t, rows in encounter_tables(terrain, number,
+                                                           (cast, sites, labels) if cast else None)],
             "hexes": hexes}
 
 
@@ -5122,6 +5165,39 @@ def write_contents_pdf(contents, path):
         # each table in two columns, all on one page: placed by hand, so the
         # automatic page break stays off while it's drawn
         rows = table["rows"]
+        if any(row.get("kind") == "story" for row in rows):
+            # with the history: one column, the story rows (in italics) wrap
+            widths, line = (12, width - 12 - 22, 22), 4.8
+            texts, heights = [], []
+            for row in rows:
+                pdf.set_font(body, "I" if row["kind"] == "story" else "", 10)
+                texts.append(pdf_text(row["encounter"] + marks.get(row["note"], "")))
+                lines = pdf.multi_cell(widths[1], line, texts[-1], align="L", dry_run=True, output="LINES")
+                heights.append(max(1, len(lines)) * line)
+            if pdf.get_y() + 14 + 5.4 + sum(heights) > pdf.h - pdf.b_margin:
+                pdf.add_page()
+            pdf.set_auto_page_break(False)
+            heading(tr("pdf_enc_table", terrain=capitalised(table["terrain"])), 15)
+            pdf.set_font(body, "B", 10)
+            pdf.set_fill_color(*ink)
+            pdf.set_text_color(255, 255, 255)
+            for w, label in zip(widths, pick(TEXTS["pdf_enc_cols"])):
+                pdf.cell(w, 5.4, pdf_text(label), fill=True)
+            pdf.ln(5.4)
+            pdf.set_text_color(*ink)
+            for i, (row, text, h) in enumerate(zip(rows, texts, heights)):
+                y = pdf.get_y()
+                pdf.set_fill_color(*(shade if i % 2 else (255, 255, 255)))
+                pdf.set_font(body, "", 10)
+                pdf.cell(widths[0], h, row["roll"], fill=True)
+                pdf.set_font(body, "I" if row["kind"] == "story" else "", 10)
+                pdf.multi_cell(widths[1], line, text, align="L", fill=True, new_x="RIGHT", new_y="TOP")
+                pdf.set_font(body, "", 10)
+                pdf.cell(widths[2], h, pdf_text(row["ref"]), fill=True)
+                pdf.set_xy(pdf.l_margin, y + h)
+            pdf.ln(6)
+            pdf.set_auto_page_break(True, margin=16)
+            continue
         half = (len(rows) + 1) // 2
         if pdf.get_y() + 14 + 5.2 + half * 4.6 > pdf.h - pdf.b_margin:
             pdf.add_page()
