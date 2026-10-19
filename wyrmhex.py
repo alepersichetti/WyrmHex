@@ -809,38 +809,6 @@ TEXTS = {
                         "{empty} land hexes out of {land} are left empty (-), to fill in at the table with your "
                         "own tables."),
     "pdf_hex_cols": (("Esagono", "Terreno", "Contenuto"), ("Hex", "Terrain", "Contents")),
-    "pdf_sources": ("Fonti e licenze", "Sources and licences"),
-    "pdf_source_hh": ("Tabelle degli incontri casuali: {title}, di {author} ({url}). Testo rilasciato sotto "
-                      "licenza Creative Commons Attribuzione-Condividi allo stesso modo 4.0 "
-                      "(https://creativecommons.org/licenses/by-sa/4.0/). Nomi dei mostri tradotti in italiano "
-                      "per WyrmHex.",
-                      "Random encounter tables: {title}, by {author} ({url}). Text released under the Creative "
-                      "Commons Attribution-ShareAlike 4.0 licence (https://creativecommons.org/licenses/by-sa/4.0/)."),
-    "pdf_source_bfrpg": ("I mostri e i riferimenti alle pagine vengono da Basic Fantasy Role-Playing Game (Chris "
-                         "Gonnerman e collaboratori, https://www.basicfantasy.org/) e dai suoi Field Guide: "
-                         "Open Game Content rilasciato con la Open Game License 1.0a (la quarta edizione del "
-                         "regolamento con la licenza Creative Commons Attribuzione-Condividi allo stesso modo 4.0).",
-                         "The monsters and page references come from the Basic Fantasy Role-Playing Game (Chris "
-                         "Gonnerman and contributors, https://www.basicfantasy.org/) and its Field Guides: Open Game "
-                         "Content released under the Open Game License 1.0a (the 4th edition of the core rules "
-                         "under the Creative Commons Attribution-ShareAlike 4.0 licence)."),
-    "pdf_source_d4": ("Popolamento degli esagoni: Wilderness Stocking - Expanded, Even More Forest Hexes e Even "
-                      "More Mountain Hexes I, III e IV (bozze), di D4Caltrops (https://blog.d4caltrops.com/): "
-                      "risorse gratuite pubblicate sul suo blog, usate citando l'autore e tradotte in italiano "
-                      "per WyrmHex.",
-                      "Hex stocking: Wilderness Stocking - Expanded, Even More Forest Hexes and Even More "
-                      "Mountain Hexes I, III and IV (drafts), by D4Caltrops (https://blog.d4caltrops.com/): free "
-                      "resources published on the author's blog, used with credit."),
-    "pdf_source_own": ("La storia della landa, le voci di taverna e i nomi casuali sono scritti per WyrmHex.",
-                       "The history of the land, the tavern rumours and the random names are written for WyrmHex."),
-    "pdf_source_font": ("I titoli sono scritti con il carattere Catholicon di Vladimir Arabadzhi "
-                        "(vladar.bearblog.dev), il testo e le tabelle con Crimson Text di The Crimson Text "
-                        "Project Authors (github.com/googlefonts/Crimson): entrambi rilasciati con la SIL Open "
-                        "Font License 1.1.",
-                        "The headings are set in the Catholicon typeface by Vladimir Arabadzhi "
-                        "(vladar.bearblog.dev), the text and the tables in Crimson Text by The Crimson Text "
-                        "Project Authors (github.com/googlefonts/Crimson): both released under the SIL Open Font "
-                        "License 1.1."),
     "h_contents": ("genera anche il contenuto degli esagoni, a caso: incontri casuali ed esagoni popolati, "
                    "in un PDF accanto alla mappa",
                    "also make what's in the hexes, at random: random encounters and stocked hexes, in a PDF "
@@ -4798,6 +4766,9 @@ def history_cast(rng, H, names):
     return values
 
 
+RUMOUR_DIE = 20                     # the tavern rumours in the PDF are 1d20
+
+
 def land_history(grid, terrain, rivers, sites, labels, number):
     """The history of the land: (paragraphs, rumours), from history.json and
     the map itself (its sites, terrain, sea and rivers). It takes one of
@@ -4911,10 +4882,8 @@ def land_history(grid, terrain, rivers, sites, labels, number):
         if options:
             site = rng.choice(options)
             rumours.append(capitalised(text.format(**values, **(about(*site) if site else {}))))
-        if len(rumours) == 6:
+        if len(rumours) == RUMOUR_DIE:     # a 1d20 table (20 of them need no site)
             break
-    if len(rumours) == 5:             # rolled on a die: 1d4 or 1d6
-        rumours.pop()
     return paragraphs, rumours
 
 
@@ -5069,8 +5038,8 @@ def pdf_text(text):
 
 
 def write_contents_pdf(contents, path):
-    """The contents as a PDF: history and rumours, encounter tables, hexes,
-    sources. Needs fpdf2; returns False when it isn't installed."""
+    """The contents as a PDF: history and rumours, encounter tables, hexes.
+    Needs fpdf2; returns False when it isn't installed."""
     try:
         from fpdf import FPDF
     except ImportError:
@@ -5213,23 +5182,8 @@ def write_contents_pdf(contents, path):
         pdf.multi_cell(widths[2], 5, text, fill=True, new_x="LMARGIN", new_y="NEXT")
         pdf.set_y(y + 5 * lines)
 
-    # 4. sources and licences
-    pdf.add_page()
-    heading(tr("pdf_sources"))
-    for source in content_sources():
-        para(source, 10)
     pdf.output(path)
     return True
-
-
-def content_sources():
-    """Where the tables come from, with their licences, for the PDF."""
-    hh = load_data("encounters_hexcrawl_horrors.json")["_source"]
-    return [tr("pdf_source_hh", title=hh["title"], author=hh["author"], url=hh["url"]),
-            tr("pdf_source_bfrpg"),
-            tr("pdf_source_d4"),
-            tr("pdf_source_own"),
-            tr("pdf_source_font")]
 
 
 def save_contents(params, grid, land, seed, number, edited, log):
