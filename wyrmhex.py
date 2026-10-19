@@ -5025,7 +5025,7 @@ def encounter_monsters(t, number, count):
     ones more likely (by their share of the d100), kept in the book's order.
     "Roll again" and the dead creatures are left out. Rows are (encounter,
     page reference, note)."""
-    rows = [e for e in load_data("encounters_hexcrawl_horrors.json")["tables"][ENCOUNTER_TABLES[t]]
+    rows = [e for e in load_data("encounters.json")["tables"][ENCOUNTER_TABLES[t]]
             if e["ref"] != "Roll again" and e.get("note") != "dead"]
     rng = random.Random(f"encounters {number} {ENCOUNTER_TABLES[t]}")
     # weighted draw without repeats: each row gets a random key, weight-biased
