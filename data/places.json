@@ -1,0 +1,3732 @@
+{
+ "_source": {
+  "title": "Even More Forest Hexes, Even More Mountain Hexes I, III, IV (Draft Versions)",
+  "author": "D4Caltrops",
+  "url": "https://blog.d4caltrops.com/",
+  "licence": "Free resources published on the D4Caltrops blog; no licence stated. Used with credit to the author.",
+  "changes": "Transcribed from the PDFs (one page per numbered place); Italian translation added for WyrmHex. Obvious typos fixed; nested table layouts folded into whole rows. {hex:N} marks a reference to D4Caltrops' place N: WyrmHex replaces it with the map hex where that place is, or drops it.",
+  "how": "Each table: roll the die; the text is lead + row, or the row put in place of {} in the lead."
+ },
+ "hexes": [
+  {
+   "id": 21,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes I (Draft)",
+   "en": {
+    "name": "The Winding Walkway",
+    "intro": "With relieved sighs, you spy a stout stonework shortcut weaving and wending between industriously partitioned peaks."
+   },
+   "it": {
+    "name": "Il Sentiero Serpeggiante",
+    "intro": "Con un sospiro di sollievo, scorgete una robusta scorciatoia in pietra che serpeggia e si snoda tra picchi suddivisi con operosa cura."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "Following this paved path will",
+      "it": "Seguire questo sentiero lastricato"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "soon prove a welcome relief, as the various elevations and grades that surround grow suddenly steeper, while this remains relatively level.",
+       "it": "si rivelerà presto un gradito sollievo, poiché i dislivelli e i pendii circostanti si fanno all'improvviso più ripidi, mentre questo resta relativamente pianeggiante."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "take you on a fairly comprehensive tour of the area as it meanders in various directions.",
+       "it": "vi porterà in un giro piuttosto completo della zona, mentre serpeggia in varie direzioni."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "shave half the time off traversing this hex, provided you are travelling South East/North West.",
+       "it": "dimezzerà il tempo necessario ad attraversare questo esagono, purché viaggiate in direzione sud-est/nord-ovest."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "eventually lead you to a destination at least four hexes away, as this seems to span several dozen miles.",
+       "it": "vi condurrà infine a una destinazione distante almeno quattro esagoni, poiché sembra estendersi per parecchie decine di miglia."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "Along a circuitous, but convenient, route one may encounter",
+      "it": "Lungo un percorso tortuoso, ma comodo, ci si potrebbe imbattere in"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "a cyclopean archway over a dry river bed, that serves as the home for a colony of easily startled Giant Bats.",
+       "it": "un arco ciclopico sopra il letto di un fiume in secca, che fa da dimora a una colonia di pipistrelli giganti che si spaventano facilmente."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "a Molefolk Monk Merchant Caravan, laden with tubers for trade.",
+       "it": "una carovana mercantile di monaci talpidi, carica di tuberi da commerciare."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "a quarter mile stretch, mostly impassable due to quarrying by local Crag Goblins.",
+       "it": "un tratto lungo un quarto di miglio, quasi del tutto impraticabile a causa delle cave scavate dai goblin delle rupi della zona."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "a hapless group of brick-robbers, filling carts to help fortify a nearby cobbled-together Keep. Their Ogre overseers' lashes keep them busy.",
+       "it": "uno sventurato gruppo di ladri di mattoni, intenti a riempire carri per aiutare a fortificare una vicina rocca messa insieme alla bell'e meglio. Le frustate dei loro sorveglianti ogre non concedono loro tregua."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "the Stone Giant shepherdess Atmara and her flock of elephantine Mountain Sheep. One of her favorite lambs (currently being menaced by a gigantic Rock Python) is lost down a crevice that is far too narrow for her to access without the help of the party.",
+       "it": "Atmara, gigantessa delle pietre e pastora, con il suo gregge di elefantine pecore di montagna. Uno dei suoi agnelli preferiti (al momento minacciato da un gigantesco pitone delle rocce) è finito in fondo a un crepaccio troppo stretto perché lei possa raggiungerlo senza l'aiuto del gruppo."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "a legion of statues in soldier's formation, all seemingly sculpted mid-march and bearing ancient armaments. A large audacity of mischievous Gargoyles sometimes enjoys lurking among the ranks or moving them around to confuse passersby.",
+       "it": "una legione di statue schierate in formazione militare, tutte apparentemente scolpite nel mezzo della marcia e armate di armi antiche. Una nutrita e sfrontata combriccola di gargolle dispettose si diverte talvolta ad acquattarsi tra i ranghi o a spostare le statue per confondere i viandanti."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "The bygone builders were",
+      "it": "Gli antichi costruttori erano"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "the True Mortar Clan of Mountain Dwarfs.",
+       "it": "i nani di montagna del clan della Vera Malta."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "Dire Dirt Daubers, with eerily uniform mud bricks. The swarms were obviously being controlled by an outside force.",
+       "it": "vespe muratrici crudeli, che impastavano mattoni di fango inquietantemente uniformi. Gli sciami erano chiaramente controllati da una forza esterna."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "a now extinct race of Glacier Giants, working on a megaproject for their Queen, whose harem required tithes from throughout the land.",
+       "it": "una razza, ormai estinta, di giganti dei ghiacciai, impegnati in un'opera colossale per la loro regina, il cui harem esigeva tributi da tutto il regno."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "capable of splitting the largest stones with a mere glance.",
+       "it": "capaci di spaccare le pietre più grandi con un semplice sguardo."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "civilized Troglodytes, their feral cousins still roam these parts.",
+       "it": "trogloditi civilizzati; i loro cugini selvaggi si aggirano ancora da queste parti."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "far from numerous. In fact, legends say the whole thing was built by a single Dwarf who just wanted to get to his favorite tavern faster.",
+       "it": "tutt'altro che numerosi. Anzi, la leggenda vuole che l'intera opera sia stata costruita da un unico nano che voleva soltanto arrivare prima alla sua taverna preferita."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "not quite finished. It's supposed to lead back home to the Plane of Earth.",
+       "it": "ancora lontani dall'aver finito. La strada dovrebbe ricondurre a casa, al Piano della Terra."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "men under a brutal but ambitious God-Emperor.",
+       "it": "uomini al servizio di un dio-imperatore brutale ma ambizioso."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 22,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes I (Draft)",
+   "en": {
+    "name": "A Lifeless Lakeshore",
+    "intro": "A thick stand of towering pines now stands naked and needle-less around a murky mere hunkered between the peaks."
+   },
+   "it": {
+    "name": "Una Riva Senza Vita",
+    "intro": "Un fitto bosco di pini torreggianti si erge ora spoglio e privo di aghi attorno a uno stagno torbido, acquattato tra le vette."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "The only living things around seem to be",
+      "it": "L'unico segno di vita nei dintorni sembra essere"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "a lost and lonely grey-blue Heron with long, bright pink legs tiptoeing gingerly along the shoreline.",
+       "it": "un airone grigioazzurro, smarrito e solitario, dalle lunghe zampe rosa acceso, che avanza in punta di piedi lungo la riva con cautela."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "the occasional emaciated Buzzard, taking a teetering respite from their lazy looping flights on treetop perches.",
+       "it": "qualche poiana emaciata, che si concede un traballante riposo sui posatoi in cima agli alberi tra un pigro volo circolare e l'altro."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "an unkindness of Ravens, plaintively croaking territorial warnings to each other from the tallest trunks.",
+       "it": "un cupo stormo di corvi, che si scambiano lamentosi gracchi di avvertimento territoriale dai tronchi più alti."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "a single, cerulean Blue Bird, brilliantly blue against such a depressingly drab backdrop. The Tarn Druidess, Ishaylah, might startle the party by addressing them in Common while in this, one of her favorite forms.",
+       "it": "un unico uccellino azzurro ceruleo, di un blu brillante contro uno sfondo così deprimente e spento. Ishaylah, la druida del lago alpino, potrebbe sorprendere il gruppo rivolgendosi ai suoi membri in lingua comune mentre si trova in questa, una delle sue forme preferite."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "This lake is",
+      "it": "Questo lago è"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "murky and brackish, the color of strong black tea.",
+       "it": "torbido e salmastro, del colore di un tè nero molto forte."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "foul smelling, any Summoner would tell you it's a sulphurous stench.",
+       "it": "maleodorante: qualunque evocatore vi direbbe che si tratta di un fetore sulfureo."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "uncharacteristically pristine, given the surroundings. Mostly consists of last summer's melt from the nearby snow-capped peaks.",
+       "it": "insolitamente incontaminato, visto l'ambiente circostante. È formato per lo più dal disgelo della scorsa estate delle vicine vette innevate."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "obviously Wyrmfouled and probably home to the kind of poisonous Lake Serpent rumored to dwell in these isolated basins.",
+       "it": "palesemente insozzato da un wyrm e probabilmente dimora di quel genere di serpente lacustre velenoso che, si dice, abita questi bacini isolati."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "steaming and bubbling in places, and gives off a great deal of heat.",
+       "it": "fumante e ribollente in alcuni punti, e sprigiona un gran calore."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "given wide berth by Trolls and Hydræ, but potentially of use to clever adventurers: it's brimming with a very strong acid.",
+       "it": "evitato con cura da troll e idre, ma potenzialmente utile ad avventurieri astuti: trabocca di un acido fortissimo."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "The trees were",
+      "it": "Gli alberi erano"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "still smoldering until a recent sudden rain doused the last of the fires.",
+       "it": "ancora fumanti, finché di recente un acquazzone improvviso non ha spento gli ultimi focolai."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "once a fine grove of the rare Barrel Blister fir. The bulging trunks are prized for Dwarf kegs after the welt-causing sap is gingerly removed.",
+       "it": "un tempo un bel boschetto del raro abete vescicabotte. I tronchi panciuti sono molto apprezzati per i barili dei nani, una volta rimossa con cautela la linfa che provoca vesciche."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "stripped of needle and leaf by the super-heated pyroclastic ash cloud of an erupting volcano.",
+       "it": "spogliati di aghi e foglie dalla rovente nube piroclastica di cenere di un vulcano in eruzione."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "frequently used by Giants to craft straight and sure-flying spears.",
+       "it": "spesso usati dai giganti per ricavarne lance dritte e dal volo sicuro."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "gradually poisoned and strangled by toxins that leached into the lake water from an underground fissure.",
+       "it": "lentamente avvelenati e soffocati dalle tossine filtrate nell'acqua del lago da una fessura sotterranea."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "petrified in situ, several millennia ago. The high altitude winds have long since eroded away all traces of the fine leaves and needles.",
+       "it": "pietrificati sul posto, diversi millenni fa. I venti d'alta quota hanno da tempo cancellato ogni traccia delle sottili foglie e degli aghi."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "once a thriving enclave of Coniferous Dryads, prosperous and welcoming until the Wosebane Weevils arrived.",
+       "it": "un tempo una fiorente enclave di driadi delle conifere, prospera e ospitale finché non arrivarono i punteruoli rovinasilvani."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "each marked on the trunk with the Necromantic Rune for Withering.",
+       "it": "tutti segnati sul tronco con la runa negromantica dell'Avvizzimento."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 23,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes I (Draft)",
+   "en": {
+    "name": "A Roadside Shrine",
+    "intro": "Scenically situated near a beautiful waterfall stands a humble peak-roofed nook housing a small religious statue."
+   },
+   "it": {
+    "name": "Un'Edicola sul Ciglio della Strada",
+    "intro": "In posizione panoramica, accanto a una splendida cascata, sorge un'umile nicchia dal tetto a punta che ospita una piccola statua votiva."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "Praying at this place will",
+      "it": "Pregare in questo luogo"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "provide a welcome respite and rest, the nearby waterfall is soothing and picturesque in addition to being chock full of leaping Salmon.",
+       "it": "offrirà un gradito momento di sollievo e riposo: la vicina cascata è rilassante e pittoresca, oltre che brulicante di salmoni che saltano."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "remove all blisters, corns, and wounds to the feet and toes, stopping short of regenerating missing digits.",
+       "it": "eliminerà ogni vescica, callo e ferita a piedi e dita, senza però arrivare a far ricrescere le dita mancanti."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "anger a nearby and very jealous Petty God of Straps and Buckles.",
+       "it": "farà adirare un dio minore delle cinghie e delle fibbie che dimora nei paraggi ed è molto geloso."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "stop the passage of time in the immediate area for a day. The waterfall's rushing ceases, birds hang mid-air, etc. Only the pray-ers are not affected.",
+       "it": "fermerà lo scorrere del tempo nelle immediate vicinanze per un giorno. Lo scroscio della cascata si interrompe, gli uccelli restano sospesi a mezz'aria e così via. Solo chi ha pregato non ne è influenzato."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "The site is dedicated to {}",
+      "it": "Il luogo è dedicato {}"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "the religion followed by the party's most hated enemy/enemies.",
+       "it": "alla religione professata dal nemico più odiato (o dai nemici più odiati) del gruppo."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "ancient Cirrus Cloud Titans, once worshipped as divine in these parts.",
+       "it": "agli antichi titani dei cirri, un tempo venerati come divinità da queste parti."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "a young woman, who threw herself into the falls after being spurned by her lover. It's said at night, you can still hear her sobs.",
+       "it": "a una giovane donna che si gettò nella cascata dopo essere stata respinta dal suo amato. Si dice che di notte si possano ancora udire i suoi singhiozzi."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "an un-named Saint of a sect now considered heretical by the major religion that is most important to the party.",
+       "it": "a un santo senza nome di una setta oggi considerata eretica dalla grande religione che conta di più per il gruppo."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "an Empress of antiquity, so beloved by Her people that Her ascension to Godhood was a foregone conclusion, but theologists continue to debate to this day which Deity She disguises Herself as.",
+       "it": "a un'imperatrice dell'antichità, così amata dal Suo popolo che la Sua ascesa alla divinità fu una conclusione scontata; tuttavia i teologi discutono ancora oggi sotto le spoglie di quale divinità Ella si celi."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "a flusteringly obscure and exotic divinity from far off lands to the West, the strange story of how it came to rest here may be decoded in some of the graffiti chalked and chiseled nearby. Care must be taken, however, because reading the words may inadvertently invoke prayers of teleportations and travel.",
+       "it": "a una divinità sconcertantemente oscura ed esotica, giunta da terre lontane a occidente; la strana storia di come sia finita qui si può decifrare in alcuni dei graffiti tracciati col gesso e incisi nei paraggi. Occorre però fare attenzione, perché leggere quelle parole potrebbe involontariamente invocare preghiere di teletrasporto e di viaggio."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "Woe to any who dare desecrate the shrine for",
+      "it": "Guai a chi osa profanare l'edicola, perché"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "curses of ingrown toenails will inconvenience iconoclasts.",
+       "it": "maledizioni di unghie incarnite tormenteranno gli iconoclasti."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "the destruction will haunt all dreams, making sleep very unrestful.",
+       "it": "lo scempio ne perseguiterà tutti i sogni, rendendo il sonno tutt'altro che riposante."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "all food and water they carry shall spoil before sundown/sunrise.",
+       "it": "tutto il cibo e l'acqua che porta con sé andranno a male prima del tramonto/dell'alba."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "the next Healing Magics they receive will have the opposite effect.",
+       "it": "le prossime magie curative che riceverà avranno l'effetto opposto."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "homage is paid here by a skilled Ranger, who will stalk the party.",
+       "it": "qui viene a rendere omaggio un abile ranger, che braccherà il gruppo."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "all of their domesticated animals/pets will balk or buck for a week.",
+       "it": "tutti i suoi animali domestici e da compagnia si impunteranno o scalceranno per una settimana."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "severe weather will surely follow them for at least three weeks.",
+       "it": "il maltempo lo seguirà di certo per almeno tre settimane."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "it was constructed to trap a malicious and potent Pine-Cone Demon and this will free it to begin infecting all the conifers in the Hex.",
+       "it": "fu costruita per imprigionare un demone delle pigne malvagio e potente, e così lo si libererà, lasciandolo libero di infettare tutte le conifere dell'esagono."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 24,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes I (Draft)",
+   "en": {
+    "name": "The Three Chimneys",
+    "intro": "The height of Hill Giants, a triad of tall spires stand clustered together among gnarled, weather-worn trees."
+   },
+   "it": {
+    "name": "I Tre Camini",
+    "intro": "Alte quanto giganti delle colline, tre svettanti guglie si ergono raggruppate tra alberi nodosi e segnati dalle intemperie."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "The spires were once",
+      "it": "Un tempo le guglie erano"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "used as watchtowers by the Ochre Claw Goblins, until the tribe was driven off by a nearby Ogre Slinger.",
+       "it": "usate come torri di vedetta dai goblin dell'Artiglio Ocra, finché la tribù non fu scacciata da un ogre fromboliere dei dintorni."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "painted extensively in primitive patterns and petroglyphs, but many have faded away and seem only to be strangely uniform stains.",
+       "it": "dipinte fittamente con motivi primitivi e petroglifi, ma molti sono sbiaditi e ora sembrano soltanto macchie stranamente uniformi."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "the trunks of ancient, gargantuan Cloud Pines, now utterly petrified, yet still incredibly sacred to Druids & Dryads.",
+       "it": "i tronchi di antichi, colossali pini delle nubi, ormai del tutto pietrificati, eppure ancora sacri come non mai per druidi e driadi."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "the site of a powerful ritual to summon forth a titanic being known as \"The Hand Of The Mountains\" from deep within the earth. Any Wonder Worker can discern from the residual energy present that the ritual was thankfully unsuccessful, but some power still remains in this place.",
+       "it": "il luogo di un potente rituale per evocare dalle profondità della terra un essere titanico noto come \"La Mano delle Montagne\". Qualunque taumaturgo può intuire dall'energia residua che il rituale per fortuna fallì, ma in questo luogo permane ancora un certo potere."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "The spires are now",
+      "it": "Ora le guglie sono"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "heavily eroded and tilting leeward precariously, and could probably be pulled down by a team of horses.",
+       "it": "fortemente erose e pericolosamente inclinate sottovento, e probabilmente una pariglia di cavalli potrebbe tirarle giù."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "little more than a useful landmark and place to leave encouraging messages for other travelers.",
+       "it": "poco più di un utile punto di riferimento e di un posto dove lasciare messaggi d'incoraggiamento per altri viaggiatori."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "very easy to climb thanks to iron pitons spaced out at Dwarf-length.",
+       "it": "facilissime da scalare grazie a chiodi da roccia in ferro piantati a intervalli di un'altezza di nano."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "hollowed out, serving as an emergency food cache for a nearby motley mischief of Packratfolk Trappers, who watch from their hiding places.",
+       "it": "svuotate all'interno e usate come dispensa d'emergenza da una variopinta combriccola di trappolieri del popolo dei ratti accaparratori che vive nei paraggi e osserva dai propri nascondigli."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "serving as a heavily modified observation point for a cautious colony of Yellowjacket-folk.",
+       "it": "adibite a punto d'osservazione, pesantemente modificato, da una guardinga colonia del popolo delle vespe gialle."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "three towers in a stalemate war between surviving identical triplet Elementalists: Clidira (Earth), Orforda (Air), and Villindena (Water); they don't like to speak of what happened to their sister.",
+       "it": "tre torri in una guerra di logoramento senza vincitori tra tre gemelle identiche superstiti, tutte elementaliste: Clidira (Terra), Orforda (Aria) e Villindena (Acqua); non amano parlare di cosa sia accaduto alla loro sorella."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "Atop one of the formations, one may find {}",
+      "it": "In cima a una delle formazioni {}"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "a windy place to spend the night, with breathtaking views.",
+       "it": "si potrebbe trovare un luogo ventoso dove passare la notte, con panorami mozzafiato."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "the rusting remains of an Iron Skeleton.",
+       "it": "si potrebbero trovare i resti arrugginiti di uno scheletro di ferro."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "a small copse of bonsai Pear Trees, their tiny fruit is delicious.",
+       "it": "si potrebbe trovare un boschetto di peri bonsai, i cui minuscoli frutti sono deliziosi."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "the skull of a Cyclops, serving as the lair for the Pseudodragon: Sgoid.",
+       "it": "si potrebbe trovare il teschio di un ciclope, che fa da tana allo pseudodrago Sgoid."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "clumps of a rare lichen known as Wraithwrap, that wards off Undead.",
+       "it": "si potrebbero trovare ciuffi di un raro lichene noto come Avvolgispettri, che tiene lontani i non morti."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "a surprising amount of dry and flammable firewood.",
+       "it": "si potrebbe trovare una sorprendente quantità di legna da ardere secca e infiammabile."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "oneself immediately rushing to scramble back down the spire, or risk being spotted by a quiver of Wyverns.",
+       "it": "ci si potrebbe ritrovare a ridiscendere in tutta fretta la guglia, per non rischiare di essere avvistati da uno stormo di viverne."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "the loinclothed, laconic ascetic: Spestin. Once a formidable Paladin of The Lecturing Smite, he has been in muted penance for three decades.",
+       "it": "si potrebbe trovare Spestin, l'asceta laconico vestito solo di un perizoma. Un tempo formidabile paladino della Punizione Ammonitrice, da tre decenni sconta la sua penitenza in silenzio."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 25,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes I (Draft)",
+   "en": {
+    "name": "The Cacophonous Cataract",
+    "intro": "You can barely hear yourself think over the tremendous din of water rushing over mule-stubborn rocks."
+   },
+   "it": {
+    "name": "La Cascata Cacofonica",
+    "intro": "Riuscite a malapena a sentire i vostri pensieri sopra il tremendo frastuono dell'acqua che si riversa su rocce testarde come muli."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "Traversing the raging torrent across the top",
+      "it": "Attraversare il torrente impetuoso sulla sommità della cascata"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "may be made easier by a thick, partially submerged rope strung across.",
+       "it": "potrebbe essere reso più facile da una spessa fune, in parte sommersa, tesa da una sponda all'altra."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "will prove difficult due to hidden gouges and slick rocks, smoothed and worn into the stone over the centuries.",
+       "it": "si rivelerà difficile a causa di solchi nascosti e rocce viscide, levigati e scavati nella pietra nel corso dei secoli."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "might be best, provided you can keep yourself upright and balance within the prodigious current.",
+       "it": "potrebbe essere la scelta migliore, purché riusciate a restare in piedi e in equilibrio nella prodigiosa corrente."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "is a fool's errand, much better to pick your way carefully upstream along the rocky banks in order to find a suitable ford a hex away or so.",
+       "it": "è un'impresa da folli: molto meglio risalire con cautela la corrente lungo le sponde rocciose per trovare un guado adatto a un esagono di distanza o giù di lì."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "Potentially unheard due to the constant crash of the waters is",
+      "it": "Forse impossibile da udire per il costante fragore delle acque è"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "the grinding rumble of seismic activity, foretelling an earthquake.",
+       "it": "il cupo rombo di un'attività sismica, presagio di un terremoto."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "a clash of arms, concealed by brush on the opposite bank: Two warriors are unsuccessfully fending off the coordinated attacks of a litter of three adolescent Manticore Pups.",
+       "it": "un clangore d'armi, nascosto dalla boscaglia sulla sponda opposta: due guerrieri cercano invano di respingere gli attacchi coordinati di una cucciolata di tre giovani manticore."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "the shrill warning cries of a nearby Gnome, who has seen how the Snowmelt Scrag that lurks behind the largest falls suddenly leaps and rends the last traveler in any line that dares to cross.",
+       "it": "l'acuto grido d'allarme di uno gnomo nei paraggi, che ha visto come lo scrag del disgelo in agguato dietro la cascata più grande balzi all'improvviso e faccia a brani l'ultimo viaggiatore di qualunque fila osi attraversare."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "a vociferous litany of curses from a bruised Caravan Guard, left for dead and marooned on a large rock below.",
+       "it": "una rumorosa litania di imprecazioni di una guardia di carovana piena di lividi, data per morta e rimasta bloccata su una grossa roccia più in basso."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "the plaintive song of the Fortunate Sparrow, which sings only once in its lifetime and is said to portend good luck for any listener who can hum her tune.",
+       "it": "il canto struggente del passero fortunato, che canta una sola volta nella vita e che si dice porti fortuna a chiunque lo ascolti e sappia canticchiarne la melodia."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "a stifled snicker from Paumalphan The Fantastic, a minor Illusionist practicing his deceitful Art by disguising the gently flowing rill found here as a dangerous deluge.",
+       "it": "una risatina soffocata di Paumalphan il Fantastico, un illusionista di poco conto che esercita la sua arte ingannevole camuffando il placido ruscello che scorre qui da pericolosa fiumana in piena."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "On a ramshackle raft, hurtling down the river toward you,",
+      "it": "Su una zattera sgangherata che sfreccia giù per il fiume verso di voi,"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "you spy a completely drenched and pathetic looking Mountain Lion.",
+       "it": "scorgete un puma completamente fradicio e dall'aria pietosa."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "is a nuisance of Kobolds from the Searing Yip clan, armed with slings.",
+       "it": "c'è una molesta banda di coboldi del clan del Guaito Rovente, armati di fionde."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "is an NPC adventuring party, led by Bridan Greyshanks, an aging Cleric.",
+       "it": "c'è un gruppo di avventurieri PNG, guidato da Bridan Greyshanks, un chierico avanti con gli anni."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "you see a frantically braying Donkeyfolk Porter.",
+       "it": "vedete un facchino del popolo degli asini che raglia freneticamente."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "clutching each other, is a pair of Kenku fledglings with clipped wings.",
+       "it": "stretti l'uno all'altro, ci sono due piccoli kenku con le ali tarpate."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "are barrels and storage chests, containing food and useful supplies from an ill-fated surveying expedition.",
+       "it": "ci sono barili e bauli pieni di cibo e provviste utili, provenienti da una sfortunata spedizione di cartografi."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "is a dead Ogre, tethered to a bobbing Giant Sized glass bottle, containing a Princeling who was supposed to be delivered yesterday for ransom.",
+       "it": "c'è un ogre morto, legato a una gigantesca bottiglia di vetro che galleggia sobbalzando, con dentro un principino che doveva essere consegnato ieri in cambio di un riscatto."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "you see a woman dressed for war, remarkably calm considering. She may or may not be the Petty Goddess of Sheaths & Scabbards.",
+       "it": "vedete una donna in assetto da guerra, notevolmente calma date le circostanze. Potrebbe essere, o forse no, la dea minore dei foderi e delle guaine."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 31,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes III (Draft)",
+   "en": {
+    "name": "The Yawning Floe",
+    "intro": "Snaking through the peaks as far as you can see is a massive glacier with an intriguing hollow below it."
+   },
+   "it": {
+    "name": "La Banchisa Spalancata",
+    "intro": "Serpeggiando tra le vette a perdita d'occhio, un immenso ghiacciaio nasconde sotto di sé un'intrigante cavità."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "The Mouth is",
+      "it": "L'imboccatura è"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "tall enough for a Giant to enter if they were to duck down slightly.",
+       "it": "abbastanza alta da permettere a un gigante di entrare, a patto di chinarsi un poco."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "possibly accessible only by boat, it appears that warm water has melted the ice to create an opening.",
+       "it": "forse raggiungibile solo in barca: sembra che dell'acqua calda abbia sciolto il ghiaccio, aprendo un varco."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "wide and gaping, closer inspection reveals several rows of dripping icicles that remind one of teeth.",
+       "it": "ampia e spalancata; a un esame più attento rivela diverse file di ghiaccioli gocciolanti che ricordano dei denti."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "polished and smoothed, almost as if it was deliberately hollowed out by powerful Magics.",
+       "it": "levigata e liscia, quasi come se fosse stata scavata di proposito da potenti magie."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "The Tunnel",
+      "it": "Il tunnel"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "provides shelter for a dreadful pack of Winter Wolves.",
+       "it": "offre riparo a un temibile branco di lupi d'inverno."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "appears to be a much more direct and swift means of travel than the treacherous, boulder-strewn ice above.",
+       "it": "sembra una via molto più diretta e rapida dell'insidioso ghiaccio disseminato di massi che lo sovrasta."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "is quite stable, but unnervingly temperate in places, the constant drips of icy water from the ceiling are sure to find their way down the back of necks.",
+       "it": "è piuttosto stabile, ma in alcuni punti inquietantemente tiepido; le continue gocce d'acqua gelida che cadono dal soffitto finiranno di sicuro per scivolare giù lungo la nuca di qualcuno."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "is home to a flurry of mischievous Ice Mephits that love nothing more than to prank visitors by stealing items to encase within the icy walls, just out of reach.",
+       "it": "ospita una frotta di dispettosi mefiti del ghiaccio, che non amano nulla più che fare scherzi ai visitatori rubando loro oggetti da imprigionare nelle pareti ghiacciate, appena fuori portata."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "might serve as an entrance to the colder reaches of the Unseen Lands for incautious travelers.",
+       "it": "potrebbe fungere, per i viaggiatori incauti, da ingresso alle regioni più gelide delle Terre Invisibili."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "was formed around the remains of a massive, prehistoric relative of the frightful Purple Worm.",
+       "it": "si è formato attorno ai resti di un gigantesco parente preistorico del terribile verme purpureo."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "Atop the Glacier one may come across",
+      "it": "In cima al ghiacciaio può capitare di scorgere"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "ancient and impressive pieces of Pillar, uprooted from their Temples.",
+       "it": "antichi e imponenti frammenti di colonne, strappati dai loro templi."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "the body of a Human Fighter, being picked at by Vultures.",
+       "it": "il corpo di un guerriero umano, beccato dagli avvoltoi."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "an enterprising Gnome and his Dog Sled Teams; very reasonable rates.",
+       "it": "un intraprendente gnomo con le sue mute di cani da slitta; tariffe molto ragionevoli."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "the shy herd of Reindeer who use this path in their migration.",
+       "it": "il timido branco di renne che percorre questo sentiero durante la migrazione."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "a crazed Wooly Mammoth, she just lost her calf to a Cougar.",
+       "it": "una femmina di mammut lanoso fuori di sé: ha appena perso il suo piccolo per colpa di un puma."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "several warm Yurts and their welcoming Nomad occupants.",
+       "it": "diverse yurte calde e i loro ospitali occupanti nomadi."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "a shaggy, arctic Chimera (Mountain Goat, Snow Panther, Remorhaz).",
+       "it": "una chimera artica e irsuta (capra di montagna, pantera delle nevi, remorhaz)."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "a single, immense Snow Shoe roughly the size of a Wagon.",
+       "it": "un'unica, immensa racchetta da neve grande più o meno quanto un carro."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 32,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes III (Draft)",
+   "en": {
+    "name": "Two Brothers' Bridge",
+    "intro": "Tilted perilously near a narrow bridge are two matching megaliths, each easily twelve persons tall."
+   },
+   "it": {
+    "name": "Il Ponte dei Due Fratelli",
+    "intro": "Pericolosamente inclinati accanto a uno stretto ponte si ergono due megaliti gemelli, ciascuno alto senza fatica quanto dodici persone."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "These incredible boulders",
+      "it": "Questi incredibili massi"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "once stood straight, but have shifted over the millennia due to fairly infrequent, but very severe, flooding of the nearby riverbed.",
+       "it": "un tempo stavano dritti, ma si sono spostati nel corso dei millenni a causa delle piene piuttosto rare, ma violentissime, del vicino letto del fiume."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "are belted by minuscule bands of incised lettering in a long forgotten language, telling of a tense Ophidian Peace Treaty that ended poorly.",
+       "it": "sono cinti da minuscole fasce di iscrizioni incise in una lingua dimenticata da tempo, che narrano di un teso Trattato di Pace Ofidiano finito male."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "were once one before they were split by a capricious Demigod, anyone who sleeps nearby will have the desperate pleas for reunification haunt their dreams, along with promises of strange rewards.",
+       "it": "un tempo erano uno solo, prima che un capriccioso semidio li spaccasse in due; chiunque dorma nei paraggi avrà i sogni tormentati da disperate suppliche di riunificazione, insieme a promesse di strane ricompense."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "are actually two of ten. Some surveying of the Hex will reveal them to be part of a complete set of titanic Toes poking out of the stony ground.",
+       "it": "sono in realtà due su dieci. Esplorando un po' l'esagono si scoprirà che fanno parte di una serie completa di titaniche dita dei piedi che spuntano dal terreno roccioso."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "Crossing a swiftly flowing river, the bridge",
+      "it": "Gettato su un fiume dalla corrente impetuosa, il ponte"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "will support the weight of about three horses before beginning to creak and groan loudly.",
+       "it": "regge il peso di circa tre cavalli prima di cominciare a scricchiolare e gemere rumorosamente."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "has seen better days, and some recent improvised repairs by a helpful Ogre don't exactly instill confidence.",
+       "it": "ha visto giorni migliori, e alcune recenti riparazioni improvvisate da un ogre servizievole non ispirano esattamente fiducia."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "was obviously built to last, not a scratch seems to mar its surface.",
+       "it": "è stato chiaramente costruito per durare: non un graffio sembra sfregiarne la superficie."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "appears to be a common waypost for Pilgrims, as religious graffiti and several former campfires seem to attest.",
+       "it": "sembra essere una tappa abituale per i pellegrini, come paiono attestare graffiti religiosi e i resti di diversi fuochi da campo."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "has yet to be finished, and may never be if the bloody bodies of the Dwarf builders on the other side of the span are any indicator.",
+       "it": "deve ancora essere finito, e forse non lo sarà mai, a giudicare dai corpi insanguinati dei costruttori nani dall'altra parte della campata."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "is adorned with rowdy Gargoyles in the form of Venal Monks. They are fond of singing shockingly rude Sea Shanties loudly at travelers.",
+       "it": "è adornato da chiassose gargolle in forma di monaci venali. Adorano cantare a squarciagola ai viaggiatori canzoni marinaresche incredibilmente sconce."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "Preparing Spells in this place",
+      "it": "Preparare gli incantesimi in questo luogo"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "causes the gap between the Stones to groan and widen slightly.",
+       "it": "fa sì che la fessura tra le pietre gema e si allarghi leggermente."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "is made taxing by a strange thaumatic resonance emanating from the boulders, any caster will need three extra hours of sleep.",
+       "it": "è reso faticoso da una strana risonanza taumatica emanata dai massi: ogni incantatore avrà bisogno di tre ore di sonno in più."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "goes normally, but one random spell will vanish from any Spellbook.",
+       "it": "procede normalmente, ma un incantesimo a caso svanirà da ogni libro degli incantesimi."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "leeches enchantment from the Bridge, the only thing holding it up.",
+       "it": "sottrae l'incantamento al ponte, l'unica cosa che lo tiene in piedi."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "will attract the attention of a nosy Phase Spider who lives in the Astral.",
+       "it": "attirerà l'attenzione di un ficcanaso ragno di fase che vive nell'Astrale."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "creates an unexpected feast as several Singing Salmon leap on to the shore, drowning themselves to fulfill their part of a bargain.",
+       "it": "procura un banchetto inatteso: diversi salmoni canterini balzano sulla riva, lasciandosi morire per onorare la loro parte di un patto."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "only takes half the normal amount of time for inscrutable reasons.",
+       "it": "richiede solo metà del tempo normale, per ragioni imperscrutabili."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "results in an extra, stowaway Sleep Spell, thanks to the encouraging, repetitive chirps of a highly sought after species of Cricket.",
+       "it": "fa ritrovare un incantesimo sonno in più, salito a bordo come un clandestino, grazie al frinire incoraggiante e ripetitivo di una ricercatissima specie di grillo."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 33,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes III (Draft)",
+   "en": {
+    "name": "An Overgrown Gully",
+    "intro": "Steady run-off has gouged a gorge here, rounding a sharp bend thick with stubborn trees and tenacious bracken."
+   },
+   "it": {
+    "name": "Un Burrone Invaso dalla Vegetazione",
+    "intro": "Il continuo scorrere delle acque ha scavato qui una gola, che piega in una brusca ansa fitta di alberi ostinati e felci tenaci."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "The most reliable place to cross",
+      "it": "Il punto più sicuro per attraversare"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "could be made a little easier by felling one of the more massive trees in the area. The Hillgallow Hornbeams hold some promise.",
+       "it": "potrebbe diventare un po' più agevole abbattendo uno degli alberi più massicci della zona. I carpini di Hillgallow sembrano promettenti."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "washed out with recent rains, so the choice may be between risking it and a lengthy detour.",
+       "it": "è stato spazzato via dalle piogge recenti, quindi la scelta potrebbe essere tra rischiare comunque e una lunga deviazione."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "is somewhat deceptive: the current is slow and water shallow, but a writhing surfeit of Coldwater Lamprey surge on anything wading across.",
+       "it": "è piuttosto ingannevole: la corrente è lenta e l'acqua bassa, ma una brulicante moltitudine di lamprede d'acqua fredda si avventa su chiunque lo guadi."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "might not be across a series of slick rocks to a conveniently placed boulder, atop of which brays a hopelessly marooned Mule.",
+       "it": "potrebbe anche non essere la serie di rocce scivolose che conduce a un masso in posizione provvidenziale, in cima al quale raglia un mulo rimasto irrimediabilmente bloccato."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "Fishing here",
+      "it": "A pescare qui"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "during the appropriate season will net bushels of delicious River Trout.",
+       "it": "nella stagione giusta si tirano su ceste piene di deliziose trote di fiume."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "somewhat unsuccessfully, with a net in desperate need of mending, is a band of Brigands, deserted from an infamous Mercenary Company.",
+       "it": "con scarso successo, con una rete che avrebbe un disperato bisogno di rammendo, c'è una banda di briganti, disertori di una famigerata compagnia mercenaria."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "and somewhat wary of your intrusive presence is a magnificently plumed mated pair of Kingfishers.",
+       "it": "e piuttosto diffidente verso la vostra invadente presenza c'è una coppia di martin pescatori dal piumaggio magnifico."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "will undoubtedly provoke ire from a gossip of overprotective Nixies.",
+       "it": "ci si attirerà senza dubbio le ire di un crocchio di nixie iperprotettive."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "requires very expensive bait, if one hopes to catch the gold-hungry Mudmiser Catfish. Careful cleaning is rumored to net a healthy return on the investment.",
+       "it": "serve un'esca molto costosa, se si spera di catturare l'avido pesce gatto spilorcio del fango. Si dice che pulendolo con cura si ottenga un bel ritorno sull'investimento."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "is simply no good, the fish seem to know how to steal bait from hooks, and shimmy through even the smallest holes in nets. The burbling taunts they sling in Common from deeper waters don't make it any more bearable either.",
+       "it": "non si combina proprio nulla: i pesci sembrano saper rubare l'esca dagli ami e sgusciare anche dai buchi più piccoli delle reti. E gli scherni gorgoglianti che lanciano in lingua comune dalle acque più profonde non rendono la cosa più sopportabile."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "Peeking from the foliage on the far side of the river,",
+      "it": "Tra il fogliame sull'altra sponda del fiume"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "the sun bounces off a welcoming and well-traveled trail.",
+       "it": "il sole si riflette su un sentiero accogliente e ben battuto."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "a Doe with two fawns in tow carefully judges whether to risk a drink.",
+       "it": "una cerva con due cerbiatti al seguito valuta con cautela se rischiare di abbeverarsi."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "are thorny vines, heavy with ripe and delicious Stainberries.",
+       "it": "spuntano rovi spinosi, carichi di deliziose bacche tintorie mature."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "crouched in the brush, bright, unblinking eyes of a Catamount stare.",
+       "it": "vi fissa, acquattato nella boscaglia, un puma dagli occhi lucenti che non battono ciglio."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "two lovestruck Gnomes from warring clans hide from worried parents.",
+       "it": "due gnomi innamorati, di clan in guerra tra loro, si nascondono dai genitori in ansia."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "one can barely make out the glint of a highly polished Shield, mislaid.",
+       "it": "si scorge a malapena il luccichio di uno scudo lucidatissimo, smarrito."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "fluttering laundry hangs out to dry in the breeze, near a still damp Halfling Pipeweed Merchant, utterly lost but hopeful.",
+       "it": "del bucato steso ad asciugare sventola nella brezza, accanto a un mercante halfling di erba pipa ancora umido, completamente sperduto ma fiducioso."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "are the rusting remains of some sort of massive Metal Machine, all gap-toothed gears and spindly spokes, reclaimed by vines and brambles.",
+       "it": "giacciono i resti arrugginiti di una sorta di enorme macchina di metallo, tutta ingranaggi sdentati e raggi esili, ormai reclamata da rampicanti e rovi."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 34,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes III (Draft)",
+   "en": {
+    "name": "The Ramshackle Chalet",
+    "intro": "The clucks of haughty hens and the smell of slowly roasting lamb fill your senses as you arrive at a haphazardly built home."
+   },
+   "it": {
+    "name": "Lo Chalet Sgangherato",
+    "intro": "Il chiocciare di galline altezzose e il profumo di agnello che arrostisce lentamente vi riempiono i sensi mentre giungete a una casa costruita alla bell'e meglio."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "The cabin is situated",
+      "it": "La baita si trova"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "at the start of a muddy, wagon-rutted road, pockmarked with deceptively deep puddles but better than the stony scree.",
+       "it": "all'inizio di una strada fangosa e solcata dalle ruote dei carri, butterata di pozzanghere ingannevolmente profonde, ma pur sempre meglio del ghiaione pietroso."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "beside rich, freshly plowed fields of dark and fragrant soil. The oxen in their paddock must have their work cut out for them judging from all the large boulders strewn about.",
+       "it": "accanto a fertili campi appena arati, di terra scura e profumata. I buoi nel recinto devono avere il loro bel daffare, a giudicare da tutti i grossi massi sparsi qua e là."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "quite close to a sweet-tasting Spring that never freezes and was once said to be Holy.",
+       "it": "molto vicino a una sorgente dall'acqua dolce che non gela mai e che un tempo si diceva fosse sacra."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "near a row of remarkably lifelike Statues of Farm Animals, a Gorgon Hide stretched on a frame and drying tells more of the story.",
+       "it": "vicino a una fila di statue di animali da fattoria incredibilmente realistiche; una pelle di gorgone tesa ad asciugare su un telaio la dice lunga sulla faccenda."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "Noticing your arrival",
+      "it": "Ad accorgersi del vostro arrivo"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "immediately is a hoary Hound, mangy with a missing back leg, but hoarsely howling up quite a racket.",
+       "it": "è subito un vecchio segugio canuto, rognoso e privo di una zampa posteriore, ma capace di sollevare un gran baccano con i suoi latrati rauchi."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "is a tall person of indeterminate gender, bearing two heavy Pails sloshing with fresh Goat Milk and a sour expression.",
+       "it": "è una persona alta di genere indefinibile, che porta due pesanti secchi traboccanti di latte di capra fresco e un'espressione acida."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "is a young maiden, by virtually any standards beautiful, save for weeping grey pustules, the tell-tale symptom of Saint Arwina's Pox.",
+       "it": "è una giovane fanciulla, bellissima secondo quasi ogni canone, se non fosse per le pustole grigie e purulente, sintomo inconfondibile del vaiolo di Santa Arwina."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "is a young maiden, by virtually any standards beautiful, save for the idly swishing Cow Tail she quickly snakes into her skirts to hide from view.",
+       "it": "è una giovane fanciulla, bellissima secondo quasi ogni canone, se non fosse per la coda di vacca che ondeggia pigramente e che lei si affretta a infilare sotto le gonne per nasconderla alla vista."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "is a young maiden, by virtually any standards beautiful, save for empty eye sockets where her eyes should be and writhing red/black/yellow Serpents for Hair.",
+       "it": "è una giovane fanciulla, bellissima secondo quasi ogni canone, se non fosse per le orbite vuote dove dovrebbero esserci gli occhi e i serpenti rossi, neri e gialli che si contorcono al posto dei capelli."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "a huge man peers from over the roof, behind. He's shaving with a sharpened Short Sword and using a polished Shield as a mirror and flashes a gap-toothed smile.",
+       "it": "è un uomo enorme che sbircia da dietro, al di sopra del tetto. Si sta radendo con una spada corta affilata, usando uno scudo lucidato come specchio, e sfodera un sorriso a cui manca qualche dente."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "Warm beds, hearty meals, and even hot (!) baths",
+      "it": "Letti caldi, pasti abbondanti e perfino bagni caldi (!)"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "may be provided in exchange for shifting large Stones from a field.",
+       "it": "possono esservi offerti in cambio dello sgombero di grosse pietre da un campo."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "are at your disposal due to ancient customs regarding hospitality.",
+       "it": "sono a vostra disposizione in virtù di antiche usanze sull'ospitalità."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "can be had for a sum of 10 coins a head, denomination doesn't matter.",
+       "it": "si possono avere per la somma di 10 monete a testa, di qualunque conio."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "would be lovely, it's a shame they're full up with a Dwarf mining party.",
+       "it": "sarebbero una delizia; peccato che sia tutto occupato da una spedizione di minatori nani."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "are held at ransom until the party deals with a nearby Bugbear threat.",
+       "it": "sono tenuti in ostaggio finché il gruppo non avrà risolto la minaccia di alcuni bugbear nei dintorni."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "don't seem to be the order of the day: the place is in bad need of repair.",
+       "it": "non sembrano essere all'ordine del giorno: il posto ha un disperato bisogno di riparazioni."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "tempt visiting travelers, but some may never find the will to leave due to a Mountain Nymph's Curse.",
+       "it": "tentano i viaggiatori di passaggio, ma alcuni potrebbero non trovare mai più la forza di andarsene a causa della maledizione di una ninfa dei monti."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "cost an arm and a leg. Literally. But only one of each per night at least.",
+       "it": "costano un braccio e una gamba. Letteralmente. Ma almeno se ne prende solo uno per tipo a notte."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 35,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes III (Draft)",
+   "en": {
+    "name": "Cranog's Canyon",
+    "intro": "A booming shout, muddled by multiple echoes that careen off the cliffsides here, stops you in your tracks."
+   },
+   "it": {
+    "name": "Il Canyon di Cranog",
+    "intro": "Un grido tonante, confuso dai molteplici echi che rimbalzano sulle pareti di roccia, vi inchioda sul posto."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "The strange acoustics here are such that",
+      "it": "Le strane proprietà acustiche di questo luogo fanno sì che"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "it is possible to make out the faintest whisper from one hundred paces, frustrating any attempts at Stealth.",
+       "it": "si possa distinguere il più flebile sussurro a cento passi di distanza, vanificando qualsiasi tentativo di muoversi furtivamente."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "loud sounds reverberate and maddeningly repeat for a few minutes.",
+       "it": "i suoni forti riecheggino e si ripetano in modo esasperante per alcuni minuti."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "the eerie echoes are nearly always followed by a gravelly rumble that closely resembles the preamble to a landslide.",
+       "it": "gli echi inquietanti siano quasi sempre seguiti da un rombo ghiaioso che somiglia molto al preludio di una frana."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "all words uttered are carefully stored, to repeat at random intervals, this sometimes includes the verbal components of any Spells.",
+       "it": "ogni parola pronunciata venga conservata con cura, per essere ripetuta a intervalli casuali; a volte questo include le componenti verbali degli incantesimi."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "Calling this Canyon home",
+      "it": "Ad abitare questo canyon"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "are an insular community of clan-less Kobolds, they are very wary of trespassers into their quasi-utopian community that was founded by the Cleric Cranog a few decades ago.",
+       "it": "è una chiusa comunità di coboldi senza clan, molto diffidenti verso chiunque sconfini nella loro comunità quasi utopica, fondata qualche decennio fa dalla chierica Cranog."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "are an Ogre Wight and his Skeletal Attendants. They keep a close watch on the small Merchant Company they've taken as prisoner.",
+       "it": "sono un wight ogre e i suoi servitori scheletrici. Sorvegliano da vicino la piccola compagnia di mercanti che hanno fatto prigioniera."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "is the venerable Paladin Cranog, well into her eightieth year, Geased to forever search the numerous crags of the Canyon for a Holy Relic that she's beginning to secretly doubt is even here.",
+       "it": "è la venerabile paladina Cranog, ormai prossima agli ottant'anni, vincolata da un geas a frugare per sempre i numerosi anfratti del canyon in cerca di una sacra reliquia che, in segreto, comincia a dubitare si trovi davvero qui."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "is a music hating Hill Giant couple eager to start a family after escaping the sway of a megalomaniac clamor of Harpies.",
+       "it": "è una coppia di giganti delle colline che odiano la musica, desiderosi di metter su famiglia dopo essere sfuggiti al giogo di un megalomane stormo schiamazzante di arpie."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "is a highly burnished Copper Wyrmling called Farthing, who inherited her mother's fondness for practical jokes.",
+       "it": "è una cucciola di drago di rame dalle squame lucidissime chiamata Farthing, che ha ereditato dalla madre la passione per gli scherzi."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "is the somewhat legendary Talking Tome, unbreakably fettered to its lectern and said to contain a few very powerful magics, if those that deign to study it can put up with the constant blathering.",
+       "it": "è il quasi leggendario Tomo Parlante, incatenato in modo indistruttibile al suo leggio, che si dice contenga alcune magie molto potenti, sempre che chi si degna di studiarlo riesca a sopportarne il continuo blaterare."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "Carefully foraging along the Canyon floor could uncover",
+      "it": "Frugando con attenzione sul fondo del canyon potreste scoprire"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "semi-petrified shards of an Egg that must've been horse-sized.",
+       "it": "frammenti semipietrificati di un uovo che doveva essere grande quanto un cavallo."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "Ghoul Purge Gourds, when dried and rattled, end some paralysis.",
+       "it": "delle zucche purga-ghoul che, una volta essiccate e scosse, pongono fine ad alcune paralisi."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "a cache of tightly bundled Arrows, four burst into flame when fired.",
+       "it": "una scorta di frecce strette in fasci; quattro prendono fuoco quando vengono scoccate."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "a weather-beaten Skeleton, still clutching a leather case that holds a surprisingly accurate map of the surrounding six Hexes.",
+       "it": "uno scheletro segnato dalle intemperie, che stringe ancora un astuccio di cuoio contenente una mappa sorprendentemente accurata dei sei esagoni circostanti."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "three and a half huge ivory Mastodon tusks, embedded in the cliffside.",
+       "it": "tre zanne e mezza d'avorio di mastodonte, enormi, conficcate nella parete rocciosa."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "small, fingernail sized flecks of Gold within a dry streambed.",
+       "it": "piccole pagliuzze d'oro, grandi come un'unghia, nel letto di un torrente in secca."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "the moon-touched breeding pools of extremely valuable Mithril Frogs.",
+       "it": "le pozze di riproduzione, baciate dalla luna, delle preziosissime rane di mithril."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "seams of garishly colored minerals, useful in paints & some Scroll Inks.",
+       "it": "vene di minerali dai colori sgargianti, utili per pitture e per alcuni inchiostri da pergamena."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 36,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes IV (Draft)",
+   "en": {
+    "name": "A Rangale of Deer-Stones",
+    "intro": "Seemingly erected with neither rhyme nor reason, the windswept dale before you is crowded with large upright stones."
+   },
+   "it": {
+    "name": "Un Branco di Pietre-Cervo",
+    "intro": "Erette, a quanto pare, senza né capo né coda, grandi pietre verticali affollano la valletta battuta dal vento che si apre davanti a voi."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "These humongous megaliths",
+      "it": "Questi megaliti colossali"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "might be of significance to Scholars and Sages, as thus far, no one has mapped or documented their potentially important positions completely.",
+       "it": "potrebbero interessare studiosi e saggi, dato che finora nessuno ha mai mappato o documentato del tutto le loro posizioni, forse importanti."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "keen menacingly in the wind, thanks to strategically hollowed holes near their tops.",
+       "it": "gemono minacciosi nel vento, grazie a fori scavati ad arte vicino alla sommità."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "cast very strange, clashing shadows, nothing quite seems to line up with an appropriate light source.",
+       "it": "proiettano ombre stranissime e discordanti: nulla sembra allinearsi davvero con una fonte di luce plausibile."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "will be in completely different configurations tomorrow, but thus far no one has managed to witness them moving/altering their positions.",
+       "it": "domani saranno disposti in configurazioni del tutto diverse, eppure finora nessuno è riuscito a vederli muoversi o cambiare posizione."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "Perched haphazardly atop some of the stones",
+      "it": "In bilico qua e là in cima ad alcune delle pietre,"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "the noisy nests of highly protective Rattle Naped Bustards seem like they could tumble down at any minute.",
+       "it": "i rumorosi nidi delle otarde dalla nuca a sonaglio, protettive all'inverosimile, sembrano sul punto di crollare da un momento all'altro."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "are sun-bleached Stag skulls, most have large and impressive antlers and nearly all of them seem to face Eastward.",
+       "it": "ci sono teschi di cervo sbiancati dal sole: quasi tutti hanno palchi grandi e imponenti e sembrano rivolti a est."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "is a kettle of bald and cantankerous Vulture Harpies who are wont to demand tribute prior to employing their songs.",
+       "it": "c'è uno stormo di arpie avvoltoio, calve e scorbutiche, solite pretendere un tributo prima di ricorrere ai loro canti."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "are ancient Wolf-headed Clay Figurines, fired centuries ago and left as some kind of Offering.",
+       "it": "ci sono antiche statuette d'argilla con la testa di lupo, cotte secoli fa e lasciate come una sorta di offerta."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "small dust-devils swirl about full of debris, forming and dissipating.",
+       "it": "piccoli mulinelli di polvere vorticano carichi di detriti, formandosi e dissolvendosi."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "sunbathing Mage Lizards lazily wave their five-fingered front-claws, producing brief bursts of Faerie Fire to attract mates.",
+       "it": "lucertole maghe che prendono il sole agitano pigramente gli artigli anteriori a cinque dita, producendo brevi lampi di fuoco fatato per attirare un compagno."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "Some of the carvings that adorn them produce rubbings that",
+      "it": "Alcune delle incisioni che le adornano danno calchi a sfregamento che"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "make for very valuable artworks on snooty Eastern markets.",
+       "it": "valgono come opere d'arte preziosissime sugli altezzosi mercati d'Oriente."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "reveal a startlingly accurate map of a nearby Hex.",
+       "it": "rivelano una mappa sorprendentemente precisa di un esagono vicino."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "contain startling heresies concerning the Elf Creation myth.",
+       "it": "contengono eresie sconcertanti sul mito della creazione degli elfi."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "spontaneously combust in a few hours.",
+       "it": "prendono fuoco spontaneamente nel giro di qualche ora."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "depict a long extinct type of Stag with two heads and incredible antlers.",
+       "it": "raffigurano una specie di cervo estinta da tempo, con due teste e palchi incredibili."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "serve as Talismans of Protection from most forms of lower Undead, provided they are truly ancient.",
+       "it": "fungono da talismani di protezione contro la maggior parte dei non morti minori, purché siano davvero antichi."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "gently implant a new, Random Language into the mind of the rubber.",
+       "it": "instillano con delicatezza una nuova lingua, determinata a caso, nella mente di chi esegue il calco."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "function as low-level Druid Scrolls, usable by anyone, but with a 30% chance of turning a non-Druid caster into a Deer until next New Moon.",
+       "it": "funzionano come pergamene druidiche di basso livello, utilizzabili da chiunque, ma con il 30% di probabilità di trasformare un incantatore non druido in un cervo fino alla prossima luna nuova."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 37,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes IV (Draft)",
+   "en": {
+    "name": "The Doomed Dwarfhold",
+    "intro": "Situated on the cliffs of a strip-mined quarry, unmistakably Dwarf-built buildings hunker with sullen defiance."
+   },
+   "it": {
+    "name": "La Rocca Nanica Condannata",
+    "intro": "Sulle pareti di una cava a cielo aperto sventrata dagli scavi, edifici di inconfondibile fattura nanica se ne stanno acquattati con cupa aria di sfida."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "This Clan",
+      "it": "Questo clan"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "were once well-known for forging Axe Blades so sharp that they could split a beard hair flung into the air.",
+       "it": "un tempo era famoso per forgiare lame d'ascia così affilate da spaccare in due un pelo di barba lanciato in aria."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "trucks on the fame of gloriously defeating the mighty Scourgewyrm Stocoxus, whose final, baleful breath carried a potent Curse.",
+       "it": "tira avanti sulla fama della gloriosa vittoria sul possente drago-flagello Stocoxus, il cui ultimo, funesto respiro portava con sé una potente maledizione."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "still proudly fly banners of allegiance to a Human Kingdom that was long ago lost to Famine, War, and zealous Necromancy.",
+       "it": "issa ancora con orgoglio stendardi di fedeltà a un regno umano perduto molto tempo fa per carestia, guerra e negromanzia fanatica."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "is beardless and banished, entire family lines were stricken from the name rolls, and all for dabbling in diabolical Red Magic to defeat their enemies.",
+       "it": "è senza barba e messo al bando: intere stirpi sono state cancellate dai registri dei nomi, e tutto per essersi dilettati di diabolica magia rossa pur di sconfiggere i nemici."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "The shuddersome fate that awaits this Clan",
+      "it": "Il raccapricciante destino che attende questo clan"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "may be blown out of proportion, but a recently arrived Charlatan Doomsday Prophet is quickly gaining believers.",
+       "it": "forse è esagerato, ma un ciarlatano profeta di sventura arrivato da poco sta rapidamente guadagnando seguaci."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "can be avoided, if someone finds a way to purify their primary water supply to remove the arcane taint transforming them into Cave Toads.",
+       "it": "può essere evitato, se qualcuno trova il modo di purificare la loro principale riserva d'acqua, eliminando la contaminazione arcana che li sta trasformando in rospi delle caverne."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "is the Shattering, a horrid disease that slowly turns those afflicted to fragile glass.",
+       "it": "è la Frantumazione, un morbo orribile che a poco a poco trasforma chi ne è colpito in fragile vetro."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "comes with a whimper and a faint sigh, most of its members trapped between worlds, rock-solid at times, frustratingly incorporeal during others, each day more fade completely into the Ethereal Plane.",
+       "it": "arriva con un gemito e un debole sospiro: gran parte dei suoi membri è intrappolata tra i mondi, a volte solida come la roccia, altre frustrantemente incorporea, e ogni giorno altri svaniscono del tutto nel Piano Etereo."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "flies on flaming wings, for the Red Dragon Pyre {hex:?} suspects it was a Dwarf who stole an ember-colored Egg from her cherished Clutch.",
+       "it": "giunge su ali di fuoco, perché la dragonessa rossa Pyre {hex:?} sospetta che sia stato un nano a rubare un uovo color brace dalla sua amata covata."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "was written in the Runes long ago, along with the Party's arrival at this precise moment in time, during the somber funeral of their Paladin Protector, their sole defender from Batfolk Vampire invasion.",
+       "it": "fu scritto nelle rune molto tempo fa, insieme all'arrivo del gruppo in questo preciso momento, durante il mesto funerale del loro paladino protettore, unico baluardo contro l'invasione dei vampiri del popolo dei pipistrelli."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "But within the crumbling Halls one might find the",
+      "it": "Ma tra le sale in rovina si potrebbe trovare"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "incredibly wise Sage Neroth come to chronicle the Clan's fall.",
+       "it": "il saggissimo sapiente Neroth, giunto a narrare la caduta del clan."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "fabled Sentient Crossbow Kantirfrax, lonely from centuries on a shelf.",
+       "it": "la leggendaria balestra senziente Kantirfrax, intristita da secoli di solitudine su uno scaffale."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "well-defended Library of Ap, containing works on architectural secrets.",
+       "it": "la ben difesa Biblioteca di Ap, che custodisce opere sui segreti dell'architettura."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "wicked Illusionist Grue, orchestrating tribulations behind the scenes.",
+       "it": "il malvagio illusionista Grue, che orchestra tribolazioni dietro le quinte."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "small round pool containing a somberly swimming Oracular Dugong.",
+       "it": "la piccola vasca rotonda in cui nuota cupo un dugongo oracolare."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "Eldritch Gate to allies on the Plane of Ants, only activated in case of Emergencies, and apparently things have yet to become that dire.",
+       "it": "il portale occulto verso gli alleati sul Piano delle Formiche, da attivare solo in caso di emergenza, e a quanto pare le cose non sono ancora così disperate."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "massive Everfull Vat containing hearty but disgusting porridge.",
+       "it": "l'enorme tino semprepieno, colmo di una sbobba sostanziosa ma disgustosa."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "incredibly intricate Orrery, size of a barn, impeccably accurate save the fact that it seems to be spinning backwards.",
+       "it": "il complicatissimo planetario meccanico, grande quanto un fienile, di precisione impeccabile, se non fosse che sembra girare all'indietro."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 38,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes IV (Draft)",
+   "en": {
+    "name": "Unfortunate Fissures",
+    "intro": "Radiating from a steep abyss, tendrilled fissures, wide enough to swallow a Horse, make travel here treacherous indeed."
+   },
+   "it": {
+    "name": "Fenditure Sventurate",
+    "intro": "Irradiandosi da un ripido abisso, fenditure ramificate come tentacoli, abbastanza larghe da inghiottire un cavallo, rendono il viaggio qui davvero insidioso."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "The strange sound emanating from below",
+      "it": "Lo strano suono che sale dal basso"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "consists of grumbling and groaning, like a hungry Ogre's stomach.",
+       "it": "è fatto di brontolii e gemiti, come lo stomaco di un ogre affamato."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "reminds you of a sword being sharpened, raspy and grating with a clean, resonating finish before starting up again in a few moments.",
+       "it": "ricorda una spada che viene affilata, ruvido e stridente, con una chiusa netta e risonante, prima di ricominciare dopo qualche istante."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "sounds almost like a Calf bleating for its mother, if you listen carefully.",
+       "it": "sembra quasi, se si ascolta con attenzione, un vitello che chiama la madre muggendo."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "is very faint, but keen ears can distinctively discern guttural utterings in the grinding, crumbling language of Earth Elementals. For those who are familiar with the language or esoteric forms of Dwarf-tongue, one phrase seems to be repeated over and over again: Any Moment Now.",
+       "it": "è debolissimo, ma orecchie attente possono distinguere chiaramente versi gutturali nella lingua stridente e friabile degli elementali della terra. Per chi conosce quella lingua o le forme esoteriche della parlata nanica, una frase sembra ripetersi in continuazione: \"Da un momento all'altro\"."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "Peering down into a crevasse, one might spy",
+      "it": "Sbirciando giù in un crepaccio, potreste scorgere"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "strangely colored strata, mineral deposits that read like pages from an engaging book to Dwarf eyes.",
+       "it": "strati dai colori insoliti, depositi minerali che agli occhi di un nano si leggono come le pagine di un libro avvincente."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "a delicate glimmering green glow emitting softly from gargantuan Mushrooms.",
+       "it": "un delicato bagliore verde e tremolante che emana soffuso da funghi giganteschi."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "enormous sharpened bones, wider than your leg, protruding with menace out of the sides of the fissures like wicked fangs.",
+       "it": "enormi ossa appuntite, più larghe della vostra gamba, che sporgono minacciose dalle pareti delle fenditure come zanne crudeli."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "a Deep Gnome scouting party, assembling a crude rope bridge and cursing the painful rays of the Sun.",
+       "it": "una pattuglia di esploratori gnomi delle profondità, intenti a montare un rozzo ponte di corda imprecando contro i raggi dolorosi del sole."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "the white knuckles of a desperate Ettin, clinging to the rocks.",
+       "it": "le nocche sbiancate di un ettin disperato, aggrappato alle rocce."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "a shimmering seam of scintillating Sapphires, still firmly entombed in the stone, but ever so tantalizingly close.",
+       "it": "una vena luccicante di zaffiri scintillanti, ancora ben sepolti nella pietra, ma così allettantemente vicini."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "New, quaquaversal cracks form",
+      "it": "Nuove crepe si aprono a raggiera"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "imperceptibly slow, but will eventually cover the entire Hex.",
+       "it": "con lentezza impercettibile, ma finiranno per coprire l'intero esagono."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "whenever sounds louder than a shout occur.",
+       "it": "ogni volta che si produce un suono più forte di un grido."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "with footfalls heavier than a Human step, so tread lightly.",
+       "it": "sotto passi più pesanti di quelli di un umano, quindi camminate leggeri."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "surrounding a Gnoll Trader, his Donkeys, and their valuable Spices and handicrafts from distant lands.",
+       "it": "circondando un mercante gnoll, i suoi asini e le loro preziose spezie e mercanzie artigianali da terre lontane."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "under the lumbering steps of an enormous Dire Armadillo.",
+       "it": "sotto i passi pesanti di un enorme armadillo crudele."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "as a large Wizard's Tower slowly erupts from the ground.",
+       "it": "mentre una grande torre da mago emerge lentamente dal terreno."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "marooning a sweet-smelling Cedar Dryad and her scraggly Tree, she's growing desperate for rescue, and not above using her Charm for help with an emergency re-planting in safer soils.",
+       "it": "isolando una profumata driade del cedro e il suo albero rinsecchito: lei è sempre più disperata in attesa di soccorso, e non esita a usare il suo charme per farsi aiutare a ripiantarlo d'urgenza in un terreno più sicuro."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "as a Mountain Giant Mummy gesticulates wildly from a nearby peak.",
+       "it": "mentre la mummia di un gigante delle montagne gesticola freneticamente da una vetta vicina."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 39,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes IV (Draft)",
+   "en": {
+    "name": "The Drowned Hamlet",
+    "intro": "Windows gaze mournfully back at you from the center of a shallow lake, an inundated village in ruin."
+   },
+   "it": {
+    "name": "Il Borgo Sommerso",
+    "intro": "Dal centro di un lago poco profondo, delle finestre ricambiano mestamente il vostro sguardo: un villaggio sommerso e in rovina."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "This settlement was once called",
+      "it": "Un tempo questo insediamento si chiamava"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "Adwin's Meadow, situated in a field of precious healing Clingblossoms that now only grow sporadically on the banks.",
+       "it": "Prato di Adwin, sorto in un campo di preziosi aggrappafiori curativi, che ora crescono solo qua e là lungo le rive."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "Mambleley, flooded by a powerful local Witch in retribution for the drowning of her sister.",
+       "it": "Mambleley, e fu inondato da una potente strega del luogo per vendicare l'annegamento della sorella."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "Gethin's Toll, the Gnomes here were once known far and wide for their Gold-sniffing Goats, some may still lurk, feral in the foothills.",
+       "it": "Pedaggio di Gethin: gli gnomi del posto erano noti in lungo e in largo per le loro capre fiutaoro, e qualcuna potrebbe ancora aggirarsi, inselvatichita, tra le colline pedemontane."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "Beaverpuddle, with shades of irony, for what started as a Trapper's Outpost soon grew to a bustling colony, until the uncanny coordination of its enterprising namesakes engineered its downfall.",
+       "it": "Pozzacastoro, non senza una punta d'ironia: quello che era nato come avamposto di cacciatori di pelli divenne presto una colonia brulicante, finché l'inquietante coordinazione degli intraprendenti castori da cui prendeva il nome non ne architettò la rovina."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "If willing to wade over in the waist deep, frigid meltwater,",
+      "it": "Se siete disposti a guadare l'acqua di disgelo gelida, alta fino alla vita,"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "the trek is numbing and arduous, and made worse by the taunting splashes of playful and inquisitive Coldwater Otters. Most of the intact buildings appear to have been ransacked long ago.",
+       "it": "la traversata è ardua e intorpidisce le membra, resa ancora peggiore dagli schizzi beffardi di curiose e giocherellone lontre d'acqua fredda. Quasi tutti gli edifici rimasti intatti sembrano saccheggiati molto tempo fa."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "one might discover that the flooding was very sudden indeed, and quite recent. Those who fled left behind most of their possessions.",
+       "it": "potreste scoprire che l'inondazione è stata davvero improvvisa, e piuttosto recente. Chi è fuggito ha lasciato indietro gran parte dei propri averi."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "you might hear the chattering teeth of an Outlaw in her Hideout, soaked to the bone and in the beginning stages of hypothermia.",
+       "it": "potreste sentire battere i denti di una fuorilegge nel suo nascondiglio, fradicia fino al midollo e nelle prime fasi dell'ipotermia."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "and avoid the Ghoul-Eels, there's a dry second story to make camp in.",
+       "it": "e a evitare le anguille-ghoul, c'è un secondo piano asciutto dove accamparsi."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "boots and britches will become coated with a thick grey mineral crust that is impossible to wash away.",
+       "it": "stivali e brache si ricopriranno di una spessa crosta minerale grigia impossibile da lavare via."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "you'll find a thriving Nixie community, busy mocking their ideas of normal village life in an elaborate parody.",
+       "it": "troverete una fiorente comunità di nixie, impegnate a schernire la loro idea della normale vita di paese in un'elaborata parodia."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "A rustic Temple still stands, dedicated to",
+      "it": "Si erge ancora un rustico tempio, dedicato"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "the most popular Pantheon of the Region, all deities get equal billing.",
+       "it": "al pantheon più venerato della regione, in cui tutte le divinità godono di pari importanza."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "a long forbidden heretical Sect of a Player Character's Religion.",
+       "it": "a una setta eretica, proibita da tempo, della religione di un personaggio giocante."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "dueling Deities of Day and Darkness, the building bisected.",
+       "it": "alle divinità rivali del Giorno e della Tenebra, con l'edificio diviso in due."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "a minor Goddess of Childbirth, tiny hand/footprints decorate the walls.",
+       "it": "a una dea minore del parto: minuscole impronte di mani e piedi decorano le pareti."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "good Mountain Wheat harvests with an unsettling blood sacrifice bent.",
+       "it": "ai buoni raccolti del grano di montagna, con un'inquietante inclinazione per i sacrifici di sangue."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "an enigmatic Mystery Cult revolving around a strange, White Stag.",
+       "it": "a un enigmatico culto misterico incentrato su uno strano cervo bianco."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "a very Minor Saint, whose restless spirit still haunts the grounds at night in search of a Champion to re-bury his bones elsewhere.",
+       "it": "a un santo davvero minore, il cui spirito inquieto infesta ancora questi luoghi di notte in cerca di un campione che seppellisca altrove le sue ossa."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "the Ur-Medusa, seven snake-haired Sisters still serve as attendants, performing rituals and rites to stave off the encroaching water.",
+       "it": "all'Ur-Medusa: sette sorelle dai capelli di serpe prestano ancora servizio come ancelle, celebrando riti e cerimonie per tenere a bada l'acqua che avanza."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 40,
+   "terrain": "mountains",
+   "source": "Even More Mountain Hexes IV (Draft)",
+   "en": {
+    "name": "Foothills of Forest, Felled",
+    "intro": "Massive, ancient evergreens give way to a clearing, dotted with stumps of various heights."
+   },
+   "it": {
+    "name": "Pendici della Foresta Falciata",
+    "intro": "Enormi sempreverdi secolari lasciano il posto a una radura punteggiata di ceppi di varie altezze."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "The dominant trees that grow here are",
+      "it": "Gli alberi dominanti che crescono qui sono"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "locally referred to as Spearbark Larch, due to the thick strips that can be peeled and fashioned into crude weapons.",
+       "it": "chiamati dalla gente del posto larici scorzalancia, per le spesse strisce di corteccia che si possono staccare e trasformare in rozze armi."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "the last remaining copse of Greyrise Fir, ship masts made from their straight and sturdy trunks seldom break in even the worst of storms at sea, or so the legends say.",
+       "it": "l'ultimo boschetto rimasto di abeti grigioerti: gli alberi maestri ricavati dai loro tronchi dritti e robusti raramente si spezzano, anche nelle peggiori tempeste in mare, o almeno così narrano le leggende."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "Tombsap Pines, it's said coffins and pyres made from their wood can prevent the rise of Undead, large culling like this is a worrying sign.",
+       "it": "pini linfatomba: si dice che bare e pire fatte con il loro legno impediscano ai morti di rialzarsi come non morti, perciò un abbattimento così massiccio è un segnale preoccupante."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "sometimes called Lodgebeam Spruce, they tend to burn very slowly and are often used in the construction of houses.",
+       "it": "talvolta chiamati abeti rossi travecasa: tendono a bruciare molto lentamente e vengono spesso usati per costruire abitazioni."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "The lumber here is being harvested",
+      "it": "Qui il legname viene tagliato"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "haphazardly, it seems that only trees of a certain age and size are the ones being selected for the Axe.",
+       "it": "a casaccio, eppure sembra che sotto l'ascia finiscano solo alberi di una certa età e grandezza."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "by workaholic Beavers from a nearby stream.",
+       "it": "da castori stacanovisti di un ruscello vicino."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "in a slapdash and piecemeal fashion by bickering Bugbears with crude senses of humor and large, interminably dull misery whips.",
+       "it": "in modo raffazzonato e frammentario da bugbear litigiosi, dal senso dell'umorismo grossolano, armati di grossi segoni a due manici, desolatamente smussati."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "with ruthless and methodical efficiency, not a single tree is being spared.",
+       "it": "con efficienza spietata e metodica: non viene risparmiato un solo albero."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "as fuel for the Glass Furnaces of a local band of Stone Giant Artisans.",
+       "it": "come combustibile per le fornaci da vetro di una banda locale di artigiani giganti delle pietre."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "by a stand of sap-weeping, ensorcelled Treants, being forced to kill and dismember their brethren for a Wicked Sorcerer with an enchanted Staff of Sylvan Command.",
+       "it": "da un gruppo di treant stregati che piangono linfa, costretti a uccidere e smembrare i propri fratelli per conto di uno stregone malvagio armato di un bastone incantato del comando silvano."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "If left unchecked, this deforestation will",
+      "it": "Se nessuno lo fermerà, questo disboscamento"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "run its course when all suitable trees have been selected.",
+       "it": "si esaurirà da solo quando tutti gli alberi adatti saranno stati scelti."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "lead to far too much sun on these verdant foot-hills, eliminating the habitat of the very rare and precious Moonberry Bushes.",
+       "it": "lascerà fin troppo sole su queste verdi pendici, distruggendo l'habitat dei rarissimi e preziosi cespugli di bacche lunari."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "generate severe mudslides during the upcoming rainy months.",
+       "it": "provocherà gravi colate di fango nei prossimi mesi piovosi."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "steadily expand into the nearby Hexes as more wood is sought.",
+       "it": "si estenderà costantemente negli esagoni vicini, man mano che servirà altro legname."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "create a Lumber glut and subsequent shortage for a nearby Town.",
+       "it": "provocherà in una città vicina un eccesso di legname, seguito da una carenza."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "soon come to an abrupt and pointed end via Elf Arrow and Blade.",
+       "it": "avrà presto una fine brusca e appuntita, per mano di frecce e lame elfiche."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "draw the wrath of a hibernating Grizzly Druid, who is slated to wake from a century's slumber on the next full Moon.",
+       "it": "attirerà l'ira di un druido grizzly in letargo, destinato a svegliarsi da un sonno secolare alla prossima luna piena."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "expose a forgotten concealed entrance to a long-abandoned Dwarfhold, still patrolled by their Living Statue defenses.",
+       "it": "porterà alla luce un ingresso nascosto e dimenticato di una rocca nanica abbandonata da tempo, ancora pattugliata dalle statue viventi poste a sua difesa."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 46,
+   "terrain": "forest",
+   "source": "Even More Forest Hexes (Draft 5)",
+   "en": {
+    "name": "The Burbling Ford",
+    "intro": "A steady flow of water writhes and wreathes between the boulders and over slick stone bedrock, burnished over the ages."
+   },
+   "it": {
+    "name": "Il Guado Gorgogliante",
+    "intro": "Un flusso costante d'acqua si contorce e serpeggia tra i massi e sul viscido letto di roccia, levigato nel corso dei secoli."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "The water here is",
+      "it": "L'acqua qui è"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "pure, fragrant, and slightly chilled run-off from a distant mountain.",
+       "it": "pura, profumata e appena fresca, scesa dal disgelo di una montagna lontana."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "quite clear in places, you can even make out several large scaly fishes and sparkling showers of silver minnows where the water pools.",
+       "it": "limpida in alcuni punti, tanto che si distinguono diversi grossi pesci squamosi e scintillanti nugoli di pesciolini argentati là dove l'acqua forma delle pozze."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "shallow, but wide, barely coming up to the knee in the deepest areas.",
+       "it": "bassa ma ampia: nei punti più profondi arriva a malapena al ginocchio."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "surprisingly warm and smells faintly of minerals, its source must be some sort of nearby Hot Spring.",
+       "it": "sorprendentemente calda e ha un lieve odore di minerali: deve sgorgare da una qualche sorgente termale nei dintorni."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "However, crossing the rocks may prove treacherous",
+      "it": "Tuttavia, passare sulle rocce potrebbe rivelarsi insidioso"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "because they are deceptively slick, a clear grimy film clings to them wherever the water has flowed.",
+       "it": "perché sono ingannevolmente scivolose: una patina sudicia e trasparente vi aderisce ovunque sia passata l'acqua."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "due to the fact that one promising area of large, flat rocks conceals a massive Alligator Snapping Turtle, perfectly blending with the boulders.",
+       "it": "perché un'invitante distesa di grandi rocce piatte nasconde in realtà un'enorme tartaruga alligatore, perfettamente mimetizzata tra i massi."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "for the silty mud here is hungry for shoes and boots.",
+       "it": "perché qui il fango limoso ha fame di scarpe e stivali."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "or at least they did prove so for the plate armored Templar, unhorsed, unconscious, and bleeding from a head wound on the other bank.",
+       "it": "o almeno così si è rivelato per il templare in armatura di piastre che giace sull'altra sponda, disarcionato, privo di sensi e sanguinante da una ferita alla testa."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "because this is a busy breeding ground for the descriptively named Exploding Acid Toads. Startling one generally just results in stings and scars, but spooking an entire colony could take down a Fir Troll.",
+       "it": "perché questo è un affollato sito di riproduzione dei rospi acidi esplosivi, dal nome quanto mai eloquente. Spaventarne uno di solito provoca solo bruciori e cicatrici, ma mettere in allarme un'intera colonia potrebbe abbattere un troll degli abeti."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "to the comely or austere, as this tiny brooklet is home to a dozen Nixies.",
+       "it": "per chi è avvenente o austero, perché questo minuscolo ruscello ospita una dozzina di nixie."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "Linger along the edge of the rill and",
+      "it": "Indugia lungo la riva del ruscelletto e"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "you may be lulled into slumber by its sibilant and soothing sounds.",
+       "it": "il suo mormorio sibilante e suadente potrebbe cullarti fino a farti addormentare."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "one could catch sight of a family of Deer, drinking.",
+       "it": "potresti scorgere una famiglia di cervi che si abbevera."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "one could catch sight of several Satyrs, swimming.",
+       "it": "potresti scorgere diversi satiri che nuotano."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "one could catch sight of a Kingfisher's coronation.",
+       "it": "potresti scorgere l'incoronazione di un martin pescatore."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "one could catch sight of gliding Griffons, gallivanting.",
+       "it": "potresti scorgere dei grifoni che planano, folleggiando."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "one could catch sight of a parade of Pixies, playing.",
+       "it": "potresti scorgere una parata di pixie che giocano."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "one could feast from the bushes of sun-ripe blackberries until faces and fingers are stained purple. Their dark drupelets are magical, and you won't be hungry for a week.",
+       "it": "potresti banchettare con le more maturate al sole di questi cespugli finché volti e dita non si tingono di viola. Le loro scure drupeole sono magiche e non avrai fame per una settimana."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "within a few minutes an understandably skittish chestnut Pegasus Mare and her curious fledgling foal will alight and briefly bathe.",
+       "it": "nel giro di pochi minuti una giumenta pegaso saura, comprensibilmente ombrosa, e il suo curioso puledrino ai primi voli si poseranno qui per un breve bagno."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 47,
+   "terrain": "forest",
+   "source": "Even More Forest Hexes (Draft 5)",
+   "en": {
+    "name": "The Moss Green Grotto",
+    "intro": "Breaking through the bracken, you come across a waterfall fed basin, bordered by natural limestone embankments."
+   },
+   "it": {
+    "name": "La Grotta Verde Muschio",
+    "intro": "Facendoti strada tra le felci, giungi a un bacino alimentato da una cascata, delimitato da argini naturali di calcare."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "{} call this idyllic locale home.",
+      "it": "{} questo luogo idilliaco."
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "A firework of female Fernfolk, distant, but equally ancient cousins of Myconids, spore-laden and lonely,",
+       "it": "Un fuoco d'artificio di femmine del popolo delle felci, cugine lontane ma altrettanto antiche dei miconidi, cariche di spore e solitarie, chiamano casa"
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "The Pikefolk Priestess, Missa, with her useful aquatic charms, likes to",
+       "it": "La sacerdotessa del popolo dei lucci, Missa, con i suoi utili incantesimi acquatici, ama chiamare casa"
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "The Moss Troll, Mourgoulena and her three unruly daughters",
+       "it": "La troll del muschio Mourgoulena e le sue tre figlie indisciplinate chiamano casa"
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "The Nymph Mother, Liathanna, whose mere gaze can induce pregnancy, is spell-bound by a puritanical curate's Curse to",
+       "it": "La Madre Ninfa, Liathanna, il cui solo sguardo può indurre una gravidanza, è vincolata dalla maledizione di un curato puritano a chiamare casa"
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "Behind the waterfall",
+      "it": "Dietro la cascata"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "is a slick, wet wall embellished with Glyphs that, when deciphered, cast Create Sumptuous Food, 3/day.",
+       "it": "c'è una parete viscida e bagnata, ornata di glifi che, una volta decifrati, lanciano creare cibo sontuoso, 3 volte al giorno."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "is a slick, wet wall embellished with Glyphs that, when deciphered, cast Animate Dead, it's hard to notice all the bones, covered in mossy accretions, at the pool bottom.",
+       "it": "c'è una parete viscida e bagnata, ornata di glifi che, una volta decifrati, lanciano animare morti: è difficile notare tutte le ossa sul fondo della pozza, coperte di incrostazioni muschiose."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "is a slick, wet wall embellished with Glyphs that, when deciphered, cast an ancient incantation that can undo an errant Wish (once).",
+       "it": "c'è una parete viscida e bagnata, ornata di glifi che, una volta decifrati, lanciano un antico incantesimo capace di annullare un desiderio andato storto (una sola volta)."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "waits a humid but homey cave, with vibrant viridian and velvety moss mattresses and some crude but comfortable stone furniture.",
+       "it": "attende una grotta umida ma accogliente, con materassi di muschio vellutato di un vivido verde viridiano e qualche mobile di pietra, rozzo ma comodo."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "lurks the yawning entrance to a wondrous cavern where the surface of every stalagmite flashes as female Firefly Sprites futilely beckon to their mysteriously missing males. They are incredibly jealous of the tawdry Everburning Torch mislaid here by a forgone spelunker.",
+       "it": "si cela l'ingresso spalancato di una caverna meravigliosa, dove la superficie di ogni stalagmite lampeggia mentre femmine di folletti lucciola richiamano invano i loro maschi, misteriosamente scomparsi. Sono incredibilmente gelose della pacchiana torcia perenne smarrita qui da uno speleologo di tempi andati."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "is the entrance to a long forgotten Elf Catacomb. The treasures they crafted in the ancient times before cremation became the norm must first be wrestled from the bony fingers of their Skeletal Sentries, while many a forgotten incantation is muttered by the Guardian Ghosts.",
+       "it": "c'è l'ingresso di una catacomba elfica da tempo dimenticata. I tesori che gli elfi forgiarono nei tempi antichi, prima che la cremazione diventasse la norma, vanno prima strappati dalle dita ossute delle loro sentinelle scheletriche, mentre i fantasmi guardiani mormorano più di un incantesimo dimenticato."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "Trespassers washing/bathing in the pellucid pool here",
+      "it": "Gli intrusi che si lavano o fanno il bagno in questa pozza cristallina"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "find it pleasant, if a bit peaty. Almost restorative for the aches of travel.",
+       "it": "la trovano piacevole, anche se un po' torbosa. Quasi un toccasana per gli acciacchi del viaggio."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "note that it turns their irises a piercing shade of emerald for a few days.",
+       "it": "notano che per qualche giorno le loro iridi assumono un'intensa sfumatura smeraldo."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "may be surprised as the water rinses away all scars on the skin.",
+       "it": "potrebbero restare sorpresi nel vedere l'acqua lavare via tutte le cicatrici dalla loro pelle."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "will inevitably become biologically female.",
+       "it": "diventeranno inevitabilmente femmine, biologicamente parlando."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "can potentially discover that the water instantly Rusts cursed weapons.",
+       "it": "potrebbero scoprire che l'acqua fa arrugginire all'istante le armi maledette."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "might not spot the verdigris coated Copper Living Statue of a hoplite.",
+       "it": "potrebbero non accorgersi della statua vivente di rame di un oplita, ricoperta di verderame."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "may wash away their cares, literally: Some of the seaweed-colored moss is a surface dwelling subspecies of Obliviax.",
+       "it": "potrebbero lavare via i propri affanni, letteralmente: parte del muschio color alga è una sottospecie di obliviax che vive in superficie."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "will discover that the water here is actually breathable due to its high-oxygen content: the submerged caves below the cenote beckon.",
+       "it": "scopriranno che qui l'acqua è in realtà respirabile grazie all'alto contenuto di ossigeno: le grotte sommerse sotto il cenote li chiamano a sé."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 48,
+   "terrain": "forest",
+   "source": "Even More Forest Hexes (Draft 5)",
+   "en": {
+    "name": "A Treant Nursery",
+    "intro": "Even game-trails seem to give this place a wide berth, nevertheless you've found yourself surrounded by garrulous greenery."
+   },
+   "it": {
+    "name": "Un Vivaio di Treant",
+    "intro": "Persino i sentieri della selvaggina sembrano girare alla larga da questo luogo, eppure ti ritrovi circondato da una vegetazione chiacchierona."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "Fortunate for you, the Parents are",
+      "it": "Per tua fortuna, i genitori sono"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "nowhere to be found, when questioned the children sob, and murmur \"Jezek\" {hex:32}.",
+       "it": "introvabili: se interrogati, i piccoli singhiozzano e mormorano \"Jezek\" {hex:32}."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "far afield, having been mustered for a Holy War against Termitefolk.",
+       "it": "lontani, chiamati alle armi per una guerra santa contro il popolo delle termiti."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "surprisingly hands-off, hoping for survival of the fittest really.",
+       "it": "sorprendentemente distaccati: in fondo sperano che sopravviva il più adatto."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "still sleeping, as the act of planning and planting their procreations does tend to tire them so.",
+       "it": "ancora addormentati, dato che progettare e piantare la propria progenie li stanca parecchio."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "The Sapling-Ents seem to be",
+      "it": "Gli alberelli ent sembrano"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "fond of humor/jokes, but their punchlines are seldom worth the wait.",
+       "it": "amare l'umorismo e le barzellette, ma le loro battute finali raramente valgono l'attesa."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "roughly teenage (in their third decade or so) and rebellious, one has even fashioned a Stone Axe that she hides beneath her shed leaves.",
+       "it": "più o meno adolescenti (sulla trentina, all'incirca) e ribelli: una di loro si è perfino fabbricata un'ascia di pietra, che nasconde sotto le foglie che ha perso."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "very cautious, but may speak to any Elves, Druids, or Rangers present.",
+       "it": "molto cauti, ma potrebbero parlare con eventuali elfi, druidi o ranger presenti."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "all utterly smitten with and chalantly vying for the attentions of a local Quake Flower Mimosa Dryad with gorgeous amaranthine tresses.",
+       "it": "tutti perdutamente innamorati di una driade della mimosa fior-di-terremoto del posto, dalle splendide chiome color amaranto, e in gara tutt'altro che con nonchalance per le sue attenzioni."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "completely unfamiliar with non-plant-based sentient life, and have oh-so-many questions and concerns for the party's defoliated well-being.",
+       "it": "del tutto ignari della vita senziente non vegetale, e hanno taaante domande e preoccupazioni sul benessere defogliato del gruppo."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "suffering from a wicked, Devil-Weevil-driven disease. They can gladly direct you to the location of a nearby Forgotten Wyrmhoard in exchange for some assistance vis-à-vis Extraplanar Extermination.",
+       "it": "soffrire di una perfida malattia portata dai punteruoli diabolici. Possono indicarvi volentieri dove si trova un vicino tesoro di wyrm dimenticato, in cambio di un aiuto per una disinfestazione extraplanare."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "An unseen threat imperils this cultivated cradle",
+      "it": "Una minaccia invisibile incombe su questa culla coltivata"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "in the form of a stalk of Shadows, envious of the Treant's sun-lit lives.",
+       "it": "sotto forma di un agguato di ombre, invidiose della vita soleggiata dei treant."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "for beneath the rich soil lies an inconvenience of Kobolds, digging.",
+       "it": "perché sotto il ricco terreno si nasconde una seccatura di coboldi, intenti a scavare."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "for beneath the rich soil lies a hibernating Purple Worm.",
+       "it": "perché sotto il ricco terreno si nasconde un verme purpureo in letargo."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "for beneath the rich soil lies a mother lode of gold, one can even see it glimmer in their leaves.",
+       "it": "perché sotto il ricco terreno si nasconde un filone d'oro purissimo: lo si vede persino luccicare tra le loro foglie."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "for sapient woods make fine Spell Staves.",
+       "it": "perché i legni senzienti sono ottimi per farne bastoni incantati."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "and it's a lack of genetic diversity. New pollen from far off forests is needed to forestall the negative effects of inbreeding.",
+       "it": "ed è la mancanza di diversità genetica. Serve polline nuovo da foreste lontane per scongiurare gli effetti negativi della consanguineità."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "in the form of nutrient poor soil, after a doe bled out at the base of one of the saplings, they've tasted blood and believe they now have a solution.",
+       "it": "sotto forma di un suolo povero di nutrienti: da quando una cerva è morta dissanguata ai piedi di uno degli alberelli, ne hanno assaggiato il sangue e credono di aver trovato una soluzione."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "for one of their number, gifted in Prophecy, has foreseen a Pyre {hex:36}.",
+       "it": "perché uno di loro, dotato del dono della profezia, ha previsto un rogo {hex:36}."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 49,
+   "terrain": "forest",
+   "source": "Even More Forest Hexes (Draft 5)",
+   "en": {
+    "name": "The Genius Loci",
+    "intro": "The way the Legends tell it, every Forest has one. You just never thought you'd find yourself at the foot of one..."
+   },
+   "it": {
+    "name": "Il Genius Loci",
+    "intro": "A sentire le leggende, ogni foresta ne ha uno. Solo che non avresti mai pensato di ritrovarti ai piedi di uno di essi..."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "It is",
+      "it": "È"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "made Manifest from the ceaseless worship of all woodland creatures.",
+       "it": "reso manifesto dall'incessante adorazione di tutte le creature del bosco."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "an Adaptation, plants gradually evolved a defense as they were nibbled.",
+       "it": "un adattamento: a forza di essere brucate, le piante hanno sviluppato a poco a poco una difesa."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "the potent, co-located Soul of the first Druid to take to the woods.",
+       "it": "la potente anima, legata a questo stesso luogo, del primo druido che si ritirò nei boschi."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "more powerful than a Godling, but less mighty than a Deity.",
+       "it": "più potente di un dio minore, ma meno possente di una vera divinità."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "It wants",
+      "it": "Vuole"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "to go back to Sleep, it's so tiresome to be roused and have to speak.",
+       "it": "tornare a dormire: è così faticoso essere svegliati e dover parlare."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "for Its Forest (i.e.: It) to thrive despite the ludicrous ways of Men.",
+       "it": "che la sua foresta (cioè sé stesso) prosperi nonostante gli assurdi costumi degli uomini."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "for Its Forest (i.e.: It) to be left alone by all who use two legs (save birds).",
+       "it": "che la sua foresta (cioè sé stesso) venga lasciata in pace da chiunque cammini su due gambe (uccelli a parte)."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "for Its Forest (i.e.: It) to once more cover all arable land on the planet.",
+       "it": "che la sua foresta (cioè sé stesso) torni a coprire tutte le terre coltivabili del pianeta."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "Strength from the Strongest, Wisdom from the Wisest, etc.",
+       "it": "la Forza dai più forti, la Saggezza dai più saggi, e così via."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "the True Name of one of Its nemeses: Fire, Folk, or Frost.",
+       "it": "il vero nome di uno dei suoi nemici giurati: il Fuoco, le Genti o il Gelo."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "It knows",
+      "it": "Conosce"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "the location of anything you may seek within its Woods.",
+       "it": "l'ubicazione di qualunque cosa tu possa cercare nei suoi boschi."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "how to overthrow Old Honey Paws {hex:44}.",
+       "it": "il modo di rovesciare Old Honey Paws {hex:44}."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "the secret True Names for all the species of trees within its wood.",
+       "it": "i segreti veri nomi di tutte le specie di alberi del suo bosco."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "who killed The King {hex:?}, not that it matters greatly to It.",
+       "it": "l'identità di chi ha ucciso il Re {hex:?}, non che gli importi granché."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "the name and location of every Elf who ever lived or died.",
+       "it": "il nome e il luogo di ogni elfo che sia mai vissuto o morto."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "how to grant Druidical Magics to anyone, but is loath to do so.",
+       "it": "il modo di conferire la magia druidica a chiunque, ma è molto restio a farlo."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "spells of Reincarnation, unbound by time, for any brought before It.",
+       "it": "incantesimi di reincarnazione, liberi dai vincoli del tempo, per chiunque venga condotto al suo cospetto."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "a powerful, permanent aegis against all Dragon Breath.",
+       "it": "un'egida potente e permanente contro ogni soffio di drago."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 50,
+   "terrain": "forest",
+   "source": "Even More Forest Hexes (Draft 5)",
+   "en": {
+    "name": "A Spray-Soaked Span",
+    "intro": "Over the roar of the falls ahead, you hear your heart beat faster. This winding footbridge is not for the faint of heart."
+   },
+   "it": {
+    "name": "Una Passerella Intrisa di Spruzzi",
+    "intro": "Sopra il fragore delle cascate davanti a te, senti il cuore battere più forte. Questa passerella tortuosa non fa per i deboli di cuore."
+   },
+   "tables": [
+    {
+     "die": 4,
+     "lead": {
+      "en": "By all best estimations, crossing will take",
+      "it": "Secondo le migliori stime, la traversata richiederà"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "no more than an hour, and leaving any mounts behind.",
+       "it": "non più di un'ora, lasciando indietro le cavalcature."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "a full four hours, moving at a prudent pace.",
+       "it": "quattro ore piene, procedendo a passo prudente."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "the remainder of a day, and a rest before would be wise.",
+       "it": "il resto della giornata, e sarebbe saggio riposarsi prima."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "considerable concentration, at the very least.",
+       "it": "una notevole concentrazione, come minimo."
+      }
+     ]
+    },
+    {
+     "die": 6,
+     "lead": {
+      "en": "A notable hazard, when nearly half the way there",
+      "it": "Un pericolo notevole, quando si è quasi a metà strada:"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "is a steep, curving corner, slick with spume from the waterfalls below.",
+       "it": "una curva ripida e stretta, resa viscida dagli spruzzi delle cascate sottostanti."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "the once handy hand-rail suddenly gives way under weight.",
+       "it": "il corrimano, fin lì così utile, cede all'improvviso sotto il peso."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "a section of planks is missing, wide as a horse is long.",
+       "it": "manca un tratto di assi, largo quanto è lungo un cavallo."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "the heart stopping SNAP as spindly supports split and separate.",
+       "it": "il CRAC da far fermare il cuore, mentre gli esili sostegni si spezzano e si staccano."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "Cataract Harpies. Their song is drowned, but you may well be too.",
+       "it": "arpie delle cateratte. Il loro canto annega nel frastuono, ma potresti annegare anche tu."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "as the saying goes: A Troll and his bridge are seldom far apart.",
+       "it": "come dice il proverbio, un troll e il suo ponte non sono mai lontani."
+      }
+     ]
+    },
+    {
+     "die": 8,
+     "lead": {
+      "en": "Steel yourself and steal a shaky glance below to notice",
+      "it": "Fatti forza e azzarda un'occhiata tremante verso il basso: noterai"
+     },
+     "rows": [
+      {
+       "roll": [
+        1,
+        1
+       ],
+       "en": "the party of Spiderfolk, traversing the bridge from the underside.",
+       "it": "una compagnia del popolo dei ragni che attraversa il ponte dalla parte di sotto."
+      },
+      {
+       "roll": [
+        2,
+        2
+       ],
+       "en": "the skeleton of the prior bridge, dashed on the boulders.",
+       "it": "lo scheletro del ponte precedente, sfracellato sui massi."
+      },
+      {
+       "roll": [
+        3,
+        3
+       ],
+       "en": "the skeletons of the last party that failed to cross here, loot-laden.",
+       "it": "gli scheletri dell'ultimo gruppo che non è riuscito ad attraversare, carichi di bottino."
+      },
+      {
+       "roll": [
+        4,
+        4
+       ],
+       "en": "the skeleton of the big-bounty bandit: Leswin Lightfinger.",
+       "it": "lo scheletro del bandito dalla taglia altissima, Leswin Lightfinger."
+      },
+      {
+       "roll": [
+        5,
+        5
+       ],
+       "en": "the skeletons of antediluvian behemoths, frozen in the wet rocks.",
+       "it": "gli scheletri di colossi antidiluviani, imprigionati nelle rocce bagnate."
+      },
+      {
+       "roll": [
+        6,
+        6
+       ],
+       "en": "a Waterfall Naiad combing her flowing coiffure. Bad luck.",
+       "it": "una naiade delle cascate che si pettina la chioma fluente. Porta sfortuna."
+      },
+      {
+       "roll": [
+        7,
+        7
+       ],
+       "en": "a thriving Jermlaine metropolis, perched on a crag above cacophony.",
+       "it": "una fiorente metropoli di jermlaine, appollaiata su uno sperone sopra il frastuono."
+      },
+      {
+       "roll": [
+        8,
+        8
+       ],
+       "en": "a Kwalish Submersible, marooned precariously on a promontory. Its operator, the Wonder-Worker Carym, gesticulating wildly.",
+       "it": "un sommergibile di Kwalish, arenato in bilico su un promontorio. Il suo pilota, il taumaturgo Carym, gesticola freneticamente."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

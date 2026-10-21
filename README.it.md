@@ -13,7 +13,7 @@
            \    //   ****************) (*****************   \\    /
             \  //   /****************,_,*****************\   \\  /
              \// __/ *             WyrmHex              * \__ \\/
-             /       *              v1.0.0              *       \
+             /       *              v1.1.0              *       \
                      *************M********M*************
 &nbsp;
                                                 |&gt;&gt;&gt;
@@ -45,7 +45,7 @@ Mappe di varie dimensioni nella [Galleria Mappe](#10-galleria-mappe).
 
 **WyrmHex** è un piccolo programma che disegna a caso una mappa a esagoni per campagne di gioco di ruolo old school (OSR). La mappa è fatta solo di lettere e simboli, come nei videogiochi Dwarf Fortress, ADOM, NetHack o Caves of Qud:
 
-- **foreste** `♣♠`, **montagne** `▲^`, **colline** `∩n`, **deserti** `░·`, **laghi** `≈`, **paludi** `⌠"` (canne e ciuffi d'erba palustre, come in Dwarf Fortress);
+- **foreste** `♣♠`, **montagne** `▲^`, **colline** `∩n`, **deserti** `░·`, **laghi** `≈`, **paludi** `⌠"` (canne e ciuffi d'erba palustre, come in Dwarf Fortress) e, se le chiedi, **foreste di funghi giganti** `⊤°` (cappelli giganti e spore);
 - la **pianura** resta vuota, tranne quella **coltivabile**, segnata da qualche germoglio `τ`, e il **mare** è una campitura grigia;
 - i **fiumi** sono doppie linee `═║╔╗`;
 - **città**, **fortezze** e **dungeon** sono riquadri neri con un simbolo bianco.
@@ -119,7 +119,7 @@ Da qui in poi la riga in cui scrivi comincia con `(.venv)`: è il segno che è a
 
 ### Passo 5 — Installa le librerie
 
-Con l'ambiente virtuale attivo, scarica **Pillow**, la libreria che serve a creare le immagini, e **asciimatics**, quella che disegna i menu da scorrere con le frecce. Il comando è uguale su tutti i sistemi (su Windows installa da solo anche `pywin32`, che serve ad asciimatics):
+Con l'ambiente virtuale attivo, scarica **Pillow**, la libreria che serve a creare le immagini, **asciimatics**, quella che disegna i menu da scorrere con le frecce, e **fpdf2**, quella che scrive il PDF con i contenuti della landa (capitolo 6). Il comando è uguale su tutti i sistemi (su Windows installa da solo anche `pywin32`, che serve ad asciimatics):
 
 ```
 pip install -r requirements.txt
@@ -151,7 +151,7 @@ Per prima cosa il programma ti chiede la **lingua**: scegli **Italiano** o **Eng
 
 Poi compare la schermata di benvenuto, con un drago che regge il cartello con il nome del programma e, sotto, una torre di guardia: premi **INVIO** per cominciare. Il programma ti fa alcune domande. Quando ci sono delle scelte, compare un **menu**: muoviti con le frecce **↑ ↓** e conferma con **Invio** (puoi anche premere il numero della scelta, o farci clic sopra). Le altre domande, come i numeri o il titolo, si rispondono scrivendo. **Ogni domanda ha una risposta già pronta, evidenziata nel menu oppure tra parentesi quadre: se ti va bene, premi solo Invio.**
 
-1. **Cosa vuoi fare?** Scegli **creare una mappa nuova**, **riprodurre una mappa già fatta** (vedi il capitolo 4) oppure **modificare una mappa** a mano, esagono per esagono (vedi il capitolo 5).
+1. **Cosa vuoi fare?** Scegli **creare una mappa nuova**, **riprodurre una mappa già fatta** (vedi il capitolo 4) oppure **modificare una mappa** a mano, esagono per esagono (vedi il capitolo 5). Se crei una mappa nuova, il programma ti chiede subito se vuoi anche le **foreste di funghi giganti**, ispirate a Morrowind: crescono a boschetti, al posto di una parte delle foreste, solo nei luoghi più umidi: dove il vento porta più pioggia, accanto a mare, laghi, paludi e fiumi, e nelle terre basse dove l'acqua ristagna. La risposta pronta è **no**: in quel caso la mappa viene generata esattamente come sempre, con lo stesso seme. Se rispondi sì, alla domanda 5 trovi anche la loro percentuale (6% già pronto, preso dalle foreste) e con i valori a caso ne ricevi fra il 3 e il 12%. Nel PDF dei contenuti le foreste di funghi hanno la loro tabella degli incontri (dalla tabella delle caverne di *Hexcrawl Horrors*: muffe, funghi e creature del buio) e una riga nella storia della landa.
 2. **Esagoni in base e in altezza:** quante colonne e quante righe di esagoni vuoi. La risposta pronta è `auto`: il programma sceglie da solo quanti esagoni riempiono un foglio A4 restando leggibili (33 × 15).
 3. **Scegli tu o a caso?** Scegli **li scelgo io** per rispondere tu alle tre domande successive, oppure **a caso** per far scegliere al programma a caso il numero di siti, le percentuali di terreno e i fiumi, in proporzione alla mappa. Con **a caso** passa direttamente al titolo. I valori scelti vengono mostrati mentre lavora e finiscono nel seme come tutti gli altri.
 4. **Numero di dungeon, città e fortezze** da mettere sulla mappa (fino a 99 per tipo).
@@ -161,6 +161,8 @@ Poi compare la schermata di benvenuto, con un drago che regge il cartello con il
 8. **Scala:** quante miglia copre ogni esagono: 2, 6 (la risposta pronta), 12 o 24 miglia, oppure **altro, lo scrivo io**: un numero di miglia, oppure un testo qualsiasi come `5 km` o `1 giorno`. Viene stampata sotto il titolo, come "1 esagono = 6 miglia".
 9. Se usare **solo i caratteri base della tastiera** (senza simboli come ♣ ▲ ≈). Di solito rispondi no: basta premere Invio.
 10. **Colori:** **bianco e nero**, per la stampa (la risposta pronta), oppure **a colori**: foreste verdi, mare e laghi blu, deserti color sabbia, paludi viola, città rosse e così via. Solo per la mappa a colori il programma chiede poi lo **sfondo**: **bianco** o **nero**. Sullo sfondo bianco anche gli esagoni sono colorati, per leggere la mappa a colpo d'occhio: verde chiaro le pianure, verde più scuro le foreste, rosa le paludi, giallo il deserto, giallo più scuro le colline, beige le montagne, azzurro il mare e i laghi (i laghi si riconoscono dai simboli `≈`).
+11. **Cosa vuoi generare?** Tre scelte: **solo la mappa** (la risposta pronta); **la mappa e il contenuto degli esagoni, a caso**, cioè le tabelle degli incontri casuali per i terreni della mappa e l'elenco di tutti gli esagoni popolati; oppure **la mappa, il contenuto degli esagoni e la storia della landa**, con le voci che girano nelle taverne. Tutto finisce in un PDF accanto alla mappa (vedi il capitolo 6). Se chiedi il contenuto degli esagoni, il programma ti chiede anche **quanti esagoni di terra lasciare vuoti**, da riempire tu al tavolo: una percentuale da 0 a 100, oppure `auto` (la risposta pronta) per farla scegliere a caso fra 20 e 30. I contenuti si basano sulla mappa e sul seme: la stessa mappa dà sempre gli stessi contenuti, e chiederli non cambia la mappa.
+12. **Nomi di città, fortezze e dungeon:** **li scrivo io, quando la mappa è pronta**, **li sceglie il programma a caso** (nomi come "Fonte Bianca" o "Forte del Tramonto", nella lingua scelta) oppure **nessun nome**. La risposta pronta è "li scrivo io"; se nella domanda 3 hai scelto i valori a caso, è "nessun nome". I nomi a caso vanno bene anche se generi solo la mappa.
 
 Finite le domande compare un mago con la scritta **"L'incantesimo di evocazione ha inizio!"** (in inglese: *"The conjuring spell begins!"*): da qui il programma si mette al lavoro.
 
@@ -172,8 +174,8 @@ Mentre lavora, mostra i passaggi che sta facendo, ognuno con una **barra di avan
 
 Durante il disegno delle due immagini, che è la parte più lunga, compare anche una seconda barra con la percentuale, che si aggiorna sul posto fino a `100%  fatto`. Quando la mappa è pronta ti chiede le ultime cose:
 
-11. **Nomi dei siti:** per ogni città, fortezza e dungeon il programma ti dice in che esagono si trova e su che terreno, e ti chiede se vuoi dargli un nome, per esempio `Città 1, esagono 2712 (colline). Vuoi dare un nome? (s/N)`. Se rispondi `s`, scrivi il nome (fino a 24 caratteri): compare in grassetto sulla mappa, sotto il simbolo del sito. Premi Invio per lasciare il sito senza nome. Se nella domanda 3 hai scelto i valori a caso, il programma non chiede niente e i siti restano senza nome.
-12. **Formato di stampa** delle due mappe: `A4`, `A3` o `A2`. Il programma valuta il formato in base al numero di esagoni: prima della domanda vedi, per ogni formato, quanto verranno grandi gli esagoni e i caratteri, e se saranno ben leggibili. La risposta pronta, già evidenziata nel menu, è il **formato consigliato**, cioè il più piccolo in cui la mappa si legge bene; più esagoni hai scelto, più grande sarà. **La scelta finale è tua:** premi Invio per il formato consigliato, oppure spostati su un altro. Esempio:
+13. **Nomi dei siti** (solo se alla domanda 12 hai scelto "li scrivo io"): per ogni città, fortezza e dungeon il programma ti dice in che esagono si trova e su che terreno, e ti chiede se vuoi dargli un nome, per esempio `Città 1, esagono 2712 (colline). Vuoi dare un nome? (s/N)`. Se rispondi `s`, scrivi il nome (fino a 24 caratteri): compare in grassetto sulla mappa, sotto il simbolo del sito. Premi Invio per lasciare il sito senza nome.
+14. **Formato di stampa** delle due mappe: `A4`, `A3` o `A2`. Il programma valuta il formato in base al numero di esagoni: prima della domanda vedi, per ogni formato, quanto verranno grandi gli esagoni e i caratteri, e se saranno ben leggibili. La risposta pronta, già evidenziata nel menu, è il **formato consigliato**, cioè il più piccolo in cui la mappa si legge bene; più esagoni hai scelto, più grande sarà. **La scelta finale è tua:** premi Invio per il formato consigliato, oppure spostati su un altro. Esempio:
 
    ```
    Griglia di 12 x 30 esagoni: ecco come verrebbe stampata su ogni formato (esagono misurato da
@@ -200,7 +202,7 @@ Ogni mappa ha un **seme**: un codice di 24 lettere e cifre a gruppi di quattro, 
 
 Il seme contiene tutto ciò che dà forma alla terra: il numero di esagoni, le città, le fortezze e i dungeon, le percentuali di terreno, i fiumi e tutte le scelte casuali. Per questo **lo stesso seme dà sempre la stessa mappa**, su qualunque computer, anche se i file della mappa non ci sono più. Per condividere una mappa con qualcuno basta dargli il suo seme.
 
-Per rifare una mappa, avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" scegli **riprodurre una mappa già fatta** e scrivi il seme. Maiuscole, trattini e spazi non contano, e se sbagli un carattere il programma te lo dice, invece di fare in silenzio una mappa diversa. Poi ti mostra il titolo e la scala attuali della mappa e ti chiede se vuoi **rinominare la mappa** e se vuoi **cambiare la scala** (miglia per esagono: le stesse scelte della mappa nuova, più la possibilità di lasciare com'è una scala scritta a mano). Basta premere Invio per lasciarli come sono. Ti chiede anche se vuoi **dare o cambiare i nomi** di città, fortezze e dungeon: se rispondi `s`, quando la mappa è pronta ti propone i siti uno per uno, con il nome che hanno già. Poi ti chiede di nuovo se usare i caratteri base, il bianco e nero o i colori e, alla fine, il formato di stampa: così puoi rifare la stessa mappa, per esempio, con un altro nome, a 24 miglia per esagono, oppure in A3 invece che in A4.
+Per rifare una mappa, avvia il programma, scegli la lingua, alla domanda "Cosa vuoi fare?" scegli **riprodurre una mappa già fatta** e scrivi il seme. Maiuscole, trattini e spazi non contano, e se sbagli un carattere il programma te lo dice, invece di fare in silenzio una mappa diversa. Poi ti mostra il titolo e la scala attuali della mappa e ti chiede se vuoi **rinominare la mappa** e se vuoi **cambiare la scala** (miglia per esagono: le stesse scelte della mappa nuova, più la possibilità di lasciare com'è una scala scritta a mano). Basta premere Invio per lasciarli come sono. Ti chiede anche cosa fare con i **nomi** di città, fortezze e dungeon: **lasciarli come sono**, **scriverli tu** (quando la mappa è pronta ti propone i siti uno per uno, con il nome che hanno già) oppure **farli scegliere al programma a caso**. Poi ti chiede di nuovo se usare i caratteri base, il bianco e nero o i colori, se generare **solo la mappa o anche i suoi contenuti** e, alla fine, il formato di stampa: così puoi rifare la stessa mappa, per esempio, con un altro nome, a 24 miglia per esagono, oppure in A3 invece che in A4.
 
 Il titolo, la scala, i nomi dei siti e il formato di stampa non fanno parte del seme, perché non cambiano la terra. Se il PNG della mappa è ancora nella sua cartella `maps_generated/<seme>`, il programma li prende da lì (il formato diventa la risposta pronta); altrimenti usa il titolo e la scala di partenza. Da riga di comando puoi sceglierli tu, per esempio `--riproduci <seme> --titolo "Terre del Nord"`.
 
@@ -302,8 +304,20 @@ Alla fine il programma ti dice in quale cartella ha messo i file.
 | `<seme>_number.png` | La stessa mappa con il numero in ogni esagono, per il master |
 | `<seme>_nonumber.txt`, `<seme>_number.txt` | La mappa come testo, apribile con il Blocco note |
 | `<seme>_edit_…`, `<seme>_edit.json` | Solo se hai modificato la mappa (capitolo 5): la mappa modificata e l'elenco delle modifiche |
+| `<seme>_contents.pdf`, `<seme>_contents.json` | Solo se hai chiesto anche i contenuti: il PDF da stampare per il master, e gli stessi contenuti in un file di testo (per una mappa modificata, `<seme>_edit_contents…`) |
 
 I numeri degli esagoni hanno quattro cifre: le prime due indicano la colonna, le ultime due la riga. `0101` è l'esagono in alto a sinistra; `0305` è nella terza colonna, quinta riga.
+
+### Il PDF dei contenuti
+
+Se alla domanda 11 hai scelto anche il contenuto degli esagoni (o hai usato `--contenuti` o `--storia`), accanto alle mappe trovi un PDF in formato A4, nella lingua scelta, con:
+
+- solo se hai chiesto anche la storia (`--storia`): **la storia della landa**, ogni volta diversa nella forma e nei contenuti: a volte una cronaca, a volte un racconto che parte da oggi e torna indietro, a volte una leggenda narrata. Parla del regno che c'era una volta, del suo sovrano più grande e di come è caduto, delle città, delle fortezze e dei dungeon della mappa con il loro esagono, del paesaggio, del mare e dei fiumi, delle fazioni di oggi e dei loro rapporti, della minaccia che incombe e dei suoi presagi. Regni, sovrani, fazioni e dèi hanno nomi inventati sul momento, e le combinazioni possibili sono miliardi;
+- solo con la storia: **le voci che girano nelle taverne**, una tabella da 1d20: alcune parlano dei siti della mappa;
+- **gli incontri casuali**: una tabella da 1d20 per ogni terreno presente sulla mappa (pianure, foreste, colline, paludi, montagne, deserti), dal più diffuso al meno diffuso, con la pagina del manuale dove trovare le statistiche del mostro. Ogni tabella prende 20 incontri diversi dalla tabella da 1d100 di *Hexcrawl Horrors* per quel terreno, preferendo quelli più frequenti, quindi cambia da una mappa all'altra. Se hai chiesto anche la storia, 6 delle 20 voci sono **eventi e personaggi della storia**: pattuglie, spie ed emissari delle fazioni di oggi, pellegrini alla tomba del sovrano di un tempo, fantasmi e reliquie del regno caduto, fedeli del dio, viandanti diretti alle città o in fuga dai dungeon della mappa. Sono scritte in corsivo, sparse fra i mostri;
+- **gli esagoni**: una riga per ogni esagono tranne il mare, con il suo numero, il terreno e il contenuto. Città, fortezze e dungeon hanno il loro nome. Fra gli altri esagoni di terra, la percentuale che hai scelto (oppure **dal 20 al 30%**) resta vuota, da riempire al tavolo con le tue tabelle. Il resto è popolato con la tabella d66 di *Wilderness Stocking – Expanded* di D4Caltrops: **luogo notevole**, **tana**, **speciale**, **pericolo** o **risorsa**, con un suggerimento per l'arbitro. Gli occupanti delle tane (e le tracce) sono tirati sulla tabella degli incontri del terreno che trovi nel PDF. Nelle foreste e nelle montagne alcuni esagoni diventano uno dei **luoghi dettagliati** di D4Caltrops, come "Il Guado Gorgogliante" o "La Rocca Nanica Condannata", descritto per intero nella sua riga, con i dettagli già tirati sulle sue tabelle;
+
+Il file `<seme>_contents.json` contiene le stesse cose in un formato che altri programmi possono leggere. Se fpdf2 non è installato, la mappa viene fatta lo stesso e i contenuti vengono salvati solo nel JSON: il programma te lo dice.
 
 ---
 
@@ -329,6 +343,7 @@ python wyrmhex.py --mare 30 --pianura 15 --titolo "Isola dei Venti"
 python wyrmhex.py --riproduci 475T-4KM4-MY0B-JNDJ-ZYEQ-K164
 python wyrmhex.py --riproduci 475T-4KM4-MY0B-JNDJ-ZYEQ-K164 --modificata --formato A3
 python wyrmhex.py --griglia 40x25 --casuale
+python wyrmhex.py --casuale --storia --nomi-casuali
 python wyrmhex.py --language en --grid 30x15 --cities 4
 ```
 
@@ -340,6 +355,7 @@ Ogni opzione ha anche un nome inglese (nella tabella dopo la barra `/`), e puoi 
 | `--griglia` / `--grid` | Colonne x righe di esagoni (`auto` = riempie un A4) | `--griglia 20x15` |
 | `--citta`, `--fortezze`, `--dungeon` / `--cities`, `--fortresses`, `--dungeons` | Quanti siti di ogni tipo (da 0 a 99) | `--citta 4` |
 | `--pianura`, `--mare`, `--laghi`, `--paludi`, `--colline`, `--montagne`, `--foreste`, `--deserti` / `--plains`, `--sea`, `--lakes`, `--swamps`, `--hills`, `--mountains`, `--forests`, `--deserts` | Percentuale di ogni terreno, in numero intero | `--mare 25` |
+| `--funghi` / `--mushrooms` | Percentuale di foreste di funghi giganti (di solito 0: nessuna). Con `--casuale`, un valore qualsiasi sopra 0 le accende e la percentuale la sceglie il programma | `--funghi 6` |
 | `--fiumi` / `--rivers` | Numero di fiumi, fino a 100 (`-1` = automatico) | `--fiumi 3` |
 | `--casuale` / `--random` | Sceglie a caso il numero di siti, le percentuali di terreno e i fiumi, in proporzione alla mappa. Le opzioni qui sopra per siti, terreni e fiumi vengono ignorate. Con lo stesso numero di `--seme` escono sempre gli stessi valori | `--casuale` |
 | `--titolo` / `--title` | Titolo in cima alla mappa | `--titolo "Terre del Nord"` |
@@ -347,6 +363,10 @@ Ogni opzione ha anche un nome inglese (nella tabella dopo la barra `/`), e puoi 
 | `--seme` / `--seed` | Con un seme completo, rifà quella mappa (come `--riproduci`). Con un numero da 0 a 1048575, fa una mappa nuova con le tue impostazioni e quel numero per le scelte casuali | `--seme 42` |
 | `--riproduci` / `--reproduce` | Rifà la mappa di quel seme. Titolo, scala e formato vengono dal suo PNG, se è in `maps_generated/<seme>` (o nella cartella di `--output`); un vecchio seme numerico ha bisogno del suo PNG | `--riproduci 475T-4KM4-MY0B-JNDJ-ZYEQ-K164` |
 | `--modificata` / `--edited` | Insieme a `--riproduci` (o a `--seme` con un seme completo): rifà la versione modificata della mappa, con le modifiche salvate dall'editor (capitolo 5). Se la mappa non ha modifiche salvate, il programma lo dice e si ferma | `--riproduci <seme> --modificata` |
+| `--contenuti` / `--contents` | Genera anche il contenuto degli esagoni, a caso (incontri casuali ed esagoni popolati), in un PDF accanto alla mappa (capitolo 6) | `--contenuti` |
+| `--storia` / `--history` | Come `--contenuti`, e in più la storia della landa con le voci di taverna | `--storia` |
+| `--vuoti` / `--empty` | Insieme a `--contenuti` o `--storia`: la percentuale di esagoni di terra da lasciare vuoti per le tue tabelle, da 0 a 100. Senza, è a caso fra 20 e 30 | `--vuoti 40` |
+| `--nomi-casuali` / `--random-names` | Dà a città, fortezze e dungeon nomi scelti a caso | `--nomi-casuali` |
 | `--formato` / `--format` | Formato di stampa: `A4`, `A3` o `A2`. Se manca, il programma te lo chiede alla fine, proponendo quello consigliato (o, con `--riproduci`, quello della volta prima) | `--formato A3` |
 | `--orientamento` / `--orientation` | Di solito non serve: il verso del foglio segue la forma della mappa. Puoi forzarlo con `verticale` o `orizzontale` (`portrait` o `landscape`) | `--orientamento verticale` |
 | `--output` | Cartella in cui salvare le mappe al posto di `maps_generated`; anche lì ogni mappa ha la sua cartella con il seme | `--output mappe` |
@@ -418,7 +438,25 @@ Le versioni precedenti alla 0.0.2 potevano disegnare la mappa in bianco e nero c
 
 ---
 
-## 10. Galleria Mappe
+## 10. Fonti e licenze
+
+I contenuti della landa vengono da file di dati nella cartella `data`, accanto a `wyrmhex.py`:
+
+| File | Cosa contiene | Fonte e licenza |
+|---|---|---|
+| `data/encounters.json` | Le tabelle degli incontri casuali per terreno (pianure, foreste, colline, paludi, montagne, deserti, giungle, terre desolate, caverne, tombe), con i riferimenti ai manuali e la tabella della reazione | *Hexcrawl Horrors: Random Wilderness Encounters for OSR Adventures* di Tom Brown, Lone Horizons (2024), LH001 v1.2, [lonehorizons.blogspot.com](https://lonehorizons.blogspot.com/). Testo rilasciato sotto licenza [Creative Commons Attribuzione-Condividi allo stesso modo 4.0](https://creativecommons.org/licenses/by-sa/4.0/) (CC BY-SA 4.0). I nomi dei mostri sono stati tradotti in italiano per WyrmHex; il file tradotto è condiviso con la stessa licenza |
+| (riferimenti nelle tabelle) | I mostri e le pagine indicate nella colonna "Pagina": il *Basic Fantasy Role-Playing Game* (`58/66`: pagina della terza edizione / della quarta), i *Field Guide* 1 e 2 (`FG1`, `FG2`), *Hexcrawl Horrors* (`HH`) | [Basic Fantasy Role-Playing Game](https://www.basicfantasy.org/) di Chris Gonnerman e collaboratori, contenuto di gioco aperto rilasciato sotto la Open Game License 1.0a (la quarta edizione del regolamento sotto licenza CC BY-SA 4.0). WyrmHex riporta solo i nomi e le pagine, non le statistiche |
+| `data/stocking.json` | La tabella d66 per popolare gli esagoni (luogo notevole, tana, speciale, pericolo, risorsa) e la spiegazione dei tipi di risultato | *Wilderness Stocking – Expanded* (bozza) di [D4Caltrops](https://blog.d4caltrops.com/2025/10/wilderness-stocking-expanded.html): risorsa gratuita pubblicata sul suo blog, senza una licenza dichiarata; usata citando l'autore e tradotta in italiano per WyrmHex |
+| `data/places.json` | I 20 luoghi dettagliati di foresta e montagna, con le loro tabelle | *Even More Forest Hexes* (bozza 5) e *Even More Mountain Hexes* I, III e IV (bozze) di [D4Caltrops](https://blog.d4caltrops.com/): risorse gratuite pubblicate sul suo blog, senza una licenza dichiarata; usate citando l'autore e tradotte in italiano per WyrmHex |
+| `data/history.json`, `data/names.json` | I pezzi della storia della landa, delle voci di taverna e dei nomi dei siti | Testi originali scritti per WyrmHex, con la stessa licenza del programma (GPL-3.0) |
+| `data/fonts/Catholicon.ttf` | Il carattere dei titoli nel PDF | [Catholicon](https://vladar.bearblog.dev/) di Vladimir Arabadzhi, rilasciato sotto la [SIL Open Font License 1.1](data/fonts/OFL-Catholicon.txt) |
+| `data/fonts/CrimsonText-*.ttf` | Il carattere del testo e delle tabelle nel PDF | [Crimson Text](https://github.com/googlefonts/Crimson) di The Crimson Text Project Authors, rilasciato sotto la [SIL Open Font License 1.1](data/fonts/OFL-CrimsonText.txt) |
+
+Le tabelle degli incontri sono pensate per *Old-School Essentials* e gli altri giochi OSR compatibili con Basic/Expert: le statistiche dei mostri si trovano nei manuali indicati o nell'[SRD di Old-School Essentials](https://oldschoolessentials.necroticgnome.com/rules/doku.php?id=start).
+
+---
+
+## 11. Galleria Mappe
 
 Fai clic su una mappa per aprirla a grandezza intera.
 

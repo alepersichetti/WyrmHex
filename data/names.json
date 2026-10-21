@@ -1,0 +1,269 @@
+{
+ "_about": "Pieces for the random names of cities, fortresses and dungeons, written for WyrmHex. Each kind has patterns; {a} {b}... are filled from the lists with the same key. Names longer than 24 letters are skipped.",
+ "it": {
+  "city": {
+   "patterns": [
+    "{place}{thing}",
+    "{place_f} {adj_f}",
+    "{place_m} {adj_m}"
+   ],
+   "place": [
+    "Rocca",
+    "Castel",
+    "Monte",
+    "Porto",
+    "Borgo",
+    "Pian",
+    "Torre",
+    "Fonte",
+    "Sasso",
+    "Ponte",
+    "Pietra",
+    "Colle",
+    "Campo",
+    "Riva",
+    "Valle",
+    "Serra"
+   ],
+   "thing": [
+    "mare",
+    "lupo",
+    "corvo",
+    "sole",
+    "luna",
+    "ferro",
+    "quercia",
+    "nebbia",
+    "fiume",
+    "vento",
+    "pino",
+    "falco",
+    "rosa",
+    "spina",
+    "cervo",
+    "sale"
+   ],
+   "place_f": [
+    "Rocca",
+    "Torre",
+    "Fonte",
+    "Pietra",
+    "Riva",
+    "Valle",
+    "Serra",
+    "Porta"
+   ],
+   "place_m": [
+    "Monte",
+    "Porto",
+    "Borgo",
+    "Ponte",
+    "Colle",
+    "Campo",
+    "Bosco",
+    "Passo"
+   ],
+   "adj_f": [
+    "Nera",
+    "Bianca",
+    "Vecchia",
+    "Alta",
+    "Grigia",
+    "Rossa",
+    "Fredda",
+    "Fosca",
+    "Lunga",
+    "Chiara"
+   ],
+   "adj_m": [
+    "Nero",
+    "Bianco",
+    "Vecchio",
+    "Alto",
+    "Grigio",
+    "Rosso",
+    "Freddo",
+    "Fosco",
+    "Lungo",
+    "Chiaro"
+   ]
+  },
+  "fortress": {
+   "patterns": [
+    "{keep} {of}"
+   ],
+   "keep": [
+    "Forte",
+    "Rocca",
+    "Bastione",
+    "Torre",
+    "Castello",
+    "Baluardo",
+    "Cittadella",
+    "Presidio"
+   ],
+   "of": [
+    "del Lupo",
+    "del Corvo",
+    "di Ferro",
+    "del Grifone",
+    "dell'Aquila",
+    "del Drago",
+    "di Pietra",
+    "delle Ossa",
+    "del Re Caduto",
+    "della Guardia",
+    "del Tramonto",
+    "dell'Alba",
+    "dei Venti",
+    "della Spina"
+   ]
+  },
+  "dungeon": {
+   "patterns": [
+    "{place} {of}"
+   ],
+   "place": [
+    "Cripta",
+    "Caverne",
+    "Rovine",
+    "Tomba",
+    "Miniere",
+    "Catacombe",
+    "Pozzo",
+    "Tempio",
+    "Labirinto",
+    "Grotte",
+    "Sotterranei",
+    "Antro"
+   ],
+   "of": [
+    "dell'Ombra",
+    "del Re Muto",
+    "dei Mille Occhi",
+    "del Verme",
+    "della Strega",
+    "del Serpente",
+    "dei Dannati",
+    "del Silenzio",
+    "dell'Eco",
+    "della Luna Nera",
+    "del Tiranno",
+    "dei Ragni",
+    "del Sangue",
+    "dell'Abisso"
+   ]
+  }
+ },
+ "en": {
+  "city": {
+   "patterns": [
+    "{first}{last}",
+    "{first}{last}"
+   ],
+   "first": [
+    "Black",
+    "Raven",
+    "Stone",
+    "Oak",
+    "Wolf",
+    "Grey",
+    "Red",
+    "Ash",
+    "Iron",
+    "Elder",
+    "High",
+    "Mist",
+    "Thorn",
+    "Cold",
+    "Salt",
+    "Willow"
+   ],
+   "last": [
+    "ford",
+    "hold",
+    "gate",
+    "moor",
+    "watch",
+    "bridge",
+    "haven",
+    "field",
+    "wick",
+    "stead",
+    "mere",
+    "barrow",
+    "fall",
+    "cross",
+    "by",
+    "wood"
+   ]
+  },
+  "fortress": {
+   "patterns": [
+    "{first} {keep}"
+   ],
+   "first": [
+    "Raven",
+    "Iron",
+    "Grey",
+    "Wolf",
+    "Dragon",
+    "Stone",
+    "Storm",
+    "Ash",
+    "Sun",
+    "Night",
+    "Bone",
+    "King's",
+    "Griffon",
+    "Thorn"
+   ],
+   "keep": [
+    "Keep",
+    "Tower",
+    "Fort",
+    "Hold",
+    "Watch",
+    "Bastion",
+    "Citadel",
+    "Castle"
+   ]
+  },
+  "dungeon": {
+   "patterns": [
+    "{place} {of}",
+    "The {place} {of}"
+   ],
+   "place": [
+    "Crypt",
+    "Caves",
+    "Ruins",
+    "Tomb",
+    "Mines",
+    "Catacombs",
+    "Pit",
+    "Temple",
+    "Labyrinth",
+    "Grottoes",
+    "Vaults",
+    "Lair"
+   ],
+   "of": [
+    "of Shadows",
+    "of the Mute King",
+    "of a Hundred Eyes",
+    "of the Worm",
+    "of the Witch",
+    "of the Serpent",
+    "of the Damned",
+    "of Silence",
+    "of Echoes",
+    "of the Black Moon",
+    "of the Tyrant",
+    "of Spiders",
+    "of Blood",
+    "of the Abyss"
+   ]
+  }
+ }
+}

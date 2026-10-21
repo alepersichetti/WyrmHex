@@ -1,0 +1,3359 @@
+{
+ "_about": "Pieces of the history of the land, written for WyrmHex (original text). The engine builds a cast from the building blocks: a realm of old (a realm_kinds entry plus a made-up name from 'names', or a realm_named entry), a long-dead great ruler (titles + made-up name + epithets), the founding people (peoples), two factions of today (faction_kinds + faction_emblems), a forgotten god (made-up name) and a time (years). It then picks one of three forms (a chronicle, the present first and then the past, a told legend) and one line from each sentence list, at random but always the same for the same seed, filling the placeholders: {land}, {years}, {god}, {realm_*}, {ruler_*}, {people_*}, {fac1_*}, {fac2_*} (and {fac_*} in 'faction' lines), {name} and {hex} for sites, {n} for the number of rivers. Italian gets articled forms (_il, _di, _a, _da, _in: 'il Regno', 'del Regno'...) and an agreement ending (_o: o/a for singulars, i/e for peoples), so that no sentence needs to guess a gender; English uses the plain form for all of them and never _o. Rumours are [text, needs], where needs is null or the kind of site the rumour is about (city, fortress, dungeon, river_site).",
+ "names": {
+  "start": [
+   "Val",
+   "Ard",
+   "Mor",
+   "Ald",
+   "Mael",
+   "Fen",
+   "Kas",
+   "Lor",
+   "Mir",
+   "Nor",
+   "Sar",
+   "Tal",
+   "Bran",
+   "Cael",
+   "Dor",
+   "Orn",
+   "Fal",
+   "Kel",
+   "Nar",
+   "Ren",
+   "Sel",
+   "Vor",
+   "Ael",
+   "Bel",
+   "Aur",
+   "Ber",
+   "Dun",
+   "Sil",
+   "Var",
+   "Gor",
+   "Brin",
+   "Gil",
+   "Eir",
+   "Nim",
+   "Tav",
+   "Ves",
+   "Zan",
+   "Lir",
+   "Fael",
+   "Ser",
+   "Vael",
+   "Myr",
+   "Syl",
+   "Hald"
+  ],
+  "middle": [
+   "en",
+   "or",
+   "il",
+   "an",
+   "ar",
+   "el",
+   "ul",
+   "al",
+   "os",
+   "in",
+   "am",
+   "ur",
+   "ol",
+   "un",
+   "em",
+   "as",
+   "ed",
+   "es",
+   "im",
+   "ad"
+  ],
+  "end_place": [
+   "dora",
+   "heim",
+   "mar",
+   "oria",
+   "enna",
+   "ost",
+   "ador",
+   "ion",
+   "ara",
+   "ura",
+   "ille",
+   "aven",
+   "esse",
+   "und",
+   "arra",
+   "elle",
+   "andor",
+   "astra",
+   "orin",
+   "edda",
+   "eira",
+   "imbra",
+   "ast",
+   "ane",
+   "ombra",
+   "amar",
+   "ival",
+   "oss",
+   "erre",
+   "avel",
+   "ennor",
+   "ulda",
+   "essa",
+   "ambre"
+  ],
+  "end_m": [
+   "ric",
+   "an",
+   "ard",
+   "as",
+   "ion",
+   "ulf",
+   "ek",
+   "im",
+   "orn",
+   "el",
+   "ast",
+   "oc",
+   "ain",
+   "ert",
+   "aric",
+   "oran",
+   "emar",
+   "ilo",
+   "ovan",
+   "ador",
+   "eon",
+   "erik",
+   "ardo",
+   "ivar",
+   "ulan",
+   "ovar"
+  ],
+  "end_f": [
+   "wen",
+   "ys",
+   "is",
+   "enna",
+   "issa",
+   "elle",
+   "yn",
+   "wyn",
+   "ara",
+   "ella",
+   "eda",
+   "inde",
+   "ane",
+   "ilde",
+   "isse",
+   "eya",
+   "ilda",
+   "ielle",
+   "ina",
+   "ennis",
+   "aya",
+   "elin",
+   "ewen",
+   "iane",
+   "essa"
+  ]
+ },
+ "it": {
+  "land": "questa landa",
+  "numbers": [
+   "zero",
+   "uno",
+   "due",
+   "tre",
+   "quattro",
+   "cinque",
+   "sei",
+   "sette",
+   "otto",
+   "nove",
+   "dieci",
+   "undici",
+   "dodici"
+  ],
+  "site_unnamed": {
+   "city": "Città senza nome",
+   "fortress": "Fortezza senza nome",
+   "dungeon": "Dungeon senza nome"
+  },
+  "realm_kinds": [
+   {
+    "il": "il Regno",
+    "di": "del Regno",
+    "a": "al Regno",
+    "da": "dal Regno",
+    "in": "nel Regno",
+    "o": "o"
+   },
+   {
+    "il": "l'Impero",
+    "di": "dell'Impero",
+    "a": "all'Impero",
+    "da": "dall'Impero",
+    "in": "nell'Impero",
+    "o": "o"
+   },
+   {
+    "il": "la Marca",
+    "di": "della Marca",
+    "a": "alla Marca",
+    "da": "dalla Marca",
+    "in": "nella Marca",
+    "o": "a"
+   },
+   {
+    "il": "il Principato",
+    "di": "del Principato",
+    "a": "al Principato",
+    "da": "dal Principato",
+    "in": "nel Principato",
+    "o": "o"
+   },
+   {
+    "il": "la Lega",
+    "di": "della Lega",
+    "a": "alla Lega",
+    "da": "dalla Lega",
+    "in": "nella Lega",
+    "o": "a"
+   },
+   {
+    "il": "il Dominio",
+    "di": "del Dominio",
+    "a": "al Dominio",
+    "da": "dal Dominio",
+    "in": "nel Dominio",
+    "o": "o"
+   },
+   {
+    "il": "la Signoria",
+    "di": "della Signoria",
+    "a": "alla Signoria",
+    "da": "dalla Signoria",
+    "in": "nella Signoria",
+    "o": "a"
+   },
+   {
+    "il": "il Granducato",
+    "di": "del Granducato",
+    "a": "al Granducato",
+    "da": "dal Granducato",
+    "in": "nel Granducato",
+    "o": "o"
+   },
+   {
+    "il": "la Repubblica",
+    "di": "della Repubblica",
+    "a": "alla Repubblica",
+    "da": "dalla Repubblica",
+    "in": "nella Repubblica",
+    "o": "a"
+   },
+   {
+    "il": "la Teocrazia",
+    "di": "della Teocrazia",
+    "a": "alla Teocrazia",
+    "da": "dalla Teocrazia",
+    "in": "nella Teocrazia",
+    "o": "a"
+   },
+   {
+    "il": "la Contea",
+    "di": "della Contea",
+    "a": "alla Contea",
+    "da": "dalla Contea",
+    "in": "nella Contea",
+    "o": "a"
+   },
+   {
+    "il": "il Ducato",
+    "di": "del Ducato",
+    "a": "al Ducato",
+    "da": "dal Ducato",
+    "in": "nel Ducato",
+    "o": "o"
+   },
+   {
+    "il": "il Reame",
+    "di": "del Reame",
+    "a": "al Reame",
+    "da": "dal Reame",
+    "in": "nel Reame",
+    "o": "o"
+   },
+   {
+    "il": "la Baronia",
+    "di": "della Baronia",
+    "a": "alla Baronia",
+    "da": "dalla Baronia",
+    "in": "nella Baronia",
+    "o": "a"
+   },
+   {
+    "il": "il Margraviato",
+    "di": "del Margraviato",
+    "a": "al Margraviato",
+    "da": "dal Margraviato",
+    "in": "nel Margraviato",
+    "o": "o"
+   },
+   {
+    "il": "il Protettorato",
+    "di": "del Protettorato",
+    "a": "al Protettorato",
+    "da": "dal Protettorato",
+    "in": "nel Protettorato",
+    "o": "o"
+   }
+  ],
+  "realm_named": [
+   {
+    "il": "il Regno dei Re Pastori",
+    "di": "del Regno dei Re Pastori",
+    "a": "al Regno dei Re Pastori",
+    "da": "dal Regno dei Re Pastori",
+    "in": "nel Regno dei Re Pastori",
+    "o": "o"
+   },
+   {
+    "il": "l'Impero Ascendente",
+    "di": "dell'Impero Ascendente",
+    "a": "all'Impero Ascendente",
+    "da": "dall'Impero Ascendente",
+    "in": "nell'Impero Ascendente",
+    "o": "o"
+   },
+   {
+    "il": "la Lega delle Sette Torri",
+    "di": "della Lega delle Sette Torri",
+    "a": "alla Lega delle Sette Torri",
+    "da": "dalla Lega delle Sette Torri",
+    "in": "nella Lega delle Sette Torri",
+    "o": "a"
+   },
+   {
+    "il": "il Principato di Nerovalle",
+    "di": "del Principato di Nerovalle",
+    "a": "al Principato di Nerovalle",
+    "da": "dal Principato di Nerovalle",
+    "in": "nel Principato di Nerovalle",
+    "o": "o"
+   },
+   {
+    "il": "la Teocrazia del Sole Spento",
+    "di": "della Teocrazia del Sole Spento",
+    "a": "alla Teocrazia del Sole Spento",
+    "da": "dalla Teocrazia del Sole Spento",
+    "in": "nella Teocrazia del Sole Spento",
+    "o": "a"
+   },
+   {
+    "il": "il Dominio degli Stregoni",
+    "di": "del Dominio degli Stregoni",
+    "a": "al Dominio degli Stregoni",
+    "da": "dal Dominio degli Stregoni",
+    "in": "nel Dominio degli Stregoni",
+    "o": "o"
+   },
+   {
+    "il": "l'Alleanza delle Corone di Ferro",
+    "di": "dell'Alleanza delle Corone di Ferro",
+    "a": "all'Alleanza delle Corone di Ferro",
+    "da": "dall'Alleanza delle Corone di Ferro",
+    "in": "nell'Alleanza delle Corone di Ferro",
+    "o": "a"
+   },
+   {
+    "il": "il Reame Sommerso",
+    "di": "del Reame Sommerso",
+    "a": "al Reame Sommerso",
+    "da": "dal Reame Sommerso",
+    "in": "nel Reame Sommerso",
+    "o": "o"
+   },
+   {
+    "il": "la Signoria dei Mercanti di Sale",
+    "di": "della Signoria dei Mercanti di Sale",
+    "a": "alla Signoria dei Mercanti di Sale",
+    "da": "dalla Signoria dei Mercanti di Sale",
+    "in": "nella Signoria dei Mercanti di Sale",
+    "o": "a"
+   },
+   {
+    "il": "l'Impero del Trono di Corno",
+    "di": "dell'Impero del Trono di Corno",
+    "a": "all'Impero del Trono di Corno",
+    "da": "dall'Impero del Trono di Corno",
+    "in": "nell'Impero del Trono di Corno",
+    "o": "o"
+   },
+   {
+    "il": "il Regno delle Due Lune",
+    "di": "del Regno delle Due Lune",
+    "a": "al Regno delle Due Lune",
+    "da": "dal Regno delle Due Lune",
+    "in": "nel Regno delle Due Lune",
+    "o": "o"
+   },
+   {
+    "il": "la Confederazione dei Cento Guadi",
+    "di": "della Confederazione dei Cento Guadi",
+    "a": "alla Confederazione dei Cento Guadi",
+    "da": "dalla Confederazione dei Cento Guadi",
+    "in": "nella Confederazione dei Cento Guadi",
+    "o": "a"
+   },
+   {
+    "il": "il Principato delle Torri Bianche",
+    "di": "del Principato delle Torri Bianche",
+    "a": "al Principato delle Torri Bianche",
+    "da": "dal Principato delle Torri Bianche",
+    "in": "nel Principato delle Torri Bianche",
+    "o": "o"
+   },
+   {
+    "il": "la Marca dell'Ultimo Inverno",
+    "di": "della Marca dell'Ultimo Inverno",
+    "a": "alla Marca dell'Ultimo Inverno",
+    "da": "dalla Marca dell'Ultimo Inverno",
+    "in": "nella Marca dell'Ultimo Inverno",
+    "o": "a"
+   },
+   {
+    "il": "il Patto dei Fiumi Gemelli",
+    "di": "del Patto dei Fiumi Gemelli",
+    "a": "al Patto dei Fiumi Gemelli",
+    "da": "dal Patto dei Fiumi Gemelli",
+    "in": "nel Patto dei Fiumi Gemelli",
+    "o": "o"
+   }
+  ],
+  "titles": [
+   {
+    "g": "m",
+    "il": "il re",
+    "di": "del re",
+    "a": "al re",
+    "da": "dal re"
+   },
+   {
+    "g": "f",
+    "il": "la regina",
+    "di": "della regina",
+    "a": "alla regina",
+    "da": "dalla regina"
+   },
+   {
+    "g": "m",
+    "il": "l'imperatore",
+    "di": "dell'imperatore",
+    "a": "all'imperatore",
+    "da": "dall'imperatore"
+   },
+   {
+    "g": "f",
+    "il": "l'imperatrice",
+    "di": "dell'imperatrice",
+    "a": "all'imperatrice",
+    "da": "dall'imperatrice"
+   },
+   {
+    "g": "m",
+    "il": "il principe",
+    "di": "del principe",
+    "a": "al principe",
+    "da": "dal principe"
+   },
+   {
+    "g": "f",
+    "il": "la principessa",
+    "di": "della principessa",
+    "a": "alla principessa",
+    "da": "dalla principessa"
+   },
+   {
+    "g": "m",
+    "il": "il duca",
+    "di": "del duca",
+    "a": "al duca",
+    "da": "dal duca"
+   },
+   {
+    "g": "f",
+    "il": "la duchessa",
+    "di": "della duchessa",
+    "a": "alla duchessa",
+    "da": "dalla duchessa"
+   },
+   {
+    "g": "m",
+    "il": "il conte",
+    "di": "del conte",
+    "a": "al conte",
+    "da": "dal conte"
+   },
+   {
+    "g": "f",
+    "il": "la contessa",
+    "di": "della contessa",
+    "a": "alla contessa",
+    "da": "dalla contessa"
+   },
+   {
+    "g": "m",
+    "il": "l'arcimago",
+    "di": "dell'arcimago",
+    "a": "all'arcimago",
+    "da": "dall'arcimago"
+   },
+   {
+    "g": "f",
+    "il": "l'arcimaga",
+    "di": "dell'arcimaga",
+    "a": "all'arcimaga",
+    "da": "dall'arcimaga"
+   },
+   {
+    "g": "m",
+    "il": "il patriarca",
+    "di": "del patriarca",
+    "a": "al patriarca",
+    "da": "dal patriarca"
+   },
+   {
+    "g": "f",
+    "il": "la matriarca",
+    "di": "della matriarca",
+    "a": "alla matriarca",
+    "da": "dalla matriarca"
+   },
+   {
+    "g": "m",
+    "il": "il gran sacerdote",
+    "di": "del gran sacerdote",
+    "a": "al gran sacerdote",
+    "da": "dal gran sacerdote"
+   },
+   {
+    "g": "f",
+    "il": "la gran sacerdotessa",
+    "di": "della gran sacerdotessa",
+    "a": "alla gran sacerdotessa",
+    "da": "dalla gran sacerdotessa"
+   },
+   {
+    "g": "m",
+    "il": "il re stregone",
+    "di": "del re stregone",
+    "a": "al re stregone",
+    "da": "dal re stregone"
+   },
+   {
+    "g": "f",
+    "il": "la regina strega",
+    "di": "della regina strega",
+    "a": "alla regina strega",
+    "da": "dalla regina strega"
+   },
+   {
+    "g": "m",
+    "il": "il margravio",
+    "di": "del margravio",
+    "a": "al margravio",
+    "da": "dal margravio"
+   },
+   {
+    "g": "f",
+    "il": "la margravia",
+    "di": "della margravia",
+    "a": "alla margravia",
+    "da": "dalla margravia"
+   }
+  ],
+  "epithets": [
+   {
+    "m": "il Giusto",
+    "f": "la Giusta"
+   },
+   {
+    "m": "il Saggio",
+    "f": "la Saggia"
+   },
+   {
+    "m": "il Crudele",
+    "f": "la Crudele"
+   },
+   {
+    "m": "il Grande",
+    "f": "la Grande"
+   },
+   {
+    "m": "il Muto",
+    "f": "la Muta"
+   },
+   {
+    "m": "il Cieco",
+    "f": "la Cieca"
+   },
+   {
+    "m": "il Bello",
+    "f": "la Bella"
+   },
+   {
+    "m": "il Temerario",
+    "f": "la Temeraria"
+   },
+   {
+    "m": "il Pallido",
+    "f": "la Pallida"
+   },
+   {
+    "m": "il Rosso",
+    "f": "la Rossa"
+   },
+   {
+    "m": "il Vecchio",
+    "f": "la Vecchia"
+   },
+   {
+    "m": "il Giovane",
+    "f": "la Giovane"
+   },
+   {
+    "m": "il Costruttore",
+    "f": "la Costruttrice"
+   },
+   {
+    "m": "il Conquistatore",
+    "f": "la Conquistatrice"
+   },
+   {
+    "m": "il Pacifico",
+    "f": "la Pacifica"
+   },
+   {
+    "m": "il Senza Paura",
+    "f": "la Senza Paura"
+   },
+   {
+    "m": "l'Insonne",
+    "f": "l'Insonne"
+   },
+   {
+    "m": "il Dorato",
+    "f": "la Dorata"
+   },
+   {
+    "m": "il Mite",
+    "f": "la Mite"
+   },
+   {
+    "m": "il Severo",
+    "f": "la Severa"
+   },
+   {
+    "m": "il Legislatore",
+    "f": "la Legislatrice"
+   },
+   {
+    "m": "il Navigatore",
+    "f": "la Navigatrice"
+   },
+   {
+    "m": "lo Zoppo",
+    "f": "la Zoppa"
+   },
+   {
+    "m": "il Prudente",
+    "f": "la Prudente"
+   },
+   {
+    "m": "il Fortunato",
+    "f": "la Fortunata"
+   },
+   {
+    "m": "il Sognatore",
+    "f": "la Sognatrice"
+   },
+   {
+    "m": "l'Inflessibile",
+    "f": "l'Inflessibile"
+   },
+   {
+    "m": "il Silenzioso",
+    "f": "la Silenziosa"
+   },
+   {
+    "m": "dalla Mano d'Argento",
+    "f": "dalla Mano d'Argento"
+   },
+   {
+    "m": "dagli Occhi Grigi",
+    "f": "dagli Occhi Grigi"
+   },
+   {
+    "m": "l'Esule",
+    "f": "l'Esule"
+   },
+   {
+    "m": "il Malinconico",
+    "f": "la Malinconica"
+   }
+  ],
+  "peoples": [
+   {
+    "il": "i pastori delle colline",
+    "di": "dei pastori delle colline",
+    "a": "ai pastori delle colline",
+    "da": "dai pastori delle colline",
+    "o": "i"
+   },
+   {
+    "il": "le streghe del fiume",
+    "di": "delle streghe del fiume",
+    "a": "alle streghe del fiume",
+    "da": "dalle streghe del fiume",
+    "o": "e"
+   },
+   {
+    "il": "i coloni venuti dal mare",
+    "di": "dei coloni venuti dal mare",
+    "a": "ai coloni venuti dal mare",
+    "da": "dai coloni venuti dal mare",
+    "o": "i"
+   },
+   {
+    "il": "le tribù delle paludi",
+    "di": "delle tribù delle paludi",
+    "a": "alle tribù delle paludi",
+    "da": "dalle tribù delle paludi",
+    "o": "e"
+   },
+   {
+    "il": "i nani delle miniere profonde",
+    "di": "dei nani delle miniere profonde",
+    "a": "ai nani delle miniere profonde",
+    "da": "dai nani delle miniere profonde",
+    "o": "i"
+   },
+   {
+    "il": "gli elfi del bosco antico",
+    "di": "degli elfi del bosco antico",
+    "a": "agli elfi del bosco antico",
+    "da": "dagli elfi del bosco antico",
+    "o": "i"
+   },
+   {
+    "il": "i mercanti del sale",
+    "di": "dei mercanti del sale",
+    "a": "ai mercanti del sale",
+    "da": "dai mercanti del sale",
+    "o": "i"
+   },
+   {
+    "il": "gli esuli d'oltremare",
+    "di": "degli esuli d'oltremare",
+    "a": "agli esuli d'oltremare",
+    "da": "dagli esuli d'oltremare",
+    "o": "i"
+   },
+   {
+    "il": "i cacciatori dei boschi del nord",
+    "di": "dei cacciatori dei boschi del nord",
+    "a": "ai cacciatori dei boschi del nord",
+    "da": "dai cacciatori dei boschi del nord",
+    "o": "i"
+   },
+   {
+    "il": "i predoni delle steppe",
+    "di": "dei predoni delle steppe",
+    "a": "ai predoni delle steppe",
+    "da": "dai predoni delle steppe",
+    "o": "i"
+   },
+   {
+    "il": "i fabbri del ferro nero",
+    "di": "dei fabbri del ferro nero",
+    "a": "ai fabbri del ferro nero",
+    "da": "dai fabbri del ferro nero",
+    "o": "i"
+   },
+   {
+    "il": "le sacerdotesse della luna",
+    "di": "delle sacerdotesse della luna",
+    "a": "alle sacerdotesse della luna",
+    "da": "dalle sacerdotesse della luna",
+    "o": "e"
+   },
+   {
+    "il": "i pescatori della costa",
+    "di": "dei pescatori della costa",
+    "a": "ai pescatori della costa",
+    "da": "dai pescatori della costa",
+    "o": "i"
+   },
+   {
+    "il": "i nomadi delle sabbie",
+    "di": "dei nomadi delle sabbie",
+    "a": "ai nomadi delle sabbie",
+    "da": "dai nomadi delle sabbie",
+    "o": "i"
+   },
+   {
+    "il": "gli schiavi fuggiti dalle cave",
+    "di": "degli schiavi fuggiti dalle cave",
+    "a": "agli schiavi fuggiti dalle cave",
+    "da": "dagli schiavi fuggiti dalle cave",
+    "o": "i"
+   },
+   {
+    "il": "le guerriere dei monti",
+    "di": "delle guerriere dei monti",
+    "a": "alle guerriere dei monti",
+    "da": "dalle guerriere dei monti",
+    "o": "e"
+   },
+   {
+    "il": "i pellegrini senza nome",
+    "di": "dei pellegrini senza nome",
+    "a": "ai pellegrini senza nome",
+    "da": "dai pellegrini senza nome",
+    "o": "i"
+   },
+   {
+    "il": "i cavalieri senza terra",
+    "di": "dei cavalieri senza terra",
+    "a": "ai cavalieri senza terra",
+    "da": "dai cavalieri senza terra",
+    "o": "i"
+   }
+  ],
+  "faction_kinds": [
+   {
+    "il": "la Compagnia",
+    "di": "della Compagnia",
+    "a": "alla Compagnia",
+    "da": "dalla Compagnia",
+    "o": "a"
+   },
+   {
+    "il": "l'Ordine",
+    "di": "dell'Ordine",
+    "a": "all'Ordine",
+    "da": "dall'Ordine",
+    "o": "o"
+   },
+   {
+    "il": "la Gilda",
+    "di": "della Gilda",
+    "a": "alla Gilda",
+    "da": "dalla Gilda",
+    "o": "a"
+   },
+   {
+    "il": "la Confraternita",
+    "di": "della Confraternita",
+    "a": "alla Confraternita",
+    "da": "dalla Confraternita",
+    "o": "a"
+   },
+   {
+    "il": "il Circolo",
+    "di": "del Circolo",
+    "a": "al Circolo",
+    "da": "dal Circolo",
+    "o": "o"
+   },
+   {
+    "il": "la Lega",
+    "di": "della Lega",
+    "a": "alla Lega",
+    "da": "dalla Lega",
+    "o": "a"
+   },
+   {
+    "il": "il Clan",
+    "di": "del Clan",
+    "a": "al Clan",
+    "da": "dal Clan",
+    "o": "o"
+   },
+   {
+    "il": "la Casata",
+    "di": "della Casata",
+    "a": "alla Casata",
+    "da": "dalla Casata",
+    "o": "a"
+   },
+   {
+    "il": "la Setta",
+    "di": "della Setta",
+    "a": "alla Setta",
+    "da": "dalla Setta",
+    "o": "a"
+   },
+   {
+    "il": "il Concilio",
+    "di": "del Concilio",
+    "a": "al Concilio",
+    "da": "dal Concilio",
+    "o": "o"
+   },
+   {
+    "il": "la Fratellanza",
+    "di": "della Fratellanza",
+    "a": "alla Fratellanza",
+    "da": "dalla Fratellanza",
+    "o": "a"
+   },
+   {
+    "il": "la Loggia",
+    "di": "della Loggia",
+    "a": "alla Loggia",
+    "da": "dalla Loggia",
+    "o": "a"
+   },
+   {
+    "il": "il Collegio",
+    "di": "del Collegio",
+    "a": "al Collegio",
+    "da": "dal Collegio",
+    "o": "o"
+   },
+   {
+    "il": "la Banda",
+    "di": "della Banda",
+    "a": "alla Banda",
+    "da": "dalla Banda",
+    "o": "a"
+   },
+   {
+    "il": "la Società",
+    "di": "della Società",
+    "a": "alla Società",
+    "da": "dalla Società",
+    "o": "a"
+   },
+   {
+    "il": "la Congrega",
+    "di": "della Congrega",
+    "a": "alla Congrega",
+    "da": "dalla Congrega",
+    "o": "a"
+   },
+   {
+    "il": "l'Accademia",
+    "di": "dell'Accademia",
+    "a": "all'Accademia",
+    "da": "dall'Accademia",
+    "o": "a"
+   },
+   {
+    "il": "il Consorzio",
+    "di": "del Consorzio",
+    "a": "al Consorzio",
+    "da": "dal Consorzio",
+    "o": "o"
+   },
+   {
+    "il": "il Patto",
+    "di": "del Patto",
+    "a": "al Patto",
+    "da": "dal Patto",
+    "o": "o"
+   }
+  ],
+  "faction_emblems": [
+   "del Corvo",
+   "della Lanterna Spenta",
+   "dell'Ultima Torre",
+   "della Rosa Nera",
+   "del Martello",
+   "dell'Occhio Aperto",
+   "della Mano Grigia",
+   "del Serpente d'Oro",
+   "della Chiave d'Osso",
+   "del Lupo Bianco",
+   "della Spada Spezzata",
+   "del Sole Velato",
+   "della Luna Rossa",
+   "del Calice Vuoto",
+   "dell'Alba Grigia",
+   "del Cervo Ferito",
+   "della Bilancia",
+   "del Nodo Stretto",
+   "dell'Ancora",
+   "della Falce",
+   "del Fuoco Freddo",
+   "della Moneta Tagliata",
+   "del Silenzio",
+   "dell'Ultimo Giuramento",
+   "della Campana Muta",
+   "delle Tre Lame",
+   "della Piuma di Ferro",
+   "del Ponte Bruciato",
+   "dei Cento Occhi",
+   "della Stella Cadente"
+  ],
+  "years": [
+   "trecento anni fa",
+   "mille inverni fa",
+   "al tempo dei nonni dei nostri nonni",
+   "cinque secoli fa",
+   "quando il mondo era più giovane",
+   "settecento anni fa",
+   "molte generazioni fa",
+   "otto secoli or sono",
+   "quando le montagne non avevano ancora un nome",
+   "quattro secoli fa",
+   "nove secoli fa",
+   "quando la luna era ancora giovane",
+   "millecinquecento anni fa"
+  ],
+  "open_chronicle": [
+   "{years}, {people_il} giunsero in {land} con poco più dei loro carri, delle loro greggi e di una manciata di canti antichi.",
+   "Questa è la cronaca di {land}, così come la tramandano i pochi che sanno ancora leggere le pietre incise lungo le strade.",
+   "Le cronache di {land} cominciano {years}, quando la terra non aveva ancora padroni e i lupi erano più numerosi degli uomini.",
+   "Nessuno sa con certezza chi abitasse {land} per primo, ma i cronisti concordano su un fatto: {years} vi giunsero {people_il}.",
+   "Chi vuole capire i guai di oggi deve tornare indietro di molte generazioni, a quando {people_il} piantarono le prime tende in {land}.",
+   "Le poche pergamene conservate nei monasteri di {land} sono rosicchiate dai topi, ma raccontano tutte la stessa storia.",
+   "{years}, {land} era soltanto un nome sulle mappe dei mercanti, una distesa selvaggia che nessun sovrano si era mai preso la briga di reclamare.",
+   "La storia di {land} è lunga e piena di sangue versato, di giuramenti traditi e di corone perdute nel fango.",
+   "Il primo fuoco acceso in {land} da mani umane bruciò {years}, e furono {people_il} ad accenderlo su una collina battuta dal vento.",
+   "Chi tiene il conto degli anni comincia sempre dallo stesso giorno: quello in cui {people_il} attraversarono il confine di {land}."
+  ],
+  "open_present": [
+   "Oggi {land} è una terra senza padroni, fatta di villaggi fortificati, strade spezzate e rovine che nessuno osa più abitare.",
+   "Chi attraversa oggi {land} vede campi abbandonati, ponti crollati e torri vuote, e si chiede chi le abbia costruite.",
+   "In {land} non regna più nessun re: comandano i capitani, i mercanti e chiunque abbia abbastanza spade da farsi obbedire.",
+   "Oggi {land} è una terra povera e sospettosa, dove i viandanti dormono con la mano sul coltello e la porta sbarrata.",
+   "I contadini di {land} arano oggi intorno a colonne spezzate e statue senza volto, senza più chiedersi chi rappresentassero.",
+   "A guardarla oggi, {land} sembra una terra che non ha mai conosciuto la gloria: fango, rovi e villaggi stretti dietro le palizzate.",
+   "Le strade di {land} sono oggi insicure, i pozzi spesso avvelenati, e nelle locande si parla soltanto a bassa voce.",
+   "{land} è ormai una frontiera dimenticata, buona solo per banditi, cercatori di tesori e chi ha qualcosa da nascondere.",
+   "Su {land} si allunga oggi l'ombra di rovine immense, troppo grandi per i villaggi di fango che sono sorti ai loro piedi.",
+   "Chi vive oggi in {land} parla del passato come di un sogno: un'età di re, di strade sicure e di granai pieni."
+  ],
+  "back_then": [
+   "Ma non è sempre stato così: {years}, {land} era il cuore {realm_di}, e le sue strade portavano lontano.",
+   "Eppure {years} qui prosperava {realm_il}, e il nome di {land} si pronunciava con rispetto anche oltre i monti.",
+   "Non fu sempre così, e i più vecchi ricordano ancora i racconti che i loro nonni avevano udito dai propri nonni.",
+   "Per capire come si sia arrivati a questo bisogna guardare indietro, molto indietro, a ciò che accadde {years}.",
+   "Le cose erano molto diverse {years}: allora {land} aveva un solo signore, una sola legge e granai sempre pieni.",
+   "Ma sotto il fango e i rovi dorme il ricordo di un'età migliore, che i cantastorie non hanno mai smesso di cantare.",
+   "Eppure un tempo {land} conobbe la pace, la ricchezza e perfino una certa grandezza, prima che tutto andasse in pezzi.",
+   "Le rovine, però, raccontano un'altra storia, e chi sa ascoltarle vi sente ancora l'eco di trombe e di cortei."
+  ],
+  "open_legend": [
+   "Gli anziani di {land} raccontano che tutto cominciò {years}, con un fuoco acceso sulla cima di una collina battuta dal vento.",
+   "Si narra che, {years}, {land} fosse coperta da un unico, immenso bosco, e che nessun uomo osasse entrarvi.",
+   "Nelle locande, quando il fuoco si abbassa, i cantastorie cominciano sempre allo stesso modo: «C'era una volta, {years}, una terra senza padroni...»",
+   "Le nonne di {land} cantano ai bambini una filastrocca che, a sentirla bene, è la storia vera di come andarono le cose.",
+   "Chi chiede ai pastori di {land} perché la terra sia così piena di rovine si sente rispondere con una storia lunga e strana.",
+   "Esiste una leggenda che ogni bambino di {land} conosce a memoria, anche se nessun adulto ammette di crederci.",
+   "I bardi itineranti giurano che quanto segue è accaduto davvero, e chiedono una moneta in più per raccontare il finale.",
+   "Si dice che le pietre di {land} ricordino tutto, e che nelle notti senza vento si possa sentirle raccontare la loro storia.",
+   "Sui muri di una cappella in rovina qualcuno dipinse, {years}, la storia di {land}: ecco ciò che vi si legge ancora.",
+   "Le streghe dei boschi raccontano la storia di {land} in cambio di un ricciolo di capelli, e la raccontano sempre allo stesso modo."
+  ],
+  "origin": [
+   "{people_il} giunsero in {land}, scacciarono i giganti dalle valli e fondarono {realm_il} sulle ceneri dei loro primi accampamenti.",
+   "Furono {people_il} a fondare {realm_il}, dopo aver giurato su una pietra nera che nessuno straniero avrebbe mai più dato loro ordini.",
+   "{realm_il} nacque da un patto fra {people_il} e i signori delle montagne, sigillato con il sangue e con il sale.",
+   "{realm_il} fu fondat{realm_o} da un pugno di esuli che avevano perso tutto, e che giurarono di non perdere mai più nulla.",
+   "Fuggit{people_o} da una guerra lontana, {people_il} trovarono in {land} una terra fertile e quasi vuota, e vi fondarono {realm_il}.",
+   "Per generazioni {people_il} vissero in clan rivali, finché un giuramento comune non diede vita {realm_a}.",
+   "La prima pietra {realm_di} fu posata, {years}, sulla riva di un lago oggi scomparso, dove {people_il} avevano visto cadere una stella.",
+   "{people_il} non volevano un re, ma i lupi, gli inverni e i predoni non lasciarono loro scelta, e così nacque {realm_il}.",
+   "{realm_il} sorse attorno a una sorgente calda che non gelava mai, contesa per anni fra {people_il} e le bestie dei boschi.",
+   "Si dice che {people_il} abbiano comprato {land} da un drago in cambio di una promessa, e che da quella promessa sia nat{realm_o} {realm_il}.",
+   "Guidat{people_o} da una profetessa cieca, {people_il} vagarono per sette anni prima di fermarsi in {land} e fondare {realm_il}.",
+   "{realm_il} cominciò come una semplice palizzata di tronchi, eretta {people_da} per difendersi dalle incursioni dei predoni.",
+   "{years}, {people_il} strinsero un'alleanza con le genti delle valli vicine, e da quell'alleanza prese forma {realm_il}.",
+   "Le terre migliori di {land} furono divise fra le famiglie {people_di}, e il patto che regolava la spartizione divenne la legge {realm_di}.",
+   "Un oracolo predisse {people_a} che avrebbero regnato finché un certo pozzo avesse dato acqua, e attorno a quel pozzo sorse {realm_il}."
+  ],
+  "golden": [
+   "Sotto {ruler_il}, {realm_il} conobbe la sua età dell'oro: le strade erano sicure e i granai sempre pieni.",
+   "{ruler_il} fece lastricare le strade, scavare canali e costruire ponti di pietra, molti dei quali sono ancora in piedi.",
+   "Durante il regno {ruler_di}, nessun nemico osò varcare i confini, e i mercanti di terre lontane portarono spezie, sete e notizie.",
+   "{ruler_il} governò per quarant'anni con giustizia e pugno di ferro, e i cantastorie ricordano ancora le sentenze di quel regno, severe ma sempre giuste.",
+   "Fu {ruler_il} a costruire la grande biblioteca {realm_di}, dove si diceva fossero custoditi i nomi veri di tutte le cose.",
+   "{ruler_il} sconfisse i giganti delle montagne in tre battaglie, e con le loro ossa fece costruire un trono che nessun altro osò mai occupare.",
+   "Al tempo {ruler_di} si coniarono monete d'oro così pure che ancora oggi i cambiavalute le pesano con rispetto.",
+   "{ruler_il} strinse un patto con gli spiriti dei boschi, e per tutta la durata di quel regno nessun albero fu abbattuto senza il loro permesso.",
+   "La corte {ruler_di} fu la più splendida che {land} avesse mai visto: vi giungevano poeti, maghi e ambasciatori da ogni regno conosciuto.",
+   "{ruler_il} diede {realm_a} un codice di leggi inciso su dodici colonne di bronzo, e per secoli i giudici giurarono su quelle colonne.",
+   "Sotto la guida {ruler_di}, i cavalieri {realm_di} ricacciarono i predoni oltre i confini e liberarono le strade dai briganti.",
+   "{ruler_il} salì al trono ancora bambin{ruler_o}, eppure quel regno fu il più lungo e prospero che si ricordi.",
+   "Grazie {ruler_a}, ogni villaggio {realm_di} ebbe il suo pozzo, il suo mulino e una torre di guardia con un fuoco sempre acceso.",
+   "{ruler_il} fece innalzare sulle alture una catena di fari, e in una sola notte un messaggio poteva attraversare {realm_il} da un capo all'altro.",
+   "Non c'è vecchio in {land} che non conosca il nome {ruler_di}: si dice che in quegli anni perfino i lupi rispettassero i confini dei pascoli.",
+   "{ruler_il} viaggiò in incognito per tutte le province, ascoltando le lamentele dei contadini e punendo i nobili che li opprimevano.",
+   "Con l'aiuto di un mago di corte, {ruler_il} imbrigliò i fiumi di {land} e trasformò le paludi in campi di grano dorato."
+  ],
+  "fall": [
+   "{realm_il} cadde quando una pestilenza svuotò le sue città in una sola estate, e i vivi non bastarono a seppellire i morti.",
+   "{realm_il} cadde quando i suoi maghi aprirono una porta che nessuno seppe più richiudere, e da quella porta uscirono cose senza nome.",
+   "{realm_il} si spezzò in una guerra fra fratelli, e i feudi rivali si divorarono a vicenda finché non rimase nulla da conquistare.",
+   "La fine {realm_di} giunse quando i fiumi cambiarono corso e i raccolti marcirono nei campi per sette anni di fila.",
+   "{realm_il} cadde quando un drago reclamò per sé il tesoro della corona, e nessuno dei cavalieri partiti per riprenderlo fece mai ritorno.",
+   "{realm_il} cadde quando i morti smisero di restare nelle loro tombe e marciarono, in silenzio, contro le città dei vivi.",
+   "Alla morte {ruler_di} gli eredi si contesero il trono per trent'anni, e {realm_il} si sbriciolò in una dozzina di signorie in guerra.",
+   "{realm_il} fu travolt{realm_o} da un'orda venuta dal nord, che bruciò ogni biblioteca e ogni tempio che incontrò sul suo cammino.",
+   "Un inverno durato nove anni seppellì {realm_il} sotto la neve, e quando finalmente arrivò il disgelo non era rimasto quasi nessuno a vederlo.",
+   "{realm_il} cadde per mano di un consigliere di corte che avvelenò i sovrani e i loro eredi, e poi scomparve portando con sé il sigillo della corona.",
+   "I sacerdoti di {god} maledissero {realm_il} dall'alto delle loro torri, e da quel giorno nessun bambino nacque più entro i suoi confini.",
+   "{realm_il} si indebitò con i nani delle montagne per pagare i suoi eserciti, e quando non poté più saldare il debito i nani vennero a riscuoterlo di persona.",
+   "La terra tremò per tre giorni e tre notti, e quando si fermò la capitale {realm_di} era sprofondata in una voragine senza fondo.",
+   "{realm_il} si arrese senza combattere a un esercito di stregoni, che per un secolo governarono {land} con il terrore e con la magia.",
+   "Una rivolta di schiavi e di contadini affamati incendiò le città {realm_di}, e i nobili fuggirono oltre i monti con quanto potevano portare.",
+   "{ruler_il} cercò l'immortalità nei libri proibiti, e il prezzo di quella ricerca lo pagò {realm_il}, fino all'ultima anima.",
+   "Un giorno il sole sorse rosso e restò rosso per un anno intero: i raccolti seccarono, i pozzi si svuotarono e {realm_il} si spense con loro.",
+   "{realm_il} fu tradit{realm_o} dai suoi stessi alleati, che aprirono le porte della capitale al nemico in cambio di oro e di terre."
+  ],
+  "fall_after": [
+   "Le città furono abbandonate in fretta, e nelle case rimasero le tavole apparecchiate, le culle vuote e i forzieri chiusi a chiave.",
+   "I sopravvissuti si dispersero ai quattro venti, portando con sé solo i nomi dei loro antenati e qualche reliquia di famiglia.",
+   "Il tesoro della corona scomparve nella confusione, e da allora generazioni di cercatori lo inseguono di rovina in rovina.",
+   "In pochi anni i boschi si ripresero i campi, e le strade lastricate sparirono sotto l'erba, il muschio e le radici.",
+   "I nobili superstiti si rinchiusero nei loro castelli, e ciascuno di loro si proclamò erede legittimo {realm_di}.",
+   "Le biblioteche bruciarono, e con esse andarono perduti i nomi dei re, le mappe delle miniere e le parole per comandare ai draghi.",
+   "Per una generazione intera nessuno osò avvicinarsi alla capitale caduta, e chi lo fece tornò con i capelli bianchi e senza più parole.",
+   "Le ultime legioni {realm_di} rimasero senza paga e senza ordini, e divennero bande di predoni che saccheggiavano le stesse terre che avevano difeso.",
+   "Le campane di tutte le torri suonarono per un giorno e una notte, poi tacquero, e nessuno le ha più sentite suonare insieme.",
+   "Il sigillo {realm_di} fu spezzato in sette frammenti, affidati a sette famiglie che giurarono di non riunirli finché non fosse giunto il momento.",
+   "I maghi di corte sigillarono le loro torri dall'interno, e nessuno sa se dietro quelle porte ci sia ancora qualcuno vivo.",
+   "Chi poté fuggì verso il mare o oltre i monti; chi restò imparò presto a nascondersi nei boschi e a diffidare di chiunque.",
+   "Per anni i corvi furono gli unici padroni delle mura, e ancora oggi in {land} si dice «ricco come un corvo» di chi vive delle disgrazie altrui."
+  ],
+  "after": [
+   "Da allora {land} è terra di nessuno: chi ci vive obbedisce alla spada più vicina e paga tributo a chi la impugna.",
+   "Da allora {land} è una frontiera, dove i coloni arrivano a ondate e a ondate spariscono, senza lasciare traccia.",
+   "Da allora le genti di {land} diffidano dei forestieri, dei maghi e delle strade antiche, e non ne fanno mistero.",
+   "Da allora {land} è tornata selvaggia, e le mappe dei vecchi cartografi non servono più a nessuno.",
+   "Sono passati secoli di guerre minori, carestie e signorotti di passaggio, e nessuno è più riuscito a riunire {land} sotto una sola bandiera.",
+   "Nei secoli bui che seguirono, {land} fu contesa da baroni, briganti e stregoni, e ogni generazione vide un nuovo padrone.",
+   "Da allora in {land} si vive alla giornata, fra raccolti magri, inverni lunghi e rovine che è meglio non disturbare.",
+   "Seguirono anni oscuri, in cui le leggi furono dimenticate e la parola di un capobanda valeva più di qualunque giuramento.",
+   "Da allora i villaggi di {land} si sono chiusi in sé stessi, e ognuno ha le sue leggi, i suoi santuari e i suoi rancori.",
+   "Per generazioni {land} è stata terra di passaggio per eserciti stranieri, che l'hanno saccheggiata senza mai volerla tenere.",
+   "Da allora nessuno ha più osato chiamarsi re in {land}, e chi ci ha provato è finito appeso ai merli del proprio castello.",
+   "Il tempo ha cancellato quasi tutto: oggi in {land} restano solo nomi storpiati, rovine coperte d'edera e storie che cambiano a ogni racconto."
+  ],
+  "legend": [
+   "Si dice che {ruler_il} non sia mai mort{ruler_o}, ma dorma sotto una collina insieme ai suoi cavalieri, in attesa dell'ora del bisogno.",
+   "La corona {ruler_di} non fu mai ritrovata: secondo una profezia, chi la poserà sul proprio capo potrà comandare ai morti {realm_di}.",
+   "Prima che esistesse {realm_il}, in {land} si adorava {god}, un dio dalle mille voci che ancora oggi, a volte, risponde a chi lo chiama per nome.",
+   "Una profezia incisa sulle porte della capitale annuncia che {realm_il} risorgerà il giorno in cui un erede {ruler_di} berrà dal pozzo d'argento.",
+   "La spada {ruler_di}, che non si spezzava né arrugginiva, fu gettata in un lago dopo l'ultima battaglia; i pescatori giurano di vederla ancora brillare nelle notti senza luna.",
+   "Le rovine del tempio di {god} sono evitate da tutti: si racconta che il dio vi dorma ancora, e che sogni la fine del mondo.",
+   "{ruler_il} ebbe in dono da {god} un anello che permetteva di parlare con gli animali, e quell'anello non è mai stato ritrovato.",
+   "Si racconta che sotto la capitale {realm_di} esista una seconda città, identica alla prima ma rovesciata, dove tutto ciò che andò perduto è ancora conservato.",
+   "Le campane di {god} suoneranno tre volte prima della fine del mondo: due rintocchi si sono già sentiti, e nessuno sa quando verrà il terzo.",
+   "Il cuore {ruler_di} fu sepolto lontano dal corpo, in un luogo segreto, e si dice che continuerà a battere finché {land} sarà libera.",
+   "{ruler_il} non morì in battaglia né di vecchiaia, ma svanì una notte dalla torre più alta, lasciando solo un mantello e una lettera che nessuno ha mai decifrato.",
+   "I sacerdoti di {god} custodivano un libro che conteneva il giorno della morte di ogni abitante {realm_di}; quando i templi bruciarono, il libro sparì.",
+   "Si dice che {god} abbia maledetto {ruler_il} per aver costruito un palazzo più alto del suo tempio, e che la maledizione ricada ancora sui discendenti.",
+   "Ogni cento anni, nella notte più lunga dell'inverno, l'esercito {realm_di} marcia di nuovo sulle vecchie strade, e chi lo incontra deve cedergli il passo.",
+   "Gli anziani giurano che {ruler_il} nascose il tesoro della corona in tre luoghi diversi, e che la mappa è tatuata sulla schiena di un discendente ignaro.",
+   "Una profezia di {god}, ripetuta dalle streghe di ogni villaggio, dice che {land} avrà di nuovo un sovrano quando la torre spezzata tornerà intera.",
+   "Lo specchio {ruler_di} mostrava a chi vi guardava il proprio vero nemico; fu rubato la notte stessa della sepoltura, e da allora passa di mano in mano."
+  ],
+  "cities_intro": [
+   "Oggi le città sono poche e lontane fra loro, e ognuna guarda alle altre con un misto di bisogno e di sospetto.",
+   "La vita si raccoglie ormai in poche città murate, dove si commercia, si complotta e si aspetta il prossimo disastro.",
+   "Il potere è diviso fra città che si guardano con sospetto, e ciascuna ha i suoi signori, le sue leggi e i suoi prezzi.",
+   "Le poche città rimaste sono isole di luce in un mare di buio, e chi viaggia fra l'una e l'altra lo fa a proprio rischio.",
+   "Dove un tempo sorgevano grandi capitali, oggi resistono città più piccole e più dure, costruite spesso con le pietre delle antiche.",
+   "Le città di oggi sono rifugi più che regni: vi si entra pagando un pedaggio e se ne esce, a volte, pagandone un altro.",
+   "Chi cerca un tetto, un mercato o un giudice deve trovarlo dentro le mura di una delle poche città sopravvissute."
+  ],
+  "no_city": [
+   "Nessuna città è sopravvissuta: chi attraversa {land} dorme all'aperto o fra le rovine, e tiene un occhio aperto fino all'alba.",
+   "In {land} non c'è più una sola città degna di questo nome: restano solo fattorie isolate, accampamenti e capanne di pastori.",
+   "Le città di {land} sono tutte in rovina, e i pochi abitanti vivono in villaggi di fango che cambiano posto ogni pochi anni.",
+   "Chi cerca una città in {land} trova solo mura annerite e piazze invase dai rovi, dove di notte ardono fuochi che nessuno ha acceso.",
+   "In {land} non ci sono mercati né locande: per comprare sale, ferro o notizie bisogna aspettare le carovane, che passano sempre più di rado."
+  ],
+  "city": [
+   "{name} ({hex}) obbedisce a un consiglio di mercanti più interessati all'oro che alla giustizia, e ogni sentenza ha il suo prezzo.",
+   "{name} ({hex}) nacque dai sopravvissuti {realm_di}, e ne conserva con orgoglio gli stendardi sbiaditi sopra la porta principale.",
+   "{name} ({hex}) paga ogni anno un tributo ai predoni pur di restare in pace, e i cittadini cominciano a chiedersi dove finisca davvero quel denaro.",
+   "{name} ({hex}) è nelle mani di una vecchia regina che non esce dal suo palazzo da vent'anni, e c'è chi dubita che sia ancora viva.",
+   "{name} ({hex}) accoglie chiunque porti notizie dal mondo esterno, e le paga bene, purché siano vere.",
+   "{name} ({hex}) è il teatro della faida fra due famiglie nobili, che si fanno la guerra per le vie a colpi di pugnale e di veleno.",
+   "{name} ({hex}) vive all'ombra di un tempio potente, i cui sacerdoti contano più del sindaco e delle sue guardie.",
+   "{name} ({hex}) è una città di minatori e fabbri, rude e ospitale, dove ogni disputa si risolve a braccio di ferro.",
+   "{name} ({hex}) ha per signore un mago che nessuno ha mai visto in volto, e le cui leggi cambiano a ogni luna nuova.",
+   "{name} ({hex}) ospita la più grande fiera di {land}, e una volta l'anno vi si vende di tutto, perfino cose che non dovrebbero esistere.",
+   "{name} ({hex}) chiude le porte al tramonto e non le riapre per nessuno, nemmeno per chi bussa gridando il nome di un parente.",
+   "{name} ({hex}) sorge sulle rovine di un'antica capitale {realm_di}, e le sue cantine si aprono su gallerie che nessuno ha mai esplorato fino in fondo.",
+   "{name} ({hex}) è in mano a una gilda di ladri così potente da riscuotere le tasse al posto del signore, che finge di non accorgersene.",
+   "{name} ({hex}) vive nel terrore di una bestia che ogni inverno scende dai monti, e offre una ricompensa enorme a chi la ucciderà.",
+   "{name} ({hex}) è una città di esuli e di fuggiaschi, dove nessuno fa domande sul passato e tutti mentono sul proprio nome.",
+   "{name} ({hex}) ha appena eletto un nuovo borgomastro, e metà della città giura che l'elezione è stata comprata con oro straniero.",
+   "{name} ({hex}) custodisce in una teca di cristallo una reliquia {ruler_di}, e i pellegrini arrivano da lontano per vederla.",
+   "{name} ({hex}) produce il vino migliore di {land}, e le sue cantine fanno gola a ogni brigante della regione.",
+   "{name} ({hex}) dipende da un unico pozzo, e chi lo controlla comanda in città: da qualche settimana, però, l'acqua ha un sapore strano."
+  ],
+  "city_river": [
+   "{name} ({hex}) vive del commercio lungo il fiume: chi controlla i suoi moli controlla la città, e i moli cambiano padrone spesso.",
+   "{name} ({hex}) sorge su un guado conteso, e i suoi ponti sono sorvegliati giorno e notte da guardie armate di balestra.",
+   "{name} ({hex}) si stende sulle due rive, e le due metà della città non si sono mai fidate l'una dell'altra.",
+   "{name} ({hex}) riscuote un pedaggio da ogni chiatta che risale il fiume, e i barcaioli stanno organizzando qualcosa di poco pacifico.",
+   "{name} ({hex}) vive con la paura delle piene: ogni primavera il fiume si porta via qualche casa, e a volte restituisce qualcosa in cambio.",
+   "{name} ({hex}) macina nei suoi mulini ad acqua il grano di tutti i villaggi vicini, e il mugnaio più ricco conta più del podestà.",
+   "{name} ({hex}) trae ricchezza dalle perle d'acqua dolce, e i pescatori giurano che le più belle si trovano nelle anse dove nessuno osa tuffarsi."
+  ],
+  "city_sea": [
+   "{name} ({hex}) è un porto di pescatori e contrabbandieri, dove le navi arrivano più spesso di notte che di giorno.",
+   "{name} ({hex}) è un porto fortificato: le sue catene chiudono la baia ogni sera al tramonto, e chi resta fuori resta fuori.",
+   "{name} ({hex}) vive di sale e di pesce, e i suoi marinai giurano di aver visto cose a cui nessuno crede.",
+   "{name} ({hex}) paga un tributo ai pirati delle isole, ma il nuovo capitano del porto ha deciso che quest'anno non pagherà.",
+   "{name} ({hex}) dipende dal suo grande faro, e da quando il guardiano è scomparso le navi si schiantano sugli scogli una dopo l'altra.",
+   "{name} ({hex}) commercia con terre d'oltremare di cui nessuno conosce il nome, e i suoi mercati traboccano di merci strane e preziose.",
+   "{name} ({hex}) costruisce le navi migliori della costa, ma i suoi carpentieri si rifiutano di tagliare il legno di un certo bosco, e non dicono perché."
+  ],
+  "fortress_intro": [
+   "Le fortezze di {land} risalgono quasi tutte ai tempi {realm_di}, e oggi sono in mano a chi è riuscito a prenderle.",
+   "Sulle alture di {land} si ergono ancora fortezze di pietra, alcune presidiate, altre abitate da cose peggiori dei soldati.",
+   "Chi controlla le fortezze controlla le strade, e chi controlla le strade decide chi mangia e chi muore di fame in {land}.",
+   "Le vecchie fortezze sono l'ultimo baluardo contro le terre selvagge, anche se i loro comandanti pensano più ai pedaggi che alla difesa.",
+   "Torri, rocche e castelli punteggiano {land} come i denti rotti di una bocca antica, e ognuno ha una storia di assedi e tradimenti."
+  ],
+  "fortress": [
+   "{name} ({hex}) sorveglia le vie che portano verso le terre selvagge, con una guarnigione sempre troppo piccola e sempre mal pagata.",
+   "{name} ({hex}) è in mano a un signore della guerra che si fa chiamare barone, anche se nessun re l'ha mai nominato.",
+   "{name} ({hex}) restò senza guarnigione durante la caduta {realm_di}; da poco qualcuno vi ha riacceso i fuochi, ma nessuno sa chi.",
+   "{name} ({hex}) ospita un ordine di cavalieri che giura di difendere {land} da un male che nessuno ricorda più.",
+   "{name} ({hex}) fa da prigione: le sue mura servono a tenere dentro qualcuno, non a tenere fuori i nemici.",
+   "{name} ({hex}) ha due capitani rivali, e i soldati non sanno più a chi obbedire né per chi combattere.",
+   "{name} ({hex}) resiste da tre mesi all'assedio di un esercito di predoni, e i viveri cominciano a scarseggiare.",
+   "{name} ({hex}) controlla l'unica strada sicura verso le terre di confine, e il suo castellano pretende un pedaggio in oro, in grano o in un anno di servizio.",
+   "{name} ({hex}) appartiene oggi a una compagnia di mercenari che ha smesso di aspettare la paga e ha deciso di prendersela da sé.",
+   "{name} ({hex}) ha un solo abitante, un vecchio soldato che continua a fare la ronda sugli spalti come se la guerra non fosse mai finita.",
+   "{name} ({hex}) vede ogni notte accendersi una luce nella torre più alta, anche se la scala che porta lassù crollò un secolo fa.",
+   "{name} ({hex}) fa da base a cacciatori di mostri, che vendono teste, zanne e pelli al miglior offerente e non fanno domande.",
+   "{name} ({hex}) ha cambiato padrone sette volte in dieci anni, e ogni nuovo signore ha dipinto il proprio stemma sopra quello del precedente.",
+   "{name} ({hex}) poggia su fondamenta più antiche di qualunque regno, e i suoi sotterranei scendono molto più in basso di quanto dica qualsiasi mappa.",
+   "{name} ({hex}) obbedisce a una castellana che ha giurato vendetta contro i signori delle città, e che sta radunando uomini e cavalli."
+  ],
+  "dungeon_intro": [
+   "Sotto {land} si aprono cripte, miniere e templi dimenticati, e ognuno custodisce un frammento della storia {realm_di}.",
+   "Le rovine e i sotterranei di {land} attirano avventurieri da ogni dove: pochi ne tornano ricchi, molti non ne tornano affatto.",
+   "Ogni villaggio di {land} conosce almeno un luogo dove non bisogna andare, e ogni villaggio ha qualcuno che ci è andato lo stesso.",
+   "Il passato di {land} non è sepolto abbastanza in profondità: in molti luoghi affiora, e qualche volta si muove.",
+   "Chi cerca oro e gloria in {land} trova facilmente dove scendere; trovare la via del ritorno è un'altra faccenda."
+  ],
+  "dungeon": [
+   "{name} ({hex}): un tempo la tesoreria {realm_di}; i custodi ne murarono l'ingresso quando tutto crollò, restando chiusi dentro.",
+   "{name} ({hex}): si aprì dove la terra tremò in una notte senza luna, e da allora ne esce un vento caldo che sa di zolfo.",
+   "{name} ({hex}): qui aveva la sua tana uno stregone che cercava l'immortalità; nessuno sa se l'abbia trovata.",
+   "{name} ({hex}): qui fu sepolto vivo un re, insieme a tutto il suo seguito e a un tesoro che nessuno ha mai osato reclamare.",
+   "{name} ({hex}): i minatori fuggirono in fretta, e gli attrezzi sono ancora dove li lasciarono, accanto a una vena di un metallo senza nome.",
+   "{name} ({hex}): un tempio scavato a rovescio nella roccia, sacro a un dio che non vuole essere nominato.",
+   "{name} ({hex}): si dice che vi portino i viandanti rapiti sulle strade vicine, e che nessuno di loro sia mai tornato a raccontarlo.",
+   "{name} ({hex}): qui riposa {ruler_il}, in una tomba protetta da trappole, enigmi e un guardiano che non dorme mai.",
+   "{name} ({hex}): l'antico santuario di {god}, dove l'altare è ancora caldo e le offerte fresche, anche se nessuno ammette di portarle.",
+   "{name} ({hex}): la prigione dove i maghi {realm_di} rinchiudevano ciò che non potevano uccidere; alcune serrature sono state forzate di recente, dall'interno.",
+   "{name} ({hex}): un labirinto di gallerie scavate da qualcosa di enorme che, secondo i pastori, non ha ancora finito di scavare.",
+   "{name} ({hex}): l'ultima roccaforte dei fedeli {ruler_di}, che si barricarono quaggiù e giurarono di non arrendersi mai.",
+   "{name} ({hex}): la biblioteca sommersa di un'accademia di maghi, dove i libri sono ancora asciutti dentro bolle d'aria incantate.",
+   "{name} ({hex}): il nido di una regina dei ragni grande come un carro, che i contadini placano con offerte di bestiame.",
+   "{name} ({hex}): le catacombe dove {people_il} seppellivano i loro antenati, che a quanto pare non vogliono essere disturbati.",
+   "{name} ({hex}): la fucina di un fabbro maledetto, dove le armi forgiate un tempo per {realm_il} attendono ancora qualcuno che le impugni.",
+   "{name} ({hex}): un pozzo senza fondo da cui, nelle notti di tempesta, sale una voce che chiama per nome gli abitanti dei villaggi vicini."
+  ],
+  "sea": [
+   "Il mare bagna {land}, e i suoi pescatori raccontano di isole che compaiono e scompaiono con la nebbia.",
+   "Lungo le coste di {land} si nascondono calette di contrabbandieri e relitti di navi antiche, ancora carichi di merci che nessuno ha reclamato.",
+   "Il mare che bagna {land} è freddo e agitato, e nelle notti di tempesta i marinai giurano di sentire campane suonare sotto le onde.",
+   "Dal mare arrivano in {land} mercanti, pirati e notizie di terre lontane, e spesso è difficile capire chi sia chi.",
+   "Le scogliere di {land} sono punteggiate di fari spenti, e i pescatori evitano le acque profonde dove, si dice, dorme qualcosa di enorme."
+  ],
+  "rivers": [
+   "{n} fiumi scendono dai rilievi verso valle, e lungo le loro rive si concentrano villaggi, mulini e guai.",
+   "{land} è attraversata da {n} fiumi, e ognuno ha il suo traghettatore, il suo pedaggio e la sua leggenda.",
+   "{n} fiumi solcano {land}, e i loro guadi sono da secoli il luogo preferito per le imboscate, le fiere e i duelli.",
+   "Le acque di {n} fiumi bagnano {land}, e i barcaioli che li risalgono conoscono ogni ansa, ogni secca e ogni segreto delle rive.",
+   "{n} fiumi scorrono in {land}, e nelle loro acque i pescatori trovano a volte monete, anelli e ossa che le piene hanno strappato alle rovine."
+  ],
+  "one_river": [
+   "Un solo fiume attraversa {land}, ed è la sua via più sicura: chi se ne allontana se ne pente.",
+   "Un unico grande fiume divide {land} in due, e le genti delle due rive parlano dialetti diversi e si guardano in cagnesco.",
+   "Un solo fiume bagna {land}, e tutta la vita si stringe lungo le sue rive: lontano dall'acqua ci sono solo pietre, vento e ossa.",
+   "Un fiume lento e scuro attraversa {land}, e i barcaioli non lo navigano mai di notte, per ragioni che preferiscono non spiegare.",
+   "L'unico fiume di {land} nasce da una sorgente che nessuno ha mai visto, e ogni primavera porta a valle oggetti di una città sconosciuta."
+  ],
+  "no_river": [
+   "Nessun fiume attraversa {land}: l'acqua viene da pozzi profondi e cisterne antiche, e chi le controlla ha in mano la vita di tutti.",
+   "In {land} non scorrono fiumi, e ogni goccia di pioggia viene raccolta con cura in vasche, otri e canali scavati nella roccia.",
+   "{land} non ha fiumi, ma i vecchi raccontano che un tempo ce n'era uno, e che fu prosciugato da una maledizione.",
+   "Senza fiumi, {land} vive di sorgenti e di pozzi, e le liti per l'acqua sono più aspre di quelle per l'oro."
+  ],
+  "factions_intro": [
+   "Oggi in {land} si contendono il potere diverse fazioni, e due di loro contano più di tutte le altre.",
+   "Nessun re governa {land}, ma il vuoto lasciato dalla corona è stato riempito da fazioni avide e ambiziose.",
+   "Chi vuole fare affari in {land} deve sapere chi pagare, a chi obbedire e a chi non voltare mai le spalle.",
+   "Dietro ogni pedaggio, ogni impiccagione e ogni festa di {land} c'è la mano di una delle sue fazioni.",
+   "Le vere potenze di {land} non siedono su un trono, ma in sale segrete, locande fumose e accampamenti nei boschi.",
+   "In {land} il potere non si eredita: lo si compra, lo si ruba o lo si conquista con la spada, e oggi lo tengono in pochi.",
+   "Fra le rovine di ciò che fu {realm_il} si muovono oggi nuove forze, decise a prendersi tutto quello che resta."
+  ],
+  "faction": [
+   "{fac_il} riunisce i mercanti più ricchi di {land}, e vuole riaprire le vecchie strade commerciali a qualunque costo.",
+   "{fac_il} è nat{fac_o} fra i reduci di una guerra dimenticata, e oggi vende le sue spade a chiunque possa pagarle.",
+   "{fac_il} custodisce i segreti dei maghi {realm_di}, e non permette a nessuno di studiarli senza il suo permesso.",
+   "{fac_il} predica il ritorno dell'antico dio {god}, e raccoglie seguaci fra i poveri, i malati e i disperati di ogni villaggio.",
+   "{fac_il} sostiene di discendere {ruler_da}, e rivendica il diritto di governare {land} in nome dell'antica corona.",
+   "{fac_il} controlla il contrabbando di sale, armi e reliquie, e ha orecchie in ogni locanda e in ogni porto.",
+   "{fac_il} dà la caccia a streghe, mostri e non morti, ma si dice che i suoi metodi spaventino i contadini più delle bestie stesse.",
+   "{fac_il} raccoglie i ladri, i mendicanti e i tagliaborse delle città, e impone le sue regole dove le guardie non arrivano.",
+   "{fac_il} vuole riportare {land} allo stato selvaggio, e sabota mulini, ponti e strade nel nome degli spiriti della foresta.",
+   "{fac_il} cerca da generazioni i frammenti del sigillo {realm_di}, e ne possiede già più di quanti ammetta.",
+   "{fac_il} presta denaro a signori e villaggi, e riscuote i debiti con una pazienza infinita e una crudeltà ancora maggiore.",
+   "{fac_il} protegge i viandanti sulle strade in cambio di un pedaggio, e chi rifiuta di pagare scopre presto da chi lo stava proteggendo.",
+   "{fac_il} è guidat{fac_o} da una veggente cieca, e prende ogni decisione leggendo il volo dei corvi e le viscere dei pesci.",
+   "{fac_il} recluta giovani nei villaggi più poveri, promettendo terre e titoli in un regno che deve ancora nascere.",
+   "{fac_il} studia le rovine e i sotterranei di {land}, e paga bene gli avventurieri che riportano libri, mappe e oggetti strani.",
+   "{fac_il} controlla le miniere e le fucine di {land}, e decide chi può comprare armi e chi deve accontentarsi di bastoni.",
+   "{fac_il} fu fondat{fac_o} per vendicare la caduta {realm_di}, e dopo secoli non ha ancora deciso con chi prendersela.",
+   "{fac_il} è temut{fac_o} in tutta {land} per i suoi assassini, che non mancano mai il bersaglio e non lasciano mai testimoni.",
+   "{fac_il} gestisce le locande e le stazioni di posta lungo le strade, e sa sempre chi viaggia, con chi e con quanto denaro."
+  ],
+  "rivalry": [
+   "{fac1_il} e {fac2_il} si odiano da tre generazioni, e ormai nessuno ricorda più chi abbia cominciato.",
+   "{fac1_il} e {fac2_il} si combattono apertamente per le strade, ma in segreto i loro capi si incontrano a ogni luna nuova.",
+   "{fac1_il} deve una somma enorme {fac2_a}, e il giorno della scadenza si avvicina senza che ci sia oro per saldare il debito.",
+   "Un matrimonio dovrebbe presto unire i capi {fac1_di} e {fac2_di}, ma molti, da entrambe le parti, farebbero di tutto per impedirlo.",
+   "{fac1_il} accusa {fac2_il} dell'assassinio del suo vecchio capo, e ha giurato vendetta pubblicamente, davanti a cento testimoni.",
+   "{fac1_il} e {fac2_il} hanno firmato una tregua fragile, che regge solo per paura di un nemico comune.",
+   "{fac1_il} ha infiltrato le proprie spie fra le file {fac2_di}, e conosce ogni sua mossa prima ancora che venga decisa.",
+   "{fac1_il} e {fac2_il} si contendono lo stesso tesoro perduto, ma la mappa per trovarlo è strappata in due, e ne hanno mezza per parte.",
+   "Un tempo {fac1_il} e {fac2_il} erano un'unica fazione, e la loro separazione fu così sanguinosa che nessuno ne parla volentieri.",
+   "{fac1_il} tiene in segreto un ostaggio prezioso {fac2_di}, e lo usa per ottenere ciò che vuole senza mai alzare la voce.",
+   "{fac1_il} disprezza {fac2_il} in pubblico, ma ogni mese, in segreto, ne compra armi, veleni e informazioni.",
+   "{fac1_il} e {fac2_il} hanno diviso {land} in due zone d'influenza, e chi sconfina viene ritrovato in un fosso all'alba.",
+   "{fac1_il} ha giurato fedeltà {fac2_a} dopo una sconfitta umiliante, ma aspetta solo l'occasione giusta per tradire."
+  ],
+  "now_intro": [
+   "Oggi, però, qualcosa sta cambiando, e anche i più testardi fra gli abitanti di {land} cominciano ad accorgersene.",
+   "Ma la fragile quiete di {land} sta per finire, e i segni sono ormai sotto gli occhi di tutti.",
+   "Negli ultimi mesi, però, nelle locande di {land} si parla sottovoce di una cosa sola.",
+   "Quest'anno l'inverno è arrivato presto, e insieme al gelo è arrivato qualcosa che nessuno sa ancora nominare.",
+   "Da qualche tempo, però, i vecchi di {land} scuotono la testa e dicono che il peggio deve ancora venire.",
+   "Ora un nuovo pericolo minaccia {land}, e le vecchie rivalità potrebbero presto sembrare poca cosa.",
+   "In {land} le cose non restano mai ferme a lungo, e anche questa volta una tempesta si prepara lontano dagli sguardi.",
+   "Ma da quando è cominciata questa primavera, in {land} niente va più come dovrebbe.",
+   "Ed è proprio adesso, mentre i potenti litigano per le briciole, che su {land} si addensa la minaccia più grave da secoli."
+  ],
+  "threat": [
+   "Un esercito di orchi si raduna ai confini, e le sue staffette sono già state viste aggirarsi fra le alture.",
+   "Una malattia che rende grigi gli occhi si diffonde di villaggio in villaggio, e i guaritori non sanno da dove venga.",
+   "I raccolti non crescono più vicino alle antiche rovine, e gli animali fuggono senza motivo verso le terre basse.",
+   "Un drago è stato visto volare basso sopra {land}, e da allora le greggi scompaiono una dopo l'altra.",
+   "Un erede {realm_di} è riapparso e reclama {land} per sé, con un sigillo che pochi possono contestare e un esercito che cresce ogni giorno.",
+   "Le campane di un tempio sepolto suonano di notte, e chi le sente sogna sempre lo stesso sogno.",
+   "I morti dei vecchi campi di battaglia hanno ricominciato a camminare, e ogni notte si avvicinano un po' di più ai villaggi.",
+   "Il culto di {god} è rinato in segreto, e i suoi fedeli rapiscono viandanti per un rito che deve compiersi al prossimo solstizio.",
+   "Un'orda di predoni, cacciata dalle proprie terre da qualcosa di peggiore, sta scendendo su {land} bruciando tutto ciò che incontra.",
+   "Un mago folle ha preso possesso di una torre dimenticata, e da allora il cielo sopra {land} cambia colore ogni notte.",
+   "La sorgente da cui dipendono i villaggi più grandi si sta prosciugando, e chi controlla l'acqua rimasta potrà dettare legge a tutti.",
+   "Un esercito straniero, guidato da un generale che si dice invincibile, ha varcato i confini e chiede la resa di ogni città.",
+   "Qualcosa si è svegliato sotto le montagne: la terra trema ogni notte, e dai pozzi sale un'acqua calda che sa di ferro.",
+   "Un branco di licantropi caccia nelle campagne di {land}, e qualcuno dice che il loro capo siede di giorno in un consiglio cittadino.",
+   "La tomba {ruler_di} è stata profanata, e chi l'ha fatto ha portato via qualcosa che avrebbe dovuto restare sepolto per sempre.",
+   "Una nebbia innaturale avanza ogni giorno di qualche passo, e i villaggi che inghiotte non mandano più notizie.",
+   "Un gigante sceso dai ghiacciai ha preso dimora in una vecchia fortezza, e pretende un tributo di bestiame da tutti i villaggi della valle.",
+   "Un veleno lento ha cominciato a uccidere i potenti di {land} uno dopo l'altro, e ognuno accusa i propri rivali.",
+   "Le stelle sopra {land} si sono spostate, e gli astrologi annunciano che il ritorno di {god} è questione di settimane.",
+   "Una febbre dell'oro ha travolto {land}: si dice che in una valle remota l'oro affiori dal terreno, e tutti i disperati ci stanno correndo.",
+   "Le porte di una fortezza dei nani, chiuse da secoli, si sono riaperte, ma ciò che ne esce non sono nani."
+  ],
+  "omen": [
+   "Da tre notti la luna sorge rossa come il sangue, e i cani ululano senza sosta fino all'alba.",
+   "Le statue {ruler_di} nelle piazze dei villaggi hanno cominciato a piangere lacrime nere.",
+   "Nei pollai nascono pulcini con tre zampe, e le streghe dei villaggi si rifiutano di dire che cosa significhi.",
+   "Gli stormi di corvi volano tutti nella stessa direzione, e nessuno li ha mai visti tornare indietro.",
+   "In ogni pozzo di {land} l'acqua è diventata salata nello stesso giorno, alla stessa ora.",
+   "Una cometa dalla coda verde attraversa il cielo da settimane, e gli astrologi hanno smesso di uscire di casa.",
+   "I bambini di {land} cantano nel sonno una filastrocca che nessuno ha insegnato loro, in una lingua morta da secoli.",
+   "Sulle porte delle case è comparso in una sola notte un segno tracciato col gesso: il simbolo dimenticato di {god}.",
+   "Il vino inacidisce nelle botti, il latte caglia nei secchi e le candele si spengono da sole appena cala il buio.",
+   "Un vecchio stendardo {realm_di}, sepolto da secoli, è stato visto sventolare sulla torre più alta di {land}, e nessuno sa chi l'abbia issato.",
+   "Le api hanno abbandonato gli alveari e i pesci risalgono i torrenti al contrario, come se fuggissero da qualcosa.",
+   "I vecchi sognano tutti, ogni notte, la stessa porta di bronzo, e al risveglio hanno le mani sporche di terra.",
+   "In tutta {land} le campane hanno suonato da sole a mezzanotte, tredici rintocchi, e poi hanno taciuto.",
+   "Un'eclissi che nessun astronomo aveva previsto ha oscurato il sole per un'ora intera, e da allora i cavalli rifiutano di uscire dalle stalle.",
+   "Un pellegrino morente è giunto al villaggio più vicino ripetendo un solo nome, sempre lo stesso: quello {ruler_di}."
+  ],
+  "terrain": {
+   "forest": [
+    "Le foreste coprono gran parte di {land}: sono antiche, fitte e piene di sentieri che non portano da nessuna parte.",
+    "Nei boschi di {land} vivono ancora creature più antiche degli uomini, e i taglialegna lasciano offerte di pane prima di abbattere un albero.",
+    "Le foreste di {land} nascondono fra gli alberi le rovine di città intere, inghiottite dalle radici in pochi secoli di abbandono.",
+    "Chi entra nelle foreste di {land} senza una guida perde presto il sentiero, e a volte anche il ricordo di come ci è arrivato."
+   ],
+   "hills": [
+    "Le colline di {land} sono punteggiate di tumuli e di torri crollate, e i pastori evitano di salire sulle cime.",
+    "Fra le colline di {land} si nascondono valli strette e villaggi isolati, dove gli stranieri sono accolti con il pane e guardati con sospetto.",
+    "Le colline di {land} sono traforate da vecchie miniere, e di notte dalle gallerie abbandonate giunge il rumore di picconi che nessuno impugna.",
+    "Sulle colline di {land} sorgono cerchi di pietre erette, e i pastori giurano che le pietre cambiano posto da un anno all'altro."
+   ],
+   "mountains": [
+    "Le montagne di {land} sono alte e fredde, e i loro passi restano chiusi per metà dell'anno.",
+    "Fra le montagne di {land} si aprono passi stretti e ghiacciai antichi, e nel ghiaccio si scorgono a volte figure immobili che sembrano guardare.",
+    "Le montagne di {land} sono ricche di ferro e d'argento, e i nani che un tempo le scavavano non hanno mai accettato di averle perdute.",
+    "Sulle vette di {land} nidificano aquile grandi come cavalli, e i montanari sanno che chi ne ruba un uovo non scende più a valle."
+   ],
+   "plains": [
+    "Le pianure di {land} sono vaste e ventose, e da lontano si vede chi arriva molto prima che arrivi.",
+    "Le pianure di {land} sono coperte di grano selvatico e di tumuli erbosi, e l'aratro porta spesso alla luce elmi, ossa e monete antiche.",
+    "Sulle pianure di {land} corrono branchi di cavalli selvaggi, e i nomadi che li inseguono non riconoscono confini né padroni.",
+    "Le pianure di {land} furono campo di battaglia per secoli, e in certe notti d'autunno vi si sentono ancora i corni e il galoppo."
+   ],
+   "desert": [
+    "Il deserto si mangia ogni anno un po' di più di {land}, e sotto la sabbia affiorano tetti e campanili.",
+    "Nel deserto di {land} i pozzi sono pochi e gelosamente custoditi, e chi ne conosce la posizione vale più di un carico d'oro.",
+    "Le dune di {land} si spostano con il vento, e ogni tempesta scopre e ricopre le rovine di una città che nessuno ha mai trovato due volte.",
+    "Nel deserto di {land} il sole uccide di giorno e il freddo di notte, e fra le rocce si nascondono predoni e serpenti grandi come alberi."
+   ],
+   "swamp": [
+    "Le paludi di {land} sono nebbiose e piene di insidie, e le loro acque restituiscono a volte ciò che hanno inghiottito.",
+    "Fra le paludi di {land} sorgono villaggi su palafitte, i cui abitanti conoscono sentieri sommersi che nessuno straniero saprebbe trovare.",
+    "Nelle paludi di {land} brillano di notte luci fredde e verdastre, e chi le segue non torna mai sulla terraferma.",
+    "Le paludi di {land} hanno inghiottito un'intera città, e nelle giornate senza vento se ne vedono ancora le torri sotto il pelo dell'acqua."
+   ],
+   "fungus": [
+    "Sulle coste umide di {land} crescono foreste di funghi giganti: cappelli larghi come piazze fanno ombra a interi villaggi, e i maghi più potenti scavano le loro torri dentro i gambi.",
+    "Sotto i funghi giganti di {land} l'aria è calda e pesante di spore, e chi si perde fra quei gambi altissimi sente voci che non appartengono a nessuno.",
+    "Nessuno sa chi abbia piantato i primi funghi giganti di {land}: le loro spore viaggiano col vento, e dove si posano la foresta cambia in pochi anni.",
+    "I funghi giganti di {land} danno legna, cibo e riparo, ma i raccoglitori sanno che certi cappelli, quando si aprono, liberano spore che fanno sognare i morti."
+   ]
+  },
+  "rumours": [
+   [
+    "Sotto {name} ({hex}) c'è ancora il tesoro {realm_di}, e nessuno è mai arrivato in fondo.",
+    "dungeon"
+   ],
+   [
+    "Un mercante itinerante vende mappe di {land}: metà sono false, ma una è vera.",
+    null
+   ],
+   [
+    "{name} ({hex}): le guardie si lasciano corrompere, ma solo con argento, mai con oro.",
+    "city"
+   ],
+   [
+    "Nelle notti di luna piena un cavaliere senza testa percorre la vecchia strada {realm_di}.",
+    null
+   ],
+   [
+    "Chi beve l'acqua del fiume presso {name} ({hex}) dimentica il proprio nome per un giorno intero.",
+    "river_site"
+   ],
+   [
+    "Un eremita delle colline sa dov'è sepolto l'ultimo re {realm_di}, ma chiede un prezzo strano.",
+    null
+   ],
+   [
+    "I lupi di {land} non attaccano chi porta al collo un dente di drago.",
+    null
+   ],
+   [
+    "C'è una taglia sulla testa di chi ha bruciato il ponte presso {name} ({hex}).",
+    "city"
+   ],
+   [
+    "{name} ({hex}) cerca mercenari, e paga in anticipo: troppo in anticipo, secondo i veterani che hanno rifiutato.",
+    "fortress"
+   ],
+   [
+    "{name} ({hex}): l'ultima notte di luna nuova qualcosa ne è uscito, e ha lasciato impronte che nessuno sa riconoscere.",
+    "dungeon"
+   ],
+   [
+    "La figlia del mugnaio giura di aver visto un cavaliere in armatura uscire da un lago e sparire nel bosco, asciutto come un osso.",
+    null
+   ],
+   [
+    "Le monete d'oro {ruler_di} portano incisa sul retro una mappa minuscola, ma per leggerla servono tutte e dodici.",
+    null
+   ],
+   [
+    "Un bambino di un villaggio vicino parla nel sonno una lingua morta, e sua madre cerca qualcuno che sappia tradurla.",
+    null
+   ],
+   [
+    "I sacerdoti di {god} non sono scomparsi del tutto: uno di loro gestisce una locanda, e tiene un altare dietro la cantina.",
+    null
+   ],
+   [
+    "Un drago vecchio e stanco cerca qualcuno a cui lasciare il suo tesoro, ma pone tre domande e accetta solo risposte sincere.",
+    null
+   ],
+   [
+    "Nei boschi c'è una capanna dove una strega vende pozioni a buon mercato, ma il prezzo vero si paga un anno dopo.",
+    null
+   ],
+   [
+    "{name} ({hex}): il borgomastro è morto da un mese, ma la sua famiglia lo tiene seduto alla finestra per non perdere il potere.",
+    "city"
+   ],
+   [
+    "{name} ({hex}): sotto la piazza del mercato corre una galleria che porta fuori dalle mura, e i contrabbandieri la usano ogni notte.",
+    "city"
+   ],
+   [
+    "{name} ({hex}): l'erede della famiglia più ricca è scomparsa, e la ricompensa per chi la riporta a casa raddoppia ogni settimana.",
+    "city"
+   ],
+   [
+    "{name} ({hex}): un alchimista cerca volontari su cui provare un elisir di lunga vita, e paga in oro sonante.",
+    "city"
+   ],
+   [
+    "{name} ({hex}): nella locanda più malfamata c'è un tavolo riservato a un ospite che nessuno ha mai visto, e ogni sera qualcuno ne paga il conto.",
+    "city"
+   ],
+   [
+    "{name} ({hex}): il castellano custodisce in segreto la corona {ruler_di}, e la mostra solo a chi gli giura fedeltà.",
+    "fortress"
+   ],
+   [
+    "{name} ({hex}): nelle segrete c'è un prigioniero che afferma di essere un principe, e c'è chi pagherebbe molto per liberarlo, o per zittirlo.",
+    "fortress"
+   ],
+   [
+    "{name} ({hex}): la guarnigione non riceve la paga da mesi, e qualcuno sta già trattando per vendere le chiavi del portone.",
+    "fortress"
+   ],
+   [
+    "{name} ({hex}): al terzo livello c'è una porta che si apre solo a chi dice la verità, e nessuno l'ha mai attraversata.",
+    "dungeon"
+   ],
+   [
+    "{name} ({hex}): l'ultima compagnia di avventurieri che ci è scesa è tornata con un membro in più, e nessuno sa chi sia.",
+    "dungeon"
+   ],
+   [
+    "{name} ({hex}): nelle sale più profonde dorme {ruler_il}, e chi ne disturberà il sonno riceverà un dono o una maledizione.",
+    "dungeon"
+   ],
+   [
+    "{name} ({hex}): gli gnomi delle colline pagano bene le lanterne blu che si trovano laggiù, e non dicono a cosa servano.",
+    "dungeon"
+   ],
+   [
+    "{name} ({hex}): ci è sceso un sacerdote di {god} con tre accoliti, e dopo un mese ne è risalito uno solo, muto e con i capelli bianchi.",
+    "dungeon"
+   ],
+   [
+    "{name} ({hex}): un traghettatore cieco porta chiunque dall'altra parte del fiume senza chiedere nulla, ma solo dopo il tramonto.",
+    "river_site"
+   ],
+   [
+    "Nel fiume presso {name} ({hex}) vive un luccio vecchio di cent'anni, con un anello d'oro incastrato fra i denti.",
+    "river_site"
+   ],
+   [
+    "{name} ({hex}): le lavandaie hanno visto scendere lungo il fiume una barca vuota, con le vele nere e i remi che si muovevano da soli.",
+    "river_site"
+   ],
+   [
+    "Ogni sette anni la vecchia strada {realm_di} riappare per una notte intera, e porta dritta al palazzo perduto.",
+    null
+   ],
+   [
+    "Un cacciatore ha trovato nel bosco un elmo d'oro con lo stemma {ruler_di}, e ora ha paura di dormire da solo.",
+    null
+   ],
+   [
+    "Le streghe del nord stanno comprando tutti i gatti neri di {land}, e li pagano tre volte il loro valore.",
+    null
+   ],
+   [
+    "Una carovana di mercanti è sparita sulla strada maestra con tutto il carico, e i carri sono stati ritrovati vuoti, con i buoi ancora aggiogati.",
+    null
+   ],
+   [
+    "Il vecchio cartografo di {land} non è morto: si nasconde da qualche parte con l'unica mappa che segna le porte dei nani.",
+    null
+   ],
+   [
+    "Chi dorme una notte intera dentro un cerchio di pietre si sveglia capace di capire la lingua dei corvi, o non si sveglia affatto.",
+    null
+   ],
+   [
+    "Un mago di passaggio paga in argento ogni dente di troll, e nessuno ha il coraggio di chiedergli a cosa gli servano.",
+    null
+   ],
+   [
+    "Un pastore ha visto una porta di pietra aprirsi da sola nel fianco di una collina, e richiudersi prima che potesse avvicinarsi.",
+    null
+   ],
+   [
+    "I mendicanti di {land} hanno un re segreto, e chi sa trovarlo può sapere qualunque cosa accada nelle città.",
+    null
+   ],
+   [
+    "Qualcuno sta comprando a peso d'oro le pietre miliari {realm_di}, e i contadini le stanno scavando di notte per venderle.",
+    null
+   ],
+   [
+    "{fac1_il} paga in oro chiunque porti notizie sui movimenti {fac2_di}, e non fa domande su come le abbia ottenute.",
+    null
+   ],
+   [
+    "Si dice che il capo {fac2_di} sia morto da mesi, e che qualcuno ne indossi la maschera per non far crollare tutto.",
+    null
+   ],
+   [
+    "Un vecchio mendicante giura di aver servito alla corte {ruler_di}, e conosce passaggi segreti che nessun altro ricorda.",
+    null
+   ],
+   [
+    "Un sigillo con lo stemma {realm_di} è stato venduto al mercato per tre monete di rame, e il giorno dopo il mercante è sparito.",
+    null
+   ],
+   [
+    "I sacerdoti di {god} sono tornati a predicare nei villaggi, e chi li ascolta smette di dormire la notte.",
+    null
+   ],
+   [
+    "Chi pronuncia tre volte il nome di {god} davanti a uno specchio rotto vede il volto della persona che lo tradirà.",
+    null
+   ],
+   [
+    "{fac1_il} sta reclutando avventurieri per una spedizione di cui nessuno conosce la meta, e paga metà in anticipo.",
+    null
+   ],
+   [
+    "Una spia {fac2_di} si nasconde in ogni locanda di questa landa, e la si riconosce perché beve solo acqua.",
+    null
+   ],
+   [
+    "La corona {ruler_di} non fu mai sepolta con il suo padrone: qualcuno la tiene nascosta in un pozzo asciutto.",
+    null
+   ],
+   [
+    "Il bardo cieco che gira per le fiere conosce l'ultima strofa della ballata {realm_di}, quella che nessuno osa cantare.",
+    null
+   ],
+   [
+    "Un cavallo senza cavaliere, con la sella insanguinata, torna ogni sera nello stesso villaggio e nessuno sa di chi sia.",
+    null
+   ],
+   [
+    "Il fabbro di un villaggio di confine sta forgiando cento punte di lancia per un cliente che paga in monete antiche.",
+    null
+   ],
+   [
+    "Un pastore ha trovato un uovo grande come una botte, caldo al tatto, e lo tiene nascosto nel fienile.",
+    null
+   ],
+   [
+    "Le api di questa landa hanno smesso di fare miele, e le streghe dicono che è un brutto segno per il raccolto.",
+    null
+   ],
+   [
+    "Un mercante di spezie vende una mappa del cielo che, a sentire lui, indica la via per una città sepolta.",
+    null
+   ],
+   [
+    "Nelle notti senza luna, sulle colline si accendono fuochi che si spengono appena qualcuno si avvicina.",
+    null
+   ],
+   [
+    "Un cacciatore di taglie forestiero sta chiedendo di un uomo con una cicatrice a forma di stella, e offre una ricompensa.",
+    null
+   ],
+   [
+    "Le monete coniate {realm_da} portano fortuna in battaglia, e i mercenari le pagano dieci volte il loro peso.",
+    null
+   ],
+   [
+    "Un gruppo di pellegrini è partito verso le montagne cantando, e da allora si sentono ancora i loro canti, ma nessuno è tornato.",
+    null
+   ],
+   [
+    "Una nobile in fuga si nasconde fra i contadini, e chi la consegnerà {fac1_a} riceverà un titolo e una terra.",
+    null
+   ],
+   [
+    "A {name} ({hex}) cercano una guida che conosca le strade del nord, e la pagano più di un cavaliere.",
+    "city"
+   ],
+   [
+    "Il tesoriere di {name} ({hex}) è sparito con le chiavi della zecca, e la città ha chiuso le porte per cercarlo.",
+    "city"
+   ],
+   [
+    "A {name} ({hex}) si tiene ogni mese un torneo, e il premio di quest'anno è una spada che nessuno è riuscito a sguainare.",
+    "city"
+   ],
+   [
+    "A {name} ({hex}) si parla di una peste che colpisce solo chi ha i capelli rossi, e i barbieri non hanno mai lavorato tanto.",
+    "city"
+   ],
+   [
+    "Dalle mura di {name} ({hex}) è stato visto volare un uomo con ali di tela, verso est.",
+    "fortress"
+   ],
+   [
+    "Il comandante di {name} ({hex}) cerca un prete che benedica le mura: dice che di notte qualcosa le scala.",
+    "fortress"
+   ],
+   [
+    "Nelle segrete di {name} ({hex}) c'è un prigioniero che dice di essere il legittimo erede {realm_di}.",
+    "fortress"
+   ],
+   [
+    "Da {name} ({hex}) è uscito un uomo coperto d'oro, che è morto prima di poter dire cosa avesse visto.",
+    "dungeon"
+   ],
+   [
+    "Chi dorme una notte all'ingresso di {name} ({hex}) sogna la strada per il tesoro, ma si sveglia con un anno in meno di vita.",
+    "dungeon"
+   ],
+   [
+    "{fac2_il} ha mandato una squadra dentro {name} ({hex}) una settimana fa, e nessuno è ancora tornato.",
+    "dungeon"
+   ],
+   [
+    "Da {name} ({hex}) si sente salire un canto in una lingua morta, sempre la stessa melodia, ogni notte un po' più forte.",
+    "dungeon"
+   ],
+   [
+    "I sacerdoti di {god} dicono che in fondo a {name} ({hex}) dorme qualcosa che non deve svegliarsi.",
+    "dungeon"
+   ],
+   [
+    "Un pescatore ha tirato su vicino a {name} ({hex}) uno scrigno chiuso da un lucchetto che nessuna chiave apre.",
+    "river_site"
+   ],
+   [
+    "Il traghettatore che porta a {name} ({hex}) non chiede soldi, ma un ricordo: e chi glielo dà non lo ritrova più.",
+    "river_site"
+   ],
+   [
+    "Il mulino vicino a {name} ({hex}) gira anche quando il fiume è in secca, e il mugnaio non vuole dire perché.",
+    "river_site"
+   ],
+   [
+    "{fac1_il} ha comprato in segreto metà delle case di {name} ({hex}), e nessuno sa che cosa voglia farne.",
+    "city"
+   ],
+   [
+    "A {name} ({hex}) un indovino legge il futuro nelle ossa di drago, e finora non ha mai sbagliato una previsione.",
+    "city"
+   ],
+   [
+    "La guarnigione di {name} ({hex}) è stata sostituita in una notte da soldati che nessuno conosce, con stemmi senza colore.",
+    "fortress"
+   ],
+   [
+    "Le guardie di {name} ({hex}) lasciano passare chiunque conosca la parola d'ordine dei tempi {ruler_di}.",
+    "fortress"
+   ],
+   [
+    "Chi entra in {name} ({hex}) con una candela accesa trova sempre la via del ritorno: chi la lascia spegnere, no.",
+    "dungeon"
+   ]
+  ],
+  "encounters": [
+   [
+    "Una pattuglia {fac1_di}: chiede a tutti dove sono diretti, e perquisisce chi non risponde.",
+    null
+   ],
+   [
+    "Un drappello {fac2_di} scorta un carro coperto da un telo, e non lascia avvicinare nessuno.",
+    null
+   ],
+   [
+    "Uno scontro fra {fac1_il} e {fac2_il}: i feriti chiedono aiuto, e ognuna delle due parti promette una ricompensa a chi si schiera con lei.",
+    null
+   ],
+   [
+    "Un reclutatore {fac1_di} offre una paga doppia a chi sa combattere, ma il contratto dura sette anni.",
+    null
+   ],
+   [
+    "Un disertore {fac2_di}, affamato e ferito, offre informazioni in cambio di cibo e di una scorta.",
+    null
+   ],
+   [
+    "Un emissario {fac1_di} diretto {fac2_a}, con una lettera sigillata che nessuno deve leggere.",
+    null
+   ],
+   [
+    "Un esattore {fac2_di} pretende un pedaggio per attraversare queste terre, e ha con sé sei uomini armati.",
+    null
+   ],
+   [
+    "Una spia {fac1_di} travestita da mercante: vuole sapere tutto {fac2_di}, e paga bene.",
+    null
+   ],
+   [
+    "Un banditore {fac2_di} legge un proclama: chiunque aiuti {fac1_il} sarà considerato un nemico.",
+    null
+   ],
+   [
+    "Una carovana nuziale fra {fac1_il} e {fac2_il}: la sposa chiede in segreto di essere aiutata a fuggire.",
+    null
+   ],
+   [
+    "Pellegrini diretti alla tomba {ruler_di}: portano offerte, cantano inni, e sono una preda facile.",
+    null
+   ],
+   [
+    "Un cantastorie narra le gesta {ruler_di}, e chiede una moneta per ogni strofa.",
+    null
+   ],
+   [
+    "Un vecchio sostiene di essere l'ultimo erede {ruler_di}, e cerca chi lo aiuti a riprendersi il trono.",
+    null
+   ],
+   [
+    "Una statua {ruler_di} rovesciata nel fango: chi la rimette in piedi riceve una visione.",
+    null
+   ],
+   [
+    "Un cercatore di tesori con una mappa che, giura, porta all'armeria perduta {realm_di}.",
+    null
+   ],
+   [
+    "Il fantasma di un soldato {realm_di} chiede chi governa ora, e si infuria se la risposta non gli piace.",
+    null
+   ],
+   [
+    "Una colonna spezzata con lo stemma {realm_di}: ai suoi piedi qualcuno ha lasciato offerte fresche.",
+    null
+   ],
+   [
+    "Bambini che giocano alla guerra {realm_di} con spade di legno: uno di loro porta al collo un vero sigillo reale.",
+    null
+   ],
+   [
+    "Fedeli di {god} in processione, incappucciati: invitano i viandanti a unirsi a loro per la notte.",
+    null
+   ],
+   [
+    "Un predicatore di {god} su un carro annuncia la fine dei tempi, e vende amuleti per salvarsi.",
+    null
+   ],
+   [
+    "Un altare a {god} appena costruito sul ciglio della strada, con il sangue ancora fresco.",
+    null
+   ],
+   [
+    "Un villaggio di discendenti {people_di}: vivono come i loro antenati e guardano i forestieri con sospetto.",
+    null
+   ],
+   [
+    "Mercanti diretti a {name} ({hex}) con un carico prezioso: cercano una scorta, e pagano bene.",
+    "city"
+   ],
+   [
+    "Profughi in fuga da {name} ({hex}): raccontano di una notte di fuoco e di porte aperte dall'interno.",
+    "city"
+   ],
+   [
+    "Soldati di {name} ({hex}) danno la caccia a un prigioniero evaso: chiedono aiuto, e sospettano di tutti.",
+    "fortress"
+   ],
+   [
+    "Un messaggero ferito di {name} ({hex}) porta una richiesta di rinforzi che senza aiuto non arriverà mai.",
+    "fortress"
+   ],
+   [
+    "L'unico sopravvissuto di una compagnia entrata in {name} ({hex}), solo e sconvolto, che non vuole tornarci da solo.",
+    "dungeon"
+   ],
+   [
+    "Una banda di predoni con oggetti antichi presi da {name} ({hex}): li vende a poco, ma qualcosa la sta seguendo.",
+    "dungeon"
+   ],
+   [
+    "Un ufficiale {fac1_di} cerca volontari per ripulire {name} ({hex}), in cambio di metà del bottino.",
+    "dungeon"
+   ],
+   [
+    "Un araldo di {name} ({hex}) annuncia una taglia sui briganti della zona, e cerca chi voglia riscuoterla.",
+    "city"
+   ],
+   [
+    "Un incendio divampa in lontananza: è un accampamento {fac2_di}, e qualcuno ha appiccato il fuoco di proposito.",
+    null
+   ],
+   [
+    "Un corriere {fac1_di} giace morto sulla strada, con la borsa dei messaggi ancora chiusa e una freccia senza piume nella schiena.",
+    null
+   ],
+   [
+    "Un'eclissi improvvisa: i contadini si inginocchiano e invocano {god}, e qualcuno indica il gruppo come colpevole.",
+    null
+   ],
+   [
+    "Una fiera di villaggio in onore {ruler_di}: giochi, vino, una gara di tiro con l'arco con un premio misterioso.",
+    null
+   ],
+   [
+    "Un tesoriere {realm_di} morto da secoli appare al tramonto e chiede che gli venga restituito un debito.",
+    null
+   ],
+   [
+    "Una nevicata fuori stagione blocca la strada; in un rifugio vicino si trovano già uomini {fac1_di} e {fac2_di}.",
+    null
+   ],
+   [
+    "Un giovane cavaliere cerca la spada {ruler_di} per dimostrare di esserne il discendente, e chiede compagni di viaggio.",
+    null
+   ],
+   [
+    "Un'erborista che fu nutrice nei palazzi {fac1_di} conosce segreti che vale la pena pagare.",
+    null
+   ],
+   [
+    "Una processione funebre porta verso {name} ({hex}) la salma di un notabile, e la vedova cerca chi indaghi sulla sua morte.",
+    "city"
+   ],
+   [
+    "Un mastro costruttore cerca operai per restaurare {name} ({hex}), e paga in anticipo: troppo in anticipo.",
+    "fortress"
+   ],
+   [
+    "Un sacerdote di {god} si dirige verso {name} ({hex}) da solo, deciso a compiere un rito che non vuole spiegare.",
+    "dungeon"
+   ],
+   [
+    "Una terra smossa di fresco: qualcuno ha sepolto qui di notte un forziere con il sigillo {realm_di}.",
+    null
+   ]
+  ]
+ },
+ "en": {
+  "land": "this land",
+  "numbers": [
+   "zero",
+   "one",
+   "two",
+   "three",
+   "four",
+   "five",
+   "six",
+   "seven",
+   "eight",
+   "nine",
+   "ten",
+   "eleven",
+   "twelve"
+  ],
+  "site_unnamed": {
+   "city": "Nameless City",
+   "fortress": "Nameless Fortress",
+   "dungeon": "Nameless Dungeon"
+  },
+  "realm_kinds": [
+   {
+    "il": "the Kingdom"
+   },
+   {
+    "il": "the Empire"
+   },
+   {
+    "il": "the March"
+   },
+   {
+    "il": "the Principality"
+   },
+   {
+    "il": "the League"
+   },
+   {
+    "il": "the Dominion"
+   },
+   {
+    "il": "the Lordship"
+   },
+   {
+    "il": "the Grand Duchy"
+   },
+   {
+    "il": "the Republic"
+   },
+   {
+    "il": "the Theocracy"
+   },
+   {
+    "il": "the County"
+   },
+   {
+    "il": "the Duchy"
+   },
+   {
+    "il": "the Realm"
+   },
+   {
+    "il": "the Barony"
+   },
+   {
+    "il": "the Margraviate"
+   },
+   {
+    "il": "the Protectorate"
+   }
+  ],
+  "realm_named": [
+   {
+    "il": "the Kingdom of the Shepherd Kings"
+   },
+   {
+    "il": "the Ascendant Empire"
+   },
+   {
+    "il": "the League of Seven Towers"
+   },
+   {
+    "il": "the Principality of Nerovale"
+   },
+   {
+    "il": "the Theocracy of the Dead Sun"
+   },
+   {
+    "il": "the Dominion of the Sorcerers"
+   },
+   {
+    "il": "the Alliance of the Iron Crowns"
+   },
+   {
+    "il": "the Drowned Realm"
+   },
+   {
+    "il": "the Lordship of the Salt Merchants"
+   },
+   {
+    "il": "the Empire of the Horn Throne"
+   },
+   {
+    "il": "the Kingdom of the Two Moons"
+   },
+   {
+    "il": "the Confederacy of the Hundred Fords"
+   },
+   {
+    "il": "the Principality of the White Towers"
+   },
+   {
+    "il": "the March of the Last Winter"
+   },
+   {
+    "il": "the Pact of the Twin Rivers"
+   }
+  ],
+  "titles": [
+   {
+    "g": "m",
+    "il": "King"
+   },
+   {
+    "g": "f",
+    "il": "Queen"
+   },
+   {
+    "g": "m",
+    "il": "Emperor"
+   },
+   {
+    "g": "f",
+    "il": "Empress"
+   },
+   {
+    "g": "m",
+    "il": "Prince"
+   },
+   {
+    "g": "f",
+    "il": "Princess"
+   },
+   {
+    "g": "m",
+    "il": "Duke"
+   },
+   {
+    "g": "f",
+    "il": "Duchess"
+   },
+   {
+    "g": "m",
+    "il": "Count"
+   },
+   {
+    "g": "f",
+    "il": "Countess"
+   },
+   {
+    "g": "m",
+    "il": "Archmage"
+   },
+   {
+    "g": "f",
+    "il": "Archmage"
+   },
+   {
+    "g": "m",
+    "il": "Patriarch"
+   },
+   {
+    "g": "f",
+    "il": "Matriarch"
+   },
+   {
+    "g": "m",
+    "il": "High Priest"
+   },
+   {
+    "g": "f",
+    "il": "High Priestess"
+   },
+   {
+    "g": "m",
+    "il": "Sorcerer-King"
+   },
+   {
+    "g": "f",
+    "il": "Witch-Queen"
+   },
+   {
+    "g": "m",
+    "il": "Margrave"
+   },
+   {
+    "g": "f",
+    "il": "Margravine"
+   }
+  ],
+  "epithets": [
+   {
+    "m": "the Just",
+    "f": "the Just"
+   },
+   {
+    "m": "the Wise",
+    "f": "the Wise"
+   },
+   {
+    "m": "the Cruel",
+    "f": "the Cruel"
+   },
+   {
+    "m": "the Great",
+    "f": "the Great"
+   },
+   {
+    "m": "the Mute",
+    "f": "the Mute"
+   },
+   {
+    "m": "the Blind",
+    "f": "the Blind"
+   },
+   {
+    "m": "the Fair",
+    "f": "the Fair"
+   },
+   {
+    "m": "the Bold",
+    "f": "the Bold"
+   },
+   {
+    "m": "the Pale",
+    "f": "the Pale"
+   },
+   {
+    "m": "the Red",
+    "f": "the Red"
+   },
+   {
+    "m": "the Old",
+    "f": "the Old"
+   },
+   {
+    "m": "the Young",
+    "f": "the Young"
+   },
+   {
+    "m": "the Builder",
+    "f": "the Builder"
+   },
+   {
+    "m": "the Conqueror",
+    "f": "the Conqueror"
+   },
+   {
+    "m": "the Peaceful",
+    "f": "the Peaceful"
+   },
+   {
+    "m": "the Fearless",
+    "f": "the Fearless"
+   },
+   {
+    "m": "the Sleepless",
+    "f": "the Sleepless"
+   },
+   {
+    "m": "the Golden",
+    "f": "the Golden"
+   },
+   {
+    "m": "the Gentle",
+    "f": "the Gentle"
+   },
+   {
+    "m": "the Stern",
+    "f": "the Stern"
+   },
+   {
+    "m": "the Lawgiver",
+    "f": "the Lawgiver"
+   },
+   {
+    "m": "the Navigator",
+    "f": "the Navigator"
+   },
+   {
+    "m": "the Lame",
+    "f": "the Lame"
+   },
+   {
+    "m": "the Prudent",
+    "f": "the Prudent"
+   },
+   {
+    "m": "the Fortunate",
+    "f": "the Fortunate"
+   },
+   {
+    "m": "the Dreamer",
+    "f": "the Dreamer"
+   },
+   {
+    "m": "the Unbending",
+    "f": "the Unbending"
+   },
+   {
+    "m": "the Silent",
+    "f": "the Silent"
+   },
+   {
+    "m": "Silverhand",
+    "f": "Silverhand"
+   },
+   {
+    "m": "the Grey-Eyed",
+    "f": "the Grey-Eyed"
+   },
+   {
+    "m": "the Exile",
+    "f": "the Exile"
+   },
+   {
+    "m": "the Melancholy",
+    "f": "the Melancholy"
+   }
+  ],
+  "peoples": [
+   {
+    "il": "the hill shepherds"
+   },
+   {
+    "il": "the river witches"
+   },
+   {
+    "il": "the settlers who came from the sea"
+   },
+   {
+    "il": "the marsh tribes"
+   },
+   {
+    "il": "the dwarves of the deep mines"
+   },
+   {
+    "il": "the elves of the old wood"
+   },
+   {
+    "il": "the salt merchants"
+   },
+   {
+    "il": "the exiles from beyond the sea"
+   },
+   {
+    "il": "the hunters of the northern woods"
+   },
+   {
+    "il": "the steppe raiders"
+   },
+   {
+    "il": "the smiths of the black iron"
+   },
+   {
+    "il": "the moon priestesses"
+   },
+   {
+    "il": "the coast fishers"
+   },
+   {
+    "il": "the sand nomads"
+   },
+   {
+    "il": "the slaves who fled the quarries"
+   },
+   {
+    "il": "the warrior women of the peaks"
+   },
+   {
+    "il": "the nameless pilgrims"
+   },
+   {
+    "il": "the landless knights"
+   }
+  ],
+  "faction_kinds": [
+   {
+    "il": "the Company"
+   },
+   {
+    "il": "the Order"
+   },
+   {
+    "il": "the Guild"
+   },
+   {
+    "il": "the Brotherhood"
+   },
+   {
+    "il": "the Circle"
+   },
+   {
+    "il": "the League"
+   },
+   {
+    "il": "the Clan"
+   },
+   {
+    "il": "the House"
+   },
+   {
+    "il": "the Sect"
+   },
+   {
+    "il": "the Council"
+   },
+   {
+    "il": "the Fellowship"
+   },
+   {
+    "il": "the Lodge"
+   },
+   {
+    "il": "the College"
+   },
+   {
+    "il": "the Band"
+   },
+   {
+    "il": "the Society"
+   },
+   {
+    "il": "the Coven"
+   },
+   {
+    "il": "the Academy"
+   },
+   {
+    "il": "the Consortium"
+   },
+   {
+    "il": "the Pact"
+   }
+  ],
+  "faction_emblems": [
+   "of the Raven",
+   "of the Snuffed Lantern",
+   "of the Last Tower",
+   "of the Black Rose",
+   "of the Hammer",
+   "of the Open Eye",
+   "of the Grey Hand",
+   "of the Golden Serpent",
+   "of the Bone Key",
+   "of the White Wolf",
+   "of the Broken Sword",
+   "of the Veiled Sun",
+   "of the Red Moon",
+   "of the Empty Chalice",
+   "of the Grey Dawn",
+   "of the Wounded Stag",
+   "of the Scales",
+   "of the Tight Knot",
+   "of the Anchor",
+   "of the Sickle",
+   "of the Cold Fire",
+   "of the Clipped Coin",
+   "of Silence",
+   "of the Last Oath",
+   "of the Silent Bell",
+   "of the Three Blades",
+   "of the Iron Feather",
+   "of the Burnt Bridge",
+   "of the Hundred Eyes",
+   "of the Falling Star"
+  ],
+  "years": [
+   "three hundred years ago",
+   "a thousand winters ago",
+   "in the days of our grandparents' grandparents",
+   "five centuries ago",
+   "when the world was younger",
+   "seven hundred years ago",
+   "many generations ago",
+   "eight long centuries ago",
+   "when the mountains had no names yet",
+   "four centuries ago",
+   "nine centuries ago",
+   "when the moon was still young",
+   "fifteen hundred years ago"
+  ],
+  "open_chronicle": [
+   "{years}, {people_il} came to {land} with little more than their carts, their flocks and a handful of old songs.",
+   "This is the chronicle of {land}, as handed down by the few who can still read the carved stones along the roads.",
+   "The chronicles of {land} begin {years}, when the ground had no masters yet and wolves outnumbered people.",
+   "Nobody knows for certain who first lived in {land}, but the chroniclers agree on one thing: {people_il} arrived {years}.",
+   "Whoever wants to understand today's troubles must go back many generations, to when {people_il} pitched the first tents in {land}.",
+   "The few parchments kept in the cloisters of {land} are gnawed by mice, yet they all tell the same story.",
+   "{years}, {land} was only a name on merchants' maps, a wild expanse that no ruler had ever bothered to claim.",
+   "The history of {land} is long and full of spilled blood, broken oaths and crowns lost in the mud.",
+   "The first fire lit in {land} by human hands burned {years}, and it was {people_il} who kindled it on a windswept hill.",
+   "Those who keep count of the years always start from the same day: the one when {people_il} crossed the border of {land}."
+  ],
+  "open_present": [
+   "Today {land} is a masterless country of fortified villages, broken roads and ruins that nobody dares to live in any more.",
+   "Whoever crosses {land} today sees abandoned fields, fallen bridges and empty towers, and wonders who built them.",
+   "No king reigns in {land} any more: power belongs to captains, merchants and anyone with enough swords to be obeyed.",
+   "Today {land} is a poor and suspicious country, where travellers sleep with a hand on their knife and the door barred.",
+   "The farmers of {land} now plough around broken columns and faceless statues, no longer asking whom they portrayed.",
+   "Looking at it today, {land} seems a country that never knew glory: mud, brambles and villages huddled behind palisades.",
+   "The roads of {land} are unsafe nowadays, the wells often poisoned, and in the inns people speak only in low voices.",
+   "{land} is now a forgotten frontier, good only for bandits, treasure hunters and those with something to hide.",
+   "The shadow of huge ruins falls across {land} today, far too large for the mud villages that have grown at their feet.",
+   "Those who live in {land} today speak of the past as of a dream: an age of kings, safe roads and full granaries."
+  ],
+  "back_then": [
+   "But it was not always so: {years}, {land} was the heart of {realm_il}, and its roads led far away.",
+   "Yet {years} {realm_il} thrived here, and the name of {land} was spoken with respect even beyond the mountains.",
+   "It was not always like this, and the oldest still remember the tales their grandparents had heard from their own grandparents.",
+   "To understand how things came to this, one must look back, far back, at what happened {years}.",
+   "Things were very different {years}: back then {land} had a single lord, a single law and granaries that were always full.",
+   "But beneath the mud and the brambles sleeps the memory of a better age, which the minstrels have never stopped singing about.",
+   "Yet once {land} knew peace, wealth and even a certain greatness, before everything fell to pieces.",
+   "The ruins, however, tell another story, and those who know how to listen still hear in them the echo of trumpets and processions."
+  ],
+  "open_legend": [
+   "The elders of {land} say that it all began {years}, with a fire lit on top of a windswept hill.",
+   "It is told that, {years}, {land} was covered by a single endless forest, and that nobody dared to enter it.",
+   "In the inns, when the fire burns low, the storytellers always begin the same way: “Once upon a time, {years}, there was a land without masters...”",
+   "The grandmothers of {land} sing their grandchildren a nursery rhyme which, listened to closely, is the true story of how things went.",
+   "Whoever asks the shepherds of {land} why the ground is so full of ruins gets a long and strange story in reply.",
+   "There is a legend every child in {land} knows by heart, though no grown-up will admit to believing it.",
+   "The wandering bards swear that what follows really happened, and ask for an extra coin to tell the ending.",
+   "They say the stones of {land} remember everything, and that on windless nights you can hear them telling their story.",
+   "On the walls of a ruined chapel someone painted, {years}, the story of {land}: this is what can still be read there.",
+   "The hedge witches tell the story of {land} in exchange for a lock of hair, and they always tell it the same way."
+  ],
+  "origin": [
+   "{people_il} came to {land}, drove the giants out of the valleys and founded {realm_il} on the ashes of their first camps.",
+   "It was {people_il} who founded {realm_il}, after swearing on a black stone that no stranger would ever give them orders again.",
+   "{realm_il} was born of a pact between {people_il} and the lords of the mountains, sealed with blood and salt.",
+   "{realm_il} was founded by a handful of exiles who had lost everything, and who swore never to lose anything again.",
+   "Fleeing a distant war, {people_il} found in {land} a fertile and nearly empty country, and there they founded {realm_il}.",
+   "For generations {people_il} lived in rival clans, until a common oath gave birth to {realm_il}.",
+   "The first stone of {realm_il} was laid, {years}, on the shore of a lake now vanished, where {people_il} had seen a star fall.",
+   "{people_il} did not want a king, but wolves, winters and raiders left them no choice, and so {realm_il} was born.",
+   "{realm_il} rose around a warm spring that never froze, fought over for years by {people_il} and the beasts of the woods.",
+   "It is said that {people_il} bought {land} from a dragon in exchange for a promise, and that {realm_il} was born of that promise.",
+   "Led by a blind prophetess, {people_il} wandered for seven years before settling in {land} and founding {realm_il}.",
+   "{realm_il} began as a simple palisade of logs, raised by {people_il} to hold off the raiders.",
+   "{years}, {people_il} forged an alliance with the peoples of the nearby valleys, and from that alliance {realm_il} took shape.",
+   "The best lands of {land} were shared among the families of {people_il}, and the pact that ruled the division became the law of {realm_il}.",
+   "An oracle foretold to {people_il} that they would rule as long as a certain well gave water, and around that well {realm_il} arose."
+  ],
+  "golden": [
+   "Under {ruler_il}, {realm_il} knew its golden age: the roads were safe and the granaries always full.",
+   "{ruler_il} had roads paved, canals dug and stone bridges built, many of which still stand.",
+   "During the reign of {ruler_il}, no enemy dared to cross the borders, and merchants from distant lands brought spices, silks and news.",
+   "{ruler_il} ruled for forty years with justice and an iron fist, and the minstrels still recall the verdicts of that reign, harsh but always fair.",
+   "It was {ruler_il} who built the great library of {realm_il}, where the true names of all things were said to be kept.",
+   "{ruler_il} defeated the mountain giants in three battles, and from their bones had a throne built that nobody else ever dared to sit on.",
+   "In the days of {ruler_il} gold coins were minted so pure that money-changers still weigh them with respect.",
+   "{ruler_il} made a pact with the spirits of the woods, and for as long as that reign lasted no tree was felled without their leave.",
+   "The court of {ruler_il} was the most splendid {land} had ever seen: poets, wizards and ambassadors came there from every known realm.",
+   "{ruler_il} gave {realm_il} a code of laws carved on twelve bronze columns, and for centuries the judges swore their oaths on those columns.",
+   "Under the guidance of {ruler_il}, the knights of {realm_il} drove the raiders beyond the borders and cleared the roads of brigands.",
+   "{ruler_il} came to the throne as a child, yet that reign was the longest and most prosperous anyone remembers.",
+   "Thanks to {ruler_il}, every village of {realm_il} had its own well, its own mill and a watchtower with a fire always burning.",
+   "{ruler_il} raised a chain of beacons on the heights, and in a single night a message could cross {realm_il} from end to end.",
+   "There is no elder in {land} who does not know the name of {ruler_il}: they say that in those years even the wolves respected the edges of the pastures.",
+   "{ruler_il} travelled in disguise through every province, listening to the peasants' complaints and punishing the nobles who oppressed them.",
+   "With the help of a court wizard, {ruler_il} tamed the rivers of {land} and turned the marshes into fields of golden wheat."
+  ],
+  "fall": [
+   "{realm_il} fell when a plague emptied its cities in a single summer, and the living were too few to bury the dead.",
+   "{realm_il} fell when its wizards opened a door that nobody could ever close again, and nameless things came through it.",
+   "{realm_il} broke apart in a war between brothers, and the rival fiefs devoured each other until nothing was left to conquer.",
+   "The end of {realm_il} came when the rivers changed course and the harvests rotted in the fields for seven years running.",
+   "{realm_il} fell when a dragon claimed the crown's treasure for itself, and none of the knights who rode out to win it back ever returned.",
+   "{realm_il} fell when the dead stopped staying in their graves and marched, in silence, against the cities of the living.",
+   "After the death of {ruler_il} the heirs fought over the throne for thirty years, and {realm_il} crumbled into a dozen warring lordships.",
+   "{realm_il} was swept away by a horde from the north, which burned every library and every temple in its path.",
+   "A winter that lasted nine years buried {realm_il} under the snow, and when the thaw finally came there was hardly anyone left to see it.",
+   "{realm_il} fell at the hands of a court counsellor who poisoned the rulers and their heirs, then vanished, taking the crown's seal with him.",
+   "The priests of {god} cursed {realm_il} from the top of their towers, and from that day no child was ever born within its borders.",
+   "{realm_il} borrowed from the mountain dwarves to pay its armies, and when it could no longer settle the debt the dwarves came to collect in person.",
+   "The earth shook for three days and three nights, and when it stopped the capital of {realm_il} had sunk into a bottomless chasm.",
+   "{realm_il} surrendered without a fight to an army of sorcerers, who ruled {land} for a century through terror and magic.",
+   "A revolt of slaves and starving peasants set the cities of {realm_il} ablaze, and the nobles fled beyond the mountains with whatever they could carry.",
+   "{ruler_il} sought immortality in forbidden books, and {realm_il} paid the price of that search, down to the last soul.",
+   "One day the sun rose red and stayed red for a whole year: the crops withered, the wells ran dry and {realm_il} faded away with them.",
+   "{realm_il} was betrayed by its own allies, who opened the gates of the capital to the enemy in exchange for gold and land."
+  ],
+  "fall_after": [
+   "The cities were abandoned in haste, and the houses were left with tables laid, cradles empty and chests still locked.",
+   "The survivors scattered to the four winds, taking with them only the names of their ancestors and a few family heirlooms.",
+   "The crown's treasure vanished in the chaos, and since then generations of seekers have chased it from ruin to ruin.",
+   "Within a few years the woods took back the fields, and the paved roads vanished under grass, moss and roots.",
+   "The surviving nobles shut themselves inside their castles, and each of them claimed to be the rightful heir of {realm_il}.",
+   "The libraries burned, and with them were lost the names of the kings, the maps of the mines and the words to command dragons.",
+   "For a whole generation nobody dared to approach the fallen capital, and those who did came back white-haired and speechless.",
+   "The last legions of {realm_il} were left without pay or orders, and turned into raiding bands that plundered the very lands they had defended.",
+   "The bells of every tower rang for a day and a night, then fell silent, and nobody has heard them ring together since.",
+   "The seal of {realm_il} was broken into seven pieces, entrusted to seven families who swore not to join them again until the time was right.",
+   "The court wizards sealed their towers from within, and nobody knows whether anyone is still alive behind those doors.",
+   "Those who could fled towards the sea or beyond the mountains; those who stayed soon learned to hide in the woods and to trust nobody.",
+   "For years the crows were the only masters of the walls, and in {land} people still say “rich as a crow” of anyone who profits from another's ruin."
+  ],
+  "after": [
+   "Since then {land} has been no-man's-land: whoever lives here obeys the nearest sword and pays tribute to whoever wields it.",
+   "Since then {land} has been a frontier, where settlers come in waves and vanish in waves, leaving no trace.",
+   "Since then the people of {land} have mistrusted strangers, wizards and old roads, and they make no secret of it.",
+   "Since then {land} has gone wild again, and the old cartographers' maps are of no use to anyone.",
+   "Centuries of petty wars, famines and passing lordlings have followed, and nobody has ever managed to unite {land} under a single banner again.",
+   "In the dark centuries that followed, {land} was fought over by barons, brigands and sorcerers, and every generation saw a new master.",
+   "Since then life in {land} has been lived day by day, between thin harvests, long winters and ruins best left undisturbed.",
+   "Dark years followed, when the laws were forgotten and the word of a gang leader was worth more than any oath.",
+   "Since then the villages of {land} have turned inward, each with its own laws, its own shrines and its own grudges.",
+   "For generations {land} has been a road for foreign armies, which plundered it without ever wanting to keep it.",
+   "Since then nobody has dared to call themselves king in {land}, and those who tried ended up hanging from the battlements of their own castle.",
+   "Time has erased almost everything: all that remains in {land} are garbled names, ivy-covered ruins and stories that change with every telling."
+  ],
+  "legend": [
+   "It is said that {ruler_il} never died, but sleeps beneath a hill among a host of loyal knights, waiting for the hour of need.",
+   "The crown of {ruler_il} was never found: a prophecy says whoever places it on their own head will command the dead of {realm_il}.",
+   "Before {realm_il} existed, {land} worshipped {god}, a god of a thousand voices who even now sometimes answers those who call out that name.",
+   "A prophecy carved on the gates of the capital foretells that {realm_il} will rise again on the day an heir of {ruler_il} drinks from the silver well.",
+   "The sword of {ruler_il}, which never broke nor rusted, was thrown into a lake after the last battle; fishers swear they still see it gleam on moonless nights.",
+   "Everyone avoids the ruins of the temple of {god}: it is said the god still sleeps there, dreaming of the end of the world.",
+   "{ruler_il} received from {god} a ring that let its wearer speak with animals, and that ring has never been found.",
+   "They tell that beneath the capital of {realm_il} lies a second city, identical to the first but upside down, where everything that was lost is still kept.",
+   "The bells of {god} will ring three times before the end of the world: two strokes have already been heard, and nobody knows when the third will come.",
+   "The heart of {ruler_il} was buried far from the body, in a secret place, and it is said it will keep beating as long as {land} stays free.",
+   "{ruler_il} did not die in battle nor of old age, but vanished one night from the highest tower, leaving only a cloak and a letter nobody has ever deciphered.",
+   "The priests of {god} kept a book holding the day of death of every inhabitant of {realm_il}; when the temples burned, the book disappeared.",
+   "It is said that {god} cursed {ruler_il} for building a palace taller than the god's own temple, and that the curse still falls on the bloodline.",
+   "Every hundred years, on the longest night of winter, the army of {realm_il} marches again along the old roads, and whoever meets it must step aside.",
+   "The elders swear that {ruler_il} hid the crown's treasure in three different places, and that the map is tattooed on the back of an unwitting descendant.",
+   "A prophecy of {god}, repeated by the witches of every village, says that {land} will have a ruler again when the broken tower stands whole once more.",
+   "The mirror of {ruler_il} showed whoever looked into it their true enemy; it was stolen on the very night of the burial, and has passed from hand to hand ever since."
+  ],
+  "cities_intro": [
+   "Today the cities are few and far between, and each one looks at the others with a mixture of need and suspicion.",
+   "Life now huddles in a few walled cities, where people trade, plot and wait for the next disaster.",
+   "Power is split between cities that eye each other with suspicion, each with its own lords, its own laws and its own prices.",
+   "The few remaining cities are islands of light in a sea of darkness, and whoever travels between them does so at their own risk.",
+   "Where great capitals once stood, smaller and tougher cities hold on today, often built with the stones of the old ones.",
+   "Today's cities are shelters more than realms: you pay a toll to get in and, sometimes, another one to get out.",
+   "Whoever seeks a roof, a market or a judge must find one within the walls of the few surviving cities."
+  ],
+  "no_city": [
+   "No city survived: whoever crosses {land} sleeps in the open or among the ruins, and keeps one eye open until dawn.",
+   "There is no longer a single city worthy of the name in {land}: only isolated farms, camps and shepherds' huts remain.",
+   "The cities of {land} all lie in ruins, and the few inhabitants live in mud villages that move every few years.",
+   "Whoever looks for a city in {land} finds only blackened walls and squares overrun by brambles, where at night fires burn that nobody lit.",
+   "There are no markets or inns in {land}: to buy salt, iron or news one must wait for the caravans, which come by less and less often."
+  ],
+  "city": [
+   "{name} ({hex}) is ruled by a council of merchants who care more for gold than for justice, and every verdict has its price.",
+   "{name} ({hex}) was founded by the survivors of {realm_il}, and proudly keeps their faded banners above the main gate.",
+   "{name} ({hex}) pays a yearly tribute to the raiders just to be left alone, and the townsfolk are starting to wonder where that money really goes.",
+   "{name} ({hex}) is in the hands of an old queen who has not left her palace in twenty years, and some doubt she is still alive.",
+   "{name} ({hex}) welcomes anyone who brings news from the outside world, and pays well for it, as long as it is true.",
+   "{name} ({hex}) is torn by a feud between two noble families, who wage war in its streets with daggers and poison.",
+   "{name} ({hex}) lives in the shadow of a powerful temple, whose priests have more say than the mayor and his guards.",
+   "{name} ({hex}) is a town of miners and smiths, rough and welcoming, where every dispute is settled by arm-wrestling.",
+   "{name} ({hex}) is ruled by a wizard whose face nobody has ever seen, and whose laws change with every new moon.",
+   "{name} ({hex}) hosts the greatest fair in {land}, and once a year everything is sold there, even things that should not exist.",
+   "{name} ({hex}) shuts its gates at sunset and opens them for nobody, not even for those who knock crying the name of a relative.",
+   "{name} ({hex}) stands on the ruins of an old capital of {realm_il}, and its cellars open onto tunnels nobody has ever explored to the end.",
+   "{name} ({hex}) is in the grip of a thieves' guild so powerful that it collects the taxes in place of the lord, who pretends not to notice.",
+   "{name} ({hex}) lives in fear of a beast that comes down from the hills every winter, and offers a huge reward to whoever kills it.",
+   "{name} ({hex}) is a town of exiles and fugitives, where nobody asks about the past and everyone lies about their name.",
+   "{name} ({hex}) has just elected a new burgomaster, and half the town swears the election was bought with foreign gold.",
+   "{name} ({hex}) keeps a relic of {ruler_il} in a crystal case, and pilgrims come from far away to see it.",
+   "{name} ({hex}) makes the best wine in {land}, and its cellars tempt every brigand in the region.",
+   "{name} ({hex}) depends on a single well, and whoever controls it rules the town: for some weeks now, though, the water has tasted strange."
+  ],
+  "city_river": [
+   "{name} ({hex}) lives on the river trade: whoever controls its docks controls the town, and the docks change hands often.",
+   "{name} ({hex}) stands on a disputed ford, and its bridges are watched day and night by guards armed with crossbows.",
+   "{name} ({hex}) spreads across both banks, and the two halves of the town have never trusted each other.",
+   "{name} ({hex}) charges a toll on every barge that comes up the river, and the boatmen are planning something far from peaceful.",
+   "{name} ({hex}) lives in fear of the floods: every spring the river carries off a few houses, and sometimes gives something back in return.",
+   "{name} ({hex}) grinds the grain of every nearby village in its water mills, and the richest miller has more say than the magistrate.",
+   "{name} ({hex}) grows rich on freshwater pearls, and the fishers swear the finest lie in the bends where nobody dares to dive."
+  ],
+  "city_sea": [
+   "{name} ({hex}) is a harbour of fishers and smugglers, where ships come in more often by night than by day.",
+   "{name} ({hex}) is a walled harbour: its chains close the bay every evening at sunset, and whoever is left outside stays outside.",
+   "{name} ({hex}) lives on salt and fish, and its sailors swear they have seen things nobody believes.",
+   "{name} ({hex}) pays tribute to the island pirates, but the new harbourmaster has decided that this year it will not pay.",
+   "{name} ({hex}) depends on its great lighthouse, and since the keeper disappeared ships have been wrecked on the rocks one after another.",
+   "{name} ({hex}) trades with lands beyond the sea whose names nobody knows, and its markets overflow with strange and precious goods.",
+   "{name} ({hex}) builds the best ships on the coast, but its shipwrights refuse to cut timber from a certain wood, and will not say why."
+  ],
+  "fortress_intro": [
+   "Almost all the fortresses of {land} date from the days of {realm_il}, and today they belong to whoever managed to take them.",
+   "Stone fortresses still rise on the heights of {land}, some garrisoned, others inhabited by things worse than soldiers.",
+   "Whoever holds the fortresses holds the roads, and whoever holds the roads decides who eats and who starves in {land}.",
+   "The old fortresses are the last bulwark against the wilds, even if their commanders think more about tolls than about defence.",
+   "Towers, keeps and castles dot {land} like the broken teeth of an ancient mouth, and each has a tale of sieges and betrayals."
+  ],
+  "fortress": [
+   "{name} ({hex}) guards the roads into the wilds, with a garrison that is always too small and always badly paid.",
+   "{name} ({hex}) is held by a warlord who calls himself a baron, though no king ever made him one.",
+   "{name} ({hex}) was left without a garrison when {realm_il} fell; lately someone has lit its fires again, but nobody knows who.",
+   "{name} ({hex}) is home to an order of knights sworn to defend {land} from an evil nobody remembers any more.",
+   "{name} ({hex}) is a prison: its walls are there to keep someone in, not to keep enemies out.",
+   "{name} ({hex}) has two rival captains, and the soldiers no longer know whom to obey or whom to fight for.",
+   "{name} ({hex}) has held out for three months against a siege by a raider army, and food is starting to run short.",
+   "{name} ({hex}) controls the only safe road to the borderlands, and its castellan demands a toll in gold, in grain or in a year of service.",
+   "{name} ({hex}) now belongs to a mercenary company that stopped waiting for its pay and decided to take it for itself.",
+   "{name} ({hex}) has a single inhabitant, an old soldier who still walks the ramparts as if the war had never ended.",
+   "{name} ({hex}) sees a light kindled every night in its highest tower, though the stairs leading up there collapsed a century ago.",
+   "{name} ({hex}) is a base for monster hunters, who sell heads, fangs and hides to the highest bidder and ask no questions.",
+   "{name} ({hex}) has changed hands seven times in ten years, and each new lord has painted a coat of arms over the previous one.",
+   "{name} ({hex}) rests on foundations older than any kingdom, and its cellars go much deeper than any map shows.",
+   "{name} ({hex}) answers to a castellan who has sworn vengeance on the lords of the cities, and is gathering men and horses."
+  ],
+  "dungeon_intro": [
+   "Beneath {land} lie crypts, mines and forgotten temples, and each one keeps a piece of the history of {realm_il}.",
+   "The ruins and underground halls of {land} draw adventurers from everywhere: few come back rich, many do not come back at all.",
+   "Every village in {land} knows at least one place where nobody should go, and every village has someone who went anyway.",
+   "The past of {land} is not buried deep enough: in many places it breaks the surface, and sometimes it moves.",
+   "Whoever seeks gold and glory in {land} easily finds a way down; finding the way back up is another matter."
+  ],
+  "dungeon": [
+   "{name} ({hex}): once the treasury of {realm_il}; its keepers walled up the entrance when everything collapsed, and stayed shut inside.",
+   "{name} ({hex}): it opened where the earth shook on a moonless night, and a warm wind smelling of sulphur has blown out of it ever since.",
+   "{name} ({hex}): the lair of a sorcerer who sought immortality; nobody knows whether he found it.",
+   "{name} ({hex}): here a king was buried alive, together with all his retinue and a treasure nobody has ever dared to claim.",
+   "{name} ({hex}): the miners fled in a hurry, and the tools are still where they dropped them, next to a vein of some nameless metal.",
+   "{name} ({hex}): a temple dug upside down into the rock, sacred to a god who will not be named.",
+   "{name} ({hex}): they say the travellers snatched on the nearby roads are taken here, and none has ever returned to tell of it.",
+   "{name} ({hex}): here lies {ruler_il}, in a tomb guarded by traps, riddles and a warden that never sleeps.",
+   "{name} ({hex}): the ancient sanctuary of {god}, where the altar is still warm and the offerings fresh, though nobody admits to bringing them.",
+   "{name} ({hex}): the prison where the wizards of {realm_il} locked away what they could not kill; some of the locks were recently forced, from the inside.",
+   "{name} ({hex}): a maze of tunnels dug by something huge which, according to the shepherds, has not finished digging yet.",
+   "{name} ({hex}): the last stronghold of those loyal to {ruler_il}, who barricaded themselves down here and swore never to surrender.",
+   "{name} ({hex}): the drowned library of a wizards' academy, where the books are still dry inside enchanted bubbles of air.",
+   "{name} ({hex}): the nest of a spider queen as big as a cart, whom the farmers appease with offerings of livestock.",
+   "{name} ({hex}): the catacombs where {people_il} buried their ancestors, who apparently do not wish to be disturbed.",
+   "{name} ({hex}): the forge of a cursed smith, where the weapons once made for {realm_il} still wait for someone to wield them.",
+   "{name} ({hex}): a bottomless well from which, on stormy nights, a voice rises calling the people of the nearby villages by name."
+  ],
+  "sea": [
+   "The sea washes the shores of {land}, and its fishers tell of islands that come and go with the fog.",
+   "Smugglers' coves and the wrecks of ancient ships hide along the coasts of {land}, still laden with goods nobody has claimed.",
+   "The sea off {land} is cold and restless, and on stormy nights sailors swear they hear bells ringing beneath the waves.",
+   "Merchants, pirates and news of distant lands reach {land} from the sea, and it is often hard to tell which is which.",
+   "The cliffs of {land} are dotted with dark lighthouses, and fishers avoid the deep waters where, they say, something enormous sleeps."
+  ],
+  "rivers": [
+   "{n} rivers run down from the high ground, and villages, mills and trouble gather along their banks.",
+   "{land} is crossed by {n} rivers, each with its own ferryman, its own toll and its own legend.",
+   "{n} rivers cut across {land}, and for centuries their fords have been the favourite place for ambushes, fairs and duels.",
+   "The waters of {n} rivers flow through {land}, and the boatmen who travel them know every bend, every shoal and every secret of the banks.",
+   "{n} rivers wind through {land}, and in their waters fishers sometimes find coins, rings and bones torn from the ruins by the floods."
+  ],
+  "one_river": [
+   "A single river crosses {land}, and it is the safest way through: whoever strays from it regrets it.",
+   "One great river splits {land} in two, and the folk on either bank speak different dialects and glare at each other.",
+   "Only one river waters {land}, and all life clings to its banks: far from the water there is only stone, wind and bones.",
+   "A slow, dark river crosses {land}, and the boatmen never travel it at night, for reasons they would rather not explain.",
+   "The only river of {land} springs from a source nobody has ever seen, and every spring it carries down objects from an unknown city."
+  ],
+  "no_river": [
+   "No river crosses {land}: water comes from deep wells and ancient cisterns, and whoever controls them holds everyone's life in their hands.",
+   "No rivers flow in {land}, and every drop of rain is carefully gathered in basins, waterskins and channels cut into the rock.",
+   "{land} has no rivers, but the old folk say there was once one, and that a curse drained it dry.",
+   "Without rivers, {land} lives on springs and wells, and quarrels over water are fiercer than those over gold."
+  ],
+  "factions_intro": [
+   "Today several factions vie for power in {land}, and two of them matter more than all the rest.",
+   "No king rules {land}, but the void left by the crown has been filled by greedy and ambitious factions.",
+   "Whoever wants to do business in {land} must know whom to pay, whom to obey and whom never to turn their back on.",
+   "Behind every toll, every hanging and every feast in {land} there is the hand of one of its factions.",
+   "The true powers of {land} do not sit on a throne, but in secret halls, smoky inns and camps in the woods.",
+   "In {land} power is not inherited: it is bought, stolen or won by the sword, and today it rests in few hands.",
+   "Among the ruins of what was once {realm_il}, new forces are stirring today, determined to seize whatever is left."
+  ],
+  "faction": [
+   "{fac_il} brings together the richest merchants of {land}, and wants to reopen the old trade roads at any cost.",
+   "{fac_il} was born among the veterans of a forgotten war, and today sells its swords to anyone who can pay.",
+   "{fac_il} guards the secrets of the wizards of {realm_il}, and lets nobody study them without its leave.",
+   "{fac_il} preaches the return of the old god {god}, and gathers followers among the poor, the sick and the desperate of every village.",
+   "{fac_il} claims descent from {ruler_il}, and asserts the right to rule {land} in the name of the old crown.",
+   "{fac_il} controls the smuggling of salt, weapons and relics, and has ears in every inn and every harbour.",
+   "{fac_il} hunts witches, monsters and the undead, but its methods are said to frighten the peasants more than the beasts themselves.",
+   "{fac_il} gathers the thieves, beggars and cutpurses of the cities, and enforces its own rules where the guards cannot reach.",
+   "{fac_il} wants to return {land} to the wild, and sabotages mills, bridges and roads in the name of the forest spirits.",
+   "{fac_il} has sought the pieces of the seal of {realm_il} for generations, and already holds more of them than it admits.",
+   "{fac_il} lends money to lords and villages, and collects its debts with endless patience and even greater cruelty.",
+   "{fac_il} protects travellers on the roads in exchange for a toll, and whoever refuses to pay soon learns what they were being protected from.",
+   "{fac_il} is led by a blind seer, and makes every decision by reading the flight of crows and the entrails of fish.",
+   "{fac_il} recruits young people in the poorest villages, promising lands and titles in a kingdom yet to be born.",
+   "{fac_il} studies the ruins and underground places of {land}, and pays adventurers well for books, maps and strange objects.",
+   "{fac_il} controls the mines and forges of {land}, and decides who may buy weapons and who must make do with sticks.",
+   "{fac_il} was founded to avenge the fall of {realm_il}, and after centuries it still has not decided whom to blame.",
+   "{fac_il} is feared all over {land} for its assassins, who never miss their mark and never leave witnesses.",
+   "{fac_il} runs the inns and coaching stations along the roads, and always knows who is travelling, with whom and with how much money."
+  ],
+  "rivalry": [
+   "{fac1_il} and {fac2_il} have hated each other for three generations, and by now nobody remembers who started it.",
+   "{fac1_il} and {fac2_il} fight openly in the streets, but in secret their leaders meet at every new moon.",
+   "{fac1_il} owes a huge sum to {fac2_il}, and the day of reckoning is approaching with no gold to settle the debt.",
+   "A marriage should soon unite the leaders of {fac1_il} and {fac2_il}, but many on both sides would do anything to stop it.",
+   "{fac1_il} accuses {fac2_il} of murdering its old leader, and has sworn revenge publicly, before a hundred witnesses.",
+   "{fac1_il} and {fac2_il} have signed a fragile truce, which holds only out of fear of a common enemy.",
+   "{fac1_il} has planted its spies in the ranks of {fac2_il}, and knows every move before it is even decided.",
+   "{fac1_il} and {fac2_il} are after the same lost treasure, but the map to find it is torn in two, and each holds one half.",
+   "{fac1_il} and {fac2_il} were once a single faction, and their split was so bloody that nobody likes to speak of it.",
+   "{fac1_il} secretly holds a valuable hostage from {fac2_il}, and uses that hostage to get whatever it wants without ever raising its voice.",
+   "{fac1_il} scorns {fac2_il} in public, but every month it secretly buys weapons, poisons and information from it.",
+   "{fac1_il} and {fac2_il} have split {land} into two spheres of influence, and whoever crosses the line is found in a ditch at dawn.",
+   "{fac1_il} swore allegiance to {fac2_il} after a humiliating defeat, but is only waiting for the right moment to betray that oath."
+  ],
+  "now_intro": [
+   "Now, though, something is changing, and even the most stubborn folk of {land} are starting to notice.",
+   "But the fragile peace of {land} is about to end, and the signs are now plain for everyone to see.",
+   "In recent months, though, the inns of {land} have been whispering about one thing only.",
+   "This year winter came early, and with the frost came something nobody can yet put a name to.",
+   "Lately, though, the elders of {land} shake their heads and say the worst is yet to come.",
+   "Now a new danger threatens {land}, and the old rivalries may soon seem a small matter.",
+   "Things never stay still for long in {land}, and this time too a storm is brewing far from prying eyes.",
+   "But ever since this spring began, nothing in {land} has gone the way it should.",
+   "And it is right now, while the powerful squabble over crumbs, that the gravest threat in centuries is gathering over {land}."
+  ],
+  "threat": [
+   "An orc army gathers at the borders, and its scouts have already been seen prowling the high ground.",
+   "A sickness that turns the eyes grey spreads from village to village, and the healers do not know where it comes from.",
+   "Crops no longer grow near the old ruins, and animals flee towards the lowlands for no reason.",
+   "A dragon has been seen flying low over {land}, and since then the flocks have vanished one after another.",
+   "An heir of {realm_il} has reappeared and claims {land}, with a seal few can dispute and an army that grows every day.",
+   "The bells of a buried temple ring at night, and whoever hears them always dreams the same dream.",
+   "The dead of the old battlefields have started walking again, and every night they come a little closer to the villages.",
+   "The cult of {god} has secretly been reborn, and its faithful are kidnapping travellers for a rite that must be completed at the next solstice.",
+   "A horde of raiders, driven from their own lands by something worse, is sweeping down on {land}, burning everything in its path.",
+   "A mad wizard has taken over a forgotten tower, and since then the sky over {land} has changed colour every night.",
+   "The spring the largest villages depend on is drying up, and whoever controls the remaining water will be able to dictate terms to everyone.",
+   "A foreign army, led by a general said to be invincible, has crossed the borders and demands the surrender of every city.",
+   "Something has woken beneath the mountains: the earth shakes every night, and warm water tasting of iron rises from the wells.",
+   "A pack of werewolves hunts the countryside of {land}, and some say their leader sits on a town council by day.",
+   "The tomb of {ruler_il} has been desecrated, and whoever did it took away something that should have stayed buried forever.",
+   "An unnatural fog creeps forward a few paces every day, and the villages it swallows send no more news.",
+   "A giant come down from the glaciers has made a home in an old fortress, and demands a tribute of cattle from every village in the valley.",
+   "A slow poison has begun killing the powerful of {land} one after another, and each side blames its rivals.",
+   "The stars above {land} have shifted, and the astrologers announce that the return of {god} is a matter of weeks.",
+   "A gold fever has swept {land}: they say gold is surfacing from the ground in a remote valley, and every desperate soul is rushing there.",
+   "The gates of a dwarven fortress, shut for centuries, have opened again, but what comes out of them is not dwarves."
+  ],
+  "omen": [
+   "For three nights the moon has risen blood-red, and the dogs howl without pause until dawn.",
+   "The statues of {ruler_il} in the village squares have begun to weep black tears.",
+   "Three-legged chicks are hatching in the henhouses, and the village witches refuse to say what it means.",
+   "The flocks of crows all fly in the same direction, and nobody has ever seen them come back.",
+   "In every well of {land} the water turned salty on the same day, at the same hour.",
+   "A green-tailed comet has been crossing the sky for weeks, and the astrologers have stopped leaving their homes.",
+   "The children of {land} sing in their sleep a rhyme nobody taught them, in a language dead for centuries.",
+   "In a single night a chalk mark appeared on the doors of the houses: the forgotten symbol of {god}.",
+   "Wine sours in the barrels, milk curdles in the pails and candles go out by themselves as soon as darkness falls.",
+   "An old banner of {realm_il}, buried for centuries, has been seen flying from the highest tower in {land}, and nobody knows who raised it.",
+   "The bees have abandoned their hives and the fish swim the wrong way up the streams, as if fleeing something.",
+   "Every night the old folk all dream of the same bronze door, and wake with their hands covered in earth.",
+   "All across {land} the bells rang by themselves at midnight, thirteen strokes, and then fell silent.",
+   "An eclipse no astronomer had foreseen darkened the sun for a whole hour, and since then the horses refuse to leave their stables.",
+   "A dying pilgrim reached the nearest village repeating a single name, always the same: that of {ruler_il}."
+  ],
+  "terrain": {
+   "forest": [
+    "Forests cover much of {land}: old, thick, and full of paths that lead nowhere.",
+    "Creatures older than humankind still live in the woods of {land}, and woodcutters leave offerings of bread before felling a tree.",
+    "The forests of {land} hide whole cities among their trees, swallowed by roots in a few centuries of neglect.",
+    "Whoever enters the forests of {land} without a guide soon loses the path, and sometimes the memory of how they got there."
+   ],
+   "hills": [
+    "The hills of {land} are dotted with barrows and fallen towers, and shepherds avoid the hilltops.",
+    "Among the hills of {land} hide narrow valleys and isolated villages, where strangers are greeted with bread and watched with suspicion.",
+    "The hills of {land} are riddled with old mines, and at night the sound of picks nobody wields echoes from the abandoned tunnels.",
+    "Rings of standing stones crown the hills of {land}, and the shepherds swear the stones change places from one year to the next."
+   ],
+   "mountains": [
+    "The mountains of {land} are high and cold, and their passes stay closed half of the year.",
+    "Narrow passes and ancient glaciers open among the mountains of {land}, and sometimes motionless figures can be glimpsed in the ice, as if watching.",
+    "The mountains of {land} are rich in iron and silver, and the dwarves who once mined them have never accepted their loss.",
+    "Eagles as big as horses nest on the peaks of {land}, and the mountain folk know that whoever steals an egg never comes back down."
+   ],
+   "plains": [
+    "The plains of {land} are wide and windy, and you can see whoever is coming long before they arrive.",
+    "The plains of {land} are covered in wild grain and grassy mounds, and the plough often turns up helmets, bones and ancient coins.",
+    "Herds of wild horses roam the plains of {land}, and the nomads who follow them recognise neither borders nor masters.",
+    "The plains of {land} were a battlefield for centuries, and on certain autumn nights the horns and the gallop can still be heard there."
+   ],
+   "desert": [
+    "Every year the desert eats a little more of {land}, and roofs and bell towers peek out of the sand.",
+    "Wells are few and jealously guarded in the desert of {land}, and anyone who knows where they are is worth more than a load of gold.",
+    "The dunes of {land} shift with the wind, and every storm uncovers and buries again the ruins of a city nobody has ever found twice.",
+    "In the desert of {land} the sun kills by day and the cold by night, and raiders and snakes as big as trees hide among the rocks."
+   ],
+   "swamp": [
+    "The swamps of {land} are misty and treacherous, and now and then their waters give back what they swallowed.",
+    "Stilt villages rise among the swamps of {land}, and their people know sunken paths no stranger could ever find.",
+    "Cold greenish lights glimmer at night in the swamps of {land}, and whoever follows them never returns to solid ground.",
+    "The swamps of {land} swallowed an entire city, and on windless days its towers can still be seen beneath the surface."
+   ],
+   "fungus": [
+    "Giant mushroom forests grow on the damp coasts of {land}: caps as wide as town squares shade whole villages, and the mightiest wizards hollow their towers out of the stems.",
+    "Under the giant mushrooms of {land} the air is warm and heavy with spores, and whoever gets lost among those towering stems hears voices that belong to no one.",
+    "Nobody knows who planted the first giant mushrooms of {land}: their spores travel on the wind, and where they settle the forest changes within a few years.",
+    "The giant mushrooms of {land} give timber, food and shelter, but the gatherers know that some caps, when they open, release spores that make the dead dream."
+   ]
+  },
+  "rumours": [
+   [
+    "Under {name} ({hex}) lies the treasure of {realm_il}, and nobody has ever reached the bottom.",
+    "dungeon"
+   ],
+   [
+    "A travelling merchant sells maps of {land}: half are fake, but one is real.",
+    null
+   ],
+   [
+    "The guards of {name} ({hex}) take bribes, but only in silver, never in gold.",
+    "city"
+   ],
+   [
+    "On full-moon nights a headless rider travels the old road of {realm_il}.",
+    null
+   ],
+   [
+    "Whoever drinks from the river near {name} ({hex}) forgets their own name for a whole day.",
+    "river_site"
+   ],
+   [
+    "A hermit in the hills knows where the last king of {realm_il} is buried, but asks a strange price.",
+    null
+   ],
+   [
+    "The wolves of {land} won't attack anyone wearing a dragon's tooth around the neck.",
+    null
+   ],
+   [
+    "There's a bounty on whoever burned the bridge near {name} ({hex}).",
+    "city"
+   ],
+   [
+    "{name} ({hex}) is hiring sellswords, and pays in advance: too far in advance, say the veterans who turned the job down.",
+    "fortress"
+   ],
+   [
+    "Something came out of {name} ({hex}) on the last new-moon night, leaving tracks nobody can recognise.",
+    "dungeon"
+   ],
+   [
+    "The miller's daughter swears she saw a knight in armour step out of a lake and vanish into the woods, dry as a bone.",
+    null
+   ],
+   [
+    "The gold coins of {ruler_il} bear a tiny map on the back, but you need all twelve of them to read it.",
+    null
+   ],
+   [
+    "A child from a nearby village speaks a dead language in his sleep, and his mother is looking for someone who can translate it.",
+    null
+   ],
+   [
+    "The priests of {god} have not vanished entirely: one of them runs an inn, and keeps an altar behind the cellar.",
+    null
+   ],
+   [
+    "An old and weary dragon is looking for someone to leave its hoard to, but it asks three questions and accepts only honest answers.",
+    null
+   ],
+   [
+    "In the woods there is a hut where a witch sells potions cheap, but the real price is paid a year later.",
+    null
+   ],
+   [
+    "The burgomaster of {name} ({hex}) died a month ago, but his family keeps him propped at the window so as not to lose power.",
+    "city"
+   ],
+   [
+    "A tunnel runs under the market square of {name} ({hex}) and out beyond the walls, and smugglers use it every night.",
+    "city"
+   ],
+   [
+    "The heiress of the richest family in {name} ({hex}) has vanished, and the reward for bringing her home doubles every week.",
+    "city"
+   ],
+   [
+    "An alchemist in {name} ({hex}) is looking for volunteers to test an elixir of long life, and pays in hard gold.",
+    "city"
+   ],
+   [
+    "In the worst inn of {name} ({hex}) a table is reserved for a guest nobody has ever seen, and every evening someone pays the bill.",
+    "city"
+   ],
+   [
+    "The castellan of {name} ({hex}) secretly keeps the crown of {ruler_il}, and shows it only to those who swear loyalty to him.",
+    "fortress"
+   ],
+   [
+    "In the cells of {name} ({hex}) there is a prisoner who claims to be a prince, and some would pay dearly to free him, or to silence him.",
+    "fortress"
+   ],
+   [
+    "The garrison of {name} ({hex}) has not been paid in months, and someone is already bargaining to sell the keys to the gate.",
+    "fortress"
+   ],
+   [
+    "On the third level of {name} ({hex}) there is a door that opens only for those who tell the truth, and nobody has ever passed through it.",
+    "dungeon"
+   ],
+   [
+    "The last band of adventurers to go down into {name} ({hex}) came back with one member more than they started with, and nobody knows who it is.",
+    "dungeon"
+   ],
+   [
+    "In the deepest halls of {name} ({hex}) sleeps {ruler_il}, and whoever disturbs that sleep will receive a gift or a curse.",
+    "dungeon"
+   ],
+   [
+    "The hill gnomes pay well for the blue lanterns found down in {name} ({hex}), and will not say what they are for.",
+    "dungeon"
+   ],
+   [
+    "A priest of {god} went down into {name} ({hex}) with three acolytes, and a month later only one came back up, mute and white-haired.",
+    "dungeon"
+   ],
+   [
+    "Near {name} ({hex}) a blind ferryman takes anyone across the river without asking for anything, but only after sunset.",
+    "river_site"
+   ],
+   [
+    "In the river near {name} ({hex}) lives a hundred-year-old pike, with a gold ring stuck between its teeth.",
+    "river_site"
+   ],
+   [
+    "The washerwomen of {name} ({hex}) saw an empty boat drift down the river, with black sails and oars rowing by themselves.",
+    "river_site"
+   ],
+   [
+    "Every seven years the old road of {realm_il} reappears for one whole night, and leads straight to the lost palace.",
+    null
+   ],
+   [
+    "A hunter found a golden helm bearing the arms of {ruler_il} in the woods, and is now afraid to sleep alone.",
+    null
+   ],
+   [
+    "The witches of the north are buying every black cat in {land}, and paying three times their worth.",
+    null
+   ],
+   [
+    "A merchant caravan vanished on the high road with all its cargo, and the wagons were found empty, with the oxen still yoked.",
+    null
+   ],
+   [
+    "The old cartographer of {land} is not dead: he is hiding somewhere with the only map that marks the dwarven gates.",
+    null
+   ],
+   [
+    "Whoever sleeps a whole night inside a stone circle wakes up able to understand the speech of crows, or does not wake up at all.",
+    null
+   ],
+   [
+    "A travelling wizard pays silver for every troll's tooth, and nobody has the nerve to ask what he needs them for.",
+    null
+   ],
+   [
+    "A shepherd saw a stone door open by itself in the side of a hill, and close again before he could get near.",
+    null
+   ],
+   [
+    "The beggars of {land} have a secret king, and whoever can find him can learn anything that happens in the cities.",
+    null
+   ],
+   [
+    "Someone is paying their weight in gold for the milestones of {realm_il}, and the peasants are digging them up at night to sell.",
+    null
+   ],
+   [
+    "{fac1_il} pays in gold for any news of the movements of {fac2_il}, and asks no questions about how it was obtained.",
+    null
+   ],
+   [
+    "They say the leader of {fac2_il} died months ago, and that someone wears their mask so that it all doesn't fall apart.",
+    null
+   ],
+   [
+    "An old beggar swears he served at the court of {ruler_il}, and knows secret passages nobody else remembers.",
+    null
+   ],
+   [
+    "A seal bearing the arms of {realm_il} was sold at the market for three copper coins, and the next day the merchant was gone.",
+    null
+   ],
+   [
+    "The priests of {god} have come back to preach in the villages, and those who listen stop sleeping at night.",
+    null
+   ],
+   [
+    "Whoever says the name of {god} three times before a broken mirror sees the face of the one who will betray them.",
+    null
+   ],
+   [
+    "{fac1_il} is hiring adventurers for an expedition whose destination nobody knows, and pays half in advance.",
+    null
+   ],
+   [
+    "A spy of {fac2_il} hides in every inn of this land, and you can tell them because they only drink water.",
+    null
+   ],
+   [
+    "The crown of {ruler_il} was never buried with its owner: someone keeps it hidden in a dry well.",
+    null
+   ],
+   [
+    "The blind bard who wanders the fairs knows the last verse of the ballad of {realm_il}, the one nobody dares to sing.",
+    null
+   ],
+   [
+    "A riderless horse with a bloodied saddle comes back to the same village every evening, and nobody knows whose it is.",
+    null
+   ],
+   [
+    "The smith of a border village is forging a hundred spearheads for a customer who pays in ancient coins.",
+    null
+   ],
+   [
+    "A shepherd found an egg as big as a barrel, warm to the touch, and keeps it hidden in his hayloft.",
+    null
+   ],
+   [
+    "The bees of this land have stopped making honey, and the witches say it's a bad sign for the harvest.",
+    null
+   ],
+   [
+    "A spice merchant sells a map of the sky that, to hear him tell it, shows the way to a buried city.",
+    null
+   ],
+   [
+    "On moonless nights fires are lit on the hills, and they go out as soon as anyone comes near.",
+    null
+   ],
+   [
+    "A foreign bounty hunter is asking after a man with a star-shaped scar, and offers a reward.",
+    null
+   ],
+   [
+    "Coins struck by {realm_il} bring luck in battle, and mercenaries pay ten times their weight for them.",
+    null
+   ],
+   [
+    "A group of pilgrims set out for the mountains singing; their songs can still be heard, but none of them came back.",
+    null
+   ],
+   [
+    "A noblewoman on the run hides among the peasants, and whoever hands her over to {fac1_il} will get a title and land.",
+    null
+   ],
+   [
+    "In {name} ({hex}) they are looking for a guide who knows the northern roads, and pay more than for a knight.",
+    "city"
+   ],
+   [
+    "The treasurer of {name} ({hex}) vanished with the keys of the mint, and the town has shut its gates to find him.",
+    "city"
+   ],
+   [
+    "{name} ({hex}) holds a tournament every month, and this year's prize is a sword nobody has managed to draw.",
+    "city"
+   ],
+   [
+    "In {name} ({hex}) there is talk of a plague that strikes only redheads, and the barbers have never been so busy.",
+    "city"
+   ],
+   [
+    "A man with canvas wings was seen flying east from the walls of {name} ({hex}).",
+    "fortress"
+   ],
+   [
+    "The commander of {name} ({hex}) is looking for a priest to bless the walls: he says something climbs them at night.",
+    "fortress"
+   ],
+   [
+    "In the dungeons of {name} ({hex}) there is a prisoner who claims to be the rightful heir of {realm_il}.",
+    "fortress"
+   ],
+   [
+    "A man covered in gold came out of {name} ({hex}), and died before he could say what he had seen.",
+    "dungeon"
+   ],
+   [
+    "Whoever sleeps one night at the entrance of {name} ({hex}) dreams the way to the treasure, but wakes up a year older.",
+    "dungeon"
+   ],
+   [
+    "{fac2_il} sent a team into {name} ({hex}) a week ago, and nobody has come back yet.",
+    "dungeon"
+   ],
+   [
+    "From {name} ({hex}) comes a song in a dead tongue, always the same tune, a little louder every night.",
+    "dungeon"
+   ],
+   [
+    "The priests of {god} say that something which must not wake sleeps at the bottom of {name} ({hex}).",
+    "dungeon"
+   ],
+   [
+    "A fisherman hauled up near {name} ({hex}) a chest closed with a padlock no key will open.",
+    "river_site"
+   ],
+   [
+    "The ferryman who takes you to {name} ({hex}) asks no money, but a memory: and whoever gives it never finds it again.",
+    "river_site"
+   ],
+   [
+    "The mill near {name} ({hex}) keeps turning even when the river is dry, and the miller won't say why.",
+    "river_site"
+   ],
+   [
+    "{fac1_il} has secretly bought half the houses in {name} ({hex}), and nobody knows what it wants them for.",
+    "city"
+   ],
+   [
+    "In {name} ({hex}) a soothsayer reads the future in dragon bones, and so far has never got a prediction wrong.",
+    "city"
+   ],
+   [
+    "The garrison of {name} ({hex}) was replaced overnight by soldiers nobody knows, bearing colourless arms.",
+    "fortress"
+   ],
+   [
+    "The guards of {name} ({hex}) let through anyone who knows the watchword from the days of {ruler_il}.",
+    "fortress"
+   ],
+   [
+    "Whoever enters {name} ({hex}) with a lit candle always finds the way back: those who let it go out do not.",
+    "dungeon"
+   ]
+  ],
+  "encounters": [
+   [
+    "A patrol of {fac1_il}: they ask everyone where they are headed, and search anyone who won't answer.",
+    null
+   ],
+   [
+    "A squad of {fac2_il} escorts a covered wagon, and lets nobody come close.",
+    null
+   ],
+   [
+    "A skirmish between {fac1_il} and {fac2_il}: the wounded beg for help, and each side promises a reward to whoever joins it.",
+    null
+   ],
+   [
+    "A recruiter for {fac1_il} offers double pay to anyone who can fight, but the contract runs for seven years.",
+    null
+   ],
+   [
+    "A deserter from {fac2_il}, hungry and wounded, offers information in exchange for food and an escort.",
+    null
+   ],
+   [
+    "An envoy of {fac1_il} on the way to {fac2_il}, carrying a sealed letter nobody must read.",
+    null
+   ],
+   [
+    "A tax collector of {fac2_il} demands a toll to cross these lands, and has six armed men with him.",
+    null
+   ],
+   [
+    "A spy of {fac1_il} disguised as a merchant: they want to know everything about {fac2_il}, and pay well.",
+    null
+   ],
+   [
+    "A herald of {fac2_il} reads a proclamation: anyone who helps {fac1_il} will be counted an enemy.",
+    null
+   ],
+   [
+    "A wedding caravan between {fac1_il} and {fac2_il}: the bride secretly asks for help to escape.",
+    null
+   ],
+   [
+    "Pilgrims heading for the tomb of {ruler_il}: they carry offerings and sing hymns, and they are easy prey.",
+    null
+   ],
+   [
+    "A storyteller recounts the deeds of {ruler_il}, asking a coin for every verse.",
+    null
+   ],
+   [
+    "An old man claims to be the last heir of {ruler_il}, and seeks help to reclaim the throne.",
+    null
+   ],
+   [
+    "A statue of {ruler_il} toppled in the mud: whoever sets it upright receives a vision.",
+    null
+   ],
+   [
+    "A treasure hunter with a map that, he swears, leads to the lost armoury of {realm_il}.",
+    null
+   ],
+   [
+    "The ghost of a soldier of {realm_il} asks who rules now, and grows angry if he dislikes the answer.",
+    null
+   ],
+   [
+    "A broken column bearing the arms of {realm_il}: at its foot someone has left fresh offerings.",
+    null
+   ],
+   [
+    "Children playing at the war of {realm_il} with wooden swords: one of them wears a real royal seal around the neck.",
+    null
+   ],
+   [
+    "Hooded followers of {god} in procession: they invite travellers to join them for the night.",
+    null
+   ],
+   [
+    "A preacher of {god} on a cart announces the end of days, and sells amulets to be saved.",
+    null
+   ],
+   [
+    "A freshly built altar to {god} by the roadside, with the blood still fresh.",
+    null
+   ],
+   [
+    "A village of descendants of {people_il}: they live as their ancestors did and eye strangers with suspicion.",
+    null
+   ],
+   [
+    "Merchants heading for {name} ({hex}) with a precious cargo: they want an escort, and pay well.",
+    "city"
+   ],
+   [
+    "Refugees fleeing {name} ({hex}): they tell of a night of fire and of gates opened from the inside.",
+    "city"
+   ],
+   [
+    "Soldiers from {name} ({hex}) are hunting an escaped prisoner: they ask for help, and suspect everyone.",
+    "fortress"
+   ],
+   [
+    "A wounded messenger from {name} ({hex}) carries a plea for reinforcements that will never arrive without help.",
+    "fortress"
+   ],
+   [
+    "The only survivor of a company that went into {name} ({hex}), alone and shaken, who won't go back alone.",
+    "dungeon"
+   ],
+   [
+    "A band of raiders carrying old relics from {name} ({hex}): they sell them cheap, but something is following them.",
+    "dungeon"
+   ],
+   [
+    "An officer of {fac1_il} seeks volunteers to clear {name} ({hex}), in exchange for half the loot.",
+    "dungeon"
+   ],
+   [
+    "A herald from {name} ({hex}) announces a bounty on the local brigands, and looks for anyone willing to collect it.",
+    "city"
+   ],
+   [
+    "A fire blazes in the distance: it's a camp of {fac2_il}, and someone set it on purpose.",
+    null
+   ],
+   [
+    "A courier of {fac1_il} lies dead on the road, the message bag still shut and a featherless arrow in the back.",
+    null
+   ],
+   [
+    "A sudden eclipse: the peasants kneel and call on {god}, and someone points at the party as the culprits.",
+    null
+   ],
+   [
+    "A village fair in honour of {ruler_il}: games, wine, and an archery contest with a mysterious prize.",
+    null
+   ],
+   [
+    "A treasurer of {realm_il}, dead for centuries, appears at sunset and asks for a debt to be repaid.",
+    null
+   ],
+   [
+    "An out-of-season snowfall blocks the road; in a nearby shelter, men of {fac1_il} and of {fac2_il} are already waiting.",
+    null
+   ],
+   [
+    "A young knight seeks the sword of {ruler_il} to prove descent from the old ruler, and asks for travelling companions.",
+    null
+   ],
+   [
+    "A herbalist who was once a nurse in the halls of {fac1_il} knows secrets worth paying for.",
+    null
+   ],
+   [
+    "A funeral procession carries a notable's body towards {name} ({hex}), and the widow wants someone to look into the death.",
+    "city"
+   ],
+   [
+    "A master builder is hiring workers to restore {name} ({hex}), and pays in advance: too far in advance.",
+    "fortress"
+   ],
+   [
+    "A priest of {god} is heading alone towards {name} ({hex}), set on performing a rite he won't explain.",
+    "dungeon"
+   ],
+   [
+    "Freshly turned earth: someone buried a chest bearing the seal of {realm_il} here at night.",
+    null
+   ]
+  ]
+ }
+}

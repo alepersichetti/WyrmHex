@@ -1,0 +1,355 @@
+{
+ "_source": {
+  "title": "Wilderness Stocking - Expanded (Draft Version)",
+  "author": "D4Caltrops",
+  "url": "https://blog.d4caltrops.com/2025/10/wilderness-stocking-expanded.html",
+  "licence": "Free resource published on the D4Caltrops blog; no licence stated. Used with credit to the author.",
+  "changes": "The d66 table (the d6 faces shown as symbols ! @ # $ % ^ = 1-6) transcribed from the PDF; Italian translation added for WyrmHex. Result notes slightly shortened (references to the author's other tables left out).",
+  "how": "Roll d66: first die = column of the table, second die = row. Lair occupants (and the tracks of result 12) are rolled by WyrmHex on the land's encounter table for the hex's terrain."
+ },
+ "types": {
+  "landmark": {
+   "en": "Landmark",
+   "it": "Luogo notevole",
+   "about_en": "Landmarks are important for any Mapping performed by the Players and usually feature prominently in any Directions they may have received concerning Destinations. They also often create Choices. Features such as these may consume Time as the Players investigate or simply provide some decoration and a brief pause to decorate Travel. It is often nice to frame Camping/Meals/Rests around these Features.",
+   "about_it": "I luoghi notevoli sono importanti per le mappe disegnate dai giocatori, e di solito compaiono nelle indicazioni che hanno ricevuto per raggiungere una meta. Spesso creano anche delle scelte. Possono far perdere tempo ai giocatori che li esplorano, o semplicemente abbellire il viaggio con una breve pausa. È bello ambientare qui accampamenti, pasti e soste."
+  },
+  "lair": {
+   "en": "Lair",
+   "it": "Tana",
+   "about_en": "These are typically smaller, Site-based Locations, potentially even Dungeons or entrances to a larger Complex. Occupants are generally drawn from Regional Encounter Tables (WyrmHex rolls them on this land's encounter table for the terrain).",
+   "about_it": "Di solito sono luoghi piccoli e circoscritti, a volte veri e propri dungeon o ingressi a un complesso più grande. Gli occupanti vengono in genere dalle tabelle degli incontri della regione (WyrmHex li tira sulla tabella degli incontri del terreno)."
+  },
+  "special": {
+   "en": "Special",
+   "it": "Speciale",
+   "about_en": "Special Results are an opportunity to place more Unusual Features, things that drive a sense of Discovery, Wonder, or perhaps create a little Mystery. Tricks and Puzzles are also commonly placed with these Results.",
+   "about_it": "I risultati speciali sono l'occasione per mettere elementi insoliti, cose che danno il senso della scoperta e della meraviglia, o creano un po' di mistero. Qui si mettono spesso anche trucchi ed enigmi."
+  },
+  "hazard": {
+   "en": "Hazard",
+   "it": "Pericolo",
+   "about_en": "Carefully consider adding some Clues or Tells to telegraph any Traps or Hazards Placed.",
+   "about_it": "Valuta con cura di aggiungere indizi o segnali che lascino intuire le trappole o i pericoli che metti."
+  },
+  "resource": {
+   "en": "Resource",
+   "it": "Risorsa",
+   "about_en": "Resources are natural Opportunities. They may be exhaustible, ephemeral, permanent features, or replenish over time. Think of the Animal/Vegetable/Mineral/Magic of a Biome, Climate or Terrain and how those might be used by the Players.",
+   "about_it": "Le risorse sono occasioni offerte dalla natura. Possono esaurirsi, durare poco, essere permanenti o rinnovarsi col tempo. Pensa agli animali, ai vegetali, ai minerali e alla magia di un ambiente, di un clima o di un terreno, e a come i giocatori potrebbero usarli."
+  }
+ },
+ "results": [
+  {
+   "roll": 11,
+   "type": [
+    "landmark"
+   ],
+   "en": "Consider adding a Hidden Feature that takes Time to Uncover or Investigate.",
+   "it": "Valuta di aggiungere un elemento nascosto che richiede tempo per essere scoperto o indagato."
+  },
+  {
+   "roll": 12,
+   "type": [
+    "landmark"
+   ],
+   "en": "Consider rolling on Encounter Tables and add a \"Trace/Track/Spoor\" for one of the local Denizens.",
+   "it": "Valuta di tirare sulle tabelle degli incontri e di aggiungere tracce, orme o escrementi di uno degli abitanti del luogo.",
+   "monster": true
+  },
+  {
+   "roll": 13,
+   "type": [
+    "landmark"
+   ],
+   "en": "Consider adding a change in Elevation that might create a vantage point to obtain the Lay of the Land.",
+   "it": "Valuta di aggiungere un dislivello che offra un punto panoramico da cui farsi un'idea del territorio."
+  },
+  {
+   "roll": 14,
+   "type": [
+    "landmark"
+   ],
+   "en": "Consider adding a Vignette to assist with Portraying a sense of Place.",
+   "it": "Valuta di aggiungere una piccola scena che aiuti a dare il senso del luogo."
+  },
+  {
+   "roll": 15,
+   "type": [
+    "landmark"
+   ],
+   "en": "Consider adding something placed by Current/Former Denizens that speaks of other Inhabitants.",
+   "it": "Valuta di aggiungere qualcosa lasciato dagli abitanti di oggi o di un tempo, che parli di altri occupanti della zona."
+  },
+  {
+   "roll": 16,
+   "type": [
+    "landmark",
+    "resource"
+   ],
+   "en": "Include an ephemeral Resource, or one that the Party can utilize to Replenish Supplies.",
+   "it": "Inserisci una risorsa effimera, oppure una che il gruppo possa usare per rifornirsi di provviste."
+  },
+  {
+   "roll": 21,
+   "type": [
+    "landmark"
+   ],
+   "en": "Consider adding some Wilderness Fauna to breathe life into the place.",
+   "it": "Valuta di aggiungere qualche animale selvatico per dare vita al luogo."
+  },
+  {
+   "roll": 22,
+   "type": [
+    "landmark"
+   ],
+   "en": "Consider adding some Distinctive Trees or other native Plants.",
+   "it": "Valuta di aggiungere alberi caratteristici o altre piante del posto."
+  },
+  {
+   "roll": 23,
+   "type": [
+    "landmark"
+   ],
+   "en": "Consider adding a few Discarded Items that may speak to the Denizens or fellow Travelers.",
+   "it": "Valuta di aggiungere qualche oggetto abbandonato che racconti degli abitanti o di altri viaggiatori."
+  },
+  {
+   "roll": 24,
+   "type": [
+    "landmark"
+   ],
+   "en": "Consider adding something that speaks to the Season or recent Changes in the Weather.",
+   "it": "Valuta di aggiungere qualcosa che parli della stagione o dei recenti cambiamenti del tempo."
+  },
+  {
+   "roll": 25,
+   "type": [
+    "landmark"
+   ],
+   "en": "Consider adding other Sensory Inputs: Smells, Sounds, or even Intuitive Impressions.",
+   "it": "Valuta di aggiungere altre sensazioni: odori, suoni o perfino impressioni istintive."
+  },
+  {
+   "roll": 26,
+   "type": [
+    "landmark",
+    "resource"
+   ],
+   "en": "Consider a Resource that may not be immediately useful now, but might be important Later.",
+   "it": "Valuta una risorsa che magari non serve subito, ma che potrebbe diventare importante più avanti."
+  },
+  {
+   "roll": 31,
+   "type": [
+    "lair"
+   ],
+   "en": "Consider giving them a Desire or Need that is in direct conflict with another Faction.",
+   "it": "Valuta di dare loro un desiderio o un bisogno in diretto conflitto con un'altra fazione.",
+   "monster": true
+  },
+  {
+   "roll": 32,
+   "type": [
+    "lair"
+   ],
+   "en": "Consider adding something that speaks to the Creature's basic Needs for Food/Water/Shelter or Companionship.",
+   "it": "Valuta di aggiungere qualcosa che parli dei bisogni essenziali delle creature: cibo, acqua, riparo o compagnia.",
+   "monster": true
+  },
+  {
+   "roll": 33,
+   "type": [
+    "lair"
+   ],
+   "en": "Consider applying a Mien to assist with Portrayal of the Encounter.",
+   "it": "Valuta di dare loro un atteggiamento che aiuti a interpretare l'incontro.",
+   "monster": true
+  },
+  {
+   "roll": 34,
+   "type": [
+    "lair",
+    "resource"
+   ],
+   "en": "Consider Placing a Resource with a Past, enough to garner Rumors and Gossip in the outside world.",
+   "it": "Valuta di mettere una risorsa con un passato, abbastanza da far nascere voci e pettegolezzi nel mondo esterno.",
+   "monster": true
+  },
+  {
+   "roll": 35,
+   "type": [
+    "lair",
+    "resource"
+   ],
+   "en": "Consider a Resource that is not immediately useable (will require Labor, Study, or Refinement to fully utilize).",
+   "it": "Valuta una risorsa che non si può usare subito (per sfruttarla del tutto servono lavoro, studio o raffinazione).",
+   "monster": true
+  },
+  {
+   "roll": 36,
+   "type": [
+    "lair",
+    "resource"
+   ],
+   "en": "Consider how the Resource may be tied to a Relationship with another Faction, either directly or indirectly.",
+   "it": "Valuta come la risorsa possa essere legata ai rapporti con un'altra fazione, in modo diretto o indiretto.",
+   "monster": true
+  },
+  {
+   "roll": 41,
+   "type": [
+    "lair"
+   ],
+   "en": "Consider how these Monsters might Ambush Intruders or Escape to potentially retrieve Reinforcements.",
+   "it": "Valuta come questi mostri potrebbero tendere un'imboscata agli intrusi, o fuggire per tornare con dei rinforzi.",
+   "monster": true
+  },
+  {
+   "roll": 42,
+   "type": [
+    "lair"
+   ],
+   "en": "Consider ways to make for a more Dangerous or Tactically Complicated Lair that requires Planning to Clear.",
+   "it": "Valuta come rendere la tana più pericolosa o tatticamente complicata, tanto da richiedere un piano per ripulirla.",
+   "monster": true
+  },
+  {
+   "roll": 43,
+   "type": [
+    "lair"
+   ],
+   "en": "Consider opportunities to telegraph or illustrate existing Faction Relationships, or give them a Reputation.",
+   "it": "Valuta come mostrare i rapporti che già esistono fra le fazioni, oppure dai a queste creature una reputazione.",
+   "monster": true
+  },
+  {
+   "roll": 44,
+   "type": [
+    "lair",
+    "resource"
+   ],
+   "en": "Consider ways of Concealing, Hiding, or Camouflaging the Resource in some way.",
+   "it": "Valuta come celare, nascondere o mimetizzare in qualche modo la risorsa.",
+   "monster": true
+  },
+  {
+   "roll": 45,
+   "type": [
+    "lair",
+    "resource"
+   ],
+   "en": "Consider adding a Resource that speaks to later Tiers: Lumber, Stone, Assets for the Domain Tier.",
+   "it": "Valuta di aggiungere una risorsa utile più avanti nella campagna: legname, pietra, beni per quando i personaggi governeranno un dominio.",
+   "monster": true
+  },
+  {
+   "roll": 46,
+   "type": [
+    "lair",
+    "resource"
+   ],
+   "en": "Consider placing a Resource that is actively being exploited by the Monsters in some way.",
+   "it": "Valuta di mettere una risorsa che i mostri stanno già sfruttando in qualche modo.",
+   "monster": true
+  },
+  {
+   "roll": 51,
+   "type": [
+    "special"
+   ],
+   "en": "Perhaps an Unusual Statue or Sculptural Element or Fountain, Spring or Pool.",
+   "it": "Magari una statua insolita o un elemento scolpito, oppure una fontana, una sorgente o una pozza."
+  },
+  {
+   "roll": 52,
+   "type": [
+    "special"
+   ],
+   "en": "Potentially include signs of Predation, Exploitation, or traces of a completely Exhausted Resource.",
+   "it": "Potresti inserire segni di predazione o di sfruttamento, o le tracce di una risorsa ormai del tutto esaurita."
+  },
+  {
+   "roll": 53,
+   "type": [
+    "special"
+   ],
+   "en": "Consider an area where Magic might function in a fashion different from Expectations.",
+   "it": "Valuta una zona dove la magia funziona in modo diverso da come ci si aspetta."
+  },
+  {
+   "roll": 54,
+   "type": [
+    "special"
+   ],
+   "en": "Consider a Strange Altar or Shrine of some sort, potentially capable of providing a Boon, Bane, or Both.",
+   "it": "Valuta uno strano altare o santuario, forse capace di concedere un beneficio, una maledizione o entrambi."
+  },
+  {
+   "roll": 55,
+   "type": [
+    "special"
+   ],
+   "en": "Consider an obstacle that is not traversable by Current Means: Lakes, Rivers, Cliffs, Canyons, Peaks, Mires.",
+   "it": "Valuta un ostacolo che non si può superare con i mezzi attuali: laghi, fiumi, scogliere, canyon, vette, acquitrini."
+  },
+  {
+   "roll": 56,
+   "type": [
+    "special"
+   ],
+   "en": "Consider a Site-Based Element or Feature that may influence/alter the immediate area/surrounding Hexes.",
+   "it": "Valuta un elemento legato al luogo che possa influenzare o cambiare la zona intorno e gli esagoni vicini."
+  },
+  {
+   "roll": 61,
+   "type": [
+    "hazard"
+   ],
+   "en": "Consider Placing a Hazard that creates the Risk of Supply/Equipment Depletion instead of outright Injury.",
+   "it": "Valuta un pericolo che rischia di consumare provviste o equipaggiamento invece di ferire direttamente."
+  },
+  {
+   "roll": 62,
+   "type": [
+    "hazard"
+   ],
+   "en": "Consider Placing a Hazard that doesn't Harm, but instead Alerts, Separates, Captures, or forces a Tough Choice.",
+   "it": "Valuta un pericolo che non ferisce, ma mette in allarme, separa, cattura o costringe a una scelta difficile."
+  },
+  {
+   "roll": 63,
+   "type": [
+    "hazard"
+   ],
+   "en": "Consider a Hazard that is designed to intentionally Harm or Alter if unsuccessfully avoided by the Adventurers.",
+   "it": "Valuta un pericolo fatto apposta per ferire o trasformare chi non riesce a evitarlo."
+  },
+  {
+   "roll": 64,
+   "type": [
+    "hazard"
+   ],
+   "en": "Consider a Hazard that Rumors would speak to: Perhaps one that doesn't impact the Party immediately.",
+   "it": "Valuta un pericolo di cui parlano le voci: magari uno che non colpisce subito il gruppo."
+  },
+  {
+   "roll": 65,
+   "type": [
+    "hazard",
+    "resource"
+   ],
+   "en": "Consider associating the Hazard with Flora such as Fruit/Berries or Mushrooms/Fungi.",
+   "it": "Valuta di legare il pericolo alla flora: frutti, bacche, funghi o muffe."
+  },
+  {
+   "roll": 66,
+   "type": [
+    "hazard",
+    "resource"
+   ],
+   "en": "Consider a Hazard that renders the Resource invaluable or inaccessible in some way.",
+   "it": "Valuta un pericolo che rende la risorsa preziosissima o in qualche modo irraggiungibile."
+  }
+ ]
+}
