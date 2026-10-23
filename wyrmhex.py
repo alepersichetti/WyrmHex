@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-WyrmHex v1.1.0 - random hexcrawl maps for OSR games, all in ASCII.
+WyrmHex v1.2.0 - random hexcrawl maps for OSR games, all in ASCII.
 
 Looks like an old terminal game (Dwarf Fortress, NetHack): hexes drawn with
 _ / \\, terrain as CP437 symbols (forest ♣♠, mountains ▲^, hills ∩n, lakes ≈,
@@ -12,7 +12,9 @@ map and the best paper size is suggested.
 
 Output goes to maps_generated/<seed>/ next to this file (or --output):
   <seed>_nonumber.png/.txt   for the players
-  <seed>_number.png/.txt     same map, hexes numbered CCRR (0101 = top left)
+  <seed>_number.png/.txt     same map, hexes numbered CCRR (0101 = top left),
+                             or battleship style: row letters on the left, column
+                             numbers on top (A1 = top left)
 
 The seed (e.g. 475T-4KM4-MY0B-JNDJ-ZYEQ-K164) holds the whole land, so the
 same seed always gives the same map. The PNG also keeps the settings.
@@ -79,7 +81,7 @@ Image.MAX_IMAGE_PIXELS = None
 # Constants used all over the program: terrain and site names, paper sizes,
 # the symbols drawn for each terrain and the colour palettes.
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 
 # terrain kinds, as stored in the terrain map {hex: kind} and in the edit files
 PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT = (
@@ -120,6 +122,7 @@ ORIENTATION_FROM_USER = {"auto": "auto", "verticale": "portrait", "orizzontale":
                          "portrait": "portrait", "landscape": "landscape"}
 ORIENTATION_NAMES = {"portrait": ("verticale", "portrait"), "landscape": ("orizzontale", "landscape")}
 SIZE_FROM_USER = {"auto": "auto", "piccola": "small", "grande": "large", "small": "small", "large": "large"}
+NUMBERING_FROM_USER = {"standard": "standard", "battaglia": "battleship", "battleship": "battleship"}
 
 # printing: resolution, white margin around the page, and how big a letter
 # may get (mm) before the map counts as too small to read
@@ -483,10 +486,12 @@ TEXTS = {
                      "    The saved edits can't be read: starting from the original map."),
     "ed_resume": ("  Questa mappa ha già delle modifiche salvate. Le riprendo? (S/n): ",
                   "  This map already has saved edits. Pick them up again? (Y/n): "),
-    "ed_ask_hex": ("  Esagono da modificare (colonna.riga, es. 03.07; T = tabella completa, A = annulla, E = esci): ",
-                   "  Hex to edit (column.row, e.g. 03.07; T = full table, U = undo, Q = quit): "),
-    "ed_bad_hex": ("    Esagono non valido: scrivi colonna.riga, es. 03.07 (la mappa va da 01.01 a {last}).",
-                   "    Not a valid hex: type column.row, e.g. 03.07 (the map goes from 01.01 to {last})."),
+    "ed_ask_hex": ("  Esagono da modificare ({how}; T = tabella completa, A = annulla, E = esci): ",
+                   "  Hex to edit ({how}; T = full table, U = undo, Q = quit): "),
+    "ed_bad_hex": ("    Esagono non valido: scrivi {how} (la mappa va da {first} a {last}).",
+                   "    Not a valid hex: type {how} (the map goes from {first} to {last})."),
+    "ed_how_standard": ("colonna.riga, es. 03.07", "column.row, e.g. 03.07"),
+    "ed_how_battleship": ("lettera della riga e colonna, es. G3", "row letter and column, e.g. G3"),
     "ed_hex_is": ("\n  Esagono {h}: {desc}", "\n  Hex {h}: {desc}"),
     "ed_what": ("  Cosa vuoi fare?", "  What do you want to do?"),
     "ed_terrain": ("cambiare il tipo di terreno", "change the terrain"),
@@ -667,7 +672,18 @@ TEXTS = {
     "q_contents": ("\n  Cosa vuoi generare?", "\n  What do you want to make?"),
     "q_fungus": ("\n  Vuoi anche le foreste di funghi giganti, sulle coste e nelle terre umide?",
                  "\n  Do you also want giant mushroom forests, on the coasts and in the damp lands?"),
-    "fungus_no": ("no, i terreni di sempre", "no, the usual terrains"),
+    "fungus_no": ("solo terreni realistici", "realistic terrains only"),
+    "q_numbering": ("\n  Come vuoi numerare gli esagoni sulla mappa numerata?",
+                    "\n  How do you want the hexes numbered on the numbered map?"),
+    "numbering_standard": ("come negli hexcrawl: colonna e riga, 0307", "hexcrawl style: column and row, 0307"),
+    "numbering_battleship": ("come a battaglia navale: lettera della riga e colonna, G3 (al massimo {n} righe)",
+                             "battleship style: row letter and column, G3 (at most {n} rows)"),
+    "h_numbering": ("numeri degli esagoni: standard (0307, colonna e riga) o battaglia (G3, lettera della riga "
+                    "e colonna, al massimo {n} righe)",
+                    "hex numbers: standard (0307, column and row) or battleship (G3, row letter and column, "
+                    "at most {n} rows)"),
+    "err_numbering_rows": ("Con la numerazione a battaglia navale le righe sono al massimo {n}.",
+                           "With battleship numbering there are at most {n} rows."),
     "fungus_yes": ("sì, con le foreste di funghi giganti", "yes, with giant mushroom forests"),
     "q_empty": ("Quanti esagoni di terra lasciare vuoti, da riempire tu al tavolo? Percentuale da 0 a 100, "
                 "oppure auto (a caso fra 20 e 30)",
@@ -738,8 +754,10 @@ TEXTS = {
     # steps 11-12: drawing and saving
     "step_plain": ("Disegno della mappa senza numeri ({paper}, {dpi} dpi, PNG + TXT)",
                    "Drawing the map without numbers ({paper}, {dpi} dpi, PNG + TXT)"),
-    "step_numbered": ("Disegno della mappa numerata ({paper}, {dpi} dpi, stessa mappa + codici CCRR)",
-                      "Drawing the numbered map ({paper}, {dpi} dpi, same map + CCRR codes)"),
+    "step_numbered": ("Disegno della mappa numerata ({paper}, {dpi} dpi, stessa mappa + {codes})",
+                      "Drawing the numbered map ({paper}, {dpi} dpi, same map + {codes})"),
+    "codes_standard": ("codici CCRR", "CCRR codes"),
+    "codes_battleship": ("lettere e numeri sui bordi", "letters and numbers on the edges"),
     "saved": ("Salvate: {a}, {b}", "Saved: {a}, {b}"),
     "warn_missing_glyphs": ("Il font non ha questi glifi, sostituiti con ASCII: {g}",
                             "The font lacks these symbols, replaced with ASCII: {g}"),
@@ -816,12 +834,15 @@ TEXTS = {
     "pdf_roll_again": ("tira ancora", "roll again"),
     "pdf_enc_cols": (("1d20", "Incontro", "Pagina"), ("1d20", "Encounter", "Page")),
     "pdf_hexes": ("Gli esagoni", "The hexes"),
-    "pdf_hexes_intro": ("Ogni esagono della mappa tranne il mare, con il codice stampato sulla mappa numerata. "
+    "pdf_hexes_intro": ("Ogni esagono della mappa tranne il mare, con {where}. "
                         "{empty} esagoni di terra su {land} sono lasciati vuoti (-), da riempire al tavolo con le "
                         "tue tabelle.",
-                        "Every hex of the map except the sea, with the code printed on the numbered map. "
+                        "Every hex of the map except the sea, with {where}. "
                         "{empty} land hexes out of {land} are left empty (-), to fill in at the table with your "
                         "own tables."),
+    "pdf_where_standard": ("il codice stampato sulla mappa numerata", "the code printed on the numbered map"),
+    "pdf_where_battleship": ("la lettera della riga e il numero della colonna, ai bordi della mappa numerata",
+                             "the row letter and the column number, on the edges of the numbered map"),
     "pdf_hex_cols": (("Esagono", "Terreno", "Contenuto"), ("Hex", "Terrain", "Contents")),
     "h_contents": ("genera anche il contenuto degli esagoni, a caso: incontri casuali ed esagoni popolati, "
                    "in un PDF accanto alla mappa",
@@ -1012,6 +1033,22 @@ class HexGrid:
 def hex_code(hex_, digits):
     """(2, 6) -> '0307': 1-based, column first, like printed hexcrawls."""
     return f"{hex_[0] + 1:0{digits}d}{hex_[1] + 1:0{digits}d}"
+
+
+# How the hexes are named on the map and everywhere the user reads them:
+# "standard" (0307, as above) or "battleship" (G3: the row's letter, then the
+# column). Inside the program, in the names and in the edit files, a hex is
+# always its hex_code. Set by main() once the settings are known.
+NUMBERING = "standard"
+ROW_LETTERS = {"it": "ABCDEFGHILMNOPQRSTUVZ", "en": "ABCDEFGHIJKLMNOPQRSTU"}   # 21 letters
+MAX_LETTER_ROWS = 21                 # battleship numbering: one letter per row
+
+
+def hex_name(hex_, digits=2):
+    """The hex as the user reads it: '0307' or, battleship style, 'G3'."""
+    if NUMBERING == "battleship":
+        return f"{ROW_LETTERS[LANG][hex_[1]]}{hex_[0] + 1}"
+    return hex_code(hex_, digits)
 
 
 # --- settings: reading and checking ---
@@ -1221,7 +1258,8 @@ def rebuild_settings(text, base):
         return None
     land, number = unpacked
     picture = find_settings(base, make_seed(land, number)) or {}
-    settings = {key: picture[key] for key in ("title", "scale", "paper", "size", "font", "labels") if key in picture}
+    settings = {key: picture[key] for key in ("title", "scale", "paper", "size", "font", "labels", "numbering")
+                if key in picture}
     settings.update(land, seed=number)
     return settings
 
@@ -1684,6 +1722,15 @@ def ask_look(p):
                                                   [tr("background_white"), tr("background_black")])]
 
 
+def ask_numbering(p):
+    """Standard or battleship hex numbers. Doesn't change the land, so it's
+    asked again when rebuilding a map, if it has few enough rows for letters."""
+    options = ["standard", "battleship"]
+    current = options.index(p.get("numbering", "standard"))
+    p["numbering"] = options[menu(tr("q_numbering"), [tr("numbering_standard"),
+                                                      tr("numbering_battleship", n=MAX_LETTER_ROWS)], current)]
+
+
 def ask_settings():
     """The interactive questions, from the language to the look of the map.
     Returns the settings dict that main() works with (the same keys that
@@ -1708,6 +1755,9 @@ def ask_settings():
             saved["ask_labels"] = "later"        # asked after the editor, if it had to be the typed one
         else:
             ask_names(saved, rebuild=True)
+        if saved["rows"] <= MAX_LETTER_ROWS:
+            ask_numbering(saved)
+            print()
         ask_look(saved)
         ask_contents(saved)
         return saved
@@ -1716,9 +1766,11 @@ def ask_settings():
     p = {}
     # the giant mushroom forests are optional: without them the maps are made as always
     p["fungus"] = menu(tr("q_fungus"), [tr("fungus_no"), tr("fungus_yes")]) == 1
+    # battleship numbers have one letter per row, so they limit the rows
+    ask_numbering(p)
     print()
     p["columns"] = ask(tr("q_columns"), "auto", int, 2, 80)
-    p["rows"] = ask(tr("q_rows"), "auto", int, 2, 80)
+    p["rows"] = ask(tr("q_rows"), "auto", int, 2, MAX_LETTER_ROWS if p["numbering"] == "battleship" else 80)
     # random values need the grid size, which may still be "auto": main() fills them in
     print()
     p["randomize"] = menu(tr("values_how"), [tr("values_manual"), tr("values_random")]) == 1
@@ -1868,6 +1920,9 @@ def settings_from_options(argv):
     ap.add_argument(*names("vuoti", "empty"), dest="empty", type=int, metavar="0-100", help=tr("h_empty"))
     ap.add_argument(*names("nomi-casuali", "random-names"), dest="random_names", action="store_true",
                     help=tr("h_random_names"))
+    numberings = {"it": ["standard", "battaglia"], "en": ["standard", "battleship"]}
+    ap.add_argument(*names("numerazione", "numbering"), dest="numbering", choices=list(NUMBERING_FROM_USER),
+                    default=None, metavar=shown(numberings), help=tr("h_numbering", n=MAX_LETTER_ROWS))
     a = ap.parse_args(argv)
     # from here on: check the options together, and turn them into settings
     if a.background and not a.colors:
@@ -1910,6 +1965,8 @@ def settings_from_options(argv):
         saved["history"] = a.history
         saved["empty"] = a.empty
         saved["random_names"] = a.random_names
+        if a.numbering:
+            saved["numbering"] = NUMBERING_FROM_USER[a.numbering]   # typed now: wins over the saved one
         return saved
 
     # a new map
@@ -1931,6 +1988,7 @@ def settings_from_options(argv):
         "ask_paper": ask_for_paper, "randomize": a.randomize,
         "contents": a.contents or a.history, "history": a.history, "empty": a.empty,
         "random_names": a.random_names, "fungus": a.fungus > 0,
+        "numbering": NUMBERING_FROM_USER[a.numbering or "standard"],
     }
 
 
@@ -1939,6 +1997,8 @@ def validate(p, log):
     errors = []
     if not (2 <= p["columns"] <= 80 and 2 <= p["rows"] <= 80):
         errors.append(tr("err_grid_range"))
+    if p.get("numbering") == "battleship" and p["rows"] > MAX_LETTER_ROWS:
+        errors.append(tr("err_numbering_rows", n=MAX_LETTER_ROWS))
     for key in ("dungeons", "cities", "fortresses"):
         if not 0 <= p[key] <= MAX_SITES:
             errors.append(tr("err_sites_range", name=tr("n_" + key), max=MAX_SITES))
@@ -2523,7 +2583,7 @@ def build_land(params, counts, grid, rng, log):
         if start is None:
             log.info(tr("info_no_sea"))
         else:
-            log.info(tr("info_sea", h=hex_code(start, 2), n=counts[SEA]))
+            log.info(tr("info_sea", h=hex_name(start), n=counts[SEA]))
 
     log.step(tr("step_lakes"))
     placed, n_lakes = dig_lakes(grid, height, counts[LAKE], rng, terrain)
@@ -2563,7 +2623,7 @@ def build_land(params, counts, grid, rng, log):
     rivers = trace_rivers(grid, terrain, height, n_rivers, rng)
     for i, r in enumerate(rivers, 1):
         where = tr("river_" + r["end"][0])
-        log.info(tr("info_river", i=i, h=hex_code(r["path"][0], 2), n=len(r["path"]), where=where))
+        log.info(tr("info_river", i=i, h=hex_name(r["path"][0]), n=len(r["path"]), where=where))
     if len(rivers) < n_rivers:
         log.warn(tr("warn_rivers", d=len(rivers), n=n_rivers))
     if n_fungus:                     # their own random numbers: the rest of the land stays put
@@ -2597,7 +2657,7 @@ def print_sites(grid, terrain, rivers, sites, labels=None):
             extra = tr("on_river") if any(h in r["path"] for r in rivers) else ""
             name = (labels or {}).get(label_key(h))
             name = f"  \"{name}\"" if name else ""
-            print(f"  {pick(SITE_NAMES[kind]):<9} {i:>2}  →  {hex_code(h, digits)}  "
+            print(f"  {pick(SITE_NAMES[kind]):<9} {i:>2}  →  {hex_name(h, digits)}  "
                   f"({pick(TERRAIN_NAMES[terrain[h]])}{extra}){name}")
 
 
@@ -2632,7 +2692,7 @@ def ask_labels(grid, terrain, sites, labels):
     for kind in (CITY, FORTRESS, DUNGEON):
         for i, (_, h) in enumerate([s for s in sites if s[0] == kind], 1):
             key, old = label_key(h), labels.get(label_key(h))
-            values = dict(site=pick(SITE_NAMES[kind]), i=i, h=hex_code(h, digits),
+            values = dict(site=pick(SITE_NAMES[kind]), i=i, h=hex_name(h, digits),
                           terrain=pick(TERRAIN_NAMES[terrain[h]]).lower(), name=old)
             answer = " ".join(input(tr("ask_relabel" if old else "ask_label", **values)).split())
             if answer.lower() in NO_WORDS:
@@ -2827,6 +2887,20 @@ def hex_template(k):
 def map_size(cols, rows, k):
     """(width, height) in letters of a cols x rows map with hexes of size k."""
     return 3 * k * (cols - 1) + 4 * k + 1, 2 * k * rows + k + 1
+
+
+# battleship numbering: the row letters go left of the map and the column
+# numbers above it, like on the board. Room for them, in letters: on each side
+# (the right one keeps the map centred) and on top
+BOARD_SIDE, BOARD_TOP = 2, 2
+
+
+def board_size(cols, rows, k):
+    """map_size() plus the room for the row letters and column numbers, if any."""
+    width, height = map_size(cols, rows, k)
+    if NUMBERING == "battleship":
+        return width + 2 * BOARD_SIDE, height + BOARD_TOP
+    return width, height
 
 
 def hex_origin(c, r, k):
@@ -3053,10 +3127,20 @@ def draw_labels(canvas, labels, sites, k, ascii_only):
 
 def write_hex_numbers(page, grid, k, ox, oy):
     """The hex codes (0101, 0102...) on the top inside row of every hex, for
-    the numbered map. ox, oy: where the map sits on the page."""
+    the numbered map; with battleship numbering, the row letters and column
+    numbers around the map instead. ox, oy: where the map sits on the page."""
     digits = max(2, len(str(max(grid.cols, grid.rows))))
     _, inside = hex_template(k)
     top_row = [xx for (yy, xx) in inside if yy == 1]    # the squares of the top inside row
+    if NUMBERING == "battleship":
+        # the row letters on the left, level with the middle of the first
+        # column's hexes, and the column numbers on top
+        for r in range(grid.rows):
+            page.put(ox - BOARD_SIDE, oy + 2 * k * r + k, ROW_LETTERS[LANG][r], "b")
+        for c in range(grid.cols):
+            number = str(c + 1)
+            page.write(ox + 3 * k * c + 2 * k + 1 - len(number) // 2, oy - BOARD_TOP, number, "b")
+        return
     for c, r in grid.hexes:
         x0, y0 = hex_origin(c, r, k)
         y = oy + y0 + 1
@@ -3066,7 +3150,7 @@ def write_hex_numbers(page, grid, k, ox, oy):
             if style != "b":
                 page.put(ox + x0 + xx, y, " ", "g" if style in "gG" else "n")
         # straight on the hex's own background, sea included: no box behind
-        code = hex_code((c, r), digits)
+        code = hex_name((c, r), digits)
         x_num = ox + x0 + 2 * k + 1 - len(code) // 2
         for i, digit in enumerate(code):
             page.put(x_num + i, y, digit, "n")
@@ -3221,8 +3305,11 @@ def fill_page(params, font_spec, aspect, log):
     n_rows = int((h_mm - 2 * MARGIN_MM) / (READABLE_CHAR_MM * aspect))
     legend_lines = len(pack_legend(Glyphs(open_font(font_spec, 40), params["ascii_only"]), n_cols - 4,
                                    has_farmland(params), has_backgrounds(params), has_mushrooms(params)))
-    columns = max(2, (n_cols - 4 - (4 * k + 1)) // (3 * k) + 1)
-    rows = max(2, (n_rows - legend_lines - 7 - (k + 1)) // (2 * k))
+    extra_w, extra_h = (2 * BOARD_SIDE, BOARD_TOP) if params.get("numbering") == "battleship" else (0, 0)
+    columns = max(2, (n_cols - 4 - extra_w - (4 * k + 1)) // (3 * k) + 1)
+    rows = max(2, (n_rows - legend_lines - 7 - extra_h - (k + 1)) // (2 * k))
+    if params.get("numbering") == "battleship":
+        rows = min(rows, MAX_LETTER_ROWS)        # one letter per row
     if params["columns"] == "auto":
         params["columns"] = columns
     if params["rows"] == "auto":
@@ -3238,7 +3325,7 @@ def hex_size(params, grid, paper, aspect):
         return 2
     if params["size"] == "large":
         return 3
-    mw, mh = map_size(grid.cols, grid.rows, 3)
+    mw, mh = board_size(grid.cols, grid.rows, 3)
     return 3 if choose_sheet(mw, mh, 3, paper, params["orientation"], aspect)[0] >= 1.4 else 2
 
 
@@ -3420,7 +3507,7 @@ def save(canvas, layout, png_path, settings=None):
 def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, aspect, G, log):
     """Letter size, page size and positions for this paper.
     Returns what save() and compose_page() need."""
-    map_w, map_h = map_size(grid.cols, grid.rows, k)
+    map_w, map_h = board_size(grid.cols, grid.rows, k)
     # legend lines depend on page width and vice versa: iterate until stable
     legend_guess = 3
     for _ in range(8):
@@ -3506,8 +3593,15 @@ def river_direction(grid, river, h):
 
 
 def parse_hex(text, grid):
-    """'03.07', '3.7' or '0307' -> (2, 6). None if it's not a hex of this grid."""
+    """'03.07', '3.7' or '0307' -> (2, 6), or 'G3' -> (2, 6) with battleship
+    numbering. None if it's not a hex of this grid."""
     text = text.strip().replace(",", ".")
+    if NUMBERING == "battleship":
+        letter, column = text[:1].upper(), text[1:].strip()
+        if not letter or letter not in ROW_LETTERS[LANG] or not column.isdigit():
+            return None
+        h = (int(column) - 1, ROW_LETTERS[LANG].index(letter))
+        return h if grid.inside(h) else None
     if "." in text:
         parts = text.split(".")
     elif text.isdigit() and len(text) == 4:
@@ -3522,7 +3616,9 @@ def parse_hex(text, grid):
 
 
 def show_hex(h):
-    """(2, 6) -> "03.07", the way the editor shows and reads hexes."""
+    """(2, 6) -> "03.07" (or "G3", battleship style), the way the editor shows and reads hexes."""
+    if NUMBERING == "battleship":
+        return hex_name(h)
     return f"{h[0] + 1:02d}.{h[1] + 1:02d}"
 
 
@@ -3937,7 +4033,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, ferti
                 continue
         ask_next = False
         # a hex code, or one of the letters T (table), A/U (undo), E/Q (quit)
-        answer = input(tr("ed_ask_hex")).strip().lower()
+        answer = input(tr("ed_ask_hex", how=tr("ed_how_" + NUMBERING))).strip().lower()
         if answer == "t":
             show(full=True)
             continue
@@ -3953,7 +4049,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, ferti
             return quit_editor()
         h = parse_hex(answer, grid)
         if not h:
-            print(tr("ed_bad_hex", last=last))
+            print(tr("ed_bad_hex", how=tr("ed_how_" + NUMBERING), first=show_hex((0, 0)), last=last))
             continue
         before = snapshot(terrain, rivers, sites)
         edit_hex(grid, terrain, rivers, sites, edited_heights(height, original, terrain), h)
@@ -4917,7 +5013,7 @@ def land_history(grid, terrain, rivers, sites, labels, number):
         return line("faction", **{k.replace(f"fac{i}_", "fac_"): v for k, v in values.items() if k.startswith(f"fac{i}_")})
 
     def about(kind, h):
-        return dict(name=site_name(kind, h, labels, H), hex=hex_code(h, 2))
+        return dict(name=site_name(kind, h, labels, H), hex=hex_name(h))
 
     river_hexes = {h for r in rivers for h in r["path"]}
     by_kind = {kind: [h for k, h in sites if k == kind] for kind in (CITY, FORTRESS, DUNGEON)}
@@ -5073,7 +5169,7 @@ def story_encounters(rng, values, sites, labels, used):
         site = {}
         if needs:
             h = rng.choice([h for k, h in sites if k == needs])
-            site = dict(name=site_name(needs, h, labels, H), hex=hex_code(h, 2))
+            site = dict(name=site_name(needs, h, labels, H), hex=hex_name(h))
         out.append(capitalised(text.format(**values, **site)))
     return out
 
@@ -5138,10 +5234,10 @@ def stock_hexes(grid, terrain, sites, number, empty=None, history=False):
         rng.shuffle(entries)
         for h, e in zip(hexes_t, entries[:(len(hexes_t) + 2) // 3]):
             chosen[h] = e
-    placed = {e["id"]: hex_code(h, 2) for h, e in chosen.items()}
+    placed = {e["id"]: hex_name(h) for h, e in chosen.items()}
     places = {}
     for h in sorted(chosen, key=lambda h: hex_code(h, 2)):
-        places[h] = {"hex": hex_code(h, 2), **roll_place(chosen[h], rng, placed)}
+        places[h] = {"hex": hex_name(h), **roll_place(chosen[h], rng, placed)}
 
     stock = {}
     for h in stocked:
@@ -5173,19 +5269,19 @@ def make_contents(params, grid, terrain, rivers, sites, seed, number):
     site_at = {h: kind for kind, h in sites}
     stock, land = stock_hexes(grid, terrain, sites, number, params.get("empty"), bool(cast))
     hexes = []
-    for c in range(grid.cols):
-        for r in range(grid.rows):
-            h = (c, r)
-            if terrain[h] == SEA:
-                continue
-            entry = {"hex": hex_code(h, 2), "terrain": pick(TERRAIN_NAMES[terrain[h]]), "type": [], "content": ""}
-            if h in site_at:
-                entry["type"] = [site_at[h]]
-                label = (labels or {}).get(label_key(h))
-                entry["content"] = pick(SITE_NAMES[site_at[h]]) + (f": {label}" if label else "")
-            elif h in stock:
-                entry.update(stock[h])
-            hexes.append(entry)
+    # in the order of their codes: column by column, or row by row for battleship codes
+    order = sorted(grid.hexes, key=lambda h: (h[1], h[0]) if NUMBERING == "battleship" else h)
+    for h in order:
+        if terrain[h] == SEA:
+            continue
+        entry = {"hex": hex_name(h), "terrain": pick(TERRAIN_NAMES[terrain[h]]), "type": [], "content": ""}
+        if h in site_at:
+            entry["type"] = [site_at[h]]
+            label = (labels or {}).get(label_key(h))
+            entry["content"] = pick(SITE_NAMES[site_at[h]]) + (f": {label}" if label else "")
+        elif h in stock:
+            entry.update(stock[h])
+        hexes.append(entry)
     types = load_data("stocking.json")["types"]
     return {"title": params["title"], "seed": seed, "version": VERSION, "language": LANG,
             "history": history, "rumours": rumours,
@@ -5355,7 +5451,8 @@ def write_contents_pdf(contents, path):
     # 3. the hexes, in code order
     pdf.add_page()
     heading(tr("pdf_hexes"))
-    para(tr("pdf_hexes_intro", empty=contents["stocking"]["empty"], land=contents["stocking"]["land"]), 10.5)
+    para(tr("pdf_hexes_intro", where=tr("pdf_where_" + NUMBERING), empty=contents["stocking"]["empty"],
+            land=contents["stocking"]["land"]), 10.5)
 
     widths = (16, 30, width - 46)
 
@@ -5422,7 +5519,13 @@ def save_maps(params, grid, land, look, seed, number, log, layout_log):
     drawing_rng = random.Random(number + 1)
     map_canvas = draw_map(grid, terrain, rivers, sites, k, G, drawing_rng, aspect, original,
                           params.get("labels"), params["ascii_only"], fertile)
+    if NUMBERING == "battleship":       # room around the map for the letters and numbers
+        board = Canvas(map_canvas.width + 2 * BOARD_SIDE, map_canvas.height + BOARD_TOP)
+        board.paste(map_canvas, BOARD_SIDE, BOARD_TOP)
+        map_canvas = board
     page, mx, my = compose_page(map_canvas, n_cols, n_rows, legend, params["title"], subtitle, G)
+    if NUMBERING == "battleship":
+        mx, my = mx + BOARD_SIDE, my + BOARD_TOP
     plain_path, numbered_path = output_names(params["output"], seed, "_edit" if original else "")
 
     log.step(tr("step_plain", paper=paper, dpi=DPI))
@@ -5431,7 +5534,7 @@ def save_maps(params, grid, land, look, seed, number, log, layout_log):
     if G.missing:
         log.warn(tr("warn_missing_glyphs", g=" ".join(sorted(G.missing))))
 
-    log.step(tr("step_numbered", paper=paper, dpi=DPI))
+    log.step(tr("step_numbered", paper=paper, dpi=DPI, codes=tr("codes_" + NUMBERING)))
     numbered = page.copy()
     write_hex_numbers(numbered, grid, k, mx, my)
     save(numbered, layout, numbered_path, params)
@@ -5448,6 +5551,8 @@ def main():
     first_run = make_maps_folder()
     interactive = len(sys.argv) == 1
     params = ask_settings() if interactive else settings_from_options(sys.argv[1:])
+    global NUMBERING
+    NUMBERING = params.setdefault("numbering", "standard")
     # paper is asked even with options, unless --formato or no tty
     ask_format = params.pop("ask_paper", interactive)
     apply_edits = params.pop("apply_edits", False)
