@@ -672,7 +672,7 @@ TEXTS = {
     "q_contents": ("\n  Cosa vuoi generare?", "\n  What do you want to make?"),
     "q_fungus": ("\n  Vuoi anche le foreste di funghi giganti, sulle coste e nelle terre umide?",
                  "\n  Do you also want giant mushroom forests, on the coasts and in the damp lands?"),
-    "fungus_no": ("no, i terreni di sempre", "no, the usual terrains"),
+    "fungus_no": ("solo terreni realistici", "realistic terrains only"),
     "q_numbering": ("\n  Come vuoi numerare gli esagoni sulla mappa numerata?",
                     "\n  How do you want the hexes numbered on the numbered map?"),
     "numbering_standard": ("come negli hexcrawl: colonna e riga, 0307", "hexcrawl style: column and row, 0307"),
