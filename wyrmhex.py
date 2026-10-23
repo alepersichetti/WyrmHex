@@ -832,7 +832,7 @@ TEXTS = {
                              "**  Lycanthropes: at night, or met by day in their human form."),
     "pdf_enc_table": ("{terrain}: 1d20", "{terrain}: 1d20"),
     "pdf_roll_again": ("tira ancora", "roll again"),
-    "pdf_enc_cols": (("1d20", "Incontro", "Pagina"), ("1d20", "Encounter", "Page")),
+    "pdf_enc_cols": (("1d20", "Incontro"), ("1d20", "Encounter")),
     "pdf_hexes": ("Gli esagoni", "The hexes"),
     "pdf_hexes_intro": ("Ogni esagono della mappa tranne il mare, con {where}. "
                         "{empty} esagoni di terra su {land} sono lasciati vuoti (-), da riempire al tavolo con le "
@@ -5250,10 +5250,10 @@ def stock_hexes(grid, terrain, sites, number, empty=None, history=False):
         label = " / ".join(types[t][LANG] for t in result["type"])
         monster = roll_monster(rng, terrain[h], number, history) if result.get("monster") else None
         if result["roll"] == 12:                             # the tracks of a local denizen
-            content = f"{label}: {tr('stock_tracks', monster=f'{monster[0]} ({monster[1]})')}." if monster \
+            content = f"{label}: {tr('stock_tracks', monster=monster[0])}." if monster \
                 else f"{label}: {result[LANG]}"
         elif monster:
-            content = f"{label}: {monster[0]} ({monster[1]}). {result[LANG]}"
+            content = f"{label}: {monster[0]}. {result[LANG]}"
         else:
             content = f"{label}: {result[LANG]}"
         stock[h] = {"type": result["type"], "roll": result["roll"], "content": content}
@@ -5288,8 +5288,8 @@ def make_contents(params, grid, terrain, rivers, sites, seed, number):
             "stocking": {"land": land, "stocked": len(stock), "empty": land - len(stock),
                          "types": [{"type": types[t][LANG], "about": types[t][f"about_{LANG}"]} for t in types]},
             "encounters": [{"terrain": pick(TERRAIN_NAMES[t]),
-                            "rows": [{"roll": roll, "encounter": name, "ref": ref, "note": note, "kind": kind}
-                                     for roll, name, ref, note, kind in rows]}
+                            "rows": [{"roll": roll, "encounter": name, "note": note, "kind": kind}
+                                     for roll, name, _, note, kind in rows]}
                            for t, rows in encounter_tables(terrain, number,
                                                            (cast, sites, labels) if cast else None)],
             "hexes": hexes}
@@ -5390,7 +5390,7 @@ def write_contents_pdf(contents, path):
         rows = table["rows"]
         if any(row.get("kind") == "story" for row in rows):
             # with the history: one column, the story rows (in italics) wrap
-            widths, line = (12, width - 12 - 22, 22), 4.8
+            widths, line = (12, width - 12), 4.8
             texts, heights = [], []
             for row in rows:
                 pdf.set_font(body, "I" if row["kind"] == "story" else "", 10)
@@ -5415,8 +5415,6 @@ def write_contents_pdf(contents, path):
                 pdf.cell(widths[0], h, row["roll"], fill=True)
                 pdf.set_font(body, "I" if row["kind"] == "story" else "", 10)
                 pdf.multi_cell(widths[1], line, text, align="L", fill=True, new_x="RIGHT", new_y="TOP")
-                pdf.set_font(body, "", 10)
-                pdf.cell(widths[2], h, pdf_text(row["ref"]), fill=True)
                 pdf.set_xy(pdf.l_margin, y + h)
             pdf.ln(6)
             pdf.set_auto_page_break(True, margin=16)
@@ -5427,7 +5425,7 @@ def write_contents_pdf(contents, path):
         pdf.set_auto_page_break(False)
         heading(tr("pdf_enc_table", terrain=capitalised(table["terrain"])), 15)
         col = (width - 6) / 2
-        widths = (10, col - 10 - 18, 18)
+        widths = (10, col - 10)
         top = pdf.get_y()
         for side, part in enumerate((rows[:half], rows[half:])):
             x0 = pdf.l_margin + side * (col + 6)
@@ -5443,7 +5441,7 @@ def write_contents_pdf(contents, path):
                 pdf.set_xy(x0, top + 5.2 + i * 4.6)
                 pdf.set_fill_color(*(shade if i % 2 else (255, 255, 255)))
                 name = row["encounter"] + marks.get(row["note"], "")
-                for w, text in zip(widths, (row["roll"], name, row["ref"])):
+                for w, text in zip(widths, (row["roll"], name)):
                     pdf.cell(w, 4.6, pdf_text(text), fill=True)
         pdf.set_xy(pdf.l_margin, top + 5.2 + half * 4.6 + 6)
         pdf.set_auto_page_break(True, margin=16)
