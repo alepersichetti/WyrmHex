@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-WyrmHex v1.2.0 - random hexcrawl maps for OSR games, all in ASCII.
+WyrmHex v1.3.0 - random hexcrawl maps for OSR games, all in ASCII.
 
 Looks like an old terminal game (Dwarf Fortress, NetHack): hexes drawn with
 _ / \\, terrain as CP437 symbols (forest ♣♠, mountains ▲^, hills ∩n, lakes ≈,
@@ -81,7 +81,7 @@ Image.MAX_IMAGE_PIXELS = None
 # Constants used all over the program: terrain and site names, paper sizes,
 # the symbols drawn for each terrain and the colour palettes.
 
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 
 # terrain kinds, as stored in the terrain map {hex: kind} and in the edit files
 PLAINS, SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT = (
