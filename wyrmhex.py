@@ -52,6 +52,7 @@ Code and comments are in English, the UI is Italian or English.
 
 import argparse
 import heapq
+import contextlib
 import json
 import math
 import os
@@ -262,6 +263,9 @@ TEXTS = {
     # welcome screen and conjuring screen
     "welcome_subtitle": ("generatore di mappe hexcrawl per campagne OSR", "hexcrawl map generator for OSR campaigns"),
     "press_enter": ("  Premi INVIO per iniziare... ", "  Press ENTER to start... "),
+    "press_close": ("\n  Premi CTRL+C per chiudere WyrmHex.", "\n  Press CTRL+C to close WyrmHex."),
+    "console_scrolled": ("PagSu / PagGiù per scorrere  ·  ancora {n} righe sotto",
+                         "PgUp / PgDn to scroll  ·  {n} more lines below"),
     "conjuring": ("L'incantesimo di evocazione ha inizio!", "The conjuring spell begins!"),
     # questions
     "enter_accepts": ("  Premi Invio per accettare il valore tra parentesi\n",
@@ -901,7 +905,7 @@ def ask_language():
     print("    1 = Italiano")
     print("    2 = English")
     while True:
-        choice = normalize_language(input("  Scelta / Choice [1]: ") or "1")
+        choice = normalize_language(read_answer("  Scelta / Choice [1]: ") or "1")
         if choice:
             LANG = choice
             return
@@ -1456,7 +1460,7 @@ def ask_scale(current=None):
     if choice < len(presets):
         return presets[choice]
     while True:                             # "other": typed by the user
-        answer = input(tr("ask_custom_scale")).strip()
+        answer = read_answer(tr("ask_custom_scale")).strip()
         if answer:
             return scale_text(answer)
 
@@ -1464,7 +1468,7 @@ def ask_scale(current=None):
 def ask(question, default, kind=int, lowest=None, highest=None):
     """Keep asking until the answer is valid. Enter = default."""
     while True:
-        answer = input(f"  {question} [{default}]: ").strip()
+        answer = read_answer(f"  {question} [{default}]: ").strip()
         if not answer:
             return default
         try:
@@ -1499,6 +1503,11 @@ def menu(title, options, default=0, context=()):
     """Index (0-based) of the chosen option. context: lines shown above the
     question, for what the full-screen menu would otherwise hide."""
     title = title.strip()
+    if CONSOLE:
+        # in the window: under what's already written, context included
+        choice = CONSOLE.choose(title, options, default)
+        print(f"  {title} {options[choice]}")
+        return choice
     if menus_available():
         from asciimatics.exceptions import ResizeScreenError
         from asciimatics.screen import Screen
@@ -1583,6 +1592,284 @@ def draw_menu(screen, title, options, current, context):
             return rows[event.y]
 
 
+# --- the full-screen window ---
+# Started from the keyboard in a real terminal, the program lives in one
+# full-screen window from the first question to the end: what it prints,
+# the typed answers, the menus and the editor all go there, so the terminal
+# never shows through between one question and the next. When it closes,
+# everything written in it is printed in the terminal, as if it had been
+# printed there all along.
+CONSOLE = None
+
+
+class Console:
+    """The window: stands in for sys.stdout and sys.stderr, keeps every line
+    written, and shows the last ones that fit."""
+
+    encoding = "utf-8"
+
+    def __init__(self):
+        from asciimatics.screen import Screen
+        self.S = Screen
+        self.out, self.err = sys.stdout, sys.stderr
+        self.lines = [""]                # everything written; the last line is still open
+        self.scroll = 0                  # lines scrolled back from the bottom, with PgUp
+        with self.terminal():
+            self.screen = Screen.open()
+        sys.stdout = sys.stderr = self
+
+    @contextlib.contextmanager
+    def terminal(self):
+        """asciimatics writes to sys.stdout: while it works, that's the real one."""
+        before = sys.stdout, sys.stderr
+        sys.stdout, sys.stderr = self.out, self.err
+        try:
+            yield
+        finally:
+            sys.stdout, sys.stderr = before
+
+    # what print() needs
+    def write(self, text):
+        for piece in re.split(r"(\n|\r)", text):
+            if piece == "\n":
+                self.lines.append("")
+            elif piece == "\r":          # a progress bar drawing its line again
+                self.lines[-1] = ""
+            elif piece:
+                self.lines[-1] += piece
+        if "\n" in text or "\r" in text:
+            self.draw()
+        return len(text)
+
+    def flush(self):
+        self.draw()
+
+    def isatty(self):
+        return True
+
+    def fileno(self):
+        return self.out.fileno()
+
+    # drawing
+    def wrapped(self, width, last=None):
+        """The lines as they fit the window: long ones wrap, under their own indent."""
+        rows = []
+        for line in self.lines[-last:] if last else self.lines:
+            line = line.expandtabs().rstrip()
+            if len(line) < width:
+                rows.append(line)
+                continue
+            indent = " " * (len(line) - len(line.lstrip()))
+            rows += textwrap.wrap(line.strip(), width - 1, initial_indent=indent,
+                                  subsequent_indent=indent + "  ", break_on_hyphens=False) or [""]
+        return rows
+
+    def draw(self, cursor=False, menu=None):
+        """The last lines that fit; with cursor, a block where the next letter
+        goes; with menu, a question and its choices under them (see choose).
+        Returns {screen row: option} for the menu's choices."""
+        screen, S = self.screen, self.S
+        width, height = screen.width, screen.height
+        rows = [(row, None) for row in self.wrapped(width, None if self.scroll else height)]
+        rows += self.menu_rows(menu, width) if menu else []
+        self.scroll = min(self.scroll, max(0, len(rows) - height + 1))
+        room = height - 1 if self.scroll else height
+        bottom = len(rows) - self.scroll
+        shown = rows[max(0, bottom - room):bottom]
+        screen.clear_buffer(S.COLOUR_WHITE, S.A_NORMAL, S.COLOUR_BLACK)
+        clickable = {}
+        for y, (row, style) in enumerate(shown):
+            if style is None:
+                screen.print_at(row[:width], 0, y, S.COLOUR_WHITE)
+            elif style == "title":
+                screen.print_at(row[:width], 0, y, S.COLOUR_WHITE, S.A_BOLD)
+            elif style == "keys":
+                screen.print_at(row[:width], 0, y, S.COLOUR_CYAN)
+            else:                                  # a choice: (option, chosen now?)
+                option, current = style
+                clickable[y] = option
+                if current:
+                    screen.print_at("▶" if screen.unicode_aware else ">", 3, y, S.COLOUR_YELLOW, S.A_BOLD)
+                    screen.print_at(row, 5, y, S.COLOUR_BLACK, S.A_NORMAL, S.COLOUR_YELLOW)
+                else:
+                    screen.print_at(row, 5, y, S.COLOUR_WHITE)
+        if self.scroll:
+            hint = tr("console_scrolled", n=self.scroll)
+            screen.print_at(hint[:width - 2], 1, height - 1, S.COLOUR_BLACK, S.A_NORMAL, S.COLOUR_YELLOW)
+        elif cursor and shown:
+            x = min(len(shown[-1][0]), width - 1)
+            screen.print_at(" ", x, len(shown) - 1, S.COLOUR_BLACK, S.A_NORMAL, S.COLOUR_WHITE)
+        with self.terminal():
+            screen.refresh()
+        return clickable
+
+    def menu_rows(self, menu, width):
+        """A menu under the text: the question, its choices and the keys to use."""
+        title, options, current = menu
+        fancy = self.screen.unicode_aware
+
+        def cut(text, room):
+            # shorten text to room letters, with an ellipsis, so it never wraps
+            return text if len(text) <= room else text[:max(0, room - 1)] + ("…" if fancy else "~")
+
+        rows = [(piece, "title") for piece in textwrap.wrap(title, max(20, width - 4), initial_indent="  ",
+                                                             subsequent_indent="  ")]
+        for i, text in enumerate(options):
+            label = f" {i + 1}  {text} " if len(options) < 10 else f" {text} "
+            rows.append((cut(label, width - 8), (i, i == current)))
+        rows.append(("  " + cut(tr("menu_keys" if fancy else "menu_keys_ascii"), width - 4), "keys"))
+        return rows
+
+    def next_event(self):
+        """The next key or click, or None after half a second (or a resize)."""
+        with self.terminal():
+            self.screen.wait_for_input(0.5)
+            event = self.screen.get_event()
+        if self.screen.has_resized():
+            self.reopen()
+            return None
+        return event
+
+    def reopen(self):
+        """The window changed size: start the screen again at the new size."""
+        with self.terminal():
+            self.screen.close()
+            self.screen = self.S.open()
+
+    # what input() and the menus need
+    def input(self, prompt=""):
+        """A typed answer, on the last line of the window."""
+        from asciimatics.event import KeyboardEvent
+        S = self.S
+        self.write(prompt)
+        start, typed = len(self.lines[-1]), ""
+        while True:
+            self.lines[-1] = self.lines[-1][:start] + typed
+            self.draw(cursor=True)
+            event = self.next_event()
+            if not isinstance(event, KeyboardEvent):
+                continue
+            key, page = event.key_code, max(1, self.screen.height // 2)
+            if key in (10, 13):
+                self.scroll = 0
+                self.write("\n")
+                return typed
+            if key in (S.KEY_BACK, 8, 127):
+                typed = typed[:-1]
+            elif key == S.KEY_PAGE_UP:
+                self.scroll += page
+            elif key == S.KEY_PAGE_DOWN:
+                self.scroll = max(0, self.scroll - page)
+            elif key == 3:                       # Ctrl+C, when the terminal hands it over as a key
+                raise KeyboardInterrupt
+            elif key == 4 and not typed:         # Ctrl+D on an empty answer
+                raise EOFError
+            elif key >= 32:
+                typed += chr(key)
+                self.scroll = 0
+
+    def choose(self, title, options, current):
+        """A menu at the bottom of the window, under what's already written:
+        index (0-based) of the chosen option."""
+        from asciimatics.event import KeyboardEvent, MouseEvent
+        S = self.S
+        while True:
+            clickable = self.draw(menu=(title, options, current))
+            event = self.next_event()
+            if isinstance(event, KeyboardEvent):
+                key, page = event.key_code, max(1, self.screen.height // 2)
+                if key in (S.KEY_UP, ord("k")):
+                    current = (current - 1) % len(options)
+                elif key in (S.KEY_DOWN, ord("j"), S.KEY_TAB):
+                    current = (current + 1) % len(options)
+                elif key == S.KEY_HOME:
+                    current = 0
+                elif key == S.KEY_END:
+                    current = len(options) - 1
+                elif key in (10, 13):
+                    break
+                elif ord("1") <= key <= ord("9") and key - ord("1") < len(options):
+                    current = key - ord("1")
+                    break
+                elif key == S.KEY_PAGE_UP:
+                    self.scroll += page
+                elif key == S.KEY_PAGE_DOWN:
+                    self.scroll = max(0, self.scroll - page)
+                elif key == 3:                   # Ctrl+C, when the terminal hands it over as a key
+                    raise KeyboardInterrupt
+                if key not in (S.KEY_PAGE_UP, S.KEY_PAGE_DOWN):
+                    self.scroll = 0
+            elif isinstance(event, MouseEvent) and event.buttons & MouseEvent.LEFT_CLICK and event.y in clickable:
+                current = clickable[event.y]
+                break
+        self.scroll = 0
+        return current
+
+    def run(self, func, *arguments):
+        """func(screen, *arguments) on this window, as Screen.wrapper would.
+        A resize starts the screen again and is passed on, so the caller
+        draws everything again."""
+        from asciimatics.exceptions import ResizeScreenError
+        try:
+            with self.terminal():
+                return func(self.screen, *arguments)
+        except ResizeScreenError:
+            self.reopen()
+            raise
+        finally:
+            self.draw()
+
+    def wait_to_close(self):
+        """Stay open until Ctrl+C: Enter, y or n typed one time too many must
+        not close the window before it's been read. PgUp and PgDn still scroll."""
+        from asciimatics.event import KeyboardEvent
+        S = self.S
+        print(tr("press_close"))
+        try:
+            while True:
+                self.draw()
+                event = self.next_event()
+                if not isinstance(event, KeyboardEvent):
+                    continue
+                page = max(1, self.screen.height // 2)
+                if event.key_code == 3:          # Ctrl+C, when the terminal hands it over as a key
+                    return
+                if event.key_code == S.KEY_PAGE_UP:
+                    self.scroll += page
+                elif event.key_code == S.KEY_PAGE_DOWN:
+                    self.scroll = max(0, self.scroll - page)
+        except KeyboardInterrupt:
+            return
+
+    def close(self, pause=False):
+        """Back to the terminal, with everything that was written in the window."""
+        global CONSOLE
+        if pause:
+            self.wait_to_close()
+        with self.terminal():
+            self.screen.close()
+        sys.stdout, sys.stderr = self.out, self.err
+        CONSOLE = None
+        print("\n".join(line.rstrip() for line in self.lines).rstrip("\n"))
+
+
+def open_console():
+    """The full-screen window, when there's a real terminal for it."""
+    global CONSOLE
+    if CONSOLE is None and menus_available():
+        CONSOLE = Console()
+
+
+def close_console(pause=False):
+    if CONSOLE is not None:
+        CONSOLE.close(pause)
+
+
+def read_answer(prompt=""):
+    """input(), in the full-screen window when there is one."""
+    return CONSOLE.input(prompt) if CONSOLE else input(prompt)
+
+
 # --- welcome screen, wizard, questions ---
 # The dragon holding the sign (name and version, see show_welcome), and
 # under it the watchtower from the ASCII Art Archive
@@ -1643,7 +1930,7 @@ def show_welcome():
         "═" * width,
     ]
     print("\n" + "\n".join(line.rstrip() for line in screen) + "\n")
-    input(tr("press_enter"))
+    read_answer(tr("press_enter"))
     print()
 
 
@@ -1683,7 +1970,7 @@ def ask_mode(folder=MAPS_FOLDER):
         return None
     edit = choice == 2
     while True:
-        answer = input(tr("ask_seed", example=example_seed())).strip()
+        answer = read_answer(tr("ask_seed", example=example_seed())).strip()
         if is_old_seed(answer) or read_seed(answer):
             break
         print(tr("seed_invalid", example=example_seed()))
@@ -1699,7 +1986,7 @@ def ask_mode(folder=MAPS_FOLDER):
     saved = rebuild_settings(answer, folder)
     if saved:
         print(tr("found_settings", seed=number, desc=describe_settings(saved)))
-        if input(tr("use_settings")).strip().lower().startswith("n"):
+        if read_answer(tr("use_settings")).strip().lower().startswith("n"):
             saved = None
     else:
         print(tr("no_settings", seed=number, folder=short_path(folder)))
@@ -1712,7 +1999,7 @@ def ask_mode(folder=MAPS_FOLDER):
 
 def ask_look(p):
     """Doesn't change the land, so it's asked again when rebuilding a map."""
-    p["ascii_only"] = input(tr("ask_ascii")).strip().lower().startswith(tr("yes_letter"))
+    p["ascii_only"] = read_answer(tr("ask_ascii")).strip().lower().startswith(tr("yes_letter"))
     print()
     p["colors"] = menu(tr("colors_how"), [tr("colors_mono"), tr("colors_color")]) == 1
     p["background"] = "white"
@@ -1744,9 +2031,9 @@ def ask_settings():
         saved = complete_settings(mode[1])
         saved["output"] = MAPS_FOLDER
         print()
-        if input(tr("ask_rename", title=saved["title"])).strip().lower().startswith(tr("yes_letter")):
-            saved["title"] = input(tr("ask_new_title", default=saved["title"])).strip() or saved["title"]
-        if input(tr("ask_rescale", scale=saved["scale"])).strip().lower().startswith(tr("yes_letter")):
+        if read_answer(tr("ask_rename", title=saved["title"])).strip().lower().startswith(tr("yes_letter")):
+            saved["title"] = read_answer(tr("ask_new_title", default=saved["title"])).strip() or saved["title"]
+        if read_answer(tr("ask_rescale", scale=saved["scale"])).strip().lower().startswith(tr("yes_letter")):
             saved["scale"] = ask_scale(saved["scale"])
             print()
         # the sites are known only once the land is made: main() asks then.
@@ -1800,7 +2087,7 @@ def ask_settings():
         p["edit"] = mode[-1] is True
     else:
         p["seed"] = None             # a new map gets a new random number
-    p["title"] = input(tr("q_title", default=tr("default_title"))).strip() or tr("default_title")
+    p["title"] = read_answer(tr("q_title", default=tr("default_title"))).strip() or tr("default_title")
     p["scale"] = ask_scale()
     print()
     p["output"] = MAPS_FOLDER
@@ -1828,7 +2115,7 @@ def ask_empty(current):
     None for "auto" (at random between 20 and 30)."""
     default = "auto" if current is None else current
     while True:
-        answer = input(f"  {tr('q_empty')} [{default}]: ").strip().lower().rstrip("%")
+        answer = read_answer(f"  {tr('q_empty')} [{default}]: ").strip().lower().rstrip("%")
         if not answer:
             return current
         if answer == "auto":
@@ -2694,13 +2981,13 @@ def ask_labels(grid, terrain, sites, labels):
             key, old = label_key(h), labels.get(label_key(h))
             values = dict(site=pick(SITE_NAMES[kind]), i=i, h=hex_name(h, digits),
                           terrain=pick(TERRAIN_NAMES[terrain[h]]).lower(), name=old)
-            answer = " ".join(input(tr("ask_relabel" if old else "ask_label", **values)).split())
+            answer = " ".join(read_answer(tr("ask_relabel" if old else "ask_label", **values)).split())
             if answer.lower() in NO_WORDS:
                 continue
             # the name typed straight away, without the "yes" first, is taken as
             # it is (it used to count as "no": the site silently stayed nameless)
             typed = answer.lower() not in YES_WORDS
-            name = answer if typed else " ".join(input(tr("q_label", n=MAX_LABEL)).split())
+            name = answer if typed else " ".join(read_answer(tr("q_label", n=MAX_LABEL)).split())
             if len(name) > MAX_LABEL:
                 # too long: cut at the last whole word that fits
                 cut = name[:MAX_LABEL + 1]
@@ -3391,7 +3678,7 @@ def ask_paper(params, grid, fonts, G, ask_user, log):
         print()
         print(tr("paper_choice"))
         while True:
-            answer = input(tr("q_paper", default=default)).strip().upper()
+            answer = read_answer(tr("q_paper", default=default)).strip().upper()
             if not answer:
                 return default
             if answer in PAPERS:
@@ -3937,7 +4224,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, ferti
         put_aside()
     if data is not None:
         prompt = tr("ed_resume") if source == "json" else tr("ed_resume_png")
-        if not input(prompt).strip().lower().startswith("n"):
+        if not read_answer(prompt).strip().lower().startswith("n"):
             try:
                 terrain, rivers, sites, skipped = edits_from_json(data, grid, terrain)
                 resumed = True
@@ -4033,7 +4320,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, ferti
                 continue
         ask_next = False
         # a hex code, or one of the letters T (table), A/U (undo), E/Q (quit)
-        answer = input(tr("ed_ask_hex", how=tr("ed_how_" + NUMBERING))).strip().lower()
+        answer = read_answer(tr("ed_ask_hex", how=tr("ed_how_" + NUMBERING))).strip().lower()
         if answer == "t":
             show(full=True)
             continue
@@ -4080,7 +4367,7 @@ def trace_by_hand(grid, terrain, rivers, spring):
     prompt = tr("ed_ask_path", h=show_hex(spring), example=example)
     # keep asking until the path is valid, or the answer is empty (give up)
     while True:
-        answer = input(prompt).strip()
+        answer = read_answer(prompt).strip()
         prompt = tr("ed_ask_path_again", h=show_hex(spring))
         if not answer:
             return None
@@ -4130,7 +4417,7 @@ class TextEditorUI:
 
     def confirm(self, question):
         """A (Y/n) question: anything but "n..." is yes."""
-        return not input(question).strip().lower().startswith("n")
+        return not read_answer(question).strip().lower().startswith("n")
 
     def trace(self, grid, terrain, rivers, spring):
         """A river traced by typing its hexes."""
@@ -4336,7 +4623,7 @@ class VisualEditor:
         from asciimatics.screen import Screen
         while True:
             try:
-                return Screen.wrapper(self.main_loop)
+                return CONSOLE.run(self.main_loop) if CONSOLE else Screen.wrapper(self.main_loop)
             except ResizeScreenError:
                 self.canvas = None              # the window changed size: draw it all again
                 continue
@@ -5548,6 +5835,8 @@ def main():
     (11-12). An edited map goes through the editor between land and paper."""
     first_run = make_maps_folder()
     interactive = len(sys.argv) == 1
+    if interactive:
+        open_console()                 # from here to the end, all in one full-screen window
     params = ask_settings() if interactive else settings_from_options(sys.argv[1:])
     global NUMBERING
     NUMBERING = params.setdefault("numbering", "standard")
@@ -5602,7 +5891,7 @@ def main():
         if on_map:              # the names were given on the map, with N
             params.pop("ask_labels", None)
         elif params.get("ask_labels") == "later":
-            params["ask_labels"] = input(tr("ask_labels_again")).strip().lower() in YES_WORDS
+            params["ask_labels"] = read_answer(tr("ask_labels_again")).strip().lower() in YES_WORDS
         log.info(tr("info_edits", path=short_path(edit_base + ".json")))
     elif apply_edits:                              # --edited: the saved edits, no editor
         data, source = load_edits(edit_base)
@@ -5651,7 +5940,7 @@ def main():
 
     # a map just made can be edited straight away, on the same paper
     if interactive and original is None and sys.stdin.isatty():
-        if input(tr("ask_edit_now")).strip().lower().startswith(tr("yes_letter")):
+        if read_answer(tr("ask_edit_now")).strip().lower().startswith(tr("yes_letter")):
             edited = edit_map(grid, terrain, rivers, sites, height, edit_base, params["labels"], fertile)
             if edited is None:
                 return
@@ -5673,5 +5962,18 @@ if __name__ == "__main__":
     try:
         main()
     except (KeyboardInterrupt, EOFError):
+        close_console()
         print(tr("interrupted"))
         sys.exit(1)
+    except SystemExit as stop:
+        # an error that stops the program: read it in the window before it closes
+        if CONSOLE and isinstance(stop.code, str):
+            print(stop.code)
+            stop.code = 1
+        close_console(pause=CONSOLE is not None and stop.code not in (None, 0))
+        raise
+    except BaseException:
+        close_console()
+        raise
+    else:
+        close_console(pause=True)
