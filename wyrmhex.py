@@ -1503,15 +1503,17 @@ def menu(title, options, default=0, context=()):
     """Index (0-based) of the chosen option. context: lines shown above the
     question, for what the full-screen menu would otherwise hide."""
     title = title.strip()
+    if CONSOLE:
+        # in the window: under what's already written, context included
+        choice = CONSOLE.choose(title, options, default)
+        print(f"  {title} {options[choice]}")
+        return choice
     if menus_available():
         from asciimatics.exceptions import ResizeScreenError
         from asciimatics.screen import Screen
         while True:
             try:
-                if CONSOLE:
-                    choice = CONSOLE.run(draw_menu, title, options, default, context)
-                else:
-                    choice = Screen.wrapper(draw_menu, arguments=[title, options, default, context])
+                choice = Screen.wrapper(draw_menu, arguments=[title, options, default, context])
                 break
             except ResizeScreenError:
                 continue                       # the window changed size: draw it again
@@ -1662,26 +1664,61 @@ class Console:
                                   subsequent_indent=indent + "  ", break_on_hyphens=False) or [""]
         return rows
 
-    def draw(self, cursor=False):
-        """The last lines that fit; with cursor, a block where the next letter goes."""
+    def draw(self, cursor=False, menu=None):
+        """The last lines that fit; with cursor, a block where the next letter
+        goes; with menu, a question and its choices under them (see choose).
+        Returns {screen row: option} for the menu's choices."""
         screen, S = self.screen, self.S
         width, height = screen.width, screen.height
-        rows = self.wrapped(width, None if self.scroll else height)
+        rows = [(row, None) for row in self.wrapped(width, None if self.scroll else height)]
+        rows += self.menu_rows(menu, width) if menu else []
         self.scroll = min(self.scroll, max(0, len(rows) - height + 1))
         room = height - 1 if self.scroll else height
         bottom = len(rows) - self.scroll
         shown = rows[max(0, bottom - room):bottom]
         screen.clear_buffer(S.COLOUR_WHITE, S.A_NORMAL, S.COLOUR_BLACK)
-        for y, row in enumerate(shown):
-            screen.print_at(row[:width], 0, y, S.COLOUR_WHITE)
+        clickable = {}
+        for y, (row, style) in enumerate(shown):
+            if style is None:
+                screen.print_at(row[:width], 0, y, S.COLOUR_WHITE)
+            elif style == "title":
+                screen.print_at(row[:width], 0, y, S.COLOUR_WHITE, S.A_BOLD)
+            elif style == "keys":
+                screen.print_at(row[:width], 0, y, S.COLOUR_CYAN)
+            else:                                  # a choice: (option, chosen now?)
+                option, current = style
+                clickable[y] = option
+                if current:
+                    screen.print_at("▶" if screen.unicode_aware else ">", 3, y, S.COLOUR_YELLOW, S.A_BOLD)
+                    screen.print_at(row, 5, y, S.COLOUR_BLACK, S.A_NORMAL, S.COLOUR_YELLOW)
+                else:
+                    screen.print_at(row, 5, y, S.COLOUR_WHITE)
         if self.scroll:
             hint = tr("console_scrolled", n=self.scroll)
             screen.print_at(hint[:width - 2], 1, height - 1, S.COLOUR_BLACK, S.A_NORMAL, S.COLOUR_YELLOW)
         elif cursor and shown:
-            x = min(len(shown[-1]), width - 1)
+            x = min(len(shown[-1][0]), width - 1)
             screen.print_at(" ", x, len(shown) - 1, S.COLOUR_BLACK, S.A_NORMAL, S.COLOUR_WHITE)
         with self.terminal():
             screen.refresh()
+        return clickable
+
+    def menu_rows(self, menu, width):
+        """A menu under the text: the question, its choices and the keys to use."""
+        title, options, current = menu
+        fancy = self.screen.unicode_aware
+
+        def cut(text, room):
+            # shorten text to room letters, with an ellipsis, so it never wraps
+            return text if len(text) <= room else text[:max(0, room - 1)] + ("…" if fancy else "~")
+
+        rows = [(piece, "title") for piece in textwrap.wrap(title, max(20, width - 4), initial_indent="  ",
+                                                             subsequent_indent="  ")]
+        for i, text in enumerate(options):
+            label = f" {i + 1}  {text} " if len(options) < 10 else f" {text} "
+            rows.append((cut(label, width - 8), (i, i == current)))
+        rows.append(("  " + cut(tr("menu_keys" if fancy else "menu_keys_ascii"), width - 4), "keys"))
+        return rows
 
     def next_event(self):
         """The next key or click, or None after half a second (or a resize)."""
@@ -1730,6 +1767,43 @@ class Console:
             elif key >= 32:
                 typed += chr(key)
                 self.scroll = 0
+
+    def choose(self, title, options, current):
+        """A menu at the bottom of the window, under what's already written:
+        index (0-based) of the chosen option."""
+        from asciimatics.event import KeyboardEvent, MouseEvent
+        S = self.S
+        while True:
+            clickable = self.draw(menu=(title, options, current))
+            event = self.next_event()
+            if isinstance(event, KeyboardEvent):
+                key, page = event.key_code, max(1, self.screen.height // 2)
+                if key in (S.KEY_UP, ord("k")):
+                    current = (current - 1) % len(options)
+                elif key in (S.KEY_DOWN, ord("j"), S.KEY_TAB):
+                    current = (current + 1) % len(options)
+                elif key == S.KEY_HOME:
+                    current = 0
+                elif key == S.KEY_END:
+                    current = len(options) - 1
+                elif key in (10, 13):
+                    break
+                elif ord("1") <= key <= ord("9") and key - ord("1") < len(options):
+                    current = key - ord("1")
+                    break
+                elif key == S.KEY_PAGE_UP:
+                    self.scroll += page
+                elif key == S.KEY_PAGE_DOWN:
+                    self.scroll = max(0, self.scroll - page)
+                elif key == 3:                   # Ctrl+C, when the terminal hands it over as a key
+                    raise KeyboardInterrupt
+                if key not in (S.KEY_PAGE_UP, S.KEY_PAGE_DOWN):
+                    self.scroll = 0
+            elif isinstance(event, MouseEvent) and event.buttons & MouseEvent.LEFT_CLICK and event.y in clickable:
+                current = clickable[event.y]
+                break
+        self.scroll = 0
+        return current
 
     def run(self, func, *arguments):
         """func(screen, *arguments) on this window, as Screen.wrapper would.
