@@ -263,7 +263,7 @@ TEXTS = {
     # welcome screen and conjuring screen
     "welcome_subtitle": ("generatore di mappe hexcrawl per campagne OSR", "hexcrawl map generator for OSR campaigns"),
     "press_enter": ("  Premi INVIO per iniziare... ", "  Press ENTER to start... "),
-    "press_enter_close": ("\n  Premi INVIO per chiudere WyrmHex... ", "\n  Press ENTER to close WyrmHex... "),
+    "press_close": ("\n  Premi CTRL+C per chiudere WyrmHex.", "\n  Press CTRL+C to close WyrmHex."),
     "console_scrolled": ("PagSu / PagGiù per scorrere  ·  ancora {n} righe sotto",
                          "PgUp / PgDn to scroll  ·  {n} more lines below"),
     "conjuring": ("L'incantesimo di evocazione ha inizio!", "The conjuring spell begins!"),
@@ -1819,11 +1819,33 @@ class Console:
         finally:
             self.draw()
 
+    def wait_to_close(self):
+        """Stay open until Ctrl+C: Enter, y or n typed one time too many must
+        not close the window before it's been read. PgUp and PgDn still scroll."""
+        from asciimatics.event import KeyboardEvent
+        S = self.S
+        print(tr("press_close"))
+        try:
+            while True:
+                self.draw()
+                event = self.next_event()
+                if not isinstance(event, KeyboardEvent):
+                    continue
+                page = max(1, self.screen.height // 2)
+                if event.key_code == 3:          # Ctrl+C, when the terminal hands it over as a key
+                    return
+                if event.key_code == S.KEY_PAGE_UP:
+                    self.scroll += page
+                elif event.key_code == S.KEY_PAGE_DOWN:
+                    self.scroll = max(0, self.scroll - page)
+        except KeyboardInterrupt:
+            return
+
     def close(self, pause=False):
         """Back to the terminal, with everything that was written in the window."""
         global CONSOLE
         if pause:
-            self.input(tr("press_enter_close"))
+            self.wait_to_close()
         with self.terminal():
             self.screen.close()
         sys.stdout, sys.stderr = self.out, self.err
