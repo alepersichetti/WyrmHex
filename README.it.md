@@ -149,11 +149,13 @@ Basta attivarlo una volta ogni volta che apri un terminale: finché la riga comi
 
 Per prima cosa il programma ti chiede la **lingua**: scegli **Italiano** o **English** (con Invio resta l'italiano). Da lì in poi domande, messaggi e anche i testi stampati sulla mappa (legenda, scala, titolo di partenza) sono nella lingua scelta.
 
-Poi compare la schermata di benvenuto, con un drago che regge il cartello con il nome del programma e, sotto, una torre di guardia: premi **INVIO** per cominciare. Il programma ti fa alcune domande. Quando ci sono delle scelte, compare un **menu**: muoviti con le frecce **↑ ↓** e conferma con **Invio** (puoi anche premere il numero della scelta, o farci clic sopra). Le altre domande, come i numeri o il titolo, si rispondono scrivendo. **Ogni domanda ha una risposta già pronta, evidenziata nel menu oppure tra parentesi quadre: se ti va bene, premi solo Invio.**
+Poi compare la schermata di benvenuto, con un drago che regge il cartello con il nome del programma e, sotto, una torre di guardia: premi **INVIO** per cominciare. Il programma ti fa alcune domande. Quando ci sono delle scelte, compare un **menu**: muoviti con le frecce **↑ ↓** e conferma con **Invio** (puoi anche premere il numero della scelta, o farci clic sopra). Le altre domande, come i numeri o il titolo, si rispondono scrivendo. **Ogni domanda ha una risposta già pronta, evidenziata nel menu oppure tra parentesi quadre: se ti va bene, premi solo Invio.** Dalla prima domanda alla fine tutto avviene in un'unica finestra a schermo intero: menu, domande, avanzamento del lavoro ed editor. Con **PagSu** e **PagGiù** scorri quello che è già passato. Alla fine la finestra resta aperta, così non si chiude per un tasto di troppo: premi **CTRL+C** per chiuderla, e tutto quello che c'era scritto resta nel terminale.
 
 1. **Cosa vuoi fare?** Scegli **creare una mappa nuova**, **riprodurre una mappa già fatta** (vedi il capitolo 4) oppure **modificare una mappa** a mano, esagono per esagono (vedi il capitolo 5). Se crei una mappa nuova, il programma ti chiede subito se vuoi anche le **foreste di funghi giganti**, ispirate a Morrowind: crescono a boschetti, al posto di una parte delle foreste, solo nei luoghi più umidi: dove il vento porta più pioggia, accanto a mare, laghi, paludi e fiumi, e nelle terre basse dove l'acqua ristagna. La risposta pronta è **solo terreni realistici**, cioè no: in quel caso la mappa viene generata esattamente come sempre, con lo stesso seme. Se rispondi sì, alla domanda 5 trovi anche la loro percentuale (6% già pronto, preso dalle foreste) e con i valori a caso ne ricevi fra il 3 e il 12%. Nel PDF dei contenuti le foreste di funghi hanno la loro tabella degli incontri (dalla tabella delle caverne di *Hexcrawl Horrors*: muffe, funghi e creature del buio) e una riga nella storia della landa.
 
-   Subito dopo ti chiede come **numerare gli esagoni** sulla mappa per il master: **come negli hexcrawl** (la risposta pronta), con il codice di colonna e riga dentro ogni esagono, per esempio `0307`; oppure **come a battaglia navale**, con le lettere delle righe sul bordo sinistro della mappa e i numeri delle colonne sul bordo in alto, così l'esagono della riga G e della colonna 3 è `G3`. Le lettere sono le 21 dell'alfabeto italiano (in inglese da A a U), quindi con la battaglia navale la mappa ha al massimo **21 righe**; con `auto` il programma ne tiene conto da solo. Le colonne dispari stanno mezzo esagono più in alto delle pari: la lettera è all'altezza della prima colonna. Nel PDF dei contenuti, nell'elenco dei siti e nell'editor gli esagoni si chiamano allo stesso modo.
+   Se crei una mappa nuova, il programma ti chiede anche **che mappa vuoi disegnare**: una **mappa regionale** (la risposta pronta), tutto quello che segue, oppure un **esagramma**, un solo esagono della mappa grande diviso in sotto-esagoni (vedi più sotto, "L'esagramma").
+
+   Per la mappa regionale, subito dopo ti chiede come **numerare gli esagoni** sulla mappa per il master: **come negli hexcrawl** (la risposta pronta), con il codice di colonna e riga dentro ogni esagono, per esempio `0307`; oppure **come a battaglia navale**, con le lettere delle righe sul bordo sinistro della mappa e i numeri delle colonne sul bordo in alto, così l'esagono della riga G e della colonna 3 è `G3`. Le lettere sono le 21 dell'alfabeto italiano (in inglese da A a U), quindi con la battaglia navale la mappa ha al massimo **21 righe**; con `auto` il programma ne tiene conto da solo. Le colonne dispari stanno mezzo esagono più in alto delle pari: la lettera è all'altezza della prima colonna. Nel PDF dei contenuti, nell'elenco dei siti e nell'editor gli esagoni si chiamano allo stesso modo.
 2. **Esagoni in base e in altezza:** quante colonne e quante righe di esagoni vuoi. La risposta pronta è `auto`: il programma sceglie da solo quanti esagoni riempiono un foglio A4 restando leggibili (33 × 15).
 3. **Scegli tu o a caso?** Scegli **li scelgo io** per rispondere tu alle tre domande successive, oppure **a caso** per far scegliere al programma a caso il numero di siti, le percentuali di terreno e i fiumi, in proporzione alla mappa. Con **a caso** passa direttamente al titolo. I valori scelti vengono mostrati mentre lavora e finiscono nel seme come tutti gli altri.
 4. **Numero di dungeon, città e fortezze** da mettere sulla mappa (fino a 99 per tipo).
@@ -197,6 +199,23 @@ Alla fine elenca dove sono le città, le fortezze e i dungeon, con il numero del
 Per ultima cosa ti chiede se vuoi **modificare questa mappa adesso**. Rispondi `s` per passare subito all'editor (capitolo 5) senza rifare la mappa: la versione modificata viene salvata accanto all'originale, nello stesso formato.
 
 ---
+
+### L'esagramma
+
+Alla domanda **Che mappa vuoi disegnare?** puoi scegliere, invece della mappa regionale, un **esagramma**: un solo esagono della mappa grande visto da vicino, diviso in sotto-esagoni, come le schede degli esagoni dei manuali hexcrawl. La mappa è fatta solo di sotto-esagoni interi, quindi il suo contorno è a gradini. Il programma ti chiede:
+
+- **quanti sotto-esagoni da un lato all'altro**: un numero dispari da 3 a 25, così ce n'è uno al centro (la risposta pronta è 7, cioè 37 sotto-esagoni);
+- **il paesaggio** che domina l'esagono: campagna aperta, bosco, colline, montagne, palude, deserto, costa (con il mare su un lato), lago, foresta di funghi giganti (se li hai chiesti), oppure **a caso**. Da lì vengono i terreni, i fiumi, i villaggi, le rocche e le tane;
+- **il codice dell'esagono** sulla mappa grande (la risposta pronta è `01.01`);
+- **il nome dell'esagono**: se premi solo Invio lo inventa il programma dal villaggio principale, per esempio "Prati di Poitan";
+- quante **miglia copre ogni sotto-esagono** (1 o 2, oppure un'altra scala scritta da te), l'aspetto e i nomi, come per la mappa regionale; e se generare **solo la mappa** oppure **la mappa e i suoi luoghi chiave**. I villaggi hanno nomi dal suono francese o germanico, come Poitan, Escourt o Waldheim, in tutte e due le lingue. Le domande sulla numerazione, sulla griglia e sulle percentuali non servono: le decide il paesaggio.
+
+Come sempre ottieni la mappa senza numeri per i giocatori e quella per il master, che qui riporta il **numero di ogni luogo chiave** (1, 2, 3…) nel suo sotto-esagono. In più ottieni un **PDF**, impaginato come una scheda d'esagono:
+
+- se hai chiesto **solo la mappa**, il PDF è una pagina con il nome, la mappa e il codice;
+- se hai chiesto anche i luoghi chiave, sotto la mappa e il codice trovi in due colonne una breve descrizione del luogo e i **luoghi chiave**, ognuno con il suo codice (`01.01.01`, `01.01.02`…): i **villaggi** (quanti abitanti, chi comanda, di cosa vive, un guaio in corso), le **rocche** (chi le tiene, in che stato sono, un aggancio per l'avventura), le **tane** (il luogo e chi ci vive, preso dalle tabelle degli incontri della mappa regionale) e i **luoghi strani**, come "un pozzo di corallo, dove l'eco risponde con parole diverse". I luoghi strani si compongono da cinque liste: decine di milioni di combinazioni, così ogni esagramma ha i suoi. Se i luoghi chiave non stanno in una pagina, continuano sulla successiva. Accanto al PDF trovi gli stessi luoghi in `<seme>_contents.json`.
+
+Tutti questi testi stanno in `data/hexagram.json`, in italiano e in inglese. Anche l'esagramma ha il suo seme: con quello lo rifai identico, e l'editor (capitolo 5) funziona anche sui suoi sotto-esagoni.
 
 ## 4. Rifare una mappa già fatta
 
@@ -306,6 +325,7 @@ Alla fine il programma ti dice in quale cartella ha messo i file.
 | `<seme>_number.png` | La stessa mappa con il numero in ogni esagono (o, con la numerazione a battaglia navale, le lettere e i numeri sui bordi), per il master |
 | `<seme>_nonumber.txt`, `<seme>_number.txt` | La mappa come testo, apribile con il Blocco note |
 | `<seme>_edit_…`, `<seme>_edit.json` | Solo se hai modificato la mappa (capitolo 5): la mappa modificata e l'elenco delle modifiche |
+| `<seme>.pdf` | Solo per un esagramma: la scheda dell'esagono, con la sola mappa oppure con i luoghi chiave (capitolo 3, "L'esagramma") |
 | `<seme>_contents.pdf`, `<seme>_contents.json` | Solo se hai chiesto anche i contenuti: il PDF da stampare per il master, e gli stessi contenuti in un file di testo (per una mappa modificata, `<seme>_edit_contents…`) |
 
 I numeri degli esagoni hanno quattro cifre: le prime due indicano la colonna, le ultime due la riga. `0101` è l'esagono in alto a sinistra; `0305` è nella terza colonna, quinta riga.
@@ -369,6 +389,9 @@ Ogni opzione ha anche un nome inglese (nella tabella dopo la barra `/`), e puoi 
 | `--storia` / `--history` | Come `--contenuti`, e in più la storia della landa con le voci di taverna | `--storia` |
 | `--vuoti` / `--empty` | Insieme a `--contenuti` o `--storia`: la percentuale di esagoni di terra da lasciare vuoti per le tue tabelle, da 0 a 100. Senza, è a caso fra 20 e 30 | `--vuoti 40` |
 | `--nomi-casuali` / `--random-names` | Dà a città, fortezze e dungeon nomi scelti a caso | `--nomi-casuali` |
+| `--esagramma` / `--hexagram` | Fa un esagramma di N sotto-esagoni da un lato all'altro (dispari, da 3 a 25) invece di una mappa regionale. Le opzioni su griglia, siti, terreni e fiumi vengono ignorate; con `--contenuti` il PDF ha anche i luoghi chiave | `--esagramma 7` |
+| `--paesaggio` / `--landscape` | Con `--esagramma`: il paesaggio, fra `pianura`, `bosco`, `colline`, `montagne`, `palude`, `deserto`, `costa`, `lago`, `funghi` (anche in inglese). Senza, è a caso | `--paesaggio colline` |
+| `--codice` / `--code` | Con `--esagramma`: il codice dell'esagono sulla mappa grande (senza, `01.01`) | `--codice 04.07` |
 | `--numerazione` / `--numbering` | Come numerare gli esagoni sulla mappa per il master: `standard` (il codice `0307` in ogni esagono, la scelta di sempre) oppure `battaglia` (`battleship`), con le lettere delle righe a sinistra e i numeri delle colonne in alto, al massimo 21 righe. Con `--riproduci` vale quella della volta prima, se non la scrivi | `--numerazione battaglia` |
 | `--formato` / `--format` | Formato di stampa: `A4`, `A3` o `A2`. Se manca, il programma te lo chiede alla fine, proponendo quello consigliato (o, con `--riproduci`, quello della volta prima) | `--formato A3` |
 | `--orientamento` / `--orientation` | Di solito non serve: il verso del foglio segue la forma della mappa. Puoi forzarlo con `verticale` o `orizzontale` (`portrait` o `landscape`) | `--orientamento verticale` |

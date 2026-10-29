@@ -149,11 +149,13 @@ You only need to activate it once each time you open a terminal: while the line 
 
 First the program asks for the **language**: choose **Italiano** or **English** (pressing Enter keeps Italian). From then on the questions, the messages and even the texts printed on the map (legend, scale, starting title) are in the language you chose.
 
-Then the welcome screen appears, with a dragon holding a sign with the program's name and, under it, a watchtower: press **ENTER** to begin. The program asks you a few questions. When there are choices, a **menu** appears: move with the **↑ ↓** arrow keys and confirm with **Enter** (you can also press the choice's number, or click it). The other questions, like numbers or the title, are answered by typing. **Every question has a ready-made answer, highlighted in the menu or in square brackets: if you're happy with it, just press Enter.**
+Then the welcome screen appears, with a dragon holding a sign with the program's name and, under it, a watchtower: press **ENTER** to begin. The program asks you a few questions. When there are choices, a **menu** appears: move with the **↑ ↓** arrow keys and confirm with **Enter** (you can also press the choice's number, or click it). The other questions, like numbers or the title, are answered by typing. **Every question has a ready-made answer, highlighted in the menu or in square brackets: if you're happy with it, just press Enter.** From the first question to the end everything happens in one full-screen window: menus, questions, the progress of the work and the editor. **PgUp** and **PgDn** scroll back through what has gone by. At the end the window stays open, so a key pressed once too often doesn't close it: press **CTRL+C** to close it, and everything that was written in it stays in the terminal.
 
 1. **What do you want to do?** Choose **make a new map**, **rebuild a map you already made** (see chapter 4) or **edit a map** by hand, hex by hex (see chapter 5). If you make a new map, the program then asks whether you also want **giant mushroom forests**, inspired by Morrowind: they grow in groves, in place of part of the forests, only in the dampest places: where the wind brings the most rain, next to the sea, lakes, swamps and rivers, and in the low lands where water lingers. The ready-made answer is **realistic terrains only**, that is no: then the map is made exactly as always, with the same seed. If you answer yes, question 5 also asks for their percentage (6% ready, taken from the forests), and with random values you get between 3 and 12%. In the contents PDF the mushroom forests get their own encounter table (from the caves table of *Hexcrawl Horrors*: molds, fungi and creatures of the dark) and a line in the history of the land.
 
-   Right after that it asks how to **number the hexes** on the game master's map: **hexcrawl style** (the ready-made answer), with the column and row code inside every hex, for example `0307`; or **battleship style**, with the row letters on the left edge of the map and the column numbers on the top edge, so the hex in row G and column 3 is `G3`. The letters go from A to U (in Italian they are the 21 letters of the Italian alphabet), so with battleship numbering the map has at most **21 rows**; with `auto` the program sees to that by itself. Odd columns sit half a hex higher than even ones: the letter is level with the first column. In the contents PDF, the list of sites and the editor the hexes go by the same names.
+   For a new map the program also asks **what kind of map you want to draw**: a **regional map** (the ready-made answer), everything that follows, or a **hexagram**, a single hex of the big map split into sub-hexes (see "The hexagram" below).
+
+   For a regional map, right after that it asks how to **number the hexes** on the game master's map: **hexcrawl style** (the ready-made answer), with the column and row code inside every hex, for example `0307`; or **battleship style**, with the row letters on the left edge of the map and the column numbers on the top edge, so the hex in row G and column 3 is `G3`. The letters go from A to U (in Italian they are the 21 letters of the Italian alphabet), so with battleship numbering the map has at most **21 rows**; with `auto` the program sees to that by itself. Odd columns sit half a hex higher than even ones: the letter is level with the first column. In the contents PDF, the list of sites and the editor the hexes go by the same names.
 2. **Hexes across and down:** how many columns and rows of hexes you want. The ready-made answer is `auto`: the program works out by itself how many hexes fill an A4 sheet and stay easy to read (33 × 15).
 3. **Choose yourself or at random?** Choose **I'll choose them** to answer the next three questions yourself, or **random** to let the program pick the number of sites, the terrain percentages and the rivers at random, sized to the map. With **random** it skips straight to the title. The values it picks are shown while it works, and they end up in the seed like any other.
 4. **Number of dungeons, cities and fortresses** to put on the map (up to 99 of each).
@@ -197,6 +199,23 @@ At the end it lists where the cities, fortresses and dungeons are, with their he
 Last of all it asks whether you want to **edit this map now**. Answer `y` to go straight into the editor (chapter 5) without making the map again: the edited version is saved next to the original, on the same paper.
 
 ---
+
+### The hexagram
+
+At **What kind of map do you want to draw?** you can choose, instead of a regional map, a **hexagram**: a single hex of the big map seen up close, split into sub-hexes, like the hex sheets of hexcrawl books. The map is made of whole sub-hexes only, so its outline is stepped. The program asks for:
+
+- **how many sub-hexes from side to side**: an odd number from 3 to 25, so there's one in the middle (the ready-made answer is 7, that is 37 sub-hexes);
+- **the landscape** that rules the hex: open country, woodland, hills, mountains, marsh, desert, coast (with the sea on one side), lake, giant mushroom forest (if you asked for them), or **at random**. The terrain, rivers, villages, keeps and lairs all come from it;
+- **the hex's code** on the big map (the ready-made answer is `01.01`);
+- **the hex's name**: if you just press Enter, the program makes one up from its main village, like "Poitan Fields";
+- how many **miles each sub-hex covers** (1 or 2, or a scale of your own), the look and the names, as for a regional map; and whether to make **the map only** or **the map and its key places**. The villages get French-sounding or Germanic names, like Poitan, Escourt or Waldheim, in both languages. The questions about numbering, grid and percentages aren't needed: the landscape settles them.
+
+As always you get the map without numbers for the players and the game master's map, which here shows the **number of every key place** (1, 2, 3…) in its sub-hex. On top of that you get a **PDF**, laid out like a hex sheet:
+
+- if you asked for **the map only**, the PDF is one page with the name, the map and the code;
+- if you asked for the key places too, under the map and the code you find, in two columns, a short description of the place and its **key places**, each with its code (`01.01.01`, `01.01.02`…): the **villages** (how many souls, who's in charge, what they live on, a trouble brewing), the **keeps** (who holds them, what state they're in, an adventure hook), the **lairs** (the place and who lives there, taken from the regional map's encounter tables) and the **strange places**, like "a well of coral, where the echo answers with other words". The strange places are put together from five lists: tens of millions of combinations, so every hexagram has its own. If the key places don't fit on one page, they go on over the next. Next to the PDF you find the same places in `<seed>_contents.json`.
+
+All these texts are in `data/hexagram.json`, in Italian and English. A hexagram has its own seed too: it rebuilds it exactly, and the editor (chapter 5) works on its sub-hexes as well.
 
 ## 4. Rebuilding a map you already made
 
@@ -306,6 +325,7 @@ At the end, the program tells you which folder it saved the files in.
 | `<seed>_number.png` | The same map with a number in every hex (or, with battleship numbering, letters and numbers on the edges), for the game master |
 | `<seed>_nonumber.txt`, `<seed>_number.txt` | The map as text, which you can open with Notepad or TextEdit |
 | `<seed>_edit_…`, `<seed>_edit.json` | Only if you edited the map (chapter 5): the edited map, and the list of changes |
+| `<seed>.pdf` | Hexagrams only: the hex sheet, with the map alone or with its key places (chapter 3, "The hexagram") |
 | `<seed>_contents.pdf`, `<seed>_contents.json` | Only if you asked for the contents too: the PDF to print for the referee, and the same contents as a text file (for an edited map, `<seed>_edit_contents…`) |
 
 Hex numbers have four digits: the first two are the column, the last two the row. `0101` is the top-left hex; `0305` is in the third column, fifth row.
@@ -368,6 +388,9 @@ Without `--language en` the messages and the texts on the map are in Italian. Ev
 | `--history` / `--storia` | Like `--contents`, plus the history of the land with tavern rumours | `--history` |
 | `--empty` / `--vuoti` | With `--contents` or `--history`: the percentage of land hexes left empty for your own tables, from 0 to 100. Without it, it's random between 20 and 30 | `--empty 40` |
 | `--random-names` / `--nomi-casuali` | Gives cities, fortresses and dungeons names picked at random | `--random-names` |
+| `--hexagram` / `--esagramma` | Makes a hexagram N sub-hexes from side to side (odd, 3 to 25) instead of a regional map. The grid, site, terrain and river options are ignored; with `--contents` the PDF has its key places too | `--hexagram 7` |
+| `--landscape` / `--paesaggio` | With `--hexagram`: the landscape, one of `plains`, `forest`, `hills`, `mountains`, `swamp`, `desert`, `coast`, `lake`, `fungus` (or in Italian). Without it, at random | `--landscape hills` |
+| `--code` / `--codice` | With `--hexagram`: the hex's code on the big map (`01.01` without it) | `--code 04.07` |
 | `--numbering` / `--numerazione` | How to number the hexes on the game master's map: `standard` (the `0307` code in every hex, as always) or `battleship` (`battaglia`), with the row letters on the left and the column numbers on top, at most 21 rows. With `--reproduce` it keeps last time's, unless you type it | `--numbering battleship` |
 | `--format` / `--formato` | Print format: `A4`, `A3` or `A2`. If you leave it out, the program asks you at the end, offering the suggested one (or, with `--reproduce`, the one from last time) | `--format A3` |
 | `--orientation` / `--orientamento` | Usually not needed: the sheet direction follows the shape of the map. You can force it with `portrait` or `landscape` (`verticale` or `orizzontale`) | `--orientation portrait` |

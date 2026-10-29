@@ -52,6 +52,7 @@ Code and comments are in English, the UI is Italian or English.
 
 import argparse
 import heapq
+import contextlib
 import json
 import math
 import os
@@ -262,6 +263,9 @@ TEXTS = {
     # welcome screen and conjuring screen
     "welcome_subtitle": ("generatore di mappe hexcrawl per campagne OSR", "hexcrawl map generator for OSR campaigns"),
     "press_enter": ("  Premi INVIO per iniziare... ", "  Press ENTER to start... "),
+    "press_close": ("\n  Premi CTRL+C per chiudere WyrmHex.", "\n  Press CTRL+C to close WyrmHex."),
+    "console_scrolled": ("PagSu / PagGiù per scorrere  ·  ancora {n} righe sotto",
+                         "PgUp / PgDn to scroll  ·  {n} more lines below"),
     "conjuring": ("L'incantesimo di evocazione ha inizio!", "The conjuring spell begins!"),
     # questions
     "enter_accepts": ("  Premi Invio per accettare il valore tra parentesi\n",
@@ -673,6 +677,40 @@ TEXTS = {
     "q_fungus": ("\n  Vuoi anche le foreste di funghi giganti, sulle coste e nelle terre umide?",
                  "\n  Do you also want giant mushroom forests, on the coasts and in the damp lands?"),
     "fungus_no": ("solo terreni realistici", "realistic terrains only"),
+    "q_map_kind": ("\n  Che mappa vuoi disegnare?", "\n  What kind of map do you want to draw?"),
+    "kind_regional": ("una mappa regionale: tanti esagoni, con città, fortezze e dungeon",
+                      "a regional map: many hexes, with cities, fortresses and dungeons"),
+    "kind_hexagram": ("un esagramma: un solo esagono della mappa grande, diviso in sotto-esagoni, con villaggi, "
+                      "rocche, tane e luoghi strani",
+                      "a hexagram: one hex of the big map, split into sub-hexes, with villages, keeps, lairs and "
+                      "strange places"),
+    "q_diameter": ("Sotto-esagoni da un lato all'altro (dispari, da {lo} a {hi})",
+                   "Sub-hexes from side to side (odd, {lo} to {hi})"),
+    "diameter_odd": ("    Serve un numero dispari, così c'è un sotto-esagono al centro.",
+                     "    It must be odd, so there's a sub-hex in the middle."),
+    "q_landscape": ("\n  Che paesaggio domina l'esagono?", "\n  What landscape rules the hex?"),
+    "landscape_random": ("a caso", "at random"),
+    "q_hex_code": ("  Codice dell'esagono sulla mappa grande [{default}]: ",
+                   "  Code of the hex on the big map [{default}]: "),
+    "q_hex_title": ("  Nome dell'esagono [lo inventa il programma]: ", "  Name of the hex [the program makes one up]: "),
+    "scale_how_hexagram": ("\n  Quante miglia copre ogni sotto-esagono?", "\n  How many miles does each sub-hex cover?"),
+    "info_hexagram": ("Esagramma {code}: {n} sotto-esagoni, {d} da un lato all'altro; paesaggio: {land}",
+                      "Hexagram {code}: {n} sub-hexes, {d} from side to side; landscape: {land}"),
+    "describe_hexagram": ("esagramma {code} di {d} sotto-esagoni, paesaggio: {land}",
+                          "hexagram {code} of {d} sub-hexes, landscape: {land}"),
+    "codes_hexagram": ("numeri dei luoghi chiave", "numbers of the key places"),
+    "info_features": ("{n} luoghi chiave (villaggi {v}, rocche {k}, tane {l}, luoghi strani {m})",
+                      "{n} key places (villages {v}, keeps {k}, lairs {l}, strange places {m})"),
+    "step_hexagram_pdf": ("Mappa dell'esagono in PDF", "The hex map as a PDF"),
+    "step_hexagram_contents": ("L'esagono e i suoi luoghi chiave (PDF)", "The hex and its key places (PDF)"),
+    "saved_pdf": ("Salvato: {a}", "Saved: {a}"),
+    "pdf_key_places": ("Luoghi chiave", "Key places"),
+    "h_hexagram": ("un esagramma di N sotto-esagoni da un lato all'altro (dispari, da 3 a 25) invece di una mappa "
+                   "regionale", "a hexagram N sub-hexes from side to side (odd, 3 to 25) instead of a regional map"),
+    "h_landscape": ("il paesaggio dell'esagramma (a caso se manca)", "the hexagram's landscape (random if missing)"),
+    "h_code": ("il codice dell'esagramma sulla mappa grande (01.01 se manca)",
+               "the hexagram's code on the big map (01.01 if missing)"),
+    "err_hexagram_size": ("--esagramma vuole un numero dispari da 3 a 25", "--hexagram wants an odd number from 3 to 25"),
     "q_numbering": ("\n  Come vuoi numerare gli esagoni sulla mappa numerata?",
                     "\n  How do you want the hexes numbered on the numbered map?"),
     "numbering_standard": ("come negli hexcrawl: colonna e riga, 0307", "hexcrawl style: column and row, 0307"),
@@ -690,6 +728,10 @@ TEXTS = {
                 "How many land hexes to leave empty, for you to fill in at the table? A percentage from 0 to "
                 "100, or auto (at random between 20 and 30)"),
     "contents_map_only": ("solo la mappa", "the map only"),
+    "contents_map_only_hexagram": ("solo la mappa (in un PDF)", "the map only (in a PDF)"),
+    "contents_stock_hexagram": ("la mappa e i suoi luoghi chiave: villaggi, rocche, tane e luoghi strani "
+                                "(in un PDF)",
+                                "the map and its key places: villages, keeps, lairs and strange places (in a PDF)"),
     "contents_stock": ("la mappa e il contenuto degli esagoni, a caso: incontri casuali ed esagoni popolati "
                        "(in un PDF)",
                        "the map and what's in its hexes, at random: random encounters and stocked hexes "
@@ -739,6 +781,11 @@ TEXTS = {
                        "1 hex = {scale} {dot} {c}{x}{r} hexes {dot} seed {seed}"),
     "subtitle_short": ("1 esagono = {scale} {dot} seme {seed}", "1 hex = {scale} {dot} seed {seed}"),
     "subtitle_seed": ("seme {seed}", "seed {seed}"),
+    "subtitle_hexagram": ("Esagono {code}  {dot}  1 sotto-esagono = {scale}  {dot}  seme {seed}",
+                          "Hex {code}  {dot}  1 sub-hex = {scale}  {dot}  seed {seed}"),
+    "subtitle_hexagram_tight": ("Esagono {code} {dot} 1 sotto-esagono = {scale} {dot} seme {seed}",
+                                "Hex {code} {dot} 1 sub-hex = {scale} {dot} seed {seed}"),
+    "subtitle_hexagram_short": ("Esagono {code} {dot} seme {seed}", "Hex {code} {dot} seed {seed}"),
     "warn_shrink": ("Il contenuto sfora il foglio: l'immagine viene ridotta al {p:.0%} per stare nell'{paper}",
                     "The content does not fit: the picture is shrunk to {p:.0%} to fit the {paper}"),
     "info_sheet": ("Foglio {paper} {o} ({w} x {h} px a {dpi} dpi): pagina di {nc} x {nr} caratteri, "
@@ -901,7 +948,7 @@ def ask_language():
     print("    1 = Italiano")
     print("    2 = English")
     while True:
-        choice = normalize_language(input("  Scelta / Choice [1]: ") or "1")
+        choice = normalize_language(read_answer("  Scelta / Choice [1]: ") or "1")
         if choice:
             LANG = choice
             return
@@ -1040,15 +1087,115 @@ def hex_code(hex_, digits):
 # column). Inside the program, in the names and in the edit files, a hex is
 # always its hex_code. Set by main() once the settings are known.
 NUMBERING = "standard"
+HEX_KEYS = {}                        # a hexagram's key places: {hex: code}, set once they're known
 ROW_LETTERS = {"it": "ABCDEFGHILMNOPQRSTUVZ", "en": "ABCDEFGHIJKLMNOPQRSTU"}   # 21 letters
 MAX_LETTER_ROWS = 21                 # battleship numbering: one letter per row
 
 
 def hex_name(hex_, digits=2):
-    """The hex as the user reads it: '0307' or, battleship style, 'G3'."""
+    """The hex as the user reads it: '0307' or, battleship style, 'G3'; a
+    hexagram's key place by its code, like '01.01.04'."""
+    if hex_ in HEX_KEYS:
+        return HEX_KEYS[hex_]
     if NUMBERING == "battleship":
         return f"{ROW_LETTERS[LANG][hex_[1]]}{hex_[0] + 1}"
     return hex_code(hex_, digits)
+
+
+# --- hexagrams ---
+# A hexagram is one hex of a bigger map, drawn as a hexagon of sub-hexes:
+# only whole sub-hexes, so its outline is stepped like the hexes themselves.
+# Its land is made like a regional map's, on that hexagon, with the terrain
+# of its landscape (hexagram.json); its sites are villages, keeps and lairs.
+REGIONAL, HEXAGRAM = "regional", "hexagram"
+MAP_KIND = REGIONAL                      # set by main() once the settings are known
+HEXAGRAM_SIZES = tuple(range(3, 26, 2))  # diameters, in sub-hexes: odd, so there's one in the middle
+HEXAGRAM_SIZE = 7                        # the ready answer
+HEXAGRAM_SCALES = (1, 2)                 # miles per sub-hex offered; 1 is the ready answer
+HEX_CODE = "01.01"                       # the hexagram's hex on the bigger map, when not given
+
+
+class HexagramGrid(HexGrid):
+    """The sub-hexes of a hexagram: those within its radius of the middle
+    one, in a square of diameter x diameter."""
+
+    def __init__(self, diameter):
+        self.radius = diameter // 2
+        self.middle = (self.radius, self.radius)
+        super().__init__(diameter, diameter)
+        self.hexes = [h for h in self.hexes if self.inside(h)]
+        self._neighbours = {h: self._neighbours[h] for h in self.hexes}
+
+    def inside(self, hex_):
+        return super().inside(hex_) and self.distance(hex_, self.middle) <= self.radius
+
+
+def make_grid(p):
+    """The grid of a map: a rectangle of hexes, or a hexagram."""
+    if p.get("kind") == HEXAGRAM:
+        return HexagramGrid(p["diameter"])
+    return HexGrid(p["columns"], p["rows"])
+
+
+def hex_count(p):
+    """How many hexes the map has: a hexagram is no rectangle."""
+    return p.get("hexes") or p["columns"] * p["rows"]
+
+
+def landscapes(fungus=True):
+    """The kinds of hexagram, as (index, landscape): the index goes in the
+    seed. The mushroom one only when mushrooms were asked for."""
+    return [(i, land) for i, land in enumerate(load_data("hexagram.json")["landscapes"])
+            if fungus or not land.get("needs_fungus")]
+
+
+def hexagram_settings(p, number):
+    """Fills in the land of a hexagram from its diameter and landscape:
+    terrain %, villages, keeps, lairs and rivers, rolled from the map number,
+    so that the seed only has to carry the diameter and the landscape."""
+    data = load_data("hexagram.json")
+    rng = random.Random(f"hexagram {number}")
+    if p.get("landscape") is None:       # "at random": not the mushrooms, unless they were asked for
+        p["landscape"] = rng.choice([i for i, _ in landscapes(p.get("fungus", False))])
+    land, counts = data["landscapes"][p["landscape"]], data["counts"]
+    perc = {terrain: 0 for _, _, terrain, _ in TERRAIN_OPTIONS}
+    for terrain, value in land["percentages"].items():
+        perc[terrain] = max(1, round(value * rng.uniform(0.75, 1.25)))
+    while sum(perc.values()) > 95:       # some plains always left
+        biggest = max(perc, key=perc.get)
+        perc[biggest] -= 1
+    perc[PLAINS] = 100 - sum(v for terrain, v in perc.items() if terrain != PLAINS)
+    area = len(HexagramGrid(p["diameter"]).hexes)
+    p.update(kind=HEXAGRAM, columns=p["diameter"], rows=p["diameter"], hexes=area, percentages=perc,
+             version=SEED_HEXAGRAM, fungus=perc[FUNGUS] > 0,
+             cities=max(1, round(area / counts["village_every"])),
+             fortresses=int(rng.random() < counts["keep_chance"]) + area // counts["more_keeps_every"],
+             dungeons=max(1, round(area / counts["lair_every"])),
+             rivers=sum(rng.random() < land["river"] for _ in range(1 + area // counts["more_rivers_every"])))
+    p.setdefault("code", HEX_CODE)
+    return p
+
+
+def landscape_name(p):
+    """The landscape of a hexagram, as the questions call it."""
+    return load_data("hexagram.json")["landscapes"][p["landscape"]][LANG]
+
+
+def use_hexagram_names():
+    """Villages, keeps and lairs instead of cities, fortresses and dungeons,
+    in the legend, the messages and the contents."""
+    global SITE_NAMES
+    data = load_data("hexagram.json")
+    names = data["site_names"]
+    SITE_NAMES = {kind: (name["it"], name["en"]) for kind, name in names.items()}
+    # and in the editor: "add a village", "C  village"...
+    for kind, (a, the) in SITE_KEYS.items():
+        TEXTS[a] = (names[kind]["a_it"], names[kind]["a_en"])
+        TEXTS[the] = (names[kind]["the_it"], names[kind]["the_en"])
+    letters = {"C": CITY, "F": FORTRESS, "D": DUNGEON}
+    TEXTS["ve_keys"] = tuple(tuple((key, names[letters[key]][lang].lower() if key in letters else word)
+                                   for key, word in keys) for lang, keys in zip(LANGUAGES, TEXTS["ve_keys"]))
+    TEXTS["ve_no_site"] = (data["editor_no_site"]["it"], data["editor_no_site"]["en"])
 
 
 # --- settings: reading and checking ---
@@ -1089,7 +1236,15 @@ SEED_TERRAINS = {1: (SEA, LAKE, HILLS, MOUNTAINS, FOREST, DESERT),
                  4: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT),
                  5: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT),
                  6: (SEA, LAKE, SWAMP, HILLS, MOUNTAINS, FOREST, DESERT, FUNGUS)}
-SEED_CHECK_SYMBOLS = {1: 3, 2: 2, 3: 2, 4: 2, 5: 2, 6: 2}
+SEED_CHECK_SYMBOLS = {1: 3, 2: 2, 3: 2, 4: 2, 5: 2, 6: 2, 7: 2}
+# 7 isn't a newer regional map: it's a hexagram, whose seed carries only its
+# diameter and landscape (the rest is rolled from its number, see
+# hexagram_settings). Its land is made like a v6 map's.
+SEED_HEXAGRAM = 7
+# its few fields make a small number, that would start with a row of zeros
+# and look alike from one hexagram to the next: before being written it's
+# mixed up (times an odd number, plus another; both undone when read)
+HEXAGRAM_SEED_MIX = (0x9E3779B97F4A7C15F39CC0605CEDC835, 0x2B7E151628AED2A6ABF7158809CF)
 # the land of v1 and v2 seeds (and of old number seeds) is made the same way
 LAND_BEFORE_WIND = 2
 LAND_WITH_ISLANDS = 4                # from here on, a mostly-sea map gets peninsulas and archipelagos
@@ -1103,6 +1258,9 @@ def new_seed():
 
 def seed_fields(p, number, version=SEED_VERSION):
     """(value, how many values it can take) for every field packed in the seed."""
+    if version == SEED_HEXAGRAM:
+        return [(version, 16), (HEXAGRAM_SIZES.index(p["diameter"]), len(HEXAGRAM_SIZES)),
+                (p["landscape"], 64), (number, RANDOM_NUMBERS)]
     fields = [(version, 16), (p["columns"] - 2, 79), (p["rows"] - 2, 79),
               (p["dungeons"], MAX_SITES + 1), (p["cities"], MAX_SITES + 1), (p["fortresses"], MAX_SITES + 1)]
     terrains = SEED_TERRAINS[version]
@@ -1166,8 +1324,8 @@ def seed_check(data, version=SEED_VERSION):
 
 def make_seed(p, number):
     """None if p doesn't fit in a seed (only old saved maps, e.g. sea 12.5%)."""
-    version = p.get("version", SEED_VERSION)
-    if version >= SEED_MUSHROOMS and not p["percentages"].get(FUNGUS):
+    version = SEED_HEXAGRAM if p.get("kind") == HEXAGRAM else p.get("version", SEED_VERSION)
+    if version == SEED_MUSHROOMS and not p["percentages"].get(FUNGUS):
         version = SEED_MUSHROOMS - 1      # no mushrooms: the seed is the same as before them
     # each field is one "digit" whose base is the number of values it can take
     packed = 0
@@ -1175,7 +1333,11 @@ def make_seed(p, number):
         if value != int(value) or not 0 <= value < choices:
             return None
         packed = packed * choices + int(value)
-    data = to_symbols(packed, SEED_LENGTH - SEED_CHECK_SYMBOLS[version])
+    length = SEED_LENGTH - SEED_CHECK_SYMBOLS[version]
+    if version == SEED_HEXAGRAM:
+        times, plus = HEXAGRAM_SEED_MIX
+        packed = (packed * times + plus) % 32 ** length
+    data = to_symbols(packed, length)
     code = data + seed_check(data, version)
     return "-".join(code[i:i + 4] for i in range(0, len(code), 4))
 
@@ -1188,7 +1350,7 @@ def read_seed(text):
     if len(code) != SEED_LENGTH or any(c not in SEED_SYMBOLS for c in code):
         return None
     # newest version first: the check symbols tell which one it is
-    for version in sorted(SEED_TERRAINS, reverse=True):
+    for version in sorted(SEED_CHECK_SYMBOLS, reverse=True):
         unpacked = unpack_seed(code, version)
         if unpacked:
             return unpacked
@@ -1205,14 +1367,23 @@ def unpack_seed(code, version):
     packed = 0
     for c in data:
         packed = packed * 32 + SEED_SYMBOLS.index(c)
+    if version == SEED_HEXAGRAM:
+        times, plus = HEXAGRAM_SEED_MIX
+        packed = (packed - plus) * pow(times, -1, 32 ** len(data)) % 32 ** len(data)
     # peel the fields off in reverse order; only the number of choices matters here
-    blank = {"columns": 2, "rows": 2, "dungeons": 0, "cities": 0, "fortresses": 0, "percentages": {}, "rivers": 0}
+    blank = {"columns": 2, "rows": 2, "dungeons": 0, "cities": 0, "fortresses": 0, "percentages": {}, "rivers": 0,
+             "diameter": HEXAGRAM_SIZES[0], "landscape": 0}
     values = []
     for _, choices in reversed(seed_fields(blank, 0, version)):
         packed, value = divmod(packed, choices)
         values.append(value)
     if packed or values.pop() != version:      # leftovers or another version: not this kind of seed
         return None
+    if version == SEED_HEXAGRAM:
+        number, landscape, size = values
+        if landscape >= len(load_data("hexagram.json")["landscapes"]):
+            return None
+        return {"kind": HEXAGRAM, "diameter": HEXAGRAM_SIZES[size], "landscape": landscape, "version": version}, number
     terrains = SEED_TERRAINS[version]
     columns, rows, dungeons, cities, fortresses, *rest = [v for v in reversed(values)]
     if version >= SEED_MUSHROOMS:
@@ -1258,9 +1429,13 @@ def rebuild_settings(text, base):
         return None
     land, number = unpacked
     picture = find_settings(base, make_seed(land, number)) or {}
-    settings = {key: picture[key] for key in ("title", "scale", "paper", "size", "font", "labels", "numbering")
+    settings = {key: picture[key] for key in ("title", "scale", "paper", "size", "font", "labels", "numbering", "code")
                 if key in picture}
     settings.update(land, seed=number)
+    if land.get("kind") == HEXAGRAM:
+        settings.setdefault("title", None)            # made up again from its village
+        settings.setdefault("scale", scale_text(str(HEXAGRAM_SCALES[0])))
+        hexagram_settings(settings, number)
     return settings
 
 
@@ -1354,7 +1529,8 @@ def complete_settings(p):
     """Fill in whatever a PNG from an older version doesn't have."""
     for key, value in (("ascii_only", False), ("colors", False), ("background", "white"),
                        ("size", "auto"), ("font", None), ("paper", None),
-                       ("title", tr("default_title")), ("scale", tr("default_scale"))):
+                       ("title", None if p.get("kind") == HEXAGRAM else tr("default_title")),
+                       ("scale", tr("default_scale"))):
         p.setdefault(key, value)
     p.setdefault("labels", {})
     p["percentages"].setdefault(SWAMP, 0)
@@ -1377,6 +1553,8 @@ def shown_terrains(percentages):
 
 def describe_settings(p):
     """One readable paragraph with the grid, sites, rivers, terrain % and title."""
+    if p.get("kind") == HEXAGRAM:
+        return tr("describe_hexagram", code=p.get("code", HEX_CODE), d=p["diameter"], land=landscape_name(p))
     perc = ", ".join(f"{pick(label).lower()} {p['percentages'][terrain]:g}%"
                      for _, _, terrain, label in shown_terrains(p["percentages"]))
     return tr("describe", cols=p["columns"], rows=p["rows"], cities=p["cities"], forts=p["fortresses"],
@@ -1439,24 +1617,26 @@ def scale_text(value):
     return tr("mile" if n == 1 else "miles", n=shown)
 
 
-def ask_scale(current=None):
-    """current: the scale of a map being rebuilt, offered as the default."""
-    presets = [scale_text(str(miles)) for miles in SCALE_PRESETS]
+def ask_scale(current=None, hexagram=False):
+    """current: the scale of a map being rebuilt, offered as the default.
+    A hexagram's scale is that of its sub-hexes."""
+    miles = HEXAGRAM_SCALES if hexagram else SCALE_PRESETS
+    presets = [scale_text(str(n)) for n in miles]
     options = presets + [tr("scale_other")]
-    default = SCALE_PRESETS.index(6)
+    default = 0 if hexagram else SCALE_PRESETS.index(6)
     if current in presets:
         default = presets.index(current)
     elif current:                    # a custom scale: offer to keep it
         options.append(tr("scale_keep", scale=current))
         default = len(options) - 1
     print()
-    choice = menu(tr("scale_how"), options, default)
+    choice = menu(tr("scale_how_hexagram" if hexagram else "scale_how"), options, default)
     if choice == len(presets) + 1:          # "keep the custom one"
         return current
     if choice < len(presets):
         return presets[choice]
     while True:                             # "other": typed by the user
-        answer = input(tr("ask_custom_scale")).strip()
+        answer = read_answer(tr("ask_custom_scale")).strip()
         if answer:
             return scale_text(answer)
 
@@ -1464,7 +1644,7 @@ def ask_scale(current=None):
 def ask(question, default, kind=int, lowest=None, highest=None):
     """Keep asking until the answer is valid. Enter = default."""
     while True:
-        answer = input(f"  {question} [{default}]: ").strip()
+        answer = read_answer(f"  {question} [{default}]: ").strip()
         if not answer:
             return default
         try:
@@ -1499,6 +1679,11 @@ def menu(title, options, default=0, context=()):
     """Index (0-based) of the chosen option. context: lines shown above the
     question, for what the full-screen menu would otherwise hide."""
     title = title.strip()
+    if CONSOLE:
+        # in the window: under what's already written, context included
+        choice = CONSOLE.choose(title, options, default)
+        print(f"  {title} {options[choice]}")
+        return choice
     if menus_available():
         from asciimatics.exceptions import ResizeScreenError
         from asciimatics.screen import Screen
@@ -1583,6 +1768,284 @@ def draw_menu(screen, title, options, current, context):
             return rows[event.y]
 
 
+# --- the full-screen window ---
+# Started from the keyboard in a real terminal, the program lives in one
+# full-screen window from the first question to the end: what it prints,
+# the typed answers, the menus and the editor all go there, so the terminal
+# never shows through between one question and the next. When it closes,
+# everything written in it is printed in the terminal, as if it had been
+# printed there all along.
+CONSOLE = None
+
+
+class Console:
+    """The window: stands in for sys.stdout and sys.stderr, keeps every line
+    written, and shows the last ones that fit."""
+
+    encoding = "utf-8"
+
+    def __init__(self):
+        from asciimatics.screen import Screen
+        self.S = Screen
+        self.out, self.err = sys.stdout, sys.stderr
+        self.lines = [""]                # everything written; the last line is still open
+        self.scroll = 0                  # lines scrolled back from the bottom, with PgUp
+        with self.terminal():
+            self.screen = Screen.open()
+        sys.stdout = sys.stderr = self
+
+    @contextlib.contextmanager
+    def terminal(self):
+        """asciimatics writes to sys.stdout: while it works, that's the real one."""
+        before = sys.stdout, sys.stderr
+        sys.stdout, sys.stderr = self.out, self.err
+        try:
+            yield
+        finally:
+            sys.stdout, sys.stderr = before
+
+    # what print() needs
+    def write(self, text):
+        for piece in re.split(r"(\n|\r)", text):
+            if piece == "\n":
+                self.lines.append("")
+            elif piece == "\r":          # a progress bar drawing its line again
+                self.lines[-1] = ""
+            elif piece:
+                self.lines[-1] += piece
+        if "\n" in text or "\r" in text:
+            self.draw()
+        return len(text)
+
+    def flush(self):
+        self.draw()
+
+    def isatty(self):
+        return True
+
+    def fileno(self):
+        return self.out.fileno()
+
+    # drawing
+    def wrapped(self, width, last=None):
+        """The lines as they fit the window: long ones wrap, under their own indent."""
+        rows = []
+        for line in self.lines[-last:] if last else self.lines:
+            line = line.expandtabs().rstrip()
+            if len(line) < width:
+                rows.append(line)
+                continue
+            indent = " " * (len(line) - len(line.lstrip()))
+            rows += textwrap.wrap(line.strip(), width - 1, initial_indent=indent,
+                                  subsequent_indent=indent + "  ", break_on_hyphens=False) or [""]
+        return rows
+
+    def draw(self, cursor=False, menu=None):
+        """The last lines that fit; with cursor, a block where the next letter
+        goes; with menu, a question and its choices under them (see choose).
+        Returns {screen row: option} for the menu's choices."""
+        screen, S = self.screen, self.S
+        width, height = screen.width, screen.height
+        rows = [(row, None) for row in self.wrapped(width, None if self.scroll else height)]
+        rows += self.menu_rows(menu, width) if menu else []
+        self.scroll = min(self.scroll, max(0, len(rows) - height + 1))
+        room = height - 1 if self.scroll else height
+        bottom = len(rows) - self.scroll
+        shown = rows[max(0, bottom - room):bottom]
+        screen.clear_buffer(S.COLOUR_WHITE, S.A_NORMAL, S.COLOUR_BLACK)
+        clickable = {}
+        for y, (row, style) in enumerate(shown):
+            if style is None:
+                screen.print_at(row[:width], 0, y, S.COLOUR_WHITE)
+            elif style == "title":
+                screen.print_at(row[:width], 0, y, S.COLOUR_WHITE, S.A_BOLD)
+            elif style == "keys":
+                screen.print_at(row[:width], 0, y, S.COLOUR_CYAN)
+            else:                                  # a choice: (option, chosen now?)
+                option, current = style
+                clickable[y] = option
+                if current:
+                    screen.print_at("▶" if screen.unicode_aware else ">", 3, y, S.COLOUR_YELLOW, S.A_BOLD)
+                    screen.print_at(row, 5, y, S.COLOUR_BLACK, S.A_NORMAL, S.COLOUR_YELLOW)
+                else:
+                    screen.print_at(row, 5, y, S.COLOUR_WHITE)
+        if self.scroll:
+            hint = tr("console_scrolled", n=self.scroll)
+            screen.print_at(hint[:width - 2], 1, height - 1, S.COLOUR_BLACK, S.A_NORMAL, S.COLOUR_YELLOW)
+        elif cursor and shown:
+            x = min(len(shown[-1][0]), width - 1)
+            screen.print_at(" ", x, len(shown) - 1, S.COLOUR_BLACK, S.A_NORMAL, S.COLOUR_WHITE)
+        with self.terminal():
+            screen.refresh()
+        return clickable
+
+    def menu_rows(self, menu, width):
+        """A menu under the text: the question, its choices and the keys to use."""
+        title, options, current = menu
+        fancy = self.screen.unicode_aware
+
+        def cut(text, room):
+            # shorten text to room letters, with an ellipsis, so it never wraps
+            return text if len(text) <= room else text[:max(0, room - 1)] + ("…" if fancy else "~")
+
+        rows = [(piece, "title") for piece in textwrap.wrap(title, max(20, width - 4), initial_indent="  ",
+                                                             subsequent_indent="  ")]
+        for i, text in enumerate(options):
+            label = f" {i + 1}  {text} " if len(options) < 10 else f" {text} "
+            rows.append((cut(label, width - 8), (i, i == current)))
+        rows.append(("  " + cut(tr("menu_keys" if fancy else "menu_keys_ascii"), width - 4), "keys"))
+        return rows
+
+    def next_event(self):
+        """The next key or click, or None after half a second (or a resize)."""
+        with self.terminal():
+            self.screen.wait_for_input(0.5)
+            event = self.screen.get_event()
+        if self.screen.has_resized():
+            self.reopen()
+            return None
+        return event
+
+    def reopen(self):
+        """The window changed size: start the screen again at the new size."""
+        with self.terminal():
+            self.screen.close()
+            self.screen = self.S.open()
+
+    # what input() and the menus need
+    def input(self, prompt=""):
+        """A typed answer, on the last line of the window."""
+        from asciimatics.event import KeyboardEvent
+        S = self.S
+        self.write(prompt)
+        start, typed = len(self.lines[-1]), ""
+        while True:
+            self.lines[-1] = self.lines[-1][:start] + typed
+            self.draw(cursor=True)
+            event = self.next_event()
+            if not isinstance(event, KeyboardEvent):
+                continue
+            key, page = event.key_code, max(1, self.screen.height // 2)
+            if key in (10, 13):
+                self.scroll = 0
+                self.write("\n")
+                return typed
+            if key in (S.KEY_BACK, 8, 127):
+                typed = typed[:-1]
+            elif key == S.KEY_PAGE_UP:
+                self.scroll += page
+            elif key == S.KEY_PAGE_DOWN:
+                self.scroll = max(0, self.scroll - page)
+            elif key == 3:                       # Ctrl+C, when the terminal hands it over as a key
+                raise KeyboardInterrupt
+            elif key == 4 and not typed:         # Ctrl+D on an empty answer
+                raise EOFError
+            elif key >= 32:
+                typed += chr(key)
+                self.scroll = 0
+
+    def choose(self, title, options, current):
+        """A menu at the bottom of the window, under what's already written:
+        index (0-based) of the chosen option."""
+        from asciimatics.event import KeyboardEvent, MouseEvent
+        S = self.S
+        while True:
+            clickable = self.draw(menu=(title, options, current))
+            event = self.next_event()
+            if isinstance(event, KeyboardEvent):
+                key, page = event.key_code, max(1, self.screen.height // 2)
+                if key in (S.KEY_UP, ord("k")):
+                    current = (current - 1) % len(options)
+                elif key in (S.KEY_DOWN, ord("j"), S.KEY_TAB):
+                    current = (current + 1) % len(options)
+                elif key == S.KEY_HOME:
+                    current = 0
+                elif key == S.KEY_END:
+                    current = len(options) - 1
+                elif key in (10, 13):
+                    break
+                elif ord("1") <= key <= ord("9") and key - ord("1") < len(options):
+                    current = key - ord("1")
+                    break
+                elif key == S.KEY_PAGE_UP:
+                    self.scroll += page
+                elif key == S.KEY_PAGE_DOWN:
+                    self.scroll = max(0, self.scroll - page)
+                elif key == 3:                   # Ctrl+C, when the terminal hands it over as a key
+                    raise KeyboardInterrupt
+                if key not in (S.KEY_PAGE_UP, S.KEY_PAGE_DOWN):
+                    self.scroll = 0
+            elif isinstance(event, MouseEvent) and event.buttons & MouseEvent.LEFT_CLICK and event.y in clickable:
+                current = clickable[event.y]
+                break
+        self.scroll = 0
+        return current
+
+    def run(self, func, *arguments):
+        """func(screen, *arguments) on this window, as Screen.wrapper would.
+        A resize starts the screen again and is passed on, so the caller
+        draws everything again."""
+        from asciimatics.exceptions import ResizeScreenError
+        try:
+            with self.terminal():
+                return func(self.screen, *arguments)
+        except ResizeScreenError:
+            self.reopen()
+            raise
+        finally:
+            self.draw()
+
+    def wait_to_close(self):
+        """Stay open until Ctrl+C: Enter, y or n typed one time too many must
+        not close the window before it's been read. PgUp and PgDn still scroll."""
+        from asciimatics.event import KeyboardEvent
+        S = self.S
+        print(tr("press_close"))
+        try:
+            while True:
+                self.draw()
+                event = self.next_event()
+                if not isinstance(event, KeyboardEvent):
+                    continue
+                page = max(1, self.screen.height // 2)
+                if event.key_code == 3:          # Ctrl+C, when the terminal hands it over as a key
+                    return
+                if event.key_code == S.KEY_PAGE_UP:
+                    self.scroll += page
+                elif event.key_code == S.KEY_PAGE_DOWN:
+                    self.scroll = max(0, self.scroll - page)
+        except KeyboardInterrupt:
+            return
+
+    def close(self, pause=False):
+        """Back to the terminal, with everything that was written in the window."""
+        global CONSOLE
+        if pause:
+            self.wait_to_close()
+        with self.terminal():
+            self.screen.close()
+        sys.stdout, sys.stderr = self.out, self.err
+        CONSOLE = None
+        print("\n".join(line.rstrip() for line in self.lines).rstrip("\n"))
+
+
+def open_console():
+    """The full-screen window, when there's a real terminal for it."""
+    global CONSOLE
+    if CONSOLE is None and menus_available():
+        CONSOLE = Console()
+
+
+def close_console(pause=False):
+    if CONSOLE is not None:
+        CONSOLE.close(pause)
+
+
+def read_answer(prompt=""):
+    """input(), in the full-screen window when there is one."""
+    return CONSOLE.input(prompt) if CONSOLE else input(prompt)
+
+
 # --- welcome screen, wizard, questions ---
 # The dragon holding the sign (name and version, see show_welcome), and
 # under it the watchtower from the ASCII Art Archive
@@ -1643,7 +2106,7 @@ def show_welcome():
         "═" * width,
     ]
     print("\n" + "\n".join(line.rstrip() for line in screen) + "\n")
-    input(tr("press_enter"))
+    read_answer(tr("press_enter"))
     print()
 
 
@@ -1683,7 +2146,7 @@ def ask_mode(folder=MAPS_FOLDER):
         return None
     edit = choice == 2
     while True:
-        answer = input(tr("ask_seed", example=example_seed())).strip()
+        answer = read_answer(tr("ask_seed", example=example_seed())).strip()
         if is_old_seed(answer) or read_seed(answer):
             break
         print(tr("seed_invalid", example=example_seed()))
@@ -1699,7 +2162,7 @@ def ask_mode(folder=MAPS_FOLDER):
     saved = rebuild_settings(answer, folder)
     if saved:
         print(tr("found_settings", seed=number, desc=describe_settings(saved)))
-        if input(tr("use_settings")).strip().lower().startswith("n"):
+        if read_answer(tr("use_settings")).strip().lower().startswith("n"):
             saved = None
     else:
         print(tr("no_settings", seed=number, folder=short_path(folder)))
@@ -1712,7 +2175,7 @@ def ask_mode(folder=MAPS_FOLDER):
 
 def ask_look(p):
     """Doesn't change the land, so it's asked again when rebuilding a map."""
-    p["ascii_only"] = input(tr("ask_ascii")).strip().lower().startswith(tr("yes_letter"))
+    p["ascii_only"] = read_answer(tr("ask_ascii")).strip().lower().startswith(tr("yes_letter"))
     print()
     p["colors"] = menu(tr("colors_how"), [tr("colors_mono"), tr("colors_color")]) == 1
     p["background"] = "white"
@@ -1731,6 +2194,23 @@ def ask_numbering(p):
                                                       tr("numbering_battleship", n=MAX_LETTER_ROWS)], current)]
 
 
+def ask_hexagram(p):
+    """A hexagram's size, landscape and hex on the bigger map."""
+    print()
+    while True:
+        lo, hi = HEXAGRAM_SIZES[0], HEXAGRAM_SIZES[-1]
+        p["diameter"] = ask(tr("q_diameter", lo=lo, hi=hi), HEXAGRAM_SIZE, int, lo, hi)
+        if p["diameter"] in HEXAGRAM_SIZES:
+            break
+        print(tr("diameter_odd"))
+    print()
+    options = landscapes(p["fungus"])
+    choice = menu(tr("q_landscape"), [tr("landscape_random")] + [land[LANG] for _, land in options])
+    p["landscape"] = options[choice - 1][0] if choice else None    # None: rolled from the map number
+    print()
+    p["code"] = read_answer(tr("q_hex_code", default=HEX_CODE)).strip() or HEX_CODE
+
+
 def ask_settings():
     """The interactive questions, from the language to the look of the map.
     Returns the settings dict that main() works with (the same keys that
@@ -1743,11 +2223,14 @@ def ask_settings():
         # land already known: only the title, the scale and the look are left (paper comes later)
         saved = complete_settings(mode[1])
         saved["output"] = MAPS_FOLDER
+        hexagram = saved.get("kind") == HEXAGRAM
         print()
-        if input(tr("ask_rename", title=saved["title"])).strip().lower().startswith(tr("yes_letter")):
-            saved["title"] = input(tr("ask_new_title", default=saved["title"])).strip() or saved["title"]
-        if input(tr("ask_rescale", scale=saved["scale"])).strip().lower().startswith(tr("yes_letter")):
-            saved["scale"] = ask_scale(saved["scale"])
+        if hexagram and not saved["title"]:          # its name is made up again, unless one is typed now
+            saved["title"] = read_answer(tr("q_hex_title")).strip() or None
+        elif read_answer(tr("ask_rename", title=saved["title"])).strip().lower().startswith(tr("yes_letter")):
+            saved["title"] = read_answer(tr("ask_new_title", default=saved["title"])).strip() or saved["title"]
+        if read_answer(tr("ask_rescale", scale=saved["scale"])).strip().lower().startswith(tr("yes_letter")):
+            saved["scale"] = ask_scale(saved["scale"], hexagram)
             print()
         # the sites are known only once the land is made: main() asks then.
         # In the editor on the map they're named there, with N
@@ -1755,7 +2238,7 @@ def ask_settings():
             saved["ask_labels"] = "later"        # asked after the editor, if it had to be the typed one
         else:
             ask_names(saved, rebuild=True)
-        if saved["rows"] <= MAX_LETTER_ROWS:
+        if not hexagram and saved["rows"] <= MAX_LETTER_ROWS:
             ask_numbering(saved)
             print()
         ask_look(saved)
@@ -1764,17 +2247,26 @@ def ask_settings():
     # a new map (or an old number seed whose PNG is gone): ask everything
     print()
     p = {}
+    # a whole region, or a single hex of it seen up close (an old number seed is always a region)
+    p["kind"] = REGIONAL if mode else (REGIONAL, HEXAGRAM)[menu(tr("q_map_kind"),
+                                                                 [tr("kind_regional"), tr("kind_hexagram")])]
+    hexagram = p["kind"] == HEXAGRAM
+    print()
     # the giant mushroom forests are optional: without them the maps are made as always
     p["fungus"] = menu(tr("q_fungus"), [tr("fungus_no"), tr("fungus_yes")]) == 1
-    # battleship numbers have one letter per row, so they limit the rows
-    ask_numbering(p)
-    print()
-    p["columns"] = ask(tr("q_columns"), "auto", int, 2, 80)
-    p["rows"] = ask(tr("q_rows"), "auto", int, 2, MAX_LETTER_ROWS if p["numbering"] == "battleship" else 80)
-    # random values need the grid size, which may still be "auto": main() fills them in
-    print()
-    p["randomize"] = menu(tr("values_how"), [tr("values_manual"), tr("values_random")]) == 1
-    if not p["randomize"]:
+    if hexagram:
+        # its terrain, sites and rivers come from its landscape: main() rolls them
+        ask_hexagram(p)
+    else:
+        # battleship numbers have one letter per row, so they limit the rows
+        ask_numbering(p)
+        print()
+        p["columns"] = ask(tr("q_columns"), "auto", int, 2, 80)
+        p["rows"] = ask(tr("q_rows"), "auto", int, 2, MAX_LETTER_ROWS if p["numbering"] == "battleship" else 80)
+        # random values need the grid size, which may still be "auto": main() fills them in
+        print()
+        p["randomize"] = menu(tr("values_how"), [tr("values_manual"), tr("values_random")]) == 1
+    if not hexagram and not p["randomize"]:
         print()
         p["dungeons"] = ask(tr("q_dungeons"), 4, int, 0, MAX_SITES)
         p["cities"] = ask(tr("q_cities"), 3, int, 0, MAX_SITES)
@@ -1800,8 +2292,11 @@ def ask_settings():
         p["edit"] = mode[-1] is True
     else:
         p["seed"] = None             # a new map gets a new random number
-    p["title"] = input(tr("q_title", default=tr("default_title"))).strip() or tr("default_title")
-    p["scale"] = ask_scale()
+    if hexagram:                     # no name: made up from its main village, once there is one
+        p["title"] = read_answer(tr("q_hex_title")).strip() or None
+    else:
+        p["title"] = read_answer(tr("q_title", default=tr("default_title"))).strip() or tr("default_title")
+    p["scale"] = ask_scale(hexagram=hexagram)
     print()
     p["output"] = MAPS_FOLDER
     p["orientation"] = "auto"
@@ -1816,10 +2311,14 @@ def ask_settings():
 def ask_contents(p):
     """Map only, or also its contents (encounters, stocked hexes, history)."""
     # 0 the map only, 1 also the stocked hexes, 2 also the history of the land
-    choice = menu(tr("q_contents"), [tr("contents_map_only"), tr("contents_stock"), tr("contents_all")],
-                  2 if p.get("history") else 1 if p.get("contents") else 0)
+    # (a hexagram: the map only, or also its key places)
+    hexagram = "_hexagram" if p.get("kind") == HEXAGRAM else ""
+    options = [tr("contents_map_only" + hexagram), tr("contents_stock" + hexagram)]
+    if not hexagram:
+        options.append(tr("contents_all"))
+    choice = menu(tr("q_contents"), options, 2 if p.get("history") and not hexagram else 1 if p.get("contents") else 0)
     p["contents"], p["history"] = choice >= 1, choice == 2
-    if p["contents"]:
+    if p["contents"] and not hexagram:     # a hexagram has key places, not a table of stocked hexes
         p["empty"] = ask_empty(p.get("empty"))
 
 
@@ -1828,7 +2327,7 @@ def ask_empty(current):
     None for "auto" (at random between 20 and 30)."""
     default = "auto" if current is None else current
     while True:
-        answer = input(f"  {tr('q_empty')} [{default}]: ").strip().lower().rstrip("%")
+        answer = read_answer(f"  {tr('q_empty')} [{default}]: ").strip().lower().rstrip("%")
         if not answer:
             return current
         if answer == "auto":
@@ -1849,10 +2348,11 @@ def ask_names(p, rebuild):
     also stay as they are."""
     if rebuild:
         options = ["names_keep", "names_typed", "names_random"]
-        default = 0
+        # a hexagram's village gives it its name: without the old names, random ones (the same as before)
+        default = 2 if p.get("kind") == HEXAGRAM and not p.get("labels") else 0
     else:
         options = ["names_typed", "names_random", "names_none"]
-        default = 2 if p.get("randomize") else 0
+        default = 2 if p.get("randomize") else 1 if p.get("kind") == HEXAGRAM else 0
     print()
     choice = options[menu(tr("q_names"), [tr(key) for key in options], default)]
     p["ask_labels"] = choice == "names_typed"
@@ -1923,6 +2423,15 @@ def settings_from_options(argv):
     numberings = {"it": ["standard", "battaglia"], "en": ["standard", "battleship"]}
     ap.add_argument(*names("numerazione", "numbering"), dest="numbering", choices=list(NUMBERING_FROM_USER),
                     default=None, metavar=shown(numberings), help=tr("h_numbering", n=MAX_LETTER_ROWS))
+    ap.add_argument(*names("esagramma", "hexagram"), dest="hexagram", type=int, default=None, metavar="N",
+                    help=tr("h_hexagram"))
+    lands = load_data("hexagram.json")["landscapes"]
+    land_keys = {land["key"]: i for i, land in enumerate(lands)}
+    land_keys.update({land["key_it"]: i for i, land in enumerate(lands)})
+    ap.add_argument(*names("paesaggio", "landscape"), dest="landscape", choices=list(land_keys), default=None,
+                    metavar=shown({"it": [land["key_it"] for land in lands], "en": [land["key"] for land in lands]}),
+                    help=tr("h_landscape"))
+    ap.add_argument(*names("codice", "code"), dest="code", default=None, metavar="01.01", help=tr("h_code"))
     a = ap.parse_args(argv)
     # from here on: check the options together, and turn them into settings
     if a.background and not a.colors:
@@ -1962,12 +2471,28 @@ def settings_from_options(argv):
         saved["ask_paper"] = ask_for_paper
         saved["apply_edits"] = a.edited
         saved["contents"] = a.contents or a.history
-        saved["history"] = a.history
+        saved["history"] = a.history and saved.get("kind") != HEXAGRAM     # a hexagram has key places only
         saved["empty"] = a.empty
-        saved["random_names"] = a.random_names
+        # a hexagram's village gives it its name: without the old names, random ones (the same as before)
+        saved["random_names"] = a.random_names or (saved.get("kind") == HEXAGRAM and not saved.get("labels"))
         if a.numbering:
             saved["numbering"] = NUMBERING_FROM_USER[a.numbering]   # typed now: wins over the saved one
         return saved
+
+    # a new hexagram: its land comes from its landscape (main() rolls it)
+    if a.hexagram is not None:
+        if a.hexagram not in HEXAGRAM_SIZES:
+            ap.error(tr("err_hexagram_size"))
+        return {
+            "kind": HEXAGRAM, "diameter": a.hexagram,
+            "landscape": None if a.landscape is None else land_keys[a.landscape],
+            "code": a.code or HEX_CODE, "seed": None if a.seed is None else int(a.seed),
+            "title": a.title, "scale": scale_text(a.scale or str(HEXAGRAM_SCALES[0])),
+            "orientation": orientation, "output": a.output, "paper": a.paper,
+            "ascii_only": a.ascii_only, "colors": a.colors, "background": background, "size": size, "font": a.font,
+            "ask_paper": ask_for_paper, "contents": a.contents or a.history, "history": False,
+            "random_names": True, "fungus": a.fungus > 0,
+        }
 
     # a new map
     if a.grid.strip().lower() == "auto":
@@ -2015,7 +2540,10 @@ def validate(p, log):
 
     # all good: say what is going to be made
     total_perc = sum(p["percentages"].values())
-    log.info(tr("info_grid", c=p["columns"], r=p["rows"], n=p["columns"] * p["rows"]))
+    if p.get("kind") == HEXAGRAM:
+        log.info(tr("info_hexagram", code=p["code"], n=hex_count(p), d=p["diameter"], land=landscape_name(p)))
+    else:
+        log.info(tr("info_grid", c=p["columns"], r=p["rows"], n=p["columns"] * p["rows"]))
     log.info(tr("info_terrains", list=", ".join(f"{pick(label).lower()} {p['percentages'][terrain]:g}%"
                                                 for _, _, terrain, label in shown_terrains(p["percentages"]))))
     log.info(tr("info_pct_sum", t=total_perc))
@@ -2023,7 +2551,7 @@ def validate(p, log):
         log.info(tr("info_pct_rest", r=100 - total_perc))
 
     # percentages -> numbers of hexes; whatever isn't assigned becomes plains
-    total = p["columns"] * p["rows"]
+    total = hex_count(p)
     perc = dict(p["percentages"])
     perc[PLAINS] += 100 - total_perc
     counts = split_hexes(total, perc)
@@ -2694,13 +3222,13 @@ def ask_labels(grid, terrain, sites, labels):
             key, old = label_key(h), labels.get(label_key(h))
             values = dict(site=pick(SITE_NAMES[kind]), i=i, h=hex_name(h, digits),
                           terrain=pick(TERRAIN_NAMES[terrain[h]]).lower(), name=old)
-            answer = " ".join(input(tr("ask_relabel" if old else "ask_label", **values)).split())
+            answer = " ".join(read_answer(tr("ask_relabel" if old else "ask_label", **values)).split())
             if answer.lower() in NO_WORDS:
                 continue
             # the name typed straight away, without the "yes" first, is taken as
             # it is (it used to count as "no": the site silently stayed nameless)
             typed = answer.lower() not in YES_WORDS
-            name = answer if typed else " ".join(input(tr("q_label", n=MAX_LABEL)).split())
+            name = answer if typed else " ".join(read_answer(tr("q_label", n=MAX_LABEL)).split())
             if len(name) > MAX_LABEL:
                 # too long: cut at the last whole word that fits
                 cut = name[:MAX_LABEL + 1]
@@ -3125,11 +3653,12 @@ def draw_labels(canvas, labels, sites, k, ascii_only):
             taken.add((x + i, row))
 
 
-def write_hex_numbers(page, grid, k, ox, oy):
+def write_hex_numbers(page, grid, k, ox, oy, keys=None):
     """The hex codes (0101, 0102...) on the top inside row of every hex, for
     the numbered map; with battleship numbering, the row letters and column
-    numbers around the map instead. ox, oy: where the map sits on the page."""
-    digits = max(2, len(str(max(grid.cols, grid.rows))))
+    numbers around the map instead. keys ({hex: text}): only those, as a
+    hexagram's key places. ox, oy: where the map sits on the page."""
+    digits = 2 if keys else max(2, len(str(max(grid.cols, grid.rows))))
     _, inside = hex_template(k)
     top_row = [xx for (yy, xx) in inside if yy == 1]    # the squares of the top inside row
     if NUMBERING == "battleship":
@@ -3141,7 +3670,7 @@ def write_hex_numbers(page, grid, k, ox, oy):
             number = str(c + 1)
             page.write(ox + 3 * k * c + 2 * k + 1 - len(number) // 2, oy - BOARD_TOP, number, "b")
         return
-    for c, r in grid.hexes:
+    for c, r in (keys or grid.hexes):
         x0, y0 = hex_origin(c, r, k)
         y = oy + y0 + 1
         # clear the row but leave rivers alone
@@ -3150,7 +3679,7 @@ def write_hex_numbers(page, grid, k, ox, oy):
             if style != "b":
                 page.put(ox + x0 + xx, y, " ", "g" if style in "gG" else "n")
         # straight on the hex's own background, sea included: no box behind
-        code = hex_name((c, r), digits)
+        code = keys[(c, r)] if keys else hex_name((c, r), digits)
         x_num = ox + x0 + 2 * k + 1 - len(code) // 2
         for i, digit in enumerate(code):
             page.put(x_num + i, y, digit, "n")
@@ -3240,23 +3769,26 @@ def compose_page(map_canvas, n_cols, n_rows, legend_lines, title, subtitle, G):
     ox = (n_cols - map_canvas.width) // 2
     oy = area_top + (area_height - map_canvas.height) // 2
     page.paste(map_canvas, ox, oy)
+    write_legend(page, legend_lines, n_cols, y_legend_line + 1)
+    return page, ox, oy
 
-    # the legend, each line centred
+
+def write_legend(page, legend_lines, width, top):
+    """The legend from row top down, each line centred in width letters."""
     for i, line in enumerate(legend_lines):
         length = sum(sum(len(text) for text, _, _ in entry) for entry in line) + 4 * (len(line) - 1)
-        x = (n_cols - length) // 2
+        x = (width - length) // 2
         for j, entry in enumerate(line):
             if j:
                 x += 4
             for text, style, tag in entry:
-                y = y_legend_line + 1 + i
+                y = top + i
                 page.write(x, y, text, style, tag)
                 if tag in (PLAINS, FERTILE, FOREST, SEA, LAKE, SWAMP, DESERT, HILLS, MOUNTAINS, FUNGUS):
                     # the same background as on the map (if the palette has one)
                     swatch = [(x, y), (x + len(text), y), (x + len(text), y + 1), (x, y + 1)]
                     page.fills.append((swatch, bg(PLAINS if tag == FERTILE else tag)))
                 x += len(text)
-    return page, ox, oy
 
 
 # --- paper, rendering, saving ---
@@ -3391,7 +3923,7 @@ def ask_paper(params, grid, fonts, G, ask_user, log):
         print()
         print(tr("paper_choice"))
         while True:
-            answer = input(tr("q_paper", default=default)).strip().upper()
+            answer = read_answer(tr("q_paper", default=default)).strip().upper()
             if not answer:
                 return default
             if answer in PAPERS:
@@ -3528,8 +4060,12 @@ def page_layout(params, grid, k, paper, seed, font_spec, bold_spec, advance_em, 
             break
         legend_guess = max(len(legend), legend_guess + 1)
     # the line under the title: the longest version that fits the page
-    values = dict(scale=params["scale"], dot=G("·", "-"), c=grid.cols, x=G("×", "x"), r=grid.rows, seed=seed)
-    versions = [tr(key, **values) for key in ("subtitle", "subtitle_tight", "subtitle_short", "subtitle_seed")]
+    values = dict(scale=params["scale"], dot=G("·", "-"), c=grid.cols, x=G("×", "x"), r=grid.rows, seed=seed,
+                  code=params.get("code", HEX_CODE))
+    keys = ("subtitle", "subtitle_tight", "subtitle_short", "subtitle_seed")
+    if params.get("kind") == HEXAGRAM:
+        keys = ("subtitle_hexagram", "subtitle_hexagram_tight", "subtitle_hexagram_short", "subtitle_seed")
+    versions = [tr(key, **values) for key in keys]
     subtitle = next((v for v in versions if len(v) + 4 <= n_cols), versions[-1])
     legend = pack_legend(G, n_cols - 4, has_farmland(params), has_backgrounds(params), has_mushrooms(params))
     # still doesn't fit (very long title?): grow the page, save() shrinks it back
@@ -3628,19 +4164,17 @@ def print_hex_table(grid, terrain, rivers, sites, only=None):
     yes, dirs = tr("ed_yes"), pick(TEXTS["ed_dirs"])
     site_at = {h: kind for kind, h in sites}
     rows = []
-    for c in range(grid.cols):
-        for r in range(grid.rows):
-            h = (c, r)
-            if only is not None and h not in only:
-                continue
-            river = next((rv for rv in rivers if h in rv["path"]), None)
-            d = river_direction(grid, river, h) if river else None
-            rows.append((show_hex(h), pick(TERRAIN_NAMES[terrain[h]]),
-                         yes if site_at.get(h) == DUNGEON else "-",
-                         yes if site_at.get(h) == CITY else "-",
-                         yes if river else "-",
-                         dirs[d] if d is not None else "-",
-                         yes if site_at.get(h) == FORTRESS else "-"))
+    for h in grid.hexes:                 # column by column (a hexagram has no corners)
+        if only is not None and h not in only:
+            continue
+        river = next((rv for rv in rivers if h in rv["path"]), None)
+        d = river_direction(grid, river, h) if river else None
+        rows.append((show_hex(h), pick(TERRAIN_NAMES[terrain[h]]),
+                     yes if site_at.get(h) == DUNGEON else "-",
+                     yes if site_at.get(h) == CITY else "-",
+                     yes if river else "-",
+                     dirs[d] if d is not None else "-",
+                     yes if site_at.get(h) == FORTRESS else "-"))
     # each column as wide as its longest cell
     widths = [max(len(x) for x in col) for col in zip(head, *rows)]
     line = lambda cells: "  " + "  ".join(f"{x:<{w}}" for x, w in zip(cells, widths)).rstrip()
@@ -3937,7 +4471,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, ferti
         put_aside()
     if data is not None:
         prompt = tr("ed_resume") if source == "json" else tr("ed_resume_png")
-        if not input(prompt).strip().lower().startswith("n"):
+        if not read_answer(prompt).strip().lower().startswith("n"):
             try:
                 terrain, rivers, sites, skipped = edits_from_json(data, grid, terrain)
                 resumed = True
@@ -4033,7 +4567,7 @@ def edit_map(grid, terrain, rivers, sites, height, edit_base, labels=None, ferti
                 continue
         ask_next = False
         # a hex code, or one of the letters T (table), A/U (undo), E/Q (quit)
-        answer = input(tr("ed_ask_hex", how=tr("ed_how_" + NUMBERING))).strip().lower()
+        answer = read_answer(tr("ed_ask_hex", how=tr("ed_how_" + NUMBERING))).strip().lower()
         if answer == "t":
             show(full=True)
             continue
@@ -4080,7 +4614,7 @@ def trace_by_hand(grid, terrain, rivers, spring):
     prompt = tr("ed_ask_path", h=show_hex(spring), example=example)
     # keep asking until the path is valid, or the answer is empty (give up)
     while True:
-        answer = input(prompt).strip()
+        answer = read_answer(prompt).strip()
         prompt = tr("ed_ask_path_again", h=show_hex(spring))
         if not answer:
             return None
@@ -4130,7 +4664,7 @@ class TextEditorUI:
 
     def confirm(self, question):
         """A (Y/n) question: anything but "n..." is yes."""
-        return not input(question).strip().lower().startswith("n")
+        return not read_answer(question).strip().lower().startswith("n")
 
     def trace(self, grid, terrain, rivers, spring):
         """A river traced by typing its hexes."""
@@ -4336,7 +4870,7 @@ class VisualEditor:
         from asciimatics.screen import Screen
         while True:
             try:
-                return Screen.wrapper(self.main_loop)
+                return CONSOLE.run(self.main_loop) if CONSOLE else Screen.wrapper(self.main_loop)
             except ResizeScreenError:
                 self.canvas = None              # the window changed size: draw it all again
                 continue
@@ -4916,6 +5450,8 @@ def random_site_labels(sites, number):
     Seeded from the map number: the same seed gives the same names."""
     rng = random.Random(f"names {number} {LANG}")
     pieces = load_data("names.json")[LANG]
+    if MAP_KIND == HEXAGRAM:              # villages, not cities: the same names in every language
+        pieces = {**pieces, CITY: load_data("hexagram.json")["names"][CITY]}
     used, used_pieces, labels = set(), set(), {}
     for kind, h in sites:
         kind_pieces = pieces[kind]
@@ -5295,6 +5831,109 @@ def make_contents(params, grid, terrain, rivers, sites, seed, number):
             "hexes": hexes}
 
 
+# --- hexagrams: key places, landmarks and rumours ---
+def fresh_choice(rng, items, used):
+    """A random item not used yet (any, once they've all been used)."""
+    left = [item for item in items if id(item) not in used] or items
+    item = rng.choice(left)
+    used.add(id(item))
+    return item
+
+
+def hexagram_features(grid, terrain, sites, number):
+    """The key places of a hexagram: its sites, and landmarks in sub-hexes of
+    their own, spread out while there's room. Numbered top to bottom, left
+    to right, as [(number, hex, kind)]; kind is the site's, or "landmark"."""
+    counts = load_data("hexagram.json")["counts"]
+    rng = random.Random(f"landmarks {number}")
+    taken = {h for _, h in sites}
+    free = [h for h in grid.hexes if terrain[h] not in WATER and h not in taken]
+    rng.shuffle(free)
+    wanted = max(counts["min_landmarks"], round(len(grid.hexes) / counts["landmark_every"]))
+    landmarks = []
+    for h in free:                       # first not next to another key place
+        if len(landmarks) < wanted and all(grid.distance(h, o) >= 2 for o in taken | set(landmarks)):
+            landmarks.append(h)
+    for h in free:                       # crowded: wherever there's land left
+        if len(landmarks) < wanted and h not in landmarks:
+            landmarks.append(h)
+    keyed = [(h, kind) for kind, h in sites] + [(h, "landmark") for h in landmarks]
+    # odd columns sit half a hex lower: rows count in halves
+    keyed.sort(key=lambda e: (2 * e[0][1] + (e[0][0] & 1), e[0][0]))
+    return [(i, h, kind) for i, (h, kind) in enumerate(keyed, 1)]
+
+
+def make_landmark(rng, used):
+    """A strange landmark, out of tens of millions: (name, description).
+    used: the pieces already taken in this hexagram, not repeated while
+    there are others."""
+    L = load_data("hexagram.json")["landmark"]
+    thing = fresh_choice(rng, L["things"], used)
+    name = f"{thing['name_' + LANG]} {fresh_choice(rng, L['names'], used)[LANG]}"
+    text = (f"{capitalised(thing[LANG])} {fresh_choice(rng, L['made'], used)[LANG]}, "
+            f"{fresh_choice(rng, L['detail'], used)[LANG]}. {fresh_choice(rng, L['around'], used)[LANG]}")
+    return name, text
+
+
+
+def hexagram_title(params, sites, labels, number):
+    """A name for the hex from its landscape and its main village, like
+    "Campi di Fonte Bianca"; a made-up name if no village has one."""
+    data = load_data("hexagram.json")
+    rng = random.Random(f"hexagram name {number} {LANG}")
+    villages = [(labels or {}).get(label_key(h)) for kind, h in sites if kind == CITY]
+    name = next((v for v in villages if v), None) or made_up_name(rng, load_data("history.json")["names"],
+                                                                     "end_place")
+    land = data["landscapes"][params["landscape"]]
+    return rng.choice(data["hex_names"][land["key"]])[LANG].format(name=name)
+
+
+def hexagram_contents(params, grid, terrain, rivers, sites, features, seed, number):
+    """Everything that goes in a hexagram's PDF, as plain data: the land in
+    a few words and its key places."""
+    data = load_data("hexagram.json")
+    labels = params.get("labels") or {}
+    land = data["landscapes"][params["landscape"]]
+    rng = random.Random(f"hexagram contents {number}")
+    used = set()
+    intro = rng.choice(data["intro"][land["key"]])[LANG]
+    if rivers:
+        intro += " " + (data["river"][LANG] if len(rivers) == 1 else data["rivers"][LANG].format(n=len(rivers)))
+    V, K, L = data["village"], data["keep"], data["lair"]
+    river_hexes = {h for r in rivers for h in r["path"]}
+    places = []
+    for n, h, kind in features:
+        place = {"n": n, "code": f"{params['code']}.{n:02d}", "hex": hex_code(h, 2), "kind": kind,
+                 "terrain": pick(TERRAIN_NAMES[terrain[h]])}
+        if kind == CITY:
+            # the first village is the biggest one
+            size = V["sizes"][rng.choice((1, 2)) if not any(p["kind"] == CITY for p in places) else rng.choice((0, 1))]
+            near_water = h in river_hexes or any(terrain[nb] in WATER for nb in grid.neighbours(h))
+            trades = V["trades"].get(terrain[h], V["trades"]["plains"]) + (V["trades"]["water"] if near_water else [])
+            place["name"] = labels.get(label_key(h)) or pick(SITE_NAMES[kind])
+            place["text"] = " ".join((
+                V["people"][LANG].format(size=size[LANG], n=rng.randint(size["low"], size["high"]) // 10 * 10),
+                V["ruled"][LANG].format(ruler=fresh_choice(rng, V["rulers"], used)[LANG]),
+                V["lives"][LANG].format(trade=fresh_choice(rng, trades, used)[LANG]),
+                fresh_choice(rng, V["troubles"], used)[LANG]))
+        elif kind == FORTRESS:
+            place["name"] = labels.get(label_key(h)) or pick(SITE_NAMES[kind])
+            place["text"] = " ".join((K["held"][LANG].format(holder=fresh_choice(rng, K["holders"], used)[LANG]),
+                                      fresh_choice(rng, K["states"], used)[LANG],
+                                      fresh_choice(rng, K["hooks"], used)[LANG]))
+        elif kind == DUNGEON:
+            monster = roll_monster(rng, terrain[h], number, False)
+            place["name"] = labels.get(label_key(h)) or L["unnamed"][LANG]
+            place["text"] = fresh_choice(rng, L["places"], used)[LANG]
+            if monster:
+                place["text"] += " " + L["lives"][LANG].format(monster=monster[0])
+        else:
+            place["name"], place["text"] = make_landmark(rng, used)
+        places.append(place)
+    return {"kind": HEXAGRAM, "title": params["title"], "code": params["code"], "seed": seed, "version": VERSION,
+            "language": LANG, "scale": params["scale"], "landscape": land[LANG], "intro": intro, "places": places}
+
+
 def pdf_text(text):
     """The PDF uses the fonts built into every PDF reader, which only know
     Latin-1 (enough for Italian): anything else gets its nearest ASCII."""
@@ -5303,9 +5942,10 @@ def pdf_text(text):
     return text.encode("latin-1", "replace").decode("latin-1")
 
 
-def write_contents_pdf(contents, path):
+def write_contents_pdf(contents, path, picture=None):
     """The contents as a PDF: history and rumours, encounter tables, hexes.
-    Needs fpdf2; returns False when it isn't installed."""
+    A hexagram's starts with its own page, with picture (its map), and may
+    be just that page. Needs fpdf2; returns False when it isn't installed."""
     try:
         from fpdf import FPDF
     except ImportError:
@@ -5353,15 +5993,20 @@ def write_contents_pdf(contents, path):
         write(width, 5.2, text)
         pdf.ln(2)
 
-    # 1. title, history and rumours
+    # 1. title, history and rumours (a hexagram: its page, then the history)
     pdf.add_page()
-    pdf.set_font(*head, 28)
-    write(width, 13, contents["title"])
-    pdf.set_font(body, "", 11)
-    pdf.set_text_color(*dim)
-    write(width, 5, T("pdf_subtitle", seed=contents["seed"]))
-    pdf.set_text_color(*ink)
-    pdf.ln(6)
+    if contents.get("kind") == HEXAGRAM:
+        hexagram_page(pdf, contents, picture, head, body)     # the map, and its key places if asked for
+        pdf.output(path)
+        return True
+    else:
+        pdf.set_font(*head, 28)
+        write(width, 13, contents["title"])
+        pdf.set_font(body, "", 11)
+        pdf.set_text_color(*dim)
+        write(width, 5, T("pdf_subtitle", seed=contents["seed"]))
+        pdf.set_text_color(*ink)
+        pdf.ln(6)
     if contents["history"]:
         heading(tr("pdf_history"))
         for p in contents["history"]:
@@ -5446,7 +6091,10 @@ def write_contents_pdf(contents, path):
         pdf.set_xy(pdf.l_margin, top + 5.2 + half * 4.6 + 6)
         pdf.set_auto_page_break(True, margin=16)
 
-    # 3. the hexes, in code order
+    # 3. the hexes, in code order (a hexagram has its key places instead)
+    if not contents.get("hexes"):
+        pdf.output(path)
+        return True
     pdf.add_page()
     heading(tr("pdf_hexes"))
     para(tr("pdf_hexes_intro", where=tr("pdf_where_" + NUMBERING), empty=contents["stocking"]["empty"],
@@ -5484,6 +6132,91 @@ def write_contents_pdf(contents, path):
     return True
 
 
+def hexagram_page(pdf, contents, picture, head, body):
+    """A hexagram's page, like a printed hex sheet: its name in a box, its
+    map, its code on the bigger map, then its key places and rumours in two
+    columns (going on over the next pages if they don't fit). Without key
+    places (the map only) the map takes the room."""
+    ink, line_w = (25, 25, 25), 0.35
+    left, top, width, bottom = pdf.l_margin, 16, pdf.w - pdf.l_margin - pdf.r_margin, pdf.h - 16
+    pdf.set_draw_color(*ink)
+    pdf.set_line_width(line_w)
+    pdf.set_auto_page_break(False)
+
+    def box(y, h):
+        pdf.rect(left, y, width, h)
+
+    def centred(y, h, text, font, size):
+        pdf.set_font(*font, size)
+        pdf.set_xy(left, y)
+        pdf.cell(width, h, pdf_text(text), align="C")
+
+    # name, map, code
+    box(top, 16)
+    centred(top, 16, contents["title"], head, 22)
+    places = contents.get("places")
+    room = (122 if places else bottom - top - 16 - 14) - 8
+    scale = min((width - 8) / picture.width, room / picture.height)
+    w, h = picture.width * scale, picture.height * scale
+    y = top + 16
+    box(y, h + 8)
+    pdf.image(picture, x=left + (width - w) / 2, y=y + 4, w=w, h=h)
+    y += h + 8
+    box(y, 12)
+    centred(y, 12, contents["code"], (body, ""), 18)
+    y += 12
+    if not places:
+        pdf.set_auto_page_break(True, margin=16)
+        return
+
+    # key places and rumours, in two columns
+    gap = 4
+    column = (width - 3 * gap) / 2
+    xs = (left + gap, left + 2 * gap + column)
+    # on the next pages the frame is drawn at the end, as tall as the text
+    state = {"col": 0, "top": y + gap, "bottom": bottom - gap, "more": False, "lowest": 0}
+
+    def frame(y0, y1):
+        box(y0, y1 - y0)
+        pdf.line(left + width / 2, y0, left + width / 2, y1)
+
+    def next_column():
+        if state["col"] == 0:
+            state["col"] = 1
+        else:                            # both full: a new page, framed the same way
+            pdf.add_page()
+            state.update(col=0, top=top + gap, more=True, lowest=0)
+        pdf.set_y(state["top"])
+
+    def block(pieces, after=1.6):
+        # pieces: (text, style, size); kept together in one column
+        heights = []
+        for text, style, size in pieces:
+            pdf.set_font(body, style, size)
+            heights.append(len(pdf.multi_cell(column, size * 0.45, pdf_text(text), dry_run=True,
+                                              output="LINES")) * size * 0.45)
+        if pdf.get_y() + sum(heights) > state["bottom"]:
+            next_column()
+        for text, style, size in pieces:
+            pdf.set_font(body, style, size)
+            pdf.set_x(xs[state["col"]])
+            pdf.multi_cell(column, size * 0.45, pdf_text(text), new_x="LEFT", new_y="NEXT")
+        state["lowest"] = max(state["lowest"], pdf.get_y())
+        pdf.ln(after)
+
+    frame(y, bottom)
+    pdf.set_y(state["top"])
+    block([(contents["intro"], "I", 10.5)], 3)
+    block([(tr("pdf_key_places").upper(), "B", 11)], 0.8)
+    for place in contents["places"]:
+        block([(f"{place['code']}. {place['name'].upper()}", "B", 9.6), (place["text"], "", 9.6)])
+    if state["more"]:
+        pdf.set_draw_color(*ink)
+        pdf.set_line_width(line_w)
+        frame(top, state["lowest"] + gap)
+    pdf.set_auto_page_break(True, margin=16)
+
+
 def save_contents(params, grid, land, seed, number, edited, log):
     """Step 13: the contents of the land, as .json and .pdf next to the maps."""
     terrain, rivers, sites, fertile = land
@@ -5499,6 +6232,50 @@ def save_contents(params, grid, land, seed, number, edited, log):
         log.info(tr("info_contents_saved", a=short_path(base + ".pdf"), b=short_path(base + ".json")))
     else:
         log.warn(tr("warn_no_fpdf", path=short_path(base + ".json")))
+
+
+def hexagram_picture(params, map_canvas, look, keys=None):
+    """A hexagram's map for its PDF: with the numbers of its key places
+    (keys) or without, and the legend under it, as a picture of its own."""
+    font_spec, bold_spec, advance_em, aspect, G, paper, k = look
+    legend = pack_legend(G, map_canvas.width, has_farmland(params), has_backgrounds(params), has_mushrooms(params))
+    canvas = Canvas(map_canvas.width, map_canvas.height + 1 + len(legend))
+    canvas.paste(map_canvas, 0, 0)
+    if keys:
+        write_hex_numbers(canvas, None, k, 0, 0, keys)
+    write_legend(canvas, legend, canvas.width, map_canvas.height + 1)
+    size = 64
+    regular = open_font(font_spec, size)
+    bold = open_font(bold_spec, size) if bold_spec else regular
+    char_w = regular.getlength("M")
+    ascent, descent = regular.getmetrics()
+    char_h = ascent + descent
+    pad = round(char_w)
+    return render(canvas, regular, bold, char_w, char_h, size, round(canvas.width * char_w) + 2 * pad,
+                  round(canvas.height * char_h) + 2 * pad, pad, pad, palette=palette_for(params))
+
+
+def save_hexagram(params, grid, land, features, pictures, seed, number, edited, log):
+    """The last step of a hexagram: its PDF, the map only or with its key
+    places, rumours, encounters (and history); the contents in .json too.
+    pictures: the map without and with the numbers of the key places."""
+    terrain, rivers, sites, fertile = land
+    with_contents = params.get("contents")
+    log.step(tr("step_hexagram_contents" if with_contents else "step_hexagram_pdf"))
+    kinds = [kind for _, _, kind in features]
+    log.info(tr("info_features", n=len(features), v=kinds.count(CITY), k=kinds.count(FORTRESS),
+                l=kinds.count(DUNGEON), m=kinds.count("landmark")))
+    base = os.path.join(map_folder(params["output"], seed), f"{seed}{'_edit' if edited else ''}")
+    if with_contents:
+        contents = hexagram_contents(params, grid, terrain, rivers, sites, features, seed, number)
+        with open(base + "_contents.json", "w", encoding="utf-8") as f:
+            json.dump(contents, f, ensure_ascii=False, indent=1)
+    else:
+        contents = {"kind": HEXAGRAM, "title": params["title"], "code": params["code"], "seed": seed}
+    if write_contents_pdf(contents, base + ".pdf", pictures[1] if with_contents else pictures[0]):
+        log.info(tr("saved_pdf", a=short_path(base + ".pdf")))
+    else:
+        log.warn(tr("warn_no_fpdf", path=short_path(base + "_contents.json")))
 
 
 def save_maps(params, grid, land, look, seed, number, log, layout_log):
@@ -5532,12 +6309,23 @@ def save_maps(params, grid, land, look, seed, number, log, layout_log):
     if G.missing:
         log.warn(tr("warn_missing_glyphs", g=" ".join(sorted(G.missing))))
 
-    log.step(tr("step_numbered", paper=paper, dpi=DPI, codes=tr("codes_" + NUMBERING)))
+    hexagram = params.get("kind") == HEXAGRAM
+    keys = None
+    if hexagram:                        # the numbers of its key places, not a code in every sub-hex
+        features = hexagram_features(grid, terrain, sites, number)
+        keys = {h: str(n) for n, h, _ in features}
+        HEX_KEYS.clear()
+        HEX_KEYS.update({h: f"{params['code']}.{n:02d}" for n, h, _ in features})
+    log.step(tr("step_numbered", paper=paper, dpi=DPI, codes=tr("codes_" + (HEXAGRAM if hexagram else NUMBERING))))
     numbered = page.copy()
-    write_hex_numbers(numbered, grid, k, mx, my)
+    write_hex_numbers(numbered, grid, k, mx, my, keys)
     save(numbered, layout, numbered_path, params)
     log.info(tr("saved", a=short_path(numbered_path), b=short_path(numbered_path[:-4] + ".txt")))
-    if params.get("contents"):
+    if hexagram:
+        pictures = [hexagram_picture(params, map_canvas, look, numbered_keys) for numbered_keys in (None, keys)]
+        save_hexagram(params, grid, (terrain, rivers, sites, fertile), features, pictures, seed, number,
+                      original is not None, log)
+    elif params.get("contents"):
         save_contents(params, grid, (terrain, rivers, sites, fertile), seed, number, original is not None, log)
     print_sites(grid, terrain, rivers, sites, params.get("labels"))
 
@@ -5548,25 +6336,33 @@ def main():
     (11-12). An edited map goes through the editor between land and paper."""
     first_run = make_maps_folder()
     interactive = len(sys.argv) == 1
+    if interactive:
+        open_console()                 # from here to the end, all in one full-screen window
     params = ask_settings() if interactive else settings_from_options(sys.argv[1:])
-    global NUMBERING
+    global NUMBERING, MAP_KIND
+    MAP_KIND = params.setdefault("kind", REGIONAL)
     NUMBERING = params.setdefault("numbering", "standard")
+    if MAP_KIND == HEXAGRAM:
+        NUMBERING = params["numbering"] = "standard"    # its sub-hexes are keyed by number instead
+        use_hexagram_names()
     # paper is asked even with options, unless --formato or no tty
     ask_format = params.pop("ask_paper", interactive)
     apply_edits = params.pop("apply_edits", False)
     show_conjuring()
-    log = Log(13 if params.get("contents") else 12)     # the contents are one more step
+    log = Log(13 if params.get("contents") or MAP_KIND == HEXAGRAM else 12)   # the contents (PDF) are one more step
 
     # 1: settings
     log.step(tr("step_validate"))
     font_spec, bold_spec = find_font(params["font"])
     advance_em, line_em = font_metrics(font_spec)
     aspect = line_em / advance_em                  # how much taller than wide a letter is
-    if "auto" in (params["columns"], params["rows"]):
+    if "auto" in (params.get("columns"), params.get("rows")):
         fill_page(params, font_spec, aspect, log)
     number = params["seed"] if params["seed"] is not None else new_seed()
     params.setdefault("version", SEED_VERSION)
-    if params.pop("randomize", False):
+    if MAP_KIND == HEXAGRAM:
+        hexagram_settings(params, number)          # its land comes from its landscape
+    elif params.pop("randomize", False):
         random_settings(params, number)
         log.info(tr("info_random"))
     counts = validate(params, log)
@@ -5585,7 +6381,7 @@ def main():
 
     # 2: font
     log.step(tr("step_font"))
-    grid = HexGrid(params["columns"], params["rows"])
+    grid = make_grid(params)
     log.info(tr("info_font", name=font_name(font_spec), fake="" if bold_spec else tr("fake_bold"), a=aspect))
 
     # 3-9: land
@@ -5602,7 +6398,7 @@ def main():
         if on_map:              # the names were given on the map, with N
             params.pop("ask_labels", None)
         elif params.get("ask_labels") == "later":
-            params["ask_labels"] = input(tr("ask_labels_again")).strip().lower() in YES_WORDS
+            params["ask_labels"] = read_answer(tr("ask_labels_again")).strip().lower() in YES_WORDS
         log.info(tr("info_edits", path=short_path(edit_base + ".json")))
     elif apply_edits:                              # --edited: the saved edits, no editor
         data, source = load_edits(edit_base)
@@ -5636,6 +6432,8 @@ def main():
     named = len(site_labels(sites, params["labels"]))
     if named:
         log.info(tr("info_labels", n=named))
+    if MAP_KIND == HEXAGRAM and not params.get("title"):
+        params["title"] = hexagram_title(params, sites, params["labels"], number)
 
     # 10: paper
     log.step(tr("step_paper"))
@@ -5651,12 +6449,12 @@ def main():
 
     # a map just made can be edited straight away, on the same paper
     if interactive and original is None and sys.stdin.isatty():
-        if input(tr("ask_edit_now")).strip().lower().startswith(tr("yes_letter")):
+        if read_answer(tr("ask_edit_now")).strip().lower().startswith(tr("yes_letter")):
             edited = edit_map(grid, terrain, rivers, sites, height, edit_base, params["labels"], fertile)
             if edited is None:
                 return
             new_terrain, new_rivers, new_sites, params["edits"], _ = edited
-            log = Log(13 if params.get("contents") else 12)
+            log = Log(13 if params.get("contents") or MAP_KIND == HEXAGRAM else 12)
             log.step_number = 10            # only the last steps are done again
             log.info(tr("info_edits", path=short_path(edit_base + ".json")))
             save_maps(params, grid, (new_terrain, new_rivers, new_sites, (terrain, rivers), fertile), look, seed, number,
@@ -5673,5 +6471,18 @@ if __name__ == "__main__":
     try:
         main()
     except (KeyboardInterrupt, EOFError):
+        close_console()
         print(tr("interrupted"))
         sys.exit(1)
+    except SystemExit as stop:
+        # an error that stops the program: read it in the window before it closes
+        if CONSOLE and isinstance(stop.code, str):
+            print(stop.code)
+            stop.code = 1
+        close_console(pause=CONSOLE is not None and stop.code not in (None, 0))
+        raise
+    except BaseException:
+        close_console()
+        raise
+    else:
+        close_console(pause=True)
