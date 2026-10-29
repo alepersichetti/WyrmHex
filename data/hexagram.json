@@ -1,5 +1,5 @@
 {
-  "about": "Pieces for hexagrams: one hex of a bigger map, split into sub-hexes. Every list holds Italian and English. The landmarks are put together from five lists (thing, made, detail, around, name) and their rumours from three (if, then, source): tens of millions of landmarks, thousands of rumours. The order of \"landscapes\" is part of the hexagram seeds: add new ones at the end, never move or remove one.",
+  "about": "Pieces for hexagrams: one hex of a bigger map, split into sub-hexes. Every list holds Italian and English. The strange landmarks are put together from five lists (thing, made, detail, around, name): tens of millions of them. The order of \"landscapes\" is part of the hexagram seeds: add new ones at the end, never move or remove one.",
   "landscapes": [
     {
       "key": "plains",
@@ -157,6 +157,131 @@
     "it": "Qui non c'è un sito: i nomi vanno a villaggi, rocche e tane.",
     "en": "There's no site here: names go to villages, keeps and lairs."
   },
+  "names": {
+    "about": "Village names for hexagrams, the same in every language: a first syllable, sometimes a middle one, and an ending, all French-sounding or all Germanic, like Poitan, Beumanne or Waldheim. Keeps and lairs keep the names in names.json.",
+    "city": {
+      "patterns": [
+        "{fr_start}{fr_end}",
+        "{fr_start}{fr_end}",
+        "{fr_start}{middle}{fr_end}",
+        "{de_start}{de_end}",
+        "{de_start}{de_end}",
+        "{de_start}{middle}{de_end}"
+      ],
+      "fr_start": [
+        "Poi",
+        "Mi",
+        "Oc",
+        "Beu",
+        "Ver",
+        "Mont",
+        "Char",
+        "Lan",
+        "Bel",
+        "Rou",
+        "Sau",
+        "Va",
+        "Gre",
+        "Cler",
+        "Dor",
+        "Mar",
+        "Fon",
+        "Lis",
+        "Ar",
+        "Bri",
+        "Cour",
+        "Tor",
+        "Vil",
+        "Mor",
+        "Pel",
+        "Sar",
+        "Bau",
+        "Esc",
+        "Lou",
+        "Ro",
+        "Gui",
+        "Che"
+      ],
+      "fr_end": [
+        "tan",
+        "nerve",
+        "ton",
+        "man",
+        "eux",
+        "ac",
+        "ignac",
+        "elle",
+        "ville",
+        "ourt",
+        "ais",
+        "enne",
+        "ier",
+        "ons",
+        "at",
+        "ot",
+        "ieu",
+        "ange",
+        "mont",
+        "val",
+        "oire",
+        "ancy",
+        "ery",
+        "oux"
+      ],
+      "de_start": [
+        "Ul",
+        "Wal",
+        "Hald",
+        "Eber",
+        "Brun",
+        "Gun",
+        "Rot",
+        "Alt",
+        "Ost",
+        "Wolf",
+        "Har",
+        "Sig",
+        "Fal",
+        "Grim",
+        "Stein",
+        "Hel",
+        "Kal",
+        "Rad",
+        "Ber",
+        "Dorn",
+        "Ham",
+        "Lind"
+      ],
+      "de_end": [
+        "berg",
+        "heim",
+        "dorf",
+        "burg",
+        "stadt",
+        "au",
+        "bach",
+        "feld",
+        "hausen",
+        "ingen",
+        "rode",
+        "wald",
+        "furt",
+        "stein",
+        "horn",
+        "bruck"
+      ],
+      "middle": [
+        "e",
+        "an",
+        "el",
+        "er",
+        "i",
+        "o",
+        "ar",
+        "en"
+      ]
+    }
+  },
   "counts": {
     "about": "how many keyed places a hexagram gets, from its number of sub-hexes",
     "village_every": 22,
@@ -165,8 +290,7 @@
     "more_keeps_every": 60,
     "more_rivers_every": 60,
     "landmark_every": 12,
-    "min_landmarks": 2,
-    "rumour_die": 6
+    "min_landmarks": 2
   },
   "hex_names": {
     "plains": [
@@ -1681,318 +1805,6 @@
       {
         "it": "delle Stelle Cadute",
         "en": "of the Fallen Stars"
-      }
-    ]
-  },
-  "rumour": {
-    "pattern": {
-      "it": "{when} {then} (lo giura {who}).",
-      "en": "{when} {then} (so swears {who})."
-    },
-    "when": [
-      {
-        "it": "Chi vi passa la notte",
-        "en": "Whoever spends the night there"
-      },
-      {
-        "it": "Chi vi lascia una moneta d'argento",
-        "en": "Whoever leaves a silver coin there"
-      },
-      {
-        "it": "Chi vi pronuncia il proprio nome",
-        "en": "Whoever speaks their own name there"
-      },
-      {
-        "it": "Chi vi dorme nella notte di luna nuova",
-        "en": "Whoever sleeps there on the night of the new moon"
-      },
-      {
-        "it": "Chi vi arriva digiuno da tre giorni",
-        "en": "Whoever comes there after three days' fasting"
-      },
-      {
-        "it": "Chi vi gira intorno sette volte",
-        "en": "Whoever walks round it seven times"
-      },
-      {
-        "it": "Chi vi seppellisce un dente da latte",
-        "en": "Whoever buries a milk tooth there"
-      },
-      {
-        "it": "Chi vi beve dopo il tramonto",
-        "en": "Whoever drinks there after sunset"
-      },
-      {
-        "it": "Chi vi canta una ninna nanna",
-        "en": "Whoever sings a lullaby there"
-      },
-      {
-        "it": "Chi vi porta un fiore rubato",
-        "en": "Whoever brings a stolen flower there"
-      },
-      {
-        "it": "Chi vi giura il falso",
-        "en": "Whoever swears falsely there"
-      },
-      {
-        "it": "Chi vi si inginocchia all'alba",
-        "en": "Whoever kneels there at dawn"
-      },
-      {
-        "it": "Chi vi lascia cadere una goccia del proprio sangue",
-        "en": "Whoever lets a drop of their blood fall there"
-      },
-      {
-        "it": "Chi vi accende una candela nera",
-        "en": "Whoever lights a black candle there"
-      },
-      {
-        "it": "Chi vi confessa un segreto",
-        "en": "Whoever confesses a secret there"
-      },
-      {
-        "it": "Chi vi arriva il giorno del proprio compleanno",
-        "en": "Whoever comes there on their birthday"
-      },
-      {
-        "it": "Chi vi scrive il nome del proprio nemico",
-        "en": "Whoever writes their enemy's name there"
-      },
-      {
-        "it": "Chi vi lascia un pezzo di pane",
-        "en": "Whoever leaves a piece of bread there"
-      },
-      {
-        "it": "Chi vi porta un morto",
-        "en": "Whoever brings a dead body there"
-      },
-      {
-        "it": "Chi vi tace dall'alba al tramonto",
-        "en": "Whoever keeps silent there from dawn to dusk"
-      },
-      {
-        "it": "Chi vi rompe un uovo",
-        "en": "Whoever breaks an egg there"
-      },
-      {
-        "it": "Chi vi fischia dopo il tramonto",
-        "en": "Whoever whistles there after sunset"
-      },
-      {
-        "it": "Chi vi resta fino al canto del gallo",
-        "en": "Whoever stays there until cockcrow"
-      },
-      {
-        "it": "Chi vi torna per la terza volta",
-        "en": "Whoever goes back there a third time"
-      },
-      {
-        "it": "Chi vi danza sotto la pioggia",
-        "en": "Whoever dances there in the rain"
-      }
-    ],
-    "then": [
-      {
-        "it": "sogna il luogo dove è sepolto un tesoro",
-        "en": "dreams of where a treasure is buried"
-      },
-      {
-        "it": "invecchia di un anno in una notte",
-        "en": "ages a year in one night"
-      },
-      {
-        "it": "sente la voce di un parente morto",
-        "en": "hears the voice of a dead relative"
-      },
-      {
-        "it": "perde la propria ombra per tre giorni",
-        "en": "loses their shadow for three days"
-      },
-      {
-        "it": "non riesce più a dire bugie fino alla luna nuova",
-        "en": "cannot tell a lie until the new moon"
-      },
-      {
-        "it": "capisce per un giorno la lingua degli uccelli",
-        "en": "understands the speech of birds for a day"
-      },
-      {
-        "it": "trova al risveglio una chiave che non apre nessuna porta conosciuta",
-        "en": "wakes holding a key that fits no known door"
-      },
-      {
-        "it": "vede per un istante il volto del proprio futuro traditore",
-        "en": "glimpses the face of their future betrayer"
-      },
-      {
-        "it": "guarisce da ogni febbre, ma dimentica una cosa cara",
-        "en": "is cured of any fever, but forgets something dear"
-      },
-      {
-        "it": "ha un gatto nero alle calcagna per sette giorni",
-        "en": "has a black cat at their heels for seven days"
-      },
-      {
-        "it": "non ha più bisogno di dormire per una settimana",
-        "en": "needs no sleep for a week"
-      },
-      {
-        "it": "sente bussare alla propria porta ogni notte per un mese",
-        "en": "hears knocking at their door every night for a month"
-      },
-      {
-        "it": "ottiene la risposta a una domanda, ma non sceglie quale",
-        "en": "gets the answer to one question, but not the one they choose"
-      },
-      {
-        "it": "trova nella borsa una moneta d'oro di un regno che non esiste",
-        "en": "finds in their purse a gold coin from a kingdom that doesn't exist"
-      },
-      {
-        "it": "smette di invecchiare finché non dice a voce alta il proprio nome",
-        "en": "stops ageing until they say their own name aloud"
-      },
-      {
-        "it": "si porta dietro la pioggia ovunque vada per nove giorni",
-        "en": "brings rain wherever they go for nine days"
-      },
-      {
-        "it": "sogna ogni notte la stessa porta, sempre un po' più aperta",
-        "en": "dreams of the same door every night, a little wider open each time"
-      },
-      {
-        "it": "dimentica il proprio nome fino al tramonto",
-        "en": "forgets their own name until sunset"
-      },
-      {
-        "it": "sente nel petto il battito di un secondo cuore",
-        "en": "feels a second heart beating in their chest"
-      },
-      {
-        "it": "ha fortuna al gioco e sfortuna in amore",
-        "en": "is lucky at dice and unlucky in love"
-      },
-      {
-        "it": "riceve una visita del Popolo Fatato prima dell'inverno",
-        "en": "is visited by the Fair Folk before winter"
-      },
-      {
-        "it": "vede i morti del villaggio passeggiare al chiaro di luna",
-        "en": "sees the village dead walking in the moonlight"
-      },
-      {
-        "it": "non riesce più ad attraversare l'acqua corrente senza tremare",
-        "en": "can no longer cross running water without trembling"
-      },
-      {
-        "it": "trova ogni mattina sulla soglia un sasso nuovo",
-        "en": "finds a new pebble on their doorstep every morning"
-      },
-      {
-        "it": "impara una canzone che nessuno ha mai sentito",
-        "en": "learns a song nobody has ever heard"
-      },
-      {
-        "it": "porta sventura al primo che incontra",
-        "en": "brings bad luck to the first person they meet"
-      },
-      {
-        "it": "vede in sogno dove si nasconde un ladro",
-        "en": "sees in a dream where a thief is hiding"
-      },
-      {
-        "it": "ha sette anni di buon raccolto",
-        "en": "has seven years of good harvests"
-      },
-      {
-        "it": "si sveglia con le mani sporche di terra",
-        "en": "wakes with earth on their hands"
-      },
-      {
-        "it": "diventa amico di ogni cane",
-        "en": "becomes friends with every dog"
-      }
-    ],
-    "who": [
-      {
-        "it": "la vedova del mugnaio",
-        "en": "the miller's widow"
-      },
-      {
-        "it": "il vecchio pastore",
-        "en": "the old shepherd"
-      },
-      {
-        "it": "una guardia ubriaca",
-        "en": "a drunk guard"
-      },
-      {
-        "it": "la levatrice",
-        "en": "the midwife"
-      },
-      {
-        "it": "un frate di passaggio",
-        "en": "a passing friar"
-      },
-      {
-        "it": "un bambino del villaggio",
-        "en": "a village child"
-      },
-      {
-        "it": "il fabbro",
-        "en": "the smith"
-      },
-      {
-        "it": "un menestrello",
-        "en": "a minstrel"
-      },
-      {
-        "it": "la nonna dell'oste",
-        "en": "the innkeeper's grandmother"
-      },
-      {
-        "it": "un cacciatore di frodo",
-        "en": "a poacher"
-      },
-      {
-        "it": "il becchino",
-        "en": "the gravedigger"
-      },
-      {
-        "it": "una mercante di spezie",
-        "en": "a spice merchant"
-      },
-      {
-        "it": "il cieco del mercato",
-        "en": "the blind man at the market"
-      },
-      {
-        "it": "un soldato tornato dalla guerra",
-        "en": "a soldier back from the war"
-      },
-      {
-        "it": "la strega del bosco",
-        "en": "the witch of the woods"
-      },
-      {
-        "it": "il prete, ma solo quando beve",
-        "en": "the priest, but only when drinking"
-      },
-      {
-        "it": "un ragazzo che dice di aver visto tutto",
-        "en": "a boy who says he saw it all"
-      },
-      {
-        "it": "il mugnaio",
-        "en": "the miller"
-      },
-      {
-        "it": "la lavandaia",
-        "en": "the washerwoman"
-      },
-      {
-        "it": "un vecchio cavaliere",
-        "en": "an old knight"
       }
     ]
   }

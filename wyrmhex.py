@@ -702,13 +702,9 @@ TEXTS = {
     "info_features": ("{n} luoghi chiave (villaggi {v}, rocche {k}, tane {l}, luoghi strani {m})",
                       "{n} key places (villages {v}, keeps {k}, lairs {l}, strange places {m})"),
     "step_hexagram_pdf": ("Mappa dell'esagono in PDF", "The hex map as a PDF"),
-    "step_hexagram_contents": ("Contenuti dell'esagono: luoghi chiave, dicerie, incontri casuali (PDF)",
-                               "Contents of the hex: key places, rumours, random encounters (PDF)"),
-    "step_hexagram_contents_history": ("Contenuti dell'esagono: luoghi chiave, dicerie, incontri casuali, storia (PDF)",
-                                       "Contents of the hex: key places, rumours, random encounters, history (PDF)"),
+    "step_hexagram_contents": ("L'esagono e i suoi luoghi chiave (PDF)", "The hex and its key places (PDF)"),
     "saved_pdf": ("Salvato: {a}", "Saved: {a}"),
     "pdf_key_places": ("Luoghi chiave", "Key places"),
-    "pdf_strange_rumours": ("Dicerie (1d{n})", "Strange rumours (1d{n})"),
     "h_hexagram": ("un esagramma di N sotto-esagoni da un lato all'altro (dispari, da 3 a 25) invece di una mappa "
                    "regionale", "a hexagram N sub-hexes from side to side (odd, 3 to 25) instead of a regional map"),
     "h_landscape": ("il paesaggio dell'esagramma (a caso se manca)", "the hexagram's landscape (random if missing)"),
@@ -733,12 +729,9 @@ TEXTS = {
                 "100, or auto (at random between 20 and 30)"),
     "contents_map_only": ("solo la mappa", "the map only"),
     "contents_map_only_hexagram": ("solo la mappa (in un PDF)", "the map only (in a PDF)"),
-    "contents_stock_hexagram": ("la mappa e i luoghi chiave, con dicerie e incontri casuali (in un PDF)",
-                                "the map and its key places, with rumours and random encounters (in a PDF)"),
-    "contents_all_hexagram": ("la mappa, i luoghi chiave e la storia del luogo, con dicerie e incontri casuali "
-                              "(in un PDF)",
-                              "the map, its key places and the history of the place, with rumours and random "
-                              "encounters (in a PDF)"),
+    "contents_stock_hexagram": ("la mappa e i suoi luoghi chiave: villaggi, rocche, tane e luoghi strani "
+                                "(in un PDF)",
+                                "the map and its key places: villages, keeps, lairs and strange places (in a PDF)"),
     "contents_stock": ("la mappa e il contenuto degli esagoni, a caso: incontri casuali ed esagoni popolati "
                        "(in un PDF)",
                        "the map and what's in its hexes, at random: random encounters and stocked hexes "
@@ -2318,10 +2311,12 @@ def ask_settings():
 def ask_contents(p):
     """Map only, or also its contents (encounters, stocked hexes, history)."""
     # 0 the map only, 1 also the stocked hexes, 2 also the history of the land
+    # (a hexagram: the map only, or also its key places)
     hexagram = "_hexagram" if p.get("kind") == HEXAGRAM else ""
-    choice = menu(tr("q_contents"), [tr("contents_map_only" + hexagram), tr("contents_stock" + hexagram),
-                                     tr("contents_all" + hexagram)],
-                  2 if p.get("history") else 1 if p.get("contents") else 0)
+    options = [tr("contents_map_only" + hexagram), tr("contents_stock" + hexagram)]
+    if not hexagram:
+        options.append(tr("contents_all"))
+    choice = menu(tr("q_contents"), options, 2 if p.get("history") and not hexagram else 1 if p.get("contents") else 0)
     p["contents"], p["history"] = choice >= 1, choice == 2
     if p["contents"] and not hexagram:     # a hexagram has key places, not a table of stocked hexes
         p["empty"] = ask_empty(p.get("empty"))
@@ -2476,7 +2471,7 @@ def settings_from_options(argv):
         saved["ask_paper"] = ask_for_paper
         saved["apply_edits"] = a.edited
         saved["contents"] = a.contents or a.history
-        saved["history"] = a.history
+        saved["history"] = a.history and saved.get("kind") != HEXAGRAM     # a hexagram has key places only
         saved["empty"] = a.empty
         # a hexagram's village gives it its name: without the old names, random ones (the same as before)
         saved["random_names"] = a.random_names or (saved.get("kind") == HEXAGRAM and not saved.get("labels"))
@@ -2495,7 +2490,7 @@ def settings_from_options(argv):
             "title": a.title, "scale": scale_text(a.scale or str(HEXAGRAM_SCALES[0])),
             "orientation": orientation, "output": a.output, "paper": a.paper,
             "ascii_only": a.ascii_only, "colors": a.colors, "background": background, "size": size, "font": a.font,
-            "ask_paper": ask_for_paper, "contents": a.contents or a.history, "history": a.history,
+            "ask_paper": ask_for_paper, "contents": a.contents or a.history, "history": False,
             "random_names": True, "fungus": a.fungus > 0,
         }
 
@@ -5455,6 +5450,8 @@ def random_site_labels(sites, number):
     Seeded from the map number: the same seed gives the same names."""
     rng = random.Random(f"names {number} {LANG}")
     pieces = load_data("names.json")[LANG]
+    if MAP_KIND == HEXAGRAM:              # villages, not cities: the same names in every language
+        pieces = {**pieces, CITY: load_data("hexagram.json")["names"][CITY]}
     used, used_pieces, labels = set(), set(), {}
     for kind, h in sites:
         kind_pieces = pieces[kind]
@@ -5878,13 +5875,6 @@ def make_landmark(rng, used):
     return name, text
 
 
-def strange_rumour(rng, used):
-    """A strange rumour, out of thousands: who does what, what happens, who
-    says so (used: as in make_landmark)."""
-    R = load_data("hexagram.json")["rumour"]
-    return R["pattern"][LANG].format(**{part: fresh_choice(rng, R[part], used)[LANG]
-                                        for part in ("when", "then", "who")})
-
 
 def hexagram_title(params, sites, labels, number):
     """A name for the hex from its landscape and its main village, like
@@ -5900,11 +5890,9 @@ def hexagram_title(params, sites, labels, number):
 
 def hexagram_contents(params, grid, terrain, rivers, sites, features, seed, number):
     """Everything that goes in a hexagram's PDF, as plain data: the land in
-    a few words, its key places, strange rumours, encounters (and history)."""
+    a few words and its key places."""
     data = load_data("hexagram.json")
     labels = params.get("labels") or {}
-    history, rumours, cast = (land_history(grid, terrain, rivers, sites, labels, number) if params.get("history")
-                              else ([], [], None))
     land = data["landscapes"][params["landscape"]]
     rng = random.Random(f"hexagram contents {number}")
     used = set()
@@ -5934,26 +5922,16 @@ def hexagram_contents(params, grid, terrain, rivers, sites, features, seed, numb
                                       fresh_choice(rng, K["states"], used)[LANG],
                                       fresh_choice(rng, K["hooks"], used)[LANG]))
         elif kind == DUNGEON:
-            monster = roll_monster(rng, terrain[h], number, bool(cast))
+            monster = roll_monster(rng, terrain[h], number, False)
             place["name"] = labels.get(label_key(h)) or L["unnamed"][LANG]
             place["text"] = fresh_choice(rng, L["places"], used)[LANG]
             if monster:
                 place["text"] += " " + L["lives"][LANG].format(monster=monster[0])
         else:
             place["name"], place["text"] = make_landmark(rng, used)
-            place["rumour"] = strange_rumour(rng, used)
         places.append(place)
-    die = data["counts"]["rumour_die"]
-    about = [rng.choice(places) for _ in range(die)] if places else []
     return {"kind": HEXAGRAM, "title": params["title"], "code": params["code"], "seed": seed, "version": VERSION,
-            "language": LANG, "scale": params["scale"], "landscape": land[LANG], "intro": intro, "places": places,
-            "strange_rumours": [f"{p['name']}: {strange_rumour(rng, used)}" for p in about],
-            "history": history, "rumours": rumours,
-            "encounters": [{"terrain": pick(TERRAIN_NAMES[t]),
-                            "rows": [{"roll": roll, "encounter": name, "note": note, "kind": kind}
-                                     for roll, name, _, note, kind in rows]}
-                           for t, rows in encounter_tables(terrain, number,
-                                                           (cast, sites, labels) if cast else None)]}
+            "language": LANG, "scale": params["scale"], "landscape": land[LANG], "intro": intro, "places": places}
 
 
 def pdf_text(text):
@@ -6018,20 +5996,9 @@ def write_contents_pdf(contents, path, picture=None):
     # 1. title, history and rumours (a hexagram: its page, then the history)
     pdf.add_page()
     if contents.get("kind") == HEXAGRAM:
-        room_left = hexagram_page(pdf, contents, picture, head, body)
-        if not contents.get("encounters"):        # the map only
-            pdf.output(path)
-            return True
-        if not room_left:
-            pdf.add_page()
-        heading(tr("pdf_strange_rumours", n=len(contents["strange_rumours"])), 15)
-        for i, rumour in enumerate(contents["strange_rumours"], 1):
-            pdf.set_font(body, "B", 11.5)
-            pdf.cell(8, 5.2, str(i))
-            pdf.set_font(body, "", 11.5)
-            write(width - 8, 5.2, rumour)
-            pdf.ln(1)
-        pdf.ln(4)
+        hexagram_page(pdf, contents, picture, head, body)     # the map, and its key places if asked for
+        pdf.output(path)
+        return True
     else:
         pdf.set_font(*head, 28)
         write(width, 13, contents["title"])
@@ -6169,8 +6136,7 @@ def hexagram_page(pdf, contents, picture, head, body):
     """A hexagram's page, like a printed hex sheet: its name in a box, its
     map, its code on the bigger map, then its key places and rumours in two
     columns (going on over the next pages if they don't fit). Without key
-    places (the map only) the map takes the room. True when the last page
-    has room left under the key places, for what comes next."""
+    places (the map only) the map takes the room."""
     ink, line_w = (25, 25, 25), 0.35
     left, top, width, bottom = pdf.l_margin, 16, pdf.w - pdf.l_margin - pdf.r_margin, pdf.h - 16
     pdf.set_draw_color(*ink)
@@ -6201,7 +6167,7 @@ def hexagram_page(pdf, contents, picture, head, body):
     y += 12
     if not places:
         pdf.set_auto_page_break(True, margin=16)
-        return False
+        return
 
     # key places and rumours, in two columns
     gap = 4
@@ -6243,17 +6209,12 @@ def hexagram_page(pdf, contents, picture, head, body):
     block([(contents["intro"], "I", 10.5)], 3)
     block([(tr("pdf_key_places").upper(), "B", 11)], 0.8)
     for place in contents["places"]:
-        pieces = [(f"{place['code']}. {place['name'].upper()}", "B", 9.6), (place["text"], "", 9.6)]
-        if place.get("rumour"):
-            pieces.append((place["rumour"], "I", 9.6))
-        block(pieces)
+        block([(f"{place['code']}. {place['name'].upper()}", "B", 9.6), (place["text"], "", 9.6)])
     if state["more"]:
         pdf.set_draw_color(*ink)
         pdf.set_line_width(line_w)
         frame(top, state["lowest"] + gap)
-        pdf.set_y(state["lowest"] + gap + 8)
     pdf.set_auto_page_break(True, margin=16)
-    return state["more"]
 
 
 def save_contents(params, grid, land, seed, number, edited, log):
@@ -6300,8 +6261,7 @@ def save_hexagram(params, grid, land, features, pictures, seed, number, edited, 
     pictures: the map without and with the numbers of the key places."""
     terrain, rivers, sites, fertile = land
     with_contents = params.get("contents")
-    log.step(tr(("step_hexagram_contents_history" if params.get("history") else "step_hexagram_contents")
-                if with_contents else "step_hexagram_pdf"))
+    log.step(tr("step_hexagram_contents" if with_contents else "step_hexagram_pdf"))
     kinds = [kind for _, _, kind in features]
     log.info(tr("info_features", n=len(features), v=kinds.count(CITY), k=kinds.count(FORTRESS),
                 l=kinds.count(DUNGEON), m=kinds.count("landmark")))
