@@ -1,0 +1,1999 @@
+{
+  "about": "Pieces for hexagrams: one hex of a bigger map, split into sub-hexes. Every list holds Italian and English. The landmarks are put together from five lists (thing, made, detail, around, name) and their rumours from three (if, then, source): tens of millions of landmarks, thousands of rumours. The order of \"landscapes\" is part of the hexagram seeds: add new ones at the end, never move or remove one.",
+  "landscapes": [
+    {
+      "key": "plains",
+      "key_it": "pianura",
+      "it": "campagna aperta (pianura)",
+      "en": "open country (plains)",
+      "main": "plains",
+      "percentages": {
+        "forest": 12,
+        "hills": 10,
+        "lake": 3,
+        "swamp": 3
+      },
+      "river": 0.6
+    },
+    {
+      "key": "forest",
+      "key_it": "bosco",
+      "it": "bosco",
+      "en": "woodland",
+      "main": "forest",
+      "percentages": {
+        "forest": 60,
+        "hills": 10,
+        "swamp": 4,
+        "lake": 2
+      },
+      "river": 0.5
+    },
+    {
+      "key": "hills",
+      "key_it": "colline",
+      "it": "colline",
+      "en": "hills",
+      "main": "hills",
+      "percentages": {
+        "hills": 50,
+        "forest": 15,
+        "mountains": 8,
+        "lake": 2
+      },
+      "river": 0.6
+    },
+    {
+      "key": "mountains",
+      "key_it": "montagne",
+      "it": "montagne",
+      "en": "mountains",
+      "main": "mountains",
+      "percentages": {
+        "mountains": 45,
+        "hills": 30,
+        "forest": 8,
+        "lake": 2
+      },
+      "river": 0.7
+    },
+    {
+      "key": "swamp",
+      "key_it": "palude",
+      "it": "palude",
+      "en": "marsh",
+      "main": "swamp",
+      "percentages": {
+        "swamp": 50,
+        "lake": 8,
+        "forest": 12
+      },
+      "river": 0.4
+    },
+    {
+      "key": "desert",
+      "key_it": "deserto",
+      "it": "deserto",
+      "en": "desert",
+      "main": "desert",
+      "percentages": {
+        "desert": 65,
+        "hills": 10,
+        "mountains": 3
+      },
+      "river": 0.15
+    },
+    {
+      "key": "coast",
+      "key_it": "costa",
+      "it": "costa (mare su un lato)",
+      "en": "coast (sea on one side)",
+      "main": "plains",
+      "percentages": {
+        "sea": 35,
+        "hills": 10,
+        "forest": 10,
+        "swamp": 3
+      },
+      "river": 0.5
+    },
+    {
+      "key": "lake",
+      "key_it": "lago",
+      "it": "lago",
+      "en": "lake",
+      "main": "plains",
+      "percentages": {
+        "lake": 30,
+        "forest": 15,
+        "swamp": 8,
+        "hills": 5
+      },
+      "river": 0.4
+    },
+    {
+      "key": "fungus",
+      "key_it": "funghi",
+      "it": "foresta di funghi giganti",
+      "en": "giant mushroom forest",
+      "main": "fungus",
+      "percentages": {
+        "fungus": 40,
+        "forest": 25,
+        "swamp": 10,
+        "lake": 4
+      },
+      "river": 0.5,
+      "needs_fungus": true
+    }
+  ],
+  "site_names": {
+    "city": {
+      "it": "Villaggio",
+      "en": "Village",
+      "a_it": "un villaggio",
+      "the_it": "il villaggio",
+      "a_en": "a village",
+      "the_en": "the village"
+    },
+    "fortress": {
+      "it": "Rocca",
+      "en": "Keep",
+      "a_it": "una rocca",
+      "the_it": "la rocca",
+      "a_en": "a keep",
+      "the_en": "the keep"
+    },
+    "dungeon": {
+      "it": "Tana",
+      "en": "Lair",
+      "a_it": "una tana",
+      "the_it": "la tana",
+      "a_en": "a lair",
+      "the_en": "the lair"
+    }
+  },
+  "editor_no_site": {
+    "it": "Qui non c'è un sito: i nomi vanno a villaggi, rocche e tane.",
+    "en": "There's no site here: names go to villages, keeps and lairs."
+  },
+  "counts": {
+    "about": "how many keyed places a hexagram gets, from its number of sub-hexes",
+    "village_every": 22,
+    "lair_every": 30,
+    "keep_chance": 0.5,
+    "more_keeps_every": 60,
+    "more_rivers_every": 60,
+    "landmark_every": 12,
+    "min_landmarks": 2,
+    "rumour_die": 6
+  },
+  "hex_names": {
+    "plains": [
+      {
+        "it": "Campi di {name}",
+        "en": "{name} Fields"
+      },
+      {
+        "it": "Piana di {name}",
+        "en": "{name} Plain"
+      },
+      {
+        "it": "Prati di {name}",
+        "en": "{name} Meadows"
+      }
+    ],
+    "forest": [
+      {
+        "it": "Boschi di {name}",
+        "en": "{name} Woods"
+      },
+      {
+        "it": "Selva di {name}",
+        "en": "{name} Wood"
+      },
+      {
+        "it": "Macchia di {name}",
+        "en": "{name} Thicket"
+      }
+    ],
+    "hills": [
+      {
+        "it": "Colli di {name}",
+        "en": "{name} Hills"
+      },
+      {
+        "it": "Poggi di {name}",
+        "en": "{name} Downs"
+      }
+    ],
+    "mountains": [
+      {
+        "it": "Picchi di {name}",
+        "en": "{name} Peaks"
+      },
+      {
+        "it": "Gioghi di {name}",
+        "en": "{name} Crags"
+      }
+    ],
+    "swamp": [
+      {
+        "it": "Paludi di {name}",
+        "en": "{name} Fens"
+      },
+      {
+        "it": "Acquitrini di {name}",
+        "en": "{name} Marshes"
+      }
+    ],
+    "desert": [
+      {
+        "it": "Sabbie di {name}",
+        "en": "{name} Sands"
+      },
+      {
+        "it": "Dune di {name}",
+        "en": "{name} Dunes"
+      }
+    ],
+    "fungus": [
+      {
+        "it": "Funghi di {name}",
+        "en": "{name} Mushroom Groves"
+      },
+      {
+        "it": "Spore di {name}",
+        "en": "{name} Sporelands"
+      }
+    ],
+    "coast": [
+      {
+        "it": "Costa di {name}",
+        "en": "{name} Coast"
+      },
+      {
+        "it": "Scogliere di {name}",
+        "en": "{name} Cliffs"
+      }
+    ],
+    "lake": [
+      {
+        "it": "Lago di {name}",
+        "en": "{name} Mere"
+      },
+      {
+        "it": "Rive di {name}",
+        "en": "{name} Shores"
+      }
+    ]
+  },
+  "intro": {
+    "plains": [
+      {
+        "it": "Una campagna aperta e generosa: l'erba ondeggia fino all'orizzonte e i villaggi si riconoscono da lontano per il fumo dei camini.",
+        "en": "Open, generous country: the grass ripples to the horizon and the villages show from afar by the smoke of their chimneys."
+      },
+      {
+        "it": "Campi coltivati a perdita d'occhio, siepi, filari di pioppi e strade bianche di polvere d'estate.",
+        "en": "Farmland as far as the eye can see, hedgerows, rows of poplars and roads white with dust in summer."
+      }
+    ],
+    "forest": [
+      {
+        "it": "Un bosco fitto di querce e faggi, dove la luce arriva a chiazze e i sentieri si perdono facilmente.",
+        "en": "A thick wood of oak and beech, where the light comes in patches and paths are easily lost."
+      },
+      {
+        "it": "Alberi antichi coperti di muschio, radure improvvise e il silenzio rotto solo dai picchi.",
+        "en": "Old trees shaggy with moss, sudden clearings and a silence broken only by woodpeckers."
+      }
+    ],
+    "hills": [
+      {
+        "it": "Colline dolci, una dietro l'altra, con vigne sui fianchi al sole e boschetti nei valloni.",
+        "en": "Gentle hills, one behind the other, with vines on the sunny slopes and copses in the hollows."
+      },
+      {
+        "it": "Poggi erbosi battuti dal vento, muretti a secco e greggi che si muovono come nuvole.",
+        "en": "Windswept grassy downs, dry-stone walls and flocks that move like clouds."
+      }
+    ],
+    "mountains": [
+      {
+        "it": "Pareti di roccia, ghiaioni e passi stretti: qui il tempo cambia in un'ora e ogni sentiero costa fatica.",
+        "en": "Rock faces, scree and narrow passes: here the weather turns in an hour and every path is hard won."
+      },
+      {
+        "it": "Cime spoglie sopra pascoli alti, dove l'aria è sottile e le voci si sentono a miglia di distanza.",
+        "en": "Bare peaks above high pastures, where the air is thin and voices carry for miles."
+      }
+    ],
+    "swamp": [
+      {
+        "it": "Acqua ferma, canne più alte di un uomo e isolotti di terra molle: chi non conosce i passaggi si perde.",
+        "en": "Still water, reeds taller than a man and islets of soft ground: whoever doesn't know the ways gets lost."
+      },
+      {
+        "it": "Nebbie al mattino, zanzare la sera e il gracidare delle rane tutta la notte.",
+        "en": "Mist in the morning, midges in the evening and frogs croaking all night long."
+      }
+    ],
+    "desert": [
+      {
+        "it": "Sabbia e roccia cotte dal sole, dove l'acqua vale più dell'oro e le carovane viaggiano di notte.",
+        "en": "Sand and rock baked by the sun, where water is worth more than gold and caravans travel by night."
+      },
+      {
+        "it": "Dune che cambiano forma col vento e pietre scolpite dal vento in forme strane.",
+        "en": "Dunes that shift with the wind and stones carved by it into strange shapes."
+      }
+    ],
+    "fungus": [
+      {
+        "it": "Funghi giganti alti come torri, nuvole di spore nella luce del pomeriggio e un odore dolciastro di terra bagnata.",
+        "en": "Giant mushrooms tall as towers, clouds of spores in the afternoon light and a sweetish smell of wet earth."
+      },
+      {
+        "it": "Sotto i cappelli dei funghi giganti regna una penombra umida, piena di ronzii e di scricchiolii.",
+        "en": "Under the caps of the giant mushrooms reigns a damp half-light, full of hums and creaks."
+      }
+    ],
+    "coast": [
+      {
+        "it": "La terra finisce nel mare tra scogli e calette; il vento sa di sale e di alghe.",
+        "en": "The land ends in the sea among rocks and coves; the wind smells of salt and seaweed."
+      },
+      {
+        "it": "Una costa frastagliata di promontori e spiagge di ciottoli, con barche tirate in secco davanti alle case.",
+        "en": "A ragged coast of headlands and pebble beaches, with boats drawn up in front of the houses."
+      }
+    ],
+    "lake": [
+      {
+        "it": "Un grande lago domina la zona: acque calme, canneti sulle rive e pescatori fin dall'alba.",
+        "en": "A great lake rules the area: calm waters, reedbeds along the shores and fishermen out from dawn."
+      },
+      {
+        "it": "Le rive del lago sono punteggiate di pontili e di case su palafitte; la nebbia sale dall'acqua ogni sera.",
+        "en": "The lake shores are dotted with jetties and houses on stilts; mist rises from the water every evening."
+      }
+    ]
+  },
+  "river": {
+    "it": "Un fiume attraversa l'esagono e porta acqua a campi e mulini.",
+    "en": "A river crosses the hex, bringing water to fields and mills."
+  },
+  "rivers": {
+    "it": "{n} fiumi attraversano l'esagono.",
+    "en": "{n} rivers cross the hex."
+  },
+  "village": {
+    "sizes": [
+      {
+        "it": "Frazione",
+        "en": "Hamlet",
+        "low": 30,
+        "high": 120
+      },
+      {
+        "it": "Villaggio",
+        "en": "Village",
+        "low": 120,
+        "high": 400
+      },
+      {
+        "it": "Borgo",
+        "en": "Small town",
+        "low": 400,
+        "high": 900
+      }
+    ],
+    "people": {
+      "it": "{size} di circa {n} abitanti.",
+      "en": "{size} of about {n} souls."
+    },
+    "ruled": {
+      "it": "Comanda {ruler}.",
+      "en": "In charge: {ruler}."
+    },
+    "lives": {
+      "it": "Vive di {trade}.",
+      "en": "It lives on {trade}."
+    },
+    "rulers": [
+      {
+        "it": "un balivo nominato dal signore della rocca vicina",
+        "en": "a bailiff appointed by the lord of the nearby keep"
+      },
+      {
+        "it": "un consiglio di cinque anziani litigiosi",
+        "en": "a council of five quarrelsome elders"
+      },
+      {
+        "it": "una badessa severa",
+        "en": "a stern abbess"
+      },
+      {
+        "it": "un mercante arricchito che si fa chiamare sindaco",
+        "en": "a rich merchant who calls himself mayor"
+      },
+      {
+        "it": "il prete, che tiene anche i registri",
+        "en": "the priest, who also keeps the ledgers"
+      },
+      {
+        "it": "una vedova energica, erede della terra",
+        "en": "a forceful widow who inherited the land"
+      },
+      {
+        "it": "il fabbro, perché nessun altro lo voleva fare",
+        "en": "the smith, since nobody else would"
+      },
+      {
+        "it": "una famiglia di piccoli nobili decaduti",
+        "en": "a family of fallen minor nobles"
+      },
+      {
+        "it": "un ex soldato con una gamba sola",
+        "en": "a one-legged former soldier"
+      },
+      {
+        "it": "nessuno: decide chi grida più forte",
+        "en": "nobody: whoever shouts loudest decides"
+      },
+      {
+        "it": "una giovane signora appena tornata dalla città",
+        "en": "a young lady just back from the city"
+      },
+      {
+        "it": "il mugnaio, padrone dell'unico mulino",
+        "en": "the miller, who owns the only mill"
+      },
+      {
+        "it": "una sacerdotessa di un culto antico",
+        "en": "a priestess of an old cult"
+      },
+      {
+        "it": "l'oste, che sa tutto di tutti",
+        "en": "the innkeeper, who knows everyone's business"
+      }
+    ],
+    "trades": {
+      "plains": [
+        {
+          "it": "grano e orzo",
+          "en": "wheat and barley"
+        },
+        {
+          "it": "uliveti",
+          "en": "olive groves"
+        },
+        {
+          "it": "vigne",
+          "en": "vineyards"
+        },
+        {
+          "it": "bestiame",
+          "en": "cattle"
+        },
+        {
+          "it": "un mulino ad acqua",
+          "en": "a water mill"
+        },
+        {
+          "it": "lino e tessitura",
+          "en": "flax and weaving"
+        }
+      ],
+      "forest": [
+        {
+          "it": "carbone di legna",
+          "en": "charcoal"
+        },
+        {
+          "it": "legname",
+          "en": "timber"
+        },
+        {
+          "it": "pellicce",
+          "en": "furs"
+        },
+        {
+          "it": "miele selvatico",
+          "en": "wild honey"
+        },
+        {
+          "it": "resina e pece",
+          "en": "resin and pitch"
+        }
+      ],
+      "hills": [
+        {
+          "it": "pecore e lana",
+          "en": "sheep and wool"
+        },
+        {
+          "it": "vigne",
+          "en": "vineyards"
+        },
+        {
+          "it": "una cava di pietra",
+          "en": "a stone quarry"
+        },
+        {
+          "it": "frutteti",
+          "en": "orchards"
+        },
+        {
+          "it": "formaggi",
+          "en": "cheese"
+        }
+      ],
+      "mountains": [
+        {
+          "it": "una miniera d'argento",
+          "en": "a silver mine"
+        },
+        {
+          "it": "capre",
+          "en": "goats"
+        },
+        {
+          "it": "una cava d'ardesia",
+          "en": "a slate quarry"
+        },
+        {
+          "it": "guide per i passi",
+          "en": "guides over the passes"
+        }
+      ],
+      "swamp": [
+        {
+          "it": "anguille",
+          "en": "eels"
+        },
+        {
+          "it": "canne e giunchi",
+          "en": "reeds and rushes"
+        },
+        {
+          "it": "torba",
+          "en": "peat"
+        },
+        {
+          "it": "erbe medicinali",
+          "en": "healing herbs"
+        }
+      ],
+      "desert": [
+        {
+          "it": "sale",
+          "en": "salt"
+        },
+        {
+          "it": "datteri",
+          "en": "dates"
+        },
+        {
+          "it": "carovane",
+          "en": "caravans"
+        },
+        {
+          "it": "acqua di un pozzo profondo",
+          "en": "water from a deep well"
+        }
+      ],
+      "fungus": [
+        {
+          "it": "funghi coltivati",
+          "en": "farmed mushrooms"
+        },
+        {
+          "it": "spore per i tintori",
+          "en": "spores for dyers"
+        },
+        {
+          "it": "legno di fungo",
+          "en": "mushroom wood"
+        }
+      ],
+      "water": [
+        {
+          "it": "pesca",
+          "en": "fishing"
+        },
+        {
+          "it": "saline",
+          "en": "salt pans"
+        },
+        {
+          "it": "costruzione di barche",
+          "en": "boatbuilding"
+        }
+      ]
+    },
+    "troubles": [
+      {
+        "it": "Da tre notti le galline non fanno più uova, e qualcuno dà la colpa al forestiero appena arrivato.",
+        "en": "For three nights the hens have laid no eggs, and some blame the stranger who just arrived."
+      },
+      {
+        "it": "Il pozzo ha cominciato a dare acqua rossa.",
+        "en": "The well has started giving red water."
+      },
+      {
+        "it": "Due famiglie litigano per un confine e stanno per arrivare alle armi.",
+        "en": "Two families feud over a boundary and are close to blows."
+      },
+      {
+        "it": "Un bambino è sparito; gli altri dicono che è andato a giocare con «la signora del bosco».",
+        "en": "A child has gone missing; the others say they went to play with \"the lady of the woods\"."
+      },
+      {
+        "it": "Il raccolto è marcito in una notte.",
+        "en": "The harvest rotted overnight."
+      },
+      {
+        "it": "Un esattore delle tasse è atteso a giorni e nessuno ha di che pagare.",
+        "en": "A tax collector is due any day and nobody can pay."
+      },
+      {
+        "it": "Lupi troppo audaci si avvicinano alle case.",
+        "en": "Wolves grown too bold come close to the houses."
+      },
+      {
+        "it": "Il prete dice di aver visto un angelo; la gente è divisa.",
+        "en": "The priest claims to have seen an angel; folk are divided."
+      },
+      {
+        "it": "Un mercante ha venduto a tutti rimedi falsi ed è fuggito verso nord.",
+        "en": "A merchant sold everyone fake remedies and fled north."
+      },
+      {
+        "it": "Cercano braccia per il raccolto: pagano bene.",
+        "en": "Hands are wanted for the harvest: the pay is good."
+      },
+      {
+        "it": "Le campane suonano da sole a mezzanotte.",
+        "en": "The bells ring by themselves at midnight."
+      },
+      {
+        "it": "Qualcuno ruba le pietre del muro del cimitero.",
+        "en": "Someone is stealing stones from the graveyard wall."
+      },
+      {
+        "it": "Una festa è alle porte e manca il vino.",
+        "en": "A feast is coming and there's no wine."
+      },
+      {
+        "it": "Un cavaliere ferito è ospite dell'oste e non vuole dire chi l'ha ridotto così.",
+        "en": "A wounded knight is the innkeeper's guest and won't say who did it."
+      },
+      {
+        "it": "I contadini trovano monete antiche nei campi arati.",
+        "en": "Farmers keep finding old coins in the ploughed fields."
+      },
+      {
+        "it": "Il signore del posto ha proibito di attraversare il ponte vecchio, senza dire perché.",
+        "en": "The local lord has forbidden crossing the old bridge, without saying why."
+      }
+    ]
+  },
+  "keep": {
+    "held": {
+      "it": "La tengono {holder}.",
+      "en": "Held by {holder}."
+    },
+    "holders": [
+      {
+        "it": "un cavaliere caduto in disgrazia e otto armigeri",
+        "en": "a disgraced knight and eight men-at-arms"
+      },
+      {
+        "it": "la guarnigione del barone, dieci uomini annoiati",
+        "en": "the baron's garrison, ten bored men"
+      },
+      {
+        "it": "un ordine di monaci guerrieri",
+        "en": "an order of warrior monks"
+      },
+      {
+        "it": "briganti che si spacciano per soldati",
+        "en": "brigands passing themselves off as soldiers"
+      },
+      {
+        "it": "una vecchia castellana e i suoi cani",
+        "en": "an old châtelaine and her hounds"
+      },
+      {
+        "it": "nessuno: è abbandonata da una generazione",
+        "en": "nobody: it has stood empty for a generation"
+      },
+      {
+        "it": "un mago in esilio e il suo apprendista",
+        "en": "an exiled wizard and an apprentice"
+      },
+      {
+        "it": "i mercenari di una compagnia di ventura",
+        "en": "the sellswords of a free company"
+      },
+      {
+        "it": "un esattore delle tasse, ben protetto",
+        "en": "a tax collector, well guarded"
+      },
+      {
+        "it": "una famiglia di nani che ci tiene una forgia",
+        "en": "a family of dwarves who keep a forge there"
+      }
+    ],
+    "states": [
+      {
+        "it": "Le mura sono solide e ben tenute.",
+        "en": "The walls are sound and well kept."
+      },
+      {
+        "it": "Metà del cortile è crollata.",
+        "en": "Half the courtyard has fallen in."
+      },
+      {
+        "it": "La torre principale pende in modo preoccupante.",
+        "en": "The main tower leans alarmingly."
+      },
+      {
+        "it": "Il ponte levatoio è bloccato abbassato da anni.",
+        "en": "The drawbridge has been stuck down for years."
+      },
+      {
+        "it": "Le stalle sono diventate una cappella.",
+        "en": "The stables have become a chapel."
+      },
+      {
+        "it": "Dal pozzo del cortile sale aria calda.",
+        "en": "Warm air rises from the well in the courtyard."
+      },
+      {
+        "it": "Le finestre sono murate, tranne una.",
+        "en": "The windows are bricked up, all but one."
+      },
+      {
+        "it": "Il fossato è pieno di rovi.",
+        "en": "The moat is choked with brambles."
+      }
+    ],
+    "hooks": [
+      {
+        "it": "Cercano una scorta per un carico d'argento; pagano in vino.",
+        "en": "They want an escort for a load of silver; they pay in wine."
+      },
+      {
+        "it": "Tengono prigioniero qualcuno e non dicono chi.",
+        "en": "They hold a prisoner and won't say who."
+      },
+      {
+        "it": "Hanno perso i contatti con la pattuglia mandata nei boschi.",
+        "en": "They've lost touch with the patrol sent into the woods."
+      },
+      {
+        "it": "Riscuotono un pedaggio esoso da chiunque passi.",
+        "en": "They charge a steep toll to anyone passing."
+      },
+      {
+        "it": "Ospitano volentieri i viandanti, ma di notte chiudono a chiave le porte delle stanze.",
+        "en": "They gladly host travellers, but lock the bedroom doors at night."
+      },
+      {
+        "it": "Danno una ricompensa per ogni testa di bestia portata al cancello.",
+        "en": "They pay a bounty for every beast's head brought to the gate."
+      },
+      {
+        "it": "Si preparano a un assedio che nessuno sa da chi verrà.",
+        "en": "They're preparing for a siege nobody knows who will lay."
+      },
+      {
+        "it": "Cercano un guaritore: il signore è malato da settimane.",
+        "en": "They're looking for a healer: the lord has been ill for weeks."
+      }
+    ]
+  },
+  "lair": {
+    "lives": {
+      "it": "Ci vive: {monster}.",
+      "en": "Lair of: {monster}."
+    },
+    "places": [
+      {
+        "it": "Una grotta umida, con ossa rosicchiate all'ingresso.",
+        "en": "A damp cave with gnawed bones at the mouth."
+      },
+      {
+        "it": "Le rovine di una fattoria, dai muri anneriti.",
+        "en": "The ruins of a farmstead, its walls blackened."
+      },
+      {
+        "it": "Un enorme tronco cavo che puzza di muschio e di sangue.",
+        "en": "A huge hollow trunk reeking of musk and blood."
+      },
+      {
+        "it": "Una cantina crollata sotto un vecchio casale.",
+        "en": "A caved-in cellar under an old farmhouse."
+      },
+      {
+        "it": "Un dirupo pieno di nidi.",
+        "en": "A cliff full of nests."
+      },
+      {
+        "it": "Una tomba antica dal sigillo rotto.",
+        "en": "An ancient tomb with a broken seal."
+      },
+      {
+        "it": "Un buco nel terreno da cui esce aria fredda.",
+        "en": "A hole in the ground breathing cold air."
+      },
+      {
+        "it": "Una miniera abbandonata, con i binari arrugginiti.",
+        "en": "An abandoned mine with rusted rails."
+      },
+      {
+        "it": "Un boschetto dove gli alberi sono legati fra loro con funi.",
+        "en": "A copse where the trees are tied together with ropes."
+      },
+      {
+        "it": "Una torre di guardia dimezzata.",
+        "en": "A watchtower cut in half."
+      }
+    ],
+    "unnamed": {
+      "it": "Tana",
+      "en": "Lair"
+    }
+  },
+  "landmark": {
+    "things": [
+      {
+        "it": "un monolite",
+        "en": "a monolith",
+        "name_it": "Monolite",
+        "name_en": "Monolith"
+      },
+      {
+        "it": "una statua",
+        "en": "a statue",
+        "name_it": "Statua",
+        "name_en": "Statue"
+      },
+      {
+        "it": "un cerchio di pietre",
+        "en": "a stone circle",
+        "name_it": "Cerchio",
+        "name_en": "Circle"
+      },
+      {
+        "it": "un albero cavo",
+        "en": "a hollow tree",
+        "name_it": "Albero",
+        "name_en": "Tree"
+      },
+      {
+        "it": "un pozzo",
+        "en": "a well",
+        "name_it": "Pozzo",
+        "name_en": "Well"
+      },
+      {
+        "it": "una torre crollata",
+        "en": "a fallen tower",
+        "name_it": "Torre",
+        "name_en": "Tower"
+      },
+      {
+        "it": "un ponte senza fiume",
+        "en": "a bridge over no river",
+        "name_it": "Ponte",
+        "name_en": "Bridge"
+      },
+      {
+        "it": "una fontana",
+        "en": "a fountain",
+        "name_it": "Fontana",
+        "name_en": "Fountain"
+      },
+      {
+        "it": "un teschio gigante",
+        "en": "a giant skull",
+        "name_it": "Teschio",
+        "name_en": "Skull"
+      },
+      {
+        "it": "una nave arenata",
+        "en": "a stranded ship",
+        "name_it": "Nave",
+        "name_en": "Ship"
+      },
+      {
+        "it": "un arco",
+        "en": "an arch",
+        "name_it": "Arco",
+        "name_en": "Arch"
+      },
+      {
+        "it": "un obelisco",
+        "en": "an obelisk",
+        "name_it": "Obelisco",
+        "name_en": "Obelisk"
+      },
+      {
+        "it": "un altare",
+        "en": "an altar",
+        "name_it": "Altare",
+        "name_en": "Altar"
+      },
+      {
+        "it": "una colonna solitaria",
+        "en": "a lone column",
+        "name_it": "Colonna",
+        "name_en": "Column"
+      },
+      {
+        "it": "un dolmen",
+        "en": "a dolmen",
+        "name_it": "Dolmen",
+        "name_en": "Dolmen"
+      },
+      {
+        "it": "un menhir",
+        "en": "a standing stone",
+        "name_it": "Menhir",
+        "name_en": "Stone"
+      },
+      {
+        "it": "una campana caduta",
+        "en": "a fallen bell",
+        "name_it": "Campana",
+        "name_en": "Bell"
+      },
+      {
+        "it": "una porta di pietra",
+        "en": "a stone door",
+        "name_it": "Porta",
+        "name_en": "Door"
+      },
+      {
+        "it": "un trono",
+        "en": "a throne",
+        "name_it": "Trono",
+        "name_en": "Throne"
+      },
+      {
+        "it": "una gabbia",
+        "en": "a cage",
+        "name_it": "Gabbia",
+        "name_en": "Cage"
+      },
+      {
+        "it": "un'ancora",
+        "en": "an anchor",
+        "name_it": "Ancora",
+        "name_en": "Anchor"
+      },
+      {
+        "it": "una spada conficcata nel terreno",
+        "en": "a sword thrust into the ground",
+        "name_it": "Spada",
+        "name_en": "Sword"
+      },
+      {
+        "it": "un mulino abbandonato",
+        "en": "an abandoned mill",
+        "name_it": "Mulino",
+        "name_en": "Mill"
+      },
+      {
+        "it": "un tumulo",
+        "en": "a barrow",
+        "name_it": "Tumulo",
+        "name_en": "Barrow"
+      },
+      {
+        "it": "una cappella",
+        "en": "a chapel",
+        "name_it": "Cappella",
+        "name_en": "Chapel"
+      },
+      {
+        "it": "una scacchiera gigante",
+        "en": "a giant chessboard",
+        "name_it": "Scacchiera",
+        "name_en": "Chessboard"
+      },
+      {
+        "it": "una meridiana",
+        "en": "a sundial",
+        "name_it": "Meridiana",
+        "name_en": "Sundial"
+      },
+      {
+        "it": "un busto",
+        "en": "a bust",
+        "name_it": "Busto",
+        "name_en": "Bust"
+      },
+      {
+        "it": "una forca",
+        "en": "a gallows",
+        "name_it": "Forca",
+        "name_en": "Gallows"
+      },
+      {
+        "it": "un faro lontano dal mare",
+        "en": "a lighthouse far from the sea",
+        "name_it": "Faro",
+        "name_en": "Lighthouse"
+      },
+      {
+        "it": "un labirinto di siepi",
+        "en": "a hedge maze",
+        "name_it": "Labirinto",
+        "name_en": "Maze"
+      },
+      {
+        "it": "una fornace",
+        "en": "a kiln",
+        "name_it": "Fornace",
+        "name_en": "Kiln"
+      },
+      {
+        "it": "un carro",
+        "en": "a wagon",
+        "name_it": "Carro",
+        "name_en": "Wagon"
+      },
+      {
+        "it": "un'enorme conchiglia",
+        "en": "a huge shell",
+        "name_it": "Conchiglia",
+        "name_en": "Shell"
+      },
+      {
+        "it": "una scalinata",
+        "en": "a stairway",
+        "name_it": "Scalinata",
+        "name_en": "Stairway"
+      },
+      {
+        "it": "un pilastro",
+        "en": "a pillar",
+        "name_it": "Pilastro",
+        "name_en": "Pillar"
+      },
+      {
+        "it": "uno specchio",
+        "en": "a mirror",
+        "name_it": "Specchio",
+        "name_en": "Mirror"
+      },
+      {
+        "it": "una lapide",
+        "en": "a gravestone",
+        "name_it": "Lapide",
+        "name_en": "Gravestone"
+      },
+      {
+        "it": "un idolo",
+        "en": "an idol",
+        "name_it": "Idolo",
+        "name_en": "Idol"
+      },
+      {
+        "it": "un cancello",
+        "en": "a gate",
+        "name_it": "Cancello",
+        "name_en": "Gate"
+      }
+    ],
+    "made": [
+      {
+        "it": "di ossidiana",
+        "en": "of obsidian"
+      },
+      {
+        "it": "d'osso",
+        "en": "of bone"
+      },
+      {
+        "it": "di vetro nero",
+        "en": "of black glass"
+      },
+      {
+        "it": "di pietra rossa",
+        "en": "of red stone"
+      },
+      {
+        "it": "di bronzo verdastro",
+        "en": "of greenish bronze"
+      },
+      {
+        "it": "di legno pietrificato",
+        "en": "of petrified wood"
+      },
+      {
+        "it": "di sale",
+        "en": "of salt"
+      },
+      {
+        "it": "di ferro arrugginito",
+        "en": "of rusted iron"
+      },
+      {
+        "it": "d'argilla cotta",
+        "en": "of baked clay"
+      },
+      {
+        "it": "di marmo venato d'oro",
+        "en": "of gold-veined marble"
+      },
+      {
+        "it": "di corallo",
+        "en": "of coral"
+      },
+      {
+        "it": "d'ambra",
+        "en": "of amber"
+      },
+      {
+        "it": "di basalto",
+        "en": "of basalt"
+      },
+      {
+        "it": "di ghiaccio che non si scioglie",
+        "en": "of ice that never melts"
+      },
+      {
+        "it": "di pietra pomice",
+        "en": "of pumice"
+      },
+      {
+        "it": "d'ardesia",
+        "en": "of slate"
+      },
+      {
+        "it": "di cristallo torbido",
+        "en": "of cloudy crystal"
+      },
+      {
+        "it": "di radici intrecciate",
+        "en": "of woven roots"
+      },
+      {
+        "it": "di ossa di drago",
+        "en": "of dragon bones"
+      },
+      {
+        "it": "di conchiglie",
+        "en": "of seashells"
+      },
+      {
+        "it": "di rame annerito",
+        "en": "of blackened copper"
+      },
+      {
+        "it": "di quarzo rosa",
+        "en": "of rose quartz"
+      },
+      {
+        "it": "di pietra lavica",
+        "en": "of lava stone"
+      },
+      {
+        "it": "di gesso",
+        "en": "of chalk"
+      },
+      {
+        "it": "d'avorio",
+        "en": "of ivory"
+      },
+      {
+        "it": "di pietra tiepida al tatto",
+        "en": "of stone warm to the touch"
+      },
+      {
+        "it": "di ferro caduto dal cielo",
+        "en": "of iron fallen from the sky"
+      },
+      {
+        "it": "di granito scuro",
+        "en": "of dark granite"
+      },
+      {
+        "it": "di quercia nera",
+        "en": "of black oak"
+      },
+      {
+        "it": "di cera",
+        "en": "of wax"
+      },
+      {
+        "it": "di vetro soffiato",
+        "en": "of blown glass"
+      },
+      {
+        "it": "d'arenaria",
+        "en": "of sandstone"
+      },
+      {
+        "it": "di madreperla",
+        "en": "of mother-of-pearl"
+      },
+      {
+        "it": "di pietra verde",
+        "en": "of green stone"
+      },
+      {
+        "it": "d'ottone",
+        "en": "of brass"
+      },
+      {
+        "it": "di cenere pressata",
+        "en": "of packed ash"
+      }
+    ],
+    "detail": [
+      {
+        "it": "che canta quando soffia il vento",
+        "en": "that sings when the wind blows"
+      },
+      {
+        "it": "con incisioni in una lingua che nessuno sa leggere",
+        "en": "carved in a script nobody can read"
+      },
+      {
+        "it": "che proietta l'ombra nella direzione sbagliata",
+        "en": "that casts its shadow the wrong way"
+      },
+      {
+        "it": "che d'inverno resta caldo come pane appena sfornato",
+        "en": "that stays warm as fresh bread in winter"
+      },
+      {
+        "it": "che di notte emette una debole luce azzurra",
+        "en": "that gives off a faint blue light at night"
+      },
+      {
+        "it": "con l'impronta di una mano grande il doppio di quella di un uomo",
+        "en": "bearing a handprint twice the size of a man's"
+      },
+      {
+        "it": "che dieci buoi non riuscirebbero a spostare",
+        "en": "that ten oxen could not shift"
+      },
+      {
+        "it": "su cui la pioggia non cade mai",
+        "en": "on which rain never falls"
+      },
+      {
+        "it": "con un foro perfettamente rotondo nel mezzo",
+        "en": "with a perfectly round hole through the middle"
+      },
+      {
+        "it": "che trasuda un liquido simile al miele",
+        "en": "that oozes something like honey"
+      },
+      {
+        "it": "attorno a cui l'erba cresce in cerchi perfetti",
+        "en": "around which the grass grows in perfect rings"
+      },
+      {
+        "it": "che ronza come un alveare se ci si appoggia l'orecchio",
+        "en": "that hums like a hive when you put your ear to it"
+      },
+      {
+        "it": "con sette nicchie vuote, una sola sempre pulita",
+        "en": "with seven empty niches, only one ever clean"
+      },
+      {
+        "it": "che riflette un cielo diverso da quello vero",
+        "en": "that reflects a sky other than the real one"
+      },
+      {
+        "it": "dove gli aghi delle bussole girano su se stessi",
+        "en": "where compass needles spin"
+      },
+      {
+        "it": "con nastri colorati legati da chi chiede una grazia",
+        "en": "hung with ribbons tied by those asking a favour"
+      },
+      {
+        "it": "che ogni mattina si trova un passo più a est",
+        "en": "found one pace further east every morning"
+      },
+      {
+        "it": "con una porta che non conduce da nessuna parte",
+        "en": "with a door that leads nowhere"
+      },
+      {
+        "it": "con tredici gradini scolpiti che salgono e si fermano nel vuoto",
+        "en": "with thirteen carved steps that climb and stop in thin air"
+      },
+      {
+        "it": "da cui a mezzogiorno si sente rintoccare una campana",
+        "en": "from which a bell tolls at noon"
+      },
+      {
+        "it": "con un volto scolpito che sembra cambiare espressione",
+        "en": "with a carved face that seems to change expression"
+      },
+      {
+        "it": "con offerte di latte e pane lasciate da mani sconosciute",
+        "en": "with offerings of milk and bread left by unknown hands"
+      },
+      {
+        "it": "che gli animali si rifiutano di avvicinare",
+        "en": "that animals refuse to approach"
+      },
+      {
+        "it": "dove l'eco risponde con parole diverse",
+        "en": "where the echo answers with other words"
+      },
+      {
+        "it": "con un'iscrizione che promette un tesoro a chi la legga al contrario",
+        "en": "with an inscription promising treasure to whoever reads it backwards"
+      },
+      {
+        "it": "in mezzo a un cerchio di funghi bianchi",
+        "en": "in the middle of a ring of white mushrooms"
+      },
+      {
+        "it": "con i segni di un antico incendio che non si cancellano",
+        "en": "with the scorch marks of an old fire that never fade"
+      },
+      {
+        "it": "che d'estate si copre di brina",
+        "en": "that frosts over in summer"
+      },
+      {
+        "it": "con una fila di nomi incisi, l'ultimo di qualcuno ancora vivo",
+        "en": "with a row of carved names, the last of someone still alive"
+      },
+      {
+        "it": "da cui sgorga acqua salata, lontano da ogni mare",
+        "en": "from which salt water springs, far from any sea"
+      },
+      {
+        "it": "con una catena spezzata fissata alla base",
+        "en": "with a broken chain fixed to its base"
+      },
+      {
+        "it": "che nelle notti di luna piena proietta due ombre",
+        "en": "that casts two shadows on full-moon nights"
+      },
+      {
+        "it": "dove chi si addormenta si sveglia sempre all'alba",
+        "en": "where whoever falls asleep always wakes at dawn"
+      },
+      {
+        "it": "con un buco in cui il vento fischia una melodia antica",
+        "en": "with a hole where the wind whistles an old tune"
+      },
+      {
+        "it": "su cui crescono fiori in ogni stagione",
+        "en": "on which flowers grow in every season"
+      },
+      {
+        "it": "che i bambini del posto chiamano per nome",
+        "en": "that the local children call by name"
+      },
+      {
+        "it": "con un sigillo di cera fresca, rinnovato da qualcuno a ogni luna",
+        "en": "with a seal of fresh wax, renewed by someone every moon"
+      },
+      {
+        "it": "con scheletri di uccelli disposti in fila ai piedi",
+        "en": "with bird skeletons laid in a row at its foot"
+      },
+      {
+        "it": "che si sente gemere nelle notti senza vento",
+        "en": "heard moaning on windless nights"
+      },
+      {
+        "it": "dove i cani ululano anche a mezzogiorno",
+        "en": "where dogs howl even at noon"
+      }
+    ],
+    "around": [
+      {
+        "it": "Intorno nidificano corvi che ripetono parole umane.",
+        "en": "Crows nest nearby that repeat human words."
+      },
+      {
+        "it": "Un eremita cieco vive lì accanto e chiede un indovinello a chi passa.",
+        "en": "A blind hermit lives close by and asks a riddle of whoever passes."
+      },
+      {
+        "it": "Lì vicino pascolano capre bianche che nessuno reclama.",
+        "en": "White goats nobody claims graze nearby."
+      },
+      {
+        "it": "Lì ai piedi c'è sempre una moneta d'argento, anche dopo che qualcuno l'ha presa.",
+        "en": "There is always a silver coin at its foot, even after someone takes it."
+      },
+      {
+        "it": "I pellegrini vi lasciano sassi dipinti.",
+        "en": "Pilgrims leave painted stones there."
+      },
+      {
+        "it": "Di notte vi si radunano lucciole in numero innaturale.",
+        "en": "At night unnatural numbers of fireflies gather there."
+      },
+      {
+        "it": "Un vecchio cane senza padrone fa la guardia e non abbaia mai.",
+        "en": "An old masterless dog keeps watch and never barks."
+      },
+      {
+        "it": "Un sentiero battuto vi arriva, ma nessuno ammette di usarlo.",
+        "en": "A beaten path leads there, but nobody admits to using it."
+      },
+      {
+        "it": "Tutt'intorno l'erba è nera come bruciata.",
+        "en": "All around, the grass is black as if burnt."
+      },
+      {
+        "it": "Lì accanto c'è una tomba senza nome, sempre coperta di fiori freschi.",
+        "en": "Beside it lies a nameless grave, always covered in fresh flowers."
+      },
+      {
+        "it": "Due statue più piccole sembrano state spostate di recente.",
+        "en": "Two smaller statues seem to have been moved recently."
+      },
+      {
+        "it": "Una famiglia di gufi vi abita e caccia in pieno giorno.",
+        "en": "A family of owls lives there and hunts in broad daylight."
+      },
+      {
+        "it": "La gente dei villaggi vicini vi celebra un rito al solstizio.",
+        "en": "Folk from the nearby villages hold a rite there at midsummer."
+      },
+      {
+        "it": "Nel fango attorno restano impronte di piedi nudi, piccole come quelle di un bambino.",
+        "en": "In the mud around are bare footprints, small as a child's."
+      },
+      {
+        "it": "Una vipera enorme dorme al sole proprio lì accanto.",
+        "en": "A huge viper sleeps in the sun right beside it."
+      },
+      {
+        "it": "Un venditore ambulante vi si ferma ogni anno e vende soltanto chiavi.",
+        "en": "A pedlar stops there every year and sells only keys."
+      },
+      {
+        "it": "Qualcuno vi ha piantato un palo con un cartello: «Non ancora».",
+        "en": "Someone has planted a post there with a sign: \"Not yet\"."
+      },
+      {
+        "it": "Ogni tanto vi si trovano attrezzi da scavo abbandonati.",
+        "en": "Abandoned digging tools turn up there now and then."
+      },
+      {
+        "it": "L'aria lì intorno sa di incenso, anche col vento.",
+        "en": "The air around smells of incense, even in the wind."
+      },
+      {
+        "it": "Un pozzo asciutto lì vicino rimanda voci dal fondo.",
+        "en": "A dry well nearby sends voices back up from the bottom."
+      },
+      {
+        "it": "Uno spaventapasseri lì accanto veste abiti nobili di un secolo fa.",
+        "en": "A scarecrow beside it wears noble clothes a century out of fashion."
+      },
+      {
+        "it": "Le api di tutta la zona sembrano venire da lì.",
+        "en": "The bees of the whole area seem to come from there."
+      },
+      {
+        "it": "I viandanti vi versano un sorso dalla borraccia, per buona sorte.",
+        "en": "Travellers pour a sip from their flasks there, for luck."
+      },
+      {
+        "it": "Una vecchia vende lì accanto amuleti che non funzionano.",
+        "en": "An old woman sells charms nearby that don't work."
+      },
+      {
+        "it": "Il terreno lì intorno risuona vuoto sotto i passi.",
+        "en": "The ground around rings hollow underfoot."
+      },
+      {
+        "it": "Di notte vi passa una processione di luci che nessuno ha mai raggiunto.",
+        "en": "At night a procession of lights passes there that nobody has ever caught up with."
+      },
+      {
+        "it": "Un ruscello vi gira intorno invece di scorrere a valle.",
+        "en": "A brook circles it instead of running downhill."
+      },
+      {
+        "it": "I bracconieri vi nascondono le prede, convinti che porti fortuna.",
+        "en": "Poachers hide their kills there, sure it brings luck."
+      },
+      {
+        "it": "Tre alberi morti vi stanno attorno come guardiani.",
+        "en": "Three dead trees stand around it like guards."
+      },
+      {
+        "it": "Un cartografo vi è scomparso l'anno scorso; la sua mappa è ancora inchiodata lì.",
+        "en": "A cartographer vanished there last year; their map is still nailed there."
+      }
+    ],
+    "names": [
+      {
+        "it": "dei Sussurri",
+        "en": "of Whispers"
+      },
+      {
+        "it": "del Re Muto",
+        "en": "of the Silent King"
+      },
+      {
+        "it": "dell'Ultima Luna",
+        "en": "of the Last Moon"
+      },
+      {
+        "it": "dei Sette Corvi",
+        "en": "of the Seven Crows"
+      },
+      {
+        "it": "della Vedova",
+        "en": "of the Widow"
+      },
+      {
+        "it": "del Pellegrino",
+        "en": "of the Pilgrim"
+      },
+      {
+        "it": "dei Nomi Perduti",
+        "en": "of Lost Names"
+      },
+      {
+        "it": "del Lupo Bianco",
+        "en": "of the White Wolf"
+      },
+      {
+        "it": "dell'Alba",
+        "en": "of the Dawn"
+      },
+      {
+        "it": "delle Lacrime",
+        "en": "of Tears"
+      },
+      {
+        "it": "del Gigante",
+        "en": "of the Giant"
+      },
+      {
+        "it": "delle Streghe",
+        "en": "of the Witches"
+      },
+      {
+        "it": "del Patto",
+        "en": "of the Pact"
+      },
+      {
+        "it": "dei Dannati",
+        "en": "of the Damned"
+      },
+      {
+        "it": "della Sposa",
+        "en": "of the Bride"
+      },
+      {
+        "it": "del Mendicante",
+        "en": "of the Beggar"
+      },
+      {
+        "it": "delle Ossa",
+        "en": "of Bones"
+      },
+      {
+        "it": "del Sole Nero",
+        "en": "of the Black Sun"
+      },
+      {
+        "it": "dell'Eco",
+        "en": "of the Echo"
+      },
+      {
+        "it": "del Tradimento",
+        "en": "of Betrayal"
+      },
+      {
+        "it": "dei Re Antichi",
+        "en": "of the Old Kings"
+      },
+      {
+        "it": "della Nebbia",
+        "en": "of the Mist"
+      },
+      {
+        "it": "del Viandante",
+        "en": "of the Wayfarer"
+      },
+      {
+        "it": "delle Sette Sorelle",
+        "en": "of the Seven Sisters"
+      },
+      {
+        "it": "del Drago",
+        "en": "of the Dragon"
+      },
+      {
+        "it": "della Promessa",
+        "en": "of the Promise"
+      },
+      {
+        "it": "dell'Inverno",
+        "en": "of Winter"
+      },
+      {
+        "it": "dei Bambini",
+        "en": "of the Children"
+      },
+      {
+        "it": "del Boia",
+        "en": "of the Hangman"
+      },
+      {
+        "it": "delle Api",
+        "en": "of the Bees"
+      },
+      {
+        "it": "del Silenzio",
+        "en": "of Silence"
+      },
+      {
+        "it": "della Fame",
+        "en": "of Hunger"
+      },
+      {
+        "it": "del Cavaliere",
+        "en": "of the Knight"
+      },
+      {
+        "it": "dei Giuramenti",
+        "en": "of Oaths"
+      },
+      {
+        "it": "della Luna Rossa",
+        "en": "of the Red Moon"
+      },
+      {
+        "it": "del Ritorno",
+        "en": "of the Return"
+      },
+      {
+        "it": "delle Campane",
+        "en": "of the Bells"
+      },
+      {
+        "it": "dell'Eremita",
+        "en": "of the Hermit"
+      },
+      {
+        "it": "del Fuoco",
+        "en": "of Fire"
+      },
+      {
+        "it": "delle Stelle Cadute",
+        "en": "of the Fallen Stars"
+      }
+    ]
+  },
+  "rumour": {
+    "pattern": {
+      "it": "{when} {then} (lo giura {who}).",
+      "en": "{when} {then} (so swears {who})."
+    },
+    "when": [
+      {
+        "it": "Chi vi passa la notte",
+        "en": "Whoever spends the night there"
+      },
+      {
+        "it": "Chi vi lascia una moneta d'argento",
+        "en": "Whoever leaves a silver coin there"
+      },
+      {
+        "it": "Chi vi pronuncia il proprio nome",
+        "en": "Whoever speaks their own name there"
+      },
+      {
+        "it": "Chi vi dorme nella notte di luna nuova",
+        "en": "Whoever sleeps there on the night of the new moon"
+      },
+      {
+        "it": "Chi vi arriva digiuno da tre giorni",
+        "en": "Whoever comes there after three days' fasting"
+      },
+      {
+        "it": "Chi vi gira intorno sette volte",
+        "en": "Whoever walks round it seven times"
+      },
+      {
+        "it": "Chi vi seppellisce un dente da latte",
+        "en": "Whoever buries a milk tooth there"
+      },
+      {
+        "it": "Chi vi beve dopo il tramonto",
+        "en": "Whoever drinks there after sunset"
+      },
+      {
+        "it": "Chi vi canta una ninna nanna",
+        "en": "Whoever sings a lullaby there"
+      },
+      {
+        "it": "Chi vi porta un fiore rubato",
+        "en": "Whoever brings a stolen flower there"
+      },
+      {
+        "it": "Chi vi giura il falso",
+        "en": "Whoever swears falsely there"
+      },
+      {
+        "it": "Chi vi si inginocchia all'alba",
+        "en": "Whoever kneels there at dawn"
+      },
+      {
+        "it": "Chi vi lascia cadere una goccia del proprio sangue",
+        "en": "Whoever lets a drop of their blood fall there"
+      },
+      {
+        "it": "Chi vi accende una candela nera",
+        "en": "Whoever lights a black candle there"
+      },
+      {
+        "it": "Chi vi confessa un segreto",
+        "en": "Whoever confesses a secret there"
+      },
+      {
+        "it": "Chi vi arriva il giorno del proprio compleanno",
+        "en": "Whoever comes there on their birthday"
+      },
+      {
+        "it": "Chi vi scrive il nome del proprio nemico",
+        "en": "Whoever writes their enemy's name there"
+      },
+      {
+        "it": "Chi vi lascia un pezzo di pane",
+        "en": "Whoever leaves a piece of bread there"
+      },
+      {
+        "it": "Chi vi porta un morto",
+        "en": "Whoever brings a dead body there"
+      },
+      {
+        "it": "Chi vi tace dall'alba al tramonto",
+        "en": "Whoever keeps silent there from dawn to dusk"
+      },
+      {
+        "it": "Chi vi rompe un uovo",
+        "en": "Whoever breaks an egg there"
+      },
+      {
+        "it": "Chi vi fischia dopo il tramonto",
+        "en": "Whoever whistles there after sunset"
+      },
+      {
+        "it": "Chi vi resta fino al canto del gallo",
+        "en": "Whoever stays there until cockcrow"
+      },
+      {
+        "it": "Chi vi torna per la terza volta",
+        "en": "Whoever goes back there a third time"
+      },
+      {
+        "it": "Chi vi danza sotto la pioggia",
+        "en": "Whoever dances there in the rain"
+      }
+    ],
+    "then": [
+      {
+        "it": "sogna il luogo dove è sepolto un tesoro",
+        "en": "dreams of where a treasure is buried"
+      },
+      {
+        "it": "invecchia di un anno in una notte",
+        "en": "ages a year in one night"
+      },
+      {
+        "it": "sente la voce di un parente morto",
+        "en": "hears the voice of a dead relative"
+      },
+      {
+        "it": "perde la propria ombra per tre giorni",
+        "en": "loses their shadow for three days"
+      },
+      {
+        "it": "non riesce più a dire bugie fino alla luna nuova",
+        "en": "cannot tell a lie until the new moon"
+      },
+      {
+        "it": "capisce per un giorno la lingua degli uccelli",
+        "en": "understands the speech of birds for a day"
+      },
+      {
+        "it": "trova al risveglio una chiave che non apre nessuna porta conosciuta",
+        "en": "wakes holding a key that fits no known door"
+      },
+      {
+        "it": "vede per un istante il volto del proprio futuro traditore",
+        "en": "glimpses the face of their future betrayer"
+      },
+      {
+        "it": "guarisce da ogni febbre, ma dimentica una cosa cara",
+        "en": "is cured of any fever, but forgets something dear"
+      },
+      {
+        "it": "ha un gatto nero alle calcagna per sette giorni",
+        "en": "has a black cat at their heels for seven days"
+      },
+      {
+        "it": "non ha più bisogno di dormire per una settimana",
+        "en": "needs no sleep for a week"
+      },
+      {
+        "it": "sente bussare alla propria porta ogni notte per un mese",
+        "en": "hears knocking at their door every night for a month"
+      },
+      {
+        "it": "ottiene la risposta a una domanda, ma non sceglie quale",
+        "en": "gets the answer to one question, but not the one they choose"
+      },
+      {
+        "it": "trova nella borsa una moneta d'oro di un regno che non esiste",
+        "en": "finds in their purse a gold coin from a kingdom that doesn't exist"
+      },
+      {
+        "it": "smette di invecchiare finché non dice a voce alta il proprio nome",
+        "en": "stops ageing until they say their own name aloud"
+      },
+      {
+        "it": "si porta dietro la pioggia ovunque vada per nove giorni",
+        "en": "brings rain wherever they go for nine days"
+      },
+      {
+        "it": "sogna ogni notte la stessa porta, sempre un po' più aperta",
+        "en": "dreams of the same door every night, a little wider open each time"
+      },
+      {
+        "it": "dimentica il proprio nome fino al tramonto",
+        "en": "forgets their own name until sunset"
+      },
+      {
+        "it": "sente nel petto il battito di un secondo cuore",
+        "en": "feels a second heart beating in their chest"
+      },
+      {
+        "it": "ha fortuna al gioco e sfortuna in amore",
+        "en": "is lucky at dice and unlucky in love"
+      },
+      {
+        "it": "riceve una visita del Popolo Fatato prima dell'inverno",
+        "en": "is visited by the Fair Folk before winter"
+      },
+      {
+        "it": "vede i morti del villaggio passeggiare al chiaro di luna",
+        "en": "sees the village dead walking in the moonlight"
+      },
+      {
+        "it": "non riesce più ad attraversare l'acqua corrente senza tremare",
+        "en": "can no longer cross running water without trembling"
+      },
+      {
+        "it": "trova ogni mattina sulla soglia un sasso nuovo",
+        "en": "finds a new pebble on their doorstep every morning"
+      },
+      {
+        "it": "impara una canzone che nessuno ha mai sentito",
+        "en": "learns a song nobody has ever heard"
+      },
+      {
+        "it": "porta sventura al primo che incontra",
+        "en": "brings bad luck to the first person they meet"
+      },
+      {
+        "it": "vede in sogno dove si nasconde un ladro",
+        "en": "sees in a dream where a thief is hiding"
+      },
+      {
+        "it": "ha sette anni di buon raccolto",
+        "en": "has seven years of good harvests"
+      },
+      {
+        "it": "si sveglia con le mani sporche di terra",
+        "en": "wakes with earth on their hands"
+      },
+      {
+        "it": "diventa amico di ogni cane",
+        "en": "becomes friends with every dog"
+      }
+    ],
+    "who": [
+      {
+        "it": "la vedova del mugnaio",
+        "en": "the miller's widow"
+      },
+      {
+        "it": "il vecchio pastore",
+        "en": "the old shepherd"
+      },
+      {
+        "it": "una guardia ubriaca",
+        "en": "a drunk guard"
+      },
+      {
+        "it": "la levatrice",
+        "en": "the midwife"
+      },
+      {
+        "it": "un frate di passaggio",
+        "en": "a passing friar"
+      },
+      {
+        "it": "un bambino del villaggio",
+        "en": "a village child"
+      },
+      {
+        "it": "il fabbro",
+        "en": "the smith"
+      },
+      {
+        "it": "un menestrello",
+        "en": "a minstrel"
+      },
+      {
+        "it": "la nonna dell'oste",
+        "en": "the innkeeper's grandmother"
+      },
+      {
+        "it": "un cacciatore di frodo",
+        "en": "a poacher"
+      },
+      {
+        "it": "il becchino",
+        "en": "the gravedigger"
+      },
+      {
+        "it": "una mercante di spezie",
+        "en": "a spice merchant"
+      },
+      {
+        "it": "il cieco del mercato",
+        "en": "the blind man at the market"
+      },
+      {
+        "it": "un soldato tornato dalla guerra",
+        "en": "a soldier back from the war"
+      },
+      {
+        "it": "la strega del bosco",
+        "en": "the witch of the woods"
+      },
+      {
+        "it": "il prete, ma solo quando beve",
+        "en": "the priest, but only when drinking"
+      },
+      {
+        "it": "un ragazzo che dice di aver visto tutto",
+        "en": "a boy who says he saw it all"
+      },
+      {
+        "it": "il mugnaio",
+        "en": "the miller"
+      },
+      {
+        "it": "la lavandaia",
+        "en": "the washerwoman"
+      },
+      {
+        "it": "un vecchio cavaliere",
+        "en": "an old knight"
+      }
+    ]
+  }
+}
